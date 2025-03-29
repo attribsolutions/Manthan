@@ -1,9 +1,9 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
-import { date_dmy_func } from "../../../components/Common/CommonFunction";
+import { date_dmy_func, loginUserDetails } from "../../../components/Common/CommonFunction";
 
-
+import data from "./data.json"
 
 var pageHeder = function (doc, data) {
     style.pageBorder(doc, data);
@@ -30,11 +30,11 @@ const generateReportPage = (doc, data) => {
 
 
 const PeriodicGRNReport = (Data) => {
-
+    debugger
     var doc = new jsPDF('l', 'pt', 'a4');
     generateReportPage(doc, Data);
     doc.setProperties({
-        title: `Stock_Report From ${date_dmy_func(Data.FromDate)} To ${date_dmy_func(Data.ToDate)} Party (${Data.PartyName})`
+        title: `Periodic GRN Report From ${date_dmy_func(Data.FromDate)} To ${date_dmy_func(Data.ToDate)} Party (${loginUserDetails().PartyName})`
     });
 
 

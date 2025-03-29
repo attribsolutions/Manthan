@@ -9,13 +9,13 @@ import { mode, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import C_Report from "../../components/Common/C_Report";
 import { stockReport_1_GoButton_API_Success } from "../../store/Report/StockReport/action";
-import { commonPageField, commonPageFieldSuccess, getpdfReportdata } from "../../store/actions";
+import { commonPageField, commonPageFieldSuccess, getpdfReportdata, getpdfReportdataSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import * as report from '../ReportIndex'
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 
-import { Periodic_GRN_Report_Success } from "../../store/Report/PeriodicGRNRedux/action";
+import { Periodic_GRN_Report, Periodic_GRN_Report_Success } from "../../store/Report/PeriodicGRNRedux/action";
 import { Periodic_Grn_Report_Api } from "../../helpers/backend_helper";
 
 const PeriodicGRNReport = (props) => {
@@ -82,6 +82,14 @@ const PeriodicGRNReport = (props) => {
                         excelFileName: "Periodic GRN Report"
                     })
                     dispatch(Periodic_GRN_Report_Success({ status: false }));
+                } else if (PrediocGrnData.BtnMode === "print") {
+                    let config = { rowData: {} }
+                    config.rowData["ReportType"] = report.PeriodicGRN;
+                    config.rowData["Status"] = PrediocGrnData.Status
+                    config.rowData["StatusCode"] = PrediocGrnData.StatusCode
+                    config.rowData["Data"] = PrediocGrnData.Data
+                    dispatch(getpdfReportdataSuccess(config.rowData))
+                    dispatch(Periodic_GRN_Report_Success({ status: false }));
                 }
             }
             else if ((PrediocGrnData.Status === true) && (PrediocGrnData.StatusCode === 204)) {
@@ -117,20 +125,14 @@ const PeriodicGRNReport = (props) => {
 
 
     function excel_And_GoBtnHandler(e, btnMode) {
+
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
             "PartyID": _cfunc.loginSelectedPartyID()
-
-
-            // "FromDate": "2025-03-01",
-            // "ToDate": "2025-03-26",
-            // "PartyID": 0
-
         });
-        let config = { ReportType: report.PeriodicGRN, jsonBody, BtnMode: btnMode }
-
-        dispatch(getpdfReportdata(Periodic_Grn_Report_Api, config))
+        let config = { jsonBody, BtnMode: btnMode }
+        dispatch(Periodic_GRN_Report(config))
     }
 
     function fromdateOnchange(e, date) {

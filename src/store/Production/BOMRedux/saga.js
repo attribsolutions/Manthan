@@ -32,7 +32,7 @@ function* get_BOMList_GenFunc({ filters }) {
 }
 
 function* editBOMListGenFunc({ config }) {
-
+  debugger
   const { btnmode } = config;
   try {
     let response = yield call(BOM_Edit_API, config);

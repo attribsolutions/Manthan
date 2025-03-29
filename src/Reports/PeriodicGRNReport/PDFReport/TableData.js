@@ -1,5 +1,5 @@
 import { numberWithCommas } from "../../Report_common_function";
-import { date_dmy_func } from "../../../components/Common/CommonFunction";
+import { date_dmy_func, loginUserDetails } from "../../../components/Common/CommonFunction";
 
 export const columns = [
     "GRN Date",
@@ -20,10 +20,11 @@ export const PageHedercolumns = [
 ]
 
 export const Rows = (data) => {
+    debugger
     const returnArr = [];
     data.forEach((element, key) => {
         const tableitemRow = [
-            `${element.GRNDate}`,
+            `${date_dmy_func(element.GRNDate)}`,
             `${element.GRNNo}`,
             `${element.PO ? element.PO : ""}`,
             `${element.Supplier}`,
@@ -40,8 +41,8 @@ export const Rows = (data) => {
 
 export const ReportHederRows = (data) => {
     var reportArray = [
-        [`From Date:  ${date_dmy_func(data.FromDate)}`,],
-        [`To Date:      ${date_dmy_func(data.ToDate)}`],
+        [`From Date:  ${date_dmy_func(data.FromDate)}`, `To Date:     ${date_dmy_func(data.ToDate)}`, `Address:  ${loginUserDetails().PartyAddress}`],
+        // [],
     ]
     return reportArray;
 }
