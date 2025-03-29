@@ -46,6 +46,7 @@ const createBatchCodeDetail = (item) => ({
     label: item.BatchCode,
     ActualQuantity: item.BaseUnitQuantity,
     Qty: item.BaseUnitQuantity,
+    
     ...item, // Spread the rest of the properties
 });
 

@@ -172,6 +172,9 @@ const IBInvoice = (props) => {
                 setCustomerID({ value: GRNitem?.Demand_Reference[0]?.CustomerID, label: GRNitem?.Demand_Reference[0]?.CustomerName })
                 setDemandID({ Demand_ID: Number(GRNitem?.Data.DemandIDs) })
 
+            } else if (subPageMode === url.VDC_INVOICE) {
+                debugger
+                setCustomerID(state.values.Customer)
             }
 
             const Updated_DemandDetails = DemandItemDetails.map((inx_1, key_1) => {
@@ -207,7 +210,6 @@ const IBInvoice = (props) => {
 
                     inx_2.Rate = _cfunc.roundToDecimalPlaces(_hasRate, 2);//max 2 decimal  //initialize
                     inx_2.ActualQuantity = _cfunc.roundToDecimalPlaces(_hasActualQuantity, 3);//max 3 decimal  //initialize
-
 
 
 
@@ -534,7 +536,7 @@ const IBInvoice = (props) => {
                         Rate: stockIndex.Rate,
                         BasicAmount: calculate.basicAmount,
                         TaxType: "GST",
-                        GST: tableIndex.GST,
+                        GST: stockIndex.LiveBatcheGSTID,
                         GSTPercentage: stockIndex.GSTPercentage,
                         HSNCode: stockIndex.HSNCode,
                         GSTAmount: calculate.roundedGstAmount,

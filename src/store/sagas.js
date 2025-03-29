@@ -135,6 +135,7 @@ import DataExportToSapSaga from "./Administrator/ExportToSAPRedux/saga"
 import CodeRedemptionReportSaga from "./Report/CodeRedemptionRedux/saga"
 
 import VoucherRedemptionClaimSaga from "./Report/VoucherRedemptionClaimRedux/saga"
+import PeriodicGRNReportSaga from "./Report/PeriodicGRNRedux/saga"
 
 
 
@@ -268,6 +269,10 @@ export default function* rootSaga() {
 		fork(GRNDiscrepancyReportSaga),
 		fork(CodeRedemptionReportSaga),
 		fork(VoucherRedemptionClaimSaga),
+		fork(PeriodicGRNReportSaga),
+
+
+		
 
 
 

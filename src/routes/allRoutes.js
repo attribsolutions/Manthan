@@ -260,6 +260,7 @@ import DataExportToSAP from "../pages/Adminisrator/DataExportToSAP/DataExportToS
 import GRNDiscrepancyReport from "../Reports/GRNDiscrepancyReport/GRNDiscrepancyReport.js";
 import CodeRedemtionReport from "../Reports/CodeRedemtionReport/CodeRedemtionReport.js";
 import VoucherRedemptionClaim from "../Reports/VoucherRedemptionClaim/VoucherRedemptionClaim.js";
+import PeriodicGRNReport from "../Reports/PeriodicGRNReport/PeriodicGRNReport.js";
 
 
 const userRoutes = [
@@ -566,6 +567,10 @@ const userRoutes = [
 	// { path: path.IB_INVOICE_LIST, component: InvoiceList },
 	{ path: path.IB_GRN_LIST, component: GRNList },
 	{ path: path.IB_INVOICE_FOR_GRN, component: InvoiceList },
+
+
+	{ path: path.PERIODIC_GRN_REPORT, component: PeriodicGRNReport },
+
 
 
 

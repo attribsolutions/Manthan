@@ -142,6 +142,7 @@ import ExportToSapReducer from "./Administrator/ExportToSAPRedux/reducer"
 import GRNDiscrepancyReportReducer from "./Report/GRNDiscrepancyRedux/reducer"
 import CodeRedemptionReportReducer from "./Report/CodeRedemptionRedux/reducer"
 import VoucherRedemptionClaimReducer from "./Report/VoucherRedemptionClaimRedux/reducer"
+import PeriodicGrnReportReducer from "./Report/PeriodicGRNRedux/reducer"
 
 const rootReducer = combineReducers({
 	Layout,
@@ -263,7 +264,8 @@ const rootReducer = combineReducers({
 	GRNDiscrepancyReportReducer,
 	CodeRedemptionReportReducer,
 	VoucherRedemptionClaimReducer,
-	
+	PeriodicGrnReportReducer
+
 
 })
 export default rootReducer

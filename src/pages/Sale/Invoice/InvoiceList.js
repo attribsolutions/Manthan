@@ -481,7 +481,12 @@ const InvoiceList = () => {
     //Added For send To Scm Button 
     function sendToScmBtnFunc(config) {
         const InvoiceID = config.rowData.id
-        const jsonBody = JSON.stringify({ Invoice: InvoiceID })
+        let jsonBody = {}
+        if (_cfunc.IsSweetAndSnacksCompany()) {
+            jsonBody = JSON.stringify({ InvoiceID: InvoiceID })
+        } else {
+            jsonBody = JSON.stringify({ Invoice: InvoiceID })
+        }
         const btnId = config.btnId
         dispatch(InvoiceSendToScm({ jsonBody, btnId }))
     }

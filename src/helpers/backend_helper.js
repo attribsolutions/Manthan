@@ -628,7 +628,9 @@ export const Invoice_1_Update_API = ({ updateId, jsonBody }) => put(`${url.INVOI
 export const Invoice_Singel_Get_for_Report_Api = ({ editId }) => get(`${url.INVOICE_1_SAVE}/${editId}/P`)// delete api
 
 export const Update_Vehicle_Invoice_API = ({ Invoiceid, vehicleid }) => get(`${url.UPDATE_VEHICLE_INVOICE}/${Invoiceid}/${vehicleid}`)// Cancel_EwayBill
-export const Invoice_Send_To_Scm = ({ jsonBody }) => post(url.INVOICE_SEND_TO_SCM, jsonBody)// delete api
+export const Invoice_Send_To_Scm = ({ jsonBody }) => post(url.INVOICE_SEND_TO_SCM, jsonBody)
+
+export const Invoice_Send_To_SAP = ({ jsonBody }) => post(url.INVOICE_SEND_TO_SAP, jsonBody)
 
 export const Invoice_1_Bulk_Delete_API = ({ jsonBody }) => delwithPostBody(url.INVOICE_1_BULK_DELETE_API, jsonBody)//Bulk delete api
 
@@ -752,6 +754,9 @@ export const Dashboard_Get_API = ({ loginPartyID }) => get(`${url.DASHBOARD}/${l
 export const StockEntry_GO_button_api_For_Item = (ItemId) => get(`${url.STOCK_ENTRY_GO_BUTTON}/${ItemId}`)//add button get api for item
 export const StockEntry_Post_API = ({ jsonBody }) => post(url.PARTY_STOCK_ENTRY, jsonBody)//post api
 export const Franchise_StockEntry_Post_API = ({ jsonBody }) => post(url.FRANCHISE_STOCK_ENTRY, jsonBody)//post api
+
+export const RateAdjustment_API = ({ jsonBody }) => post(url.RATE_ADJUSTMENT, jsonBody)//post api
+
 
 
 export const StockCount_Post_API = ({ jsonBody }) => post(url.STOCK_COUNT, jsonBody)//post api
@@ -1012,7 +1017,7 @@ export const DataExportToSAP_API = ({ jsonBody }) => post(url.DATA_EXPORT_TO_SAP
 export const DataExportToSAP_Get_API = () => get(url.GET_DATA_EXPORT_TO_SAP)//Go button api
 
 
-
+export const Periodic_Grn_Report_Api = ({ jsonBody }) => post(url.PERIODIC_GRN_REPORT, jsonBody)//Go button api
 
 
 

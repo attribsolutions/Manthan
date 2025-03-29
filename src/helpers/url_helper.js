@@ -430,6 +430,12 @@ export const CANCEL_E_WAY_BILL = '/Cancel_EwayBill' // Uploaded_E-wayBill
 export const UPDATE_VEHICLE_INVOICE = '/UpdateVehicleInvoice' // Uploaded_E-wayBill
 
 export const INVOICE_SEND_TO_SCM = '/InvoicetoSCM' // Uploaded_E-wayBill
+
+export const INVOICE_SEND_TO_SAP = '/InvoiceSAPExportDetails' // Uploaded_E-wayBill
+
+
+
+
 export const INVOICE_1_BULK_DELETE_API = '/InvoiceBulkDelete'// invoice_1 Bulk Delete Api
 
 
@@ -561,6 +567,8 @@ export const FRANCHISE_STOCK_ENTRY = '/SweetPOS/StockEntry'
 
 export const PARTY_STOCK_ENTRY = '/PartyStockEntry'
 
+
+export const RATE_ADJUSTMENT = '/RateAdjustment'
 
 
 
@@ -745,6 +753,8 @@ export const CODE_REDEMPTION_REPORT = '/CouponCodeRedemptionReport'
 
 
 export const DATA_EXPORT_TO_SAP = '/SAPExportDetails'
+
+export const PERIODIC_GRN_REPORT = '/PeriodicGRNReport'
 
 
 export const GET_DATA_EXPORT_TO_SAP = '/UploadFileListDetails'
