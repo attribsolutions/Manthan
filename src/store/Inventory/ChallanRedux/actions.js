@@ -85,8 +85,9 @@ export const deleteChallanIdSuccess = (data) => ({
 });
 
 
-export const VDC_Item = () => ({
+export const VDC_Item = (config = {}) => ({
   type: VDC_ITEM,
+  config,
 });
 
 export const VDC_Item_Success = (data) => ({

@@ -818,7 +818,10 @@ const OrderList = () => {
         }
         let idString = checkRows.map(row => row.id).join(',')
         let jsonBody = {
-            OrderIDs: idString, "Customer": null, "Party": _cfunc.loginSelectedPartyID(),
+            OrderIDs: idString,
+            "Customer": null,
+            "Party": _cfunc.loginSelectedPartyID(),
+            IsRateWise: isVisibleRateDrop ? 2 : 1
         }
 
 

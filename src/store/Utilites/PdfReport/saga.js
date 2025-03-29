@@ -7,11 +7,11 @@ import { CommonConsole } from "../../../components/Common/CommonFunction";
 
 
 function* getpdfData_GenFunc({ urlpath, config }) {
-  
-  try {
 
+  try {
+    debugger
     const response = yield call(urlpath, config);
-    
+
     response["ReportType"] = config.ReportType
     response.Data["ReportType"] = config.ReportType
     if (Array.isArray(response.Data)) {

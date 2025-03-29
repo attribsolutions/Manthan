@@ -3,13 +3,16 @@ import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
 import { date_dmy_func, loginUserIsFranchisesRole } from "../../../components/Common/CommonFunction";
+import { url } from "../../../routes";
 
 function* StockEntry_API_GenFunc({ config }) { // Save GRN  genrator function
-
+    let subPageMode = config.subPageMode
     try {
         let response = "";
         if (loginUserIsFranchisesRole()) {
             response = yield call(apiCall.Franchise_StockEntry_Post_API, config);
+        } else if (subPageMode === url.RATE_ADJUSTMENT) {
+            response = yield call(apiCall.RateAdjustment_API, config);
         } else {
             response = yield call(apiCall.StockEntry_Post_API, config);
         }

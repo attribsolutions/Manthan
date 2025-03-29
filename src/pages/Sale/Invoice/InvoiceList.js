@@ -46,6 +46,7 @@ import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/Har
 import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
 import { date_dmy_func } from "../../../components/Common/CommonFunction";
 import { CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
+import useCheckStockEntry from "../../../components/Common/commonComponent/CheckStockEntry";
 
 const InvoiceList = () => {
 
@@ -141,6 +142,8 @@ const InvoiceList = () => {
         ]));
 
     }, [hederFilters]);
+
+    const { Actionhandler } = useCheckStockEntry(hederFilters.fromdate, commonPartyDropSelect);
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
@@ -464,18 +467,26 @@ const InvoiceList = () => {
             OrderIDs: list[0].id.toString(),
             Mode: 4
         })
-        dispatch(makeGRN_Mode_1Action({
-            jsonBody,
-            pageMode: mode.modeSTPsave,
-            grnRef,
-            path: url.IB_GRN,
-        }))
 
+        Actionhandler({
+            action: makeGRN_Mode_1Action, // The function you want to call
+            params: {
+                jsonBody,
+                pageMode: mode.modeSTPsave,
+                grnRef,
+                path: url.IB_GRN,
+            },
+        })
     };
     //Added For send To Scm Button 
     function sendToScmBtnFunc(config) {
         const InvoiceID = config.rowData.id
-        const jsonBody = JSON.stringify({ Invoice: InvoiceID })
+        let jsonBody = {}
+        if (_cfunc.IsSweetAndSnacksCompany()) {
+            jsonBody = JSON.stringify({ InvoiceID: InvoiceID })
+        } else {
+            jsonBody = JSON.stringify({ Invoice: InvoiceID })
+        }
         const btnId = config.btnId
         dispatch(InvoiceSendToScm({ jsonBody, btnId }))
     }

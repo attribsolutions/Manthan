@@ -1,6 +1,7 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import {
   CommonConsole,
+  IsSweetAndSnacksCompany,
   amountCommaSeparateFunc,
   listpageConcatDateAndTime,
   loginSystemSetting,
@@ -30,6 +31,7 @@ import {
   Update_Vehicle_Customer_Invoice_API,
   Franchies_Invoice_Delete_API,
   Franchies_Invoice_Edit_API,
+  Invoice_Send_To_SAP,
 } from "../../../helpers/backend_helper";
 import {
   deleteInvoiceIdSuccess,
@@ -72,6 +74,10 @@ import { orderApprovalActionSuccess } from "../../actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Franchies_invoice_Calculate_Func } from "../../../pages/Sale/Franchies_Invoice/FranchiesInvoiceFunc";
 
+
+const isSweetAndSnacksCompany = IsSweetAndSnacksCompany()
+
+debugger
 //post api for Invoice Master
 function* save_Invoice_Genfun({ config }) {
 
@@ -92,12 +98,19 @@ function* save_Invoice_Genfun({ config }) {
   }
 }
 
-function* Invoice_Send_To_Scm_GenFun({ config }) {         // Save API
-
+function* Invoice_Send_To_Scm_GenFun({ config }) {
+  debugger      // Save API
   try {
-    const response = yield call(Invoice_Send_To_Scm, config);
+    let response = ""
+    if (isSweetAndSnacksCompany) {
+      response = yield call(Invoice_Send_To_SAP, config);
+    } else {
+      response = yield call(Invoice_Send_To_Scm, config);
+    }
     yield put(InvoiceSendToScmSuccess(response));
   } catch (error) { yield put(InvoiceApiErrorAction()) }
+
+
 }
 
 
@@ -131,6 +144,10 @@ function* InvoiceListGenFunc({ config }) {
       }
       i["isSendToScm"] = isSendToScm
       i["PartyTypeID"] = PartyTypeID
+
+      if (isSweetAndSnacksCompany) {
+        i["isSend"] = true
+      }
 
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
       i["transactionDate"] = i.CreatedOn;
@@ -181,7 +198,7 @@ function* editInvoiceListGenFunc({ config }) {
     if (subPageMode === url.FRANCHAISE_INVOICE) {
       response = yield call(Franchies_Invoice_Edit_API, config);
       response.Data?.OrderItemDetails.forEach(item => {
-        
+
         const isUnitIDPresent = item.UnitDetails.find(findEle => findEle.UnitID === item.Unit);
         const isMCunitID = item.UnitDetails.find(findEle => findEle.DeletedMCUnitsUnitID === item.MCUnitsUnitID);
         const defaultunit = isUnitIDPresent !== undefined ? isUnitIDPresent : isMCunitID;
@@ -223,9 +240,9 @@ function* editInvoiceListGenFunc({ config }) {
     else {
       updatedResp = invoice_GoButton_dataConversion_Func(response, customer);
     }
-    
+
     yield put(editInvoiceActionSuccess(updatedResp))
-    
+
   } catch (error) {
     yield put(InvoiceApiErrorAction())
   }
@@ -329,7 +346,7 @@ function invoice_GoButton_dataConversion_Func(response, customer = '') {
       if (qtyToDeduct > 0) {// Calculate total amount if quantity is greater than 0
 
         const calculatedItem = invoice_discountCalculate_Func(index2, index1);
-        
+
         totalAmount += parseFloat(calculatedItem.roundedTotalAmount); // Convert to a number
       }
 

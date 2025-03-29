@@ -16,6 +16,7 @@ import { Go_Button, PageLoadingSpinner } from "../../../components/Common/Common
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 import * as report from '../../../Reports/ReportIndex'
 import { IB_Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
+import useCheckStockEntry from "../../../components/Common/commonComponent/CheckStockEntry";
 
 const IBInvoiceList = () => {
 
@@ -41,6 +42,8 @@ const IBInvoiceList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
     const { pageField, vender, makeGRN, deleteMsg } = reducers;
     const { fromdate, todate, venderSelect } = hederFilters;
 
@@ -82,6 +85,9 @@ const IBInvoiceList = () => {
         dispatch(BreadcrumbReset())
     }, []);
 
+    const { Actionhandler } = useCheckStockEntry(hederFilters.fromdate, commonPartyDropSelect);
+
+
     useEffect(() => {
         if (makeGRN.Status === true && makeGRN.StatusCode === 200) {
             history.push({
@@ -122,13 +128,17 @@ const IBInvoiceList = () => {
             OrderIDs: list[0].id.toString(),
             Mode: 2 // mode when challan to make GRN
         })
-        dispatch(makeGRN_Mode_1Action({
-            jsonBody,
-            pageMode: mode.modeSTPsave,
-            grnRef,
-            path: url.IB_GRN,
-            challanNo
-        }))
+
+        Actionhandler({
+            action: makeGRN_Mode_1Action, // The function you want to call
+            params: {
+                jsonBody,
+                pageMode: mode.modeSTPsave,
+                grnRef,
+                path: url.IB_GRN,
+                challanNo
+            },
+        })
     };
 
     function goButtonHandler() {

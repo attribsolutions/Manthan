@@ -38,8 +38,8 @@ import { C_DatePicker } from "../../../CustomValidateForm";
 import GlobalCustomTable from "../../../GlobalCustomTable";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
-import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
 import { showToastAlert } from "../../../helpers/axios_Config";
+import useCheckStockEntry from "../../../components/Common/commonComponent/CheckStockEntry";
 
 
 const PageDetailsFunc = (subPageMode) => {
@@ -89,7 +89,6 @@ const IBInvoice = (props) => {
 
     // ****************************************************************************
 
-    const [modalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
 
@@ -102,7 +101,6 @@ const IBInvoice = (props) => {
         commonPartyDropSelect,
         StockEnteryForFirstYear,
         GRNitem,
-
         VDCItemData,
         vender
     } = useSelector((state) => ({
@@ -127,14 +125,16 @@ const IBInvoice = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
 
-
-
-
     useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Party: _cfunc.loginSelectedPartyID(),
+        })
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(PageDetails.pageID))
         dispatch(GoButtonForChallanAddSuccess([]))
-        dispatch(VDC_Item())
+        if (subPageMode === url.VDC_INVOICE) {
+            dispatch(VDC_Item({ jsonBody }))
+        }
         dispatch(GetVender())
 
         return () => {
@@ -142,11 +142,7 @@ const IBInvoice = (props) => {
             dispatch(makeGRN_Mode_1ActionSuccess({ Status: false }))
         }
 
-
     }, [])
-
-
-
 
     // userAccess useEffect
     useEffect(() => {
@@ -176,6 +172,9 @@ const IBInvoice = (props) => {
                 setCustomerID({ value: GRNitem?.Demand_Reference[0]?.CustomerID, label: GRNitem?.Demand_Reference[0]?.CustomerName })
                 setDemandID({ Demand_ID: Number(GRNitem?.Data.DemandIDs) })
 
+            } else if (subPageMode === url.VDC_INVOICE) {
+                debugger
+                setCustomerID(state.values.Customer)
             }
 
             const Updated_DemandDetails = DemandItemDetails.map((inx_1, key_1) => {
@@ -211,7 +210,6 @@ const IBInvoice = (props) => {
 
                     inx_2.Rate = _cfunc.roundToDecimalPlaces(_hasRate, 2);//max 2 decimal  //initialize
                     inx_2.ActualQuantity = _cfunc.roundToDecimalPlaces(_hasActualQuantity, 3);//max 3 decimal  //initialize
-
 
 
 
@@ -412,7 +410,7 @@ const IBInvoice = (props) => {
                                     <th>Stock </th>
                                     <th>Quantity</th>
                                     <th>Basic Rate</th>
-                                    <th>MRP</th>
+                                    {/* <th>MRP</th> */}
                                 </tr>
                             </thead>
                             <tbody>
@@ -439,7 +437,7 @@ const IBInvoice = (props) => {
                                         <td data-label='Basic Rate' style={{ textAlign: "right" }}>
                                             <span id={`stockItemRate-${index1.id}-${index2.id}`}>{_cfunc.amountCommaSeparateFunc(index2.Rate)}</span>
                                         </td>
-                                        <td data-label='MRP' style={{ textAlign: "right" }}>{_cfunc.amountCommaSeparateFunc(_cfunc.roundToDecimalPlaces(index1.MRP, 2))}</td>
+                                        {/* <td data-label='MRP' style={{ textAlign: "right" }}>{_cfunc.amountCommaSeparateFunc(_cfunc.roundToDecimalPlaces(index1.MRP, 2))}</td> */}
                                     </tr>
                                 ))}
                             </tbody>
@@ -461,38 +459,10 @@ const IBInvoice = (props) => {
 
     }
 
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            "FromDate": values.ChallanDate,
-            "PartyID": commonPartyDropSelect.value
-        });
-
-        const jsonBodyForBackdatedTransaction = JSON.stringify({
-            "TransactionDate": values.ChallanDate,
-            "PartyID": commonPartyDropSelect.value,
-
-        });
-
-        if (commonPartyDropSelect.value > 0) {
-            dispatch(CheckStockEntryForFirstTransaction({ jsonBody }))
-            dispatch(CheckStockEntryforBackDatedTransaction({ jsonBody: jsonBodyForBackdatedTransaction }))
-
-        }
-    }, [values.ChallanDate, commonPartyDropSelect.value])
 
 
 
-    useEffect(() => {
-        if (StockEnteryForFirstYear.Status === true && StockEnteryForFirstYear.StatusCode === 400) {
-            dispatch(CheckStockEntryForFirstTransactionSuccess({ status: false }))
-            customAlert({
-                Type: 3,
-                Message: JSON.stringify(StockEnteryForFirstYear.Message),
-            })
-        }
-    }, [StockEnteryForFirstYear])
-
-
+    const { Actionhandler } = useCheckStockEntry(values.ChallanDate, commonPartyDropSelect);
 
 
     function ChallanDateOnchange(y, v, e) {
@@ -530,7 +500,10 @@ const IBInvoice = (props) => {
             Party: commonPartyDropSelect.value,
             Customer: values.Customer.value
         });
-        dispatch(VDC_Item_Details({ filter }));
+        Actionhandler({
+            action: VDC_Item_Details, // The function you want to call
+            params: { filter },
+        });
     }
 
     function venderOnchange(e) {
@@ -563,7 +536,7 @@ const IBInvoice = (props) => {
                         Rate: stockIndex.Rate,
                         BasicAmount: calculate.basicAmount,
                         TaxType: "GST",
-                        GST: tableIndex.GST,
+                        GST: stockIndex.LiveBatcheGSTID,
                         GSTPercentage: stockIndex.GSTPercentage,
                         HSNCode: stockIndex.HSNCode,
                         GSTAmount: calculate.roundedGstAmount,

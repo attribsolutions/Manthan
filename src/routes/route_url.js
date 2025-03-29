@@ -339,6 +339,10 @@ export const IB_INVOICE_STP = "/IB_Invoice_STP" // IB Invoice from IB Order List
 export const VDC_INVOICE = "/VDC_Invoice" // IB Invoice
 export const VDC_INVOICE_LIST = "/VDC_Invoice_List" // IB Invoice List
 
+
+export const PERIODIC_GRN_REPORT = "/Periodic_GRN_Report" // IB Invoice List
+
+
 //********************************Accounting ***********************************//
 
 export const RECEIPTS = "/Receipts"
@@ -445,6 +449,7 @@ export const ORDER_ITEM_SUPPLIER_REPORT = "/Order_Item_Supplier_Report"
 
 export const VOUCHER_REDEMPTION_CLAIM_ = "/Voucher_Redeemption_Claim"
 
+export const RATE_ADJUSTMENT = "/Rate_Adjustment"
 
 
 

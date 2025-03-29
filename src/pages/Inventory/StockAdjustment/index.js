@@ -18,9 +18,6 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CInput, C_Select, floatRegx } from "../../../CustomValidateForm/index";
 import { goButtonPartyItemAddPageSuccess, goButtonPartyItemAddPage } from "../../../store/Administrator/PartyItemsRedux/action";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
-import BootstrapTable from "react-bootstrap-table-next";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inventory/StockEntryRedux/action";
 import { AddItemInTableFunc, stockQtyUnit_SelectOnchange } from "./StockAdjust_Func";
 import "../../../pages/Sale/SalesReturn/salesReturn.scss";
@@ -80,9 +77,13 @@ const StockAdjustment = (props) => {
         if (subPageMode === url.STOCK_ADJUSTMENT) {
             page_Id = pageId.STOCK_ADJUSTMENT;
         }
-        else {
+        else if (subPageMode === url.STOCK_ADJUSTMENT_MODE_2) {
             page_Id = pageId.STOCK_ADJUSTMENT_MODE_2;
+        } else if (subPageMode === url.RATE_ADJUSTMENT) {
+            page_Id = pageId.RATE_ADJUSTMENT;
         }
+
+
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id));
 
@@ -163,6 +164,7 @@ const StockAdjustment = (props) => {
         setTableArr([]);
         dispatch(goButtonPartyItemAddPageSuccess([]))
     }
+
 
     const ItemAddButtonHandler = async () => {
 
@@ -380,7 +382,7 @@ const StockAdjustment = (props) => {
             formatExtraData: { tableList: TableArr },
             formatter: (cellContent, index1, keys_, { tableList = [] }) => {
                 if (index1.GroupRow || index1.SubGroupRow) { return }
-
+                
                 return <>
                     <div className="table-responsive">
                         <table className="custom-table ">
@@ -388,7 +390,7 @@ const StockAdjustment = (props) => {
                                 <tr>
                                     <th>BatchCode</th>
                                     <th>Stock </th>
-                                    <th>Quantity</th>
+                                    {(subPageMode === url.RATE_ADJUSTMENT) ? <th>Rate</th> : <th>Quantity</th>}
                                     <th>MRP</th>
                                     <th></th>
                                 </tr>
@@ -400,20 +402,35 @@ const StockAdjustment = (props) => {
                                         <td data-label="Stock Quantity" style={{ textAlign: "right" }} >
                                             <samp id={`ActualQuantity-${index1.id}-${index2.id}`}>{index2.ActualQuantity}</samp>
                                         </td>
-                                        <td data-label='Quantity'>
-                                            <Input
-                                                type="text"
-                                                disabled={pageMode === 'edit' ? true : false}
-                                                placeholder="Manually enter quantity"
-                                                className="right-aligned-placeholder"
-                                                key={`batchQty${index1.id}-${index2.id}`}
-                                                id={`batchQty${index1.id}-${index2.id}`}
-                                                autoComplete="off"
-                                                defaultValue={index2.Qty}
-                                                onChange={(event) => {
-                                                    QuantityOnchange(event, index1, index2, tableList);
-                                                }}
-                                            />
+                                        <td data-label={(subPageMode === url.RATE_ADJUSTMENT) ? `Quantity` : `Rate`}>
+
+                                            {(subPageMode === url.RATE_ADJUSTMENT) ?
+                                                <Input
+                                                    type="text"
+                                                    disabled={pageMode === 'edit' ? true : false}
+                                                    placeholder="Manually enter quantity"
+                                                    className="right-aligned-placeholder"
+                                                    key={`batchQty${index1.id}-${index2.id}`}
+                                                    id={`batchQty${index1.id}-${index2.id}`}
+                                                    autoComplete="off"
+                                                    defaultValue={index2.Rate}
+                                                    onChange={(event) => {
+                                                        index2.Rate = Number(event.target.value)
+                                                    }}
+                                                />
+                                                : <Input
+                                                    type="text"
+                                                    disabled={pageMode === 'edit' ? true : false}
+                                                    placeholder="Manually enter quantity"
+                                                    className="right-aligned-placeholder"
+                                                    key={`batchQty${index1.id}-${index2.id}`}
+                                                    id={`batchQty${index1.id}-${index2.id}`}
+                                                    autoComplete="off"
+                                                    defaultValue={index2.Qty}
+                                                    onChange={(event) => {
+                                                        QuantityOnchange(event, index1, index2, tableList);
+                                                    }}
+                                                />}
                                         </td>
                                         <td data-label="MRP">{index2.MRP}</td>
                                         < td >
@@ -485,7 +502,9 @@ const StockAdjustment = (props) => {
                 // function changebodyFunc() {
                 accumulator.push({
                     "Item": index2.Item,
-                    "Quantity": index2.Qty,
+                    // "Quantity": index2.Qty,
+                    "Quantity": (subPageMode === url.RATE_ADJUSTMENT) ? undefined : index2.Qty, // Only set "Quantity" if condition is false
+                    "Rate": (subPageMode === url.RATE_ADJUSTMENT) ? index2.Rate : undefined,
                     "MRP": index2.MRPID,
                     "Unit": index1.UnitID,
                     "GST": index2.GSTID,
@@ -536,7 +555,7 @@ const StockAdjustment = (props) => {
                 "IsStockAdjustment": true,//if stock  
                 "IsAllStockZero": false
             })
-            dispatch(saveStockEntryAction({ jsonBody }));
+            dispatch(saveStockEntryAction({ jsonBody, subPageMode }));
         }
         catch (w) { }
     };

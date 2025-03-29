@@ -260,6 +260,7 @@ import DataExportToSAP from "../pages/Adminisrator/DataExportToSAP/DataExportToS
 import GRNDiscrepancyReport from "../Reports/GRNDiscrepancyReport/GRNDiscrepancyReport.js";
 import CodeRedemtionReport from "../Reports/CodeRedemtionReport/CodeRedemtionReport.js";
 import VoucherRedemptionClaim from "../Reports/VoucherRedemptionClaim/VoucherRedemptionClaim.js";
+import PeriodicGRNReport from "../Reports/PeriodicGRNReport/PeriodicGRNReport.js";
 
 
 const userRoutes = [
@@ -568,6 +569,10 @@ const userRoutes = [
 	{ path: path.IB_INVOICE_FOR_GRN, component: InvoiceList },
 
 
+	{ path: path.PERIODIC_GRN_REPORT, component: PeriodicGRNReport },
+
+
+
 
 	// { path: path.IB_INVOICE, component: Invoice },
 	{ path: path.IB_INVOICE_STP, component: OrderList },
@@ -672,7 +677,7 @@ const userRoutes = [
 
 	{ path: path.VOUCHER_REDEMPTION_CLAIM_, component: VoucherRedemptionClaim },
 
-
+	{ path: path.RATE_ADJUSTMENT, component: StockAdjustment },
 
 
 	//******************************* Sweet Pos ************************************//

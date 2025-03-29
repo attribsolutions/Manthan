@@ -293,7 +293,10 @@ export const IB_INVOICE_FOR_GRN = 146
 export const IB_INVOICE_STP = 132
 
 export const VDC_INVOICE = 333
-export const VDC_INVOICE_LIST = 334  
+export const VDC_INVOICE_LIST = 334
+
+export const RATE_ADJUSTMENT = 337
+
 
 
 // export const IB_INVOICE_STP = 132
@@ -384,6 +387,9 @@ export const STOCK_REPORT_1 = 216
 export const DEBIT_DATA_EXPORT = 243
 
 export const CREDIT_DATA_EXPORT = 244
+
+export const PERIODIC_GRN_REPORT_ = 338
+
 
 export const RECEIPT_DATA_EXPORT = 245
 

@@ -1685,7 +1685,7 @@ const StockEntry = (props) => {
     };
 
     const paginationOptions = {
-        sizePerPage: 300, // Number of rows per page
+        sizePerPage: 30, // Number of rows per page
         hideSizePerPage: true, // Hide the size per page dropdown
         hidePageListOnlyOnePage: true, // Hide the pagination list when there's only one page
         onPageChange: (page, sizePerPage) => {
