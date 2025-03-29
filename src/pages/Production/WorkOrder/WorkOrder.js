@@ -322,8 +322,8 @@ const WorkOrder = (props) => {
             ItemID: index.Item,
             Unit: index.Unit,
             UnitName: index.UnitName,
-            EstimatedOutputQty: index.EstimatedOutputQty,
-            StockQty: index.StockQty.toFixed(2),
+            EstimatedOutputQty: _cfunc.getFixedNumber(index.EstimatedOutputQty, 3),
+            StockQty: _cfunc.getFixedNumber(index.StockQty, 2),
             BOMDate: index.BomDate, // Assuming this returns a string
         }))
         .sort((a, b) => {

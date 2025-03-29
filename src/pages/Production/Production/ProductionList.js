@@ -4,7 +4,7 @@ import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { ToDate, date_ymd_func, disablePriviousTodate, loginPartyID } from "../../../components/Common/CommonFunction";
+import { ToDate, date_ymd_func, disablePriviousTodate, loginPartyID, loginSelectedPartyID } from "../../../components/Common/CommonFunction";
 import {
     updateWorkOrderListSuccess
 } from "../../../store/Production/WorkOrder/action";
@@ -108,6 +108,7 @@ const ProductionList = () => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
+            Party: loginSelectedPartyID()
         });
 
         dispatch(getProductionListPage(jsonBody));
