@@ -1,0 +1,35 @@
+{
+    "StatusCode": 200,
+    "Status": true,
+    "Message": "PeriodicGRNReport",
+    "Data": [
+        {
+            "id": 44237,
+            "GRNDate": "2025-03-01",
+            "GRNNo": 78,
+            "PO": null,
+            "SupplierID": 30,
+            "Supplier": "New Shantisagar Agencies",
+            "ChallanNo": "CM/24-25/740",
+            "ItemID": 14,
+            "ItemName": "Banana Chips Twisted Masala 125 g",
+            "Quantity": "8.000",
+            "Rate": "42.43",
+            "BasicAmount": "339.44",
+            "GSTAmount": "40.74",
+            "Amount": "380.18",
+            "DiscountType": "2",
+            "Discount": "0.00",
+            "DiscountAmount": "0.00",
+            "CGST": "20.37",
+            "SGST": "20.37",
+            "IGST": "0.00",
+            "CGSTPercentage": "6.00",
+            "SGSTPercentage": "6.00",
+            "IGSTPercentage": "0.00",
+            "GSTPercentage": "12.00",
+            "UnitID": 41,
+            "Unit": "No"
+        }
+    ]
+}

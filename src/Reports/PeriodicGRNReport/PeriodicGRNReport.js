@@ -15,7 +15,7 @@ import * as report from '../ReportIndex'
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 
-import { Periodic_GRN_Report, Periodic_GRN_Report_Success } from "../../store/Report/PeriodicGRNRedux/action";
+import { Periodic_GRN_Report_Success } from "../../store/Report/PeriodicGRNRedux/action";
 import { Periodic_Grn_Report_Api } from "../../helpers/backend_helper";
 
 const PeriodicGRNReport = (props) => {
@@ -72,6 +72,7 @@ const PeriodicGRNReport = (props) => {
     }, [])
 
     useEffect(() => {
+        debugger
         try {
             if ((PrediocGrnData.Status === true) && (PrediocGrnData.StatusCode === 200)) {
                 if (PrediocGrnData.BtnMode === "excel") {
@@ -97,6 +98,7 @@ const PeriodicGRNReport = (props) => {
     }, [PrediocGrnData]);
 
     useEffect(() => {
+        debugger
         try {
             if (PrediocGrnData.BtnMode === "print") {
                 if ((pdfdata.Status === true) && (pdfdata.StatusCode === 204)) {
@@ -118,8 +120,12 @@ const PeriodicGRNReport = (props) => {
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
-            // "Suppiler": _cfunc.loginSelectedPartyID()
-            "Suppiler": 0
+            "PartyID": _cfunc.loginSelectedPartyID()
+
+
+            // "FromDate": "2025-03-01",
+            // "ToDate": "2025-03-26",
+            // "PartyID": 0
 
         });
         let config = { ReportType: report.PeriodicGRN, jsonBody, BtnMode: btnMode }
@@ -179,7 +185,7 @@ const PeriodicGRNReport = (props) => {
                                 type="button"
                                 spinnerColor="white"
                                 className="btn btn-success m-3 mr"
-                                // loading={goBtnLoading}
+                                loading={PrediocGrnData.BtnMode === "print"}
                                 onClick={(e) => excel_And_GoBtnHandler(e, "print")}
                             >
                                 Print
@@ -187,7 +193,7 @@ const PeriodicGRNReport = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                // loading={excelLoading}
+                                loading={PrediocGrnData.BtnMode === "excel"}
                                 className="btn btn-primary m-3 mr"
                                 onClick={(e) => excel_And_GoBtnHandler(e, "excel")}
                             >

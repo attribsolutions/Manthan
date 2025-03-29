@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { CheckStockEntryforBackDatedTransaction, CheckStockEntryForFirstTransaction } from '../../../store/actions';
+import { CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess, CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess } from '../../../store/actions';
 import { customAlert } from '../../../CustomAlert/ConfirmDialog';
 
 const useCheckStockEntry = (TransactionDate, commonPartyDropSelect) => {
@@ -29,32 +29,37 @@ const useCheckStockEntry = (TransactionDate, commonPartyDropSelect) => {
             dispatch(CheckStockEntryForFirstTransaction({ jsonBody }));
             dispatch(CheckStockEntryforBackDatedTransaction({ jsonBody: jsonBodyForBackdatedTransaction }));
         }
+
+
+        return () => {
+            dispatch(CheckStockEntryForFirstTransactionSuccess({ status: false }))
+            dispatch(CheckStockEntryforBackDatedTransactionSuccess({ status: false }))
+        }
+
     }, [TransactionDate, commonPartyDropSelect.value, dispatch]);
 
-    useEffect(() => {
-        if (StockEnteryForFirstYear.Status === true && StockEnteryForFirstYear.StatusCode === 400) {
-            customAlert({
-                Type: 3,
-                Message: JSON.stringify(StockEnteryForFirstYear.Message),
-            });
-        }
-    }, [StockEnteryForFirstYear]);
 
 
-
-    const Actionhandler = ({ action, params, callback }) => {
-        debugger
-        if (StockEnteryForBackdated.Status === true && StockEnteryForBackdated.StatusCode === 400) {
-            customAlert({ Type: 3, Message: StockEnteryForBackdated.Message });
-        } else {
-            if (callback) {
-                callback();
-            } else {
-                dispatch(action(params));
+    const Actionhandler = ({ action, params, callback, }) => {
+        const validationChecks = [StockEnteryForBackdated, StockEnteryForFirstYear]
+        // Loop through validation checks and show alert if any condition fails
+        for (const check of validationChecks) {
+            if (check.Status === true && check.StatusCode === 400) {
+                customAlert({
+                    Type: 3,
+                    Message: JSON.stringify(check.Message),
+                });
+                return;  // Stop further execution if a check fails
             }
+        }
 
+        if (callback) {
+            callback();
+        } else {
+            dispatch(action(params));
         }
     };
+
 
     return { Actionhandler };
 };

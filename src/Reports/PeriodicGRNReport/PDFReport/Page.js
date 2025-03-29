@@ -4,6 +4,7 @@ import * as style from './ReportStyle'
 import { date_dmy_func } from "../../../components/Common/CommonFunction";
 
 
+
 var pageHeder = function (doc, data) {
     style.pageBorder(doc, data);
     style.pageHeder(doc, data);     //Title
@@ -29,17 +30,13 @@ const generateReportPage = (doc, data) => {
 
 
 const PeriodicGRNReport = (Data) => {
-    debugger
+
     var doc = new jsPDF('l', 'pt', 'a4');
-    Data.forEach((data, index) => {
-        if (index !== 0) {  // Add a new page only after the first iteration
-            doc.addPage();
-        }
-        generateReportPage(doc, data);
-        doc.setProperties({
-            title: `Stock_Report From ${date_dmy_func(data.FromDate)} To ${date_dmy_func(data.ToDate)} Party (${data.PartyName})`
-        });
+    generateReportPage(doc, Data);
+    doc.setProperties({
+        title: `Stock_Report From ${date_dmy_func(Data.FromDate)} To ${date_dmy_func(Data.ToDate)} Party (${Data.PartyName})`
     });
+
 
     function generateSaveAndOpenPDFReport() {
         const pdfUrl = URL.createObjectURL(doc.output('blob'));

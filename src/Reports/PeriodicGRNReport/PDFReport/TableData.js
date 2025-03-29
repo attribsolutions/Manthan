@@ -20,21 +20,18 @@ export const PageHedercolumns = [
 ]
 
 export const Rows = (data) => {
-    const { StockDetails = [] } = data
-    StockDetails.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
-
-    StockDetails.forEach((element, key) => {
+    data.forEach((element, key) => {
         const tableitemRow = [
             `${element.GRNDate}`,
             `${element.GRNNo}`,
-            `${element.PO}`,
+            `${element.PO ? element.PO : ""}`,
             `${element.Supplier}`,
             `${element.ChallanNo}`,
             `${element.ItemName}`,
             `${(Number(element.Quantity).toFixed(2))}`,
             `${(Number(element.Rate).toFixed(2))}`,
-            `${(Number(element.Unit).toFixed(2))}`,
+            `${element.Unit}`,
         ];
         returnArr.push(tableitemRow);
     })
