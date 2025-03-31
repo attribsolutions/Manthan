@@ -757,14 +757,14 @@ const WorkOrder = (props) => {
                                 )}
                             </ToolkitProvider> : null}
 
-                        < SaveButtonDraggable >
+                        {tableData.length > 0 && < SaveButtonDraggable >
                             <SaveButton pageMode={pageMode}
                                 loading={saveBtnloading}
                                 onClick={SaveHandler}
                                 userAcc={userPageAccessState}
                                 editCreatedBy={editCreatedBy}
                             />
-                        </SaveButtonDraggable>
+                        </SaveButtonDraggable>}
 
                     </form>
                 </div>

@@ -8,6 +8,7 @@ import {
   loginUserDetails,
   loginUserID,
   roundToDecimalPlaces,
+  strToBool,
 } from "../../../components/Common/CommonFunction";
 import {
   Invoice_1_GoButton_API,
@@ -75,9 +76,8 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Franchies_invoice_Calculate_Func } from "../../../pages/Sale/Franchies_Invoice/FranchiesInvoiceFunc";
 
 
-const isSweetAndSnacksCompany = IsSweetAndSnacksCompany()
 
-debugger
+
 //post api for Invoice Master
 function* save_Invoice_Genfun({ config }) {
 
@@ -99,7 +99,8 @@ function* save_Invoice_Genfun({ config }) {
 }
 
 function* Invoice_Send_To_Scm_GenFun({ config }) {
-  debugger      // Save API
+  const isSweetAndSnacksCompany = IsSweetAndSnacksCompany()
+
   try {
     let response = ""
     if (isSweetAndSnacksCompany) {
@@ -116,7 +117,7 @@ function* Invoice_Send_To_Scm_GenFun({ config }) {
 
 // Invoice List
 function* InvoiceListGenFunc({ config }) {
-
+  const isSweetAndSnacksCompany = IsSweetAndSnacksCompany()
   const isSendToScm = loginSystemSetting().InvoiceSendToSCMButton
   const PartyTypeID = loginUserDetails().PartyTypeID
   try {
@@ -295,83 +296,184 @@ function* DeleteInvoiceGenFunc({ config }) {
 
 // GO-Botton SO-invoice Add Page API
 function invoice_GoButton_dataConversion_Func(response, customer = '') {
+  const isTrayEnterQuantity = strToBool(loginSystemSetting().IsTrayEnterQuantity)
+  const isSweetAndSnacksCompany = IsSweetAndSnacksCompany()
 
   // Iterate over OrderItemDetails array and perform data conversion
-  response.Data.OrderItemDetails = response.Data.OrderItemDetails.map(index1 => {
-
-    const isUnitIDPresent = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
-    const isMCunitID = index1.UnitDetails.find(findEle => findEle.DeletedMCUnitsUnitID === index1.DeletedMCUnitsUnitID);
-    const defaultunit = isUnitIDPresent !== undefined ? isUnitIDPresent : isMCunitID;
-    debugger
-    const { IsTCSParty, ISCustomerPAN } = customer;
-
-    index1.Quantity = roundToDecimalPlaces(index1.Quantity, 3);  //initialize // Round to 3 decimal places
-    index1.Discount = roundToDecimalPlaces(index1.Discount, 2);// Round to 2 decimal places
-    index1.OrderQty = index1.Quantity;//initialize
-    index1.default_UnitDropvalue = {//initialize
-      value: index1.Unit,
-      label: index1.UnitName,
-      ConversionUnit: '1',
-      Unitlabel: index1.UnitName,
-      BaseUnitQuantity: defaultunit.BaseUnitQuantity,
-      BaseUnitQuantityNoUnit: defaultunit.BaseUnitQuantityNoUnit,
-    };
-    index1.InpStockQtyTotal = `${Number(index1.Quantity) * Number(index1.ConversionUnit)}`;
-    index1.StockInValid = false;  //initialize
-    index1.StockInvalidMsg = '';  //initialize
-    index1.IsTCSParty = IsTCSParty  //initialize  //is tcsParty flag for
-    index1.IsCustomerPAN = ISCustomerPAN //initialize
 
 
-    let totalAmount = 0;
-    let remainingOrderQty = parseFloat(index1.Quantity); // Convert to a number
-    let totalStockQty = 0;
+  if (isSweetAndSnacksCompany && isTrayEnterQuantity) {
+    response.Data.OrderItemDetails = response.Data.OrderItemDetails.map(index1 => {
 
-    // Iterate over StockDetails array and perform data conversion
-    index1.StockDetails = index1.StockDetails.map(index2 => {
+      const isUnitIDPresent = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
+      const isMCunitID = index1.UnitDetails.find(findEle => findEle.DeletedMCUnitsUnitID === index1.DeletedMCUnitsUnitID);
+      const defaultunit = isUnitIDPresent !== undefined ? isUnitIDPresent : isMCunitID;
+      debugger
+      const { IsTCSParty, ISCustomerPAN } = customer;
 
-      index2.initialRate = index2.Rate;  //initialize
+      index1.Quantity = roundToDecimalPlaces(index1.Quantity, 3);  //initialize // Round to 3 decimal places
+      index1.Discount = roundToDecimalPlaces(index1.Discount, 2);// Round to 2 decimal places
+      index1.OrderQty = index1.Quantity;//initialize
 
-      const _hasRate = ((defaultunit.BaseUnitQuantity / defaultunit.BaseUnitQuantityNoUnit) * index2.initialRate);
-      const _hasActualQuantity = (index2.BaseUnitQuantity / defaultunit.BaseUnitQuantity);
+      const isBaseUnit = index1.UnitDetails.find(findEle => findEle.IsBase);
+      index1.Quantity = roundToDecimalPlaces(index1.BaseUnitQuantity, 3);  //initialize // Round to 3 decimal places
 
 
-      index2.Rate = roundToDecimalPlaces(_hasRate, 2);//max 2 decimal  //initialize
-      index2.ActualQuantity = roundToDecimalPlaces(_hasActualQuantity, 3);//max 3 decimal  //initialize
+      index1.default_UnitDropvalue = {//initialize
+        value: isBaseUnit.UnitID,
+        label: isBaseUnit.UnitName,
+        ConversionUnit: '1',
+        Unitlabel: isBaseUnit.UnitName,
+        BaseUnitQuantity: isBaseUnit.BaseUnitQuantity,
+        BaseUnitQuantityNoUnit: isBaseUnit.BaseUnitQuantityNoUnit,
+      };
+      index1.InpStockQtyTotal = `${Number(index1.Quantity) * Number(index1.ConversionUnit)}`;
+      index1.StockInValid = false;  //initialize
+      index1.StockInvalidMsg = '';  //initialize
+      index1.IsTCSParty = IsTCSParty  //initialize  //is tcsParty flag for
+      index1.IsCustomerPAN = ISCustomerPAN //initialize
 
-      //+++++++++++++++++++++ stock Distribute +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-      const stockQty = parseFloat(index2.ActualQuantity); // Convert to a number
-      totalStockQty += stockQty;
+      debugger
+      index1["TrayQuantity"] = index1.OrderQty
 
-      const qtyToDeduct = Math.min(remainingOrderQty, stockQty);
-      index2.Qty = roundToDecimalPlaces(qtyToDeduct, 3); // Round to three decimal places
-      remainingOrderQty = roundToDecimalPlaces(remainingOrderQty - qtyToDeduct, 3); // Round the remaining order quantity
+      let totalAmount = 0;
+      let remainingOrderQty = parseFloat(index1.Quantity); // Convert to a number
+      let totalStockQty = 0;
 
-      if (qtyToDeduct > 0) {// Calculate total amount if quantity is greater than 0
+      // Iterate over StockDetails array and perform data conversion
+      index1.StockDetails = index1.StockDetails.map(index2 => {
 
-        const calculatedItem = invoice_discountCalculate_Func(index2, index1);
+        index2.initialRate = index2.Rate;  //initialize
 
-        totalAmount += parseFloat(calculatedItem.roundedTotalAmount); // Convert to a number
+        const _hasRate = ((isBaseUnit.BaseUnitQuantity / isBaseUnit.BaseUnitQuantityNoUnit) * index2.initialRate);
+        const _hasActualQuantity = (index2.BaseUnitQuantity / isBaseUnit.BaseUnitQuantity);
+
+
+        index2.Rate = roundToDecimalPlaces(_hasRate, 2);//max 2 decimal  //initialize
+        index2.ActualQuantity = roundToDecimalPlaces(_hasActualQuantity, 3);//max 3 decimal  //initialize
+
+        //+++++++++++++++++++++ stock Distribute +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        const stockQty = parseFloat(index2.ActualQuantity); // Convert to a number
+        totalStockQty += stockQty;
+
+        const qtyToDeduct = Math.min(remainingOrderQty, stockQty);
+        index2.Qty = roundToDecimalPlaces(qtyToDeduct, 3); // Round to three decimal places
+        remainingOrderQty = roundToDecimalPlaces(remainingOrderQty - qtyToDeduct, 3); // Round the remaining order quantity
+
+        if (qtyToDeduct > 0) {// Calculate total amount if quantity is greater than 0
+
+          const calculatedItem = invoice_discountCalculate_Func(index2, index1);
+
+          totalAmount += parseFloat(calculatedItem.roundedTotalAmount); // Convert to a number
+        }
+
+        return index2;
+      });
+      //+++++++++++++++++++++++++++++++++++++++++++++++++++
+
+      index1.ItemTotalStock = roundToDecimalPlaces(totalStockQty, 3); //max 3 decimal
+      index1.ItemTotalAmount = roundToDecimalPlaces(totalAmount, 2); //max 2 decimal
+
+      // Check for stock availability and set corresponding message
+      if (index1.ItemTotalStock < index1.Quantity) {
+        index1.StockInValid = true;
+        const diffrence = Math.abs(index1.ItemTotalStock - index1.Quantity);
+        const msg1 = `Short Stock Quantity ${index1.Quantity}`;
+        const msg2 = `Short Stock Quantity ${diffrence}`;
+        index1.StockInvalidMsg = index1.ItemTotalStock === 0 ? msg1 : msg2;
       }
 
-      return index2;
+      return index1;
     });
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++
+  } else {
+    response.Data.OrderItemDetails = response.Data.OrderItemDetails.map(index1 => {
 
-    index1.ItemTotalStock = roundToDecimalPlaces(totalStockQty, 3); //max 3 decimal
-    index1.ItemTotalAmount = roundToDecimalPlaces(totalAmount, 2); //max 2 decimal
+      const isUnitIDPresent = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
+      const isMCunitID = index1.UnitDetails.find(findEle => findEle.DeletedMCUnitsUnitID === index1.DeletedMCUnitsUnitID);
+      const defaultunit = isUnitIDPresent !== undefined ? isUnitIDPresent : isMCunitID;
+      debugger
+      const { IsTCSParty, ISCustomerPAN } = customer;
 
-    // Check for stock availability and set corresponding message
-    if (index1.ItemTotalStock < index1.Quantity) {
-      index1.StockInValid = true;
-      const diffrence = Math.abs(index1.ItemTotalStock - index1.Quantity);
-      const msg1 = `Short Stock Quantity ${index1.Quantity}`;
-      const msg2 = `Short Stock Quantity ${diffrence}`;
-      index1.StockInvalidMsg = index1.ItemTotalStock === 0 ? msg1 : msg2;
-    }
+      index1.Quantity = roundToDecimalPlaces(index1.Quantity, 3);  //initialize // Round to 3 decimal places
+      index1.Discount = roundToDecimalPlaces(index1.Discount, 2);// Round to 2 decimal places
+      index1.OrderQty = index1.Quantity;//initialize
+      index1.default_UnitDropvalue = {//initialize
+        value: index1.Unit,
+        label: index1.UnitName,
+        ConversionUnit: '1',
+        Unitlabel: index1.UnitName,
+        BaseUnitQuantity: defaultunit.BaseUnitQuantity,
+        BaseUnitQuantityNoUnit: defaultunit.BaseUnitQuantityNoUnit,
+      };
+      index1.InpStockQtyTotal = `${Number(index1.Quantity) * Number(index1.ConversionUnit)}`;
+      index1.StockInValid = false;  //initialize
+      index1.StockInvalidMsg = '';  //initialize
+      index1.IsTCSParty = IsTCSParty  //initialize  //is tcsParty flag for
+      index1.IsCustomerPAN = ISCustomerPAN //initialize
+      index1["TrayQuantity"] = null
+      let totalAmount = 0;
+      let remainingOrderQty = parseFloat(index1.Quantity); // Convert to a number
+      let totalStockQty = 0;
 
-    return index1;
-  });
+      // Iterate over StockDetails array and perform data conversion
+      index1.StockDetails = index1.StockDetails.map(index2 => {
+
+        index2.initialRate = index2.Rate;  //initialize
+
+        const _hasRate = ((defaultunit.BaseUnitQuantity / defaultunit.BaseUnitQuantityNoUnit) * index2.initialRate);
+        const _hasActualQuantity = (index2.BaseUnitQuantity / defaultunit.BaseUnitQuantity);
+
+
+        index2.Rate = roundToDecimalPlaces(_hasRate, 2);//max 2 decimal  //initialize
+        index2.ActualQuantity = roundToDecimalPlaces(_hasActualQuantity, 3);//max 3 decimal  //initialize
+
+        //+++++++++++++++++++++ stock Distribute +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        const stockQty = parseFloat(index2.ActualQuantity); // Convert to a number
+        totalStockQty += stockQty;
+
+        const qtyToDeduct = Math.min(remainingOrderQty, stockQty);
+        index2.Qty = roundToDecimalPlaces(qtyToDeduct, 3); // Round to three decimal places
+        remainingOrderQty = roundToDecimalPlaces(remainingOrderQty - qtyToDeduct, 3); // Round the remaining order quantity
+
+        if (qtyToDeduct > 0) {// Calculate total amount if quantity is greater than 0
+
+          const calculatedItem = invoice_discountCalculate_Func(index2, index1);
+
+          totalAmount += parseFloat(calculatedItem.roundedTotalAmount); // Convert to a number
+        }
+
+        return index2;
+      });
+      //+++++++++++++++++++++++++++++++++++++++++++++++++++
+
+      index1.ItemTotalStock = roundToDecimalPlaces(totalStockQty, 3); //max 3 decimal
+      index1.ItemTotalAmount = roundToDecimalPlaces(totalAmount, 2); //max 2 decimal
+
+      // Check for stock availability and set corresponding message
+      if (index1.ItemTotalStock < index1.Quantity) {
+        index1.StockInValid = true;
+        const diffrence = Math.abs(index1.ItemTotalStock - index1.Quantity);
+        const msg1 = `Short Stock Quantity ${index1.Quantity}`;
+        const msg2 = `Short Stock Quantity ${diffrence}`;
+        index1.StockInvalidMsg = index1.ItemTotalStock === 0 ? msg1 : msg2;
+      }
+
+      return index1;
+    });
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
 
   return response;
 }

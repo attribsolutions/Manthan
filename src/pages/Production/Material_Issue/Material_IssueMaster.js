@@ -170,6 +170,7 @@ const MaterialIssueMaster = (props) => {
 
                 const Qty_Distribution_data = Qty_Distribution_Func(Data);
                 setGoButtonList(Qty_Distribution_data)
+                dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
             }
             else {
                 if (changeButtonEnable) {

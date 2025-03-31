@@ -142,14 +142,35 @@ const IBInvoiceList = () => {
     };
 
     function goButtonHandler() {
-        const jsonBody = JSON.stringify({
+
+        let json = {}
+        const jsonBody_1 = JSON.stringify({
+            FromDate: fromdate,
+            ToDate: todate,
+            Customer: loginPartyID(),
+            Party: venderSelect === "" ? '' : venderSelect.value,
+            IsVDCChallan: 1
+        });
+
+
+        const jsonBody_2 = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
             Party: loginPartyID(),
             Customer: venderSelect === "" ? '' : venderSelect.value,
-            IsVDCChallan: (subPageMode === url.VDC_INVOICE_LIST) ? 1 : 2
+            IsVDCChallan: 0
         });
-        dispatch(challanList_ForListPage(jsonBody));
+
+        if (subPageMode === url.VDC_INVOICE_LIST) {
+            json = jsonBody_1
+
+        } else {
+            json = jsonBody_2
+
+        }
+
+
+        dispatch(challanList_ForListPage(json));
     }
 
     function downBtnFunc(config) {

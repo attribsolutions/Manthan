@@ -1,4 +1,4 @@
-import { date_dmy_func } from "../../components/Common/CommonFunction";
+import { date_dmy_func, getFixedNumber, loginSystemSetting, strToBool } from "../../components/Common/CommonFunction";
 import { convertAmericanDollars, numberWithCommas, toWords } from "../Report_common_function";
 
 
@@ -74,6 +74,7 @@ export const Bankcolumn = [
 ]
 
 export const Rows = (data) => {
+    const isTrayEnterQuantity = strToBool(loginSystemSetting().IsTrayEnterQuantity)
     const { InvoiceItems = [] } = data
     InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
@@ -86,6 +87,8 @@ export const Rows = (data) => {
     let SrNO = 1
     let TotalGst = 0
     let GSTPercentage = 0
+    let TrayTotal = 0
+
 
     const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
 
@@ -93,7 +96,7 @@ export const Rows = (data) => {
         const { HSNCode, ItemName, MRP, Rate, Discount, CGST, SGST, Amount,
             DiscountAmount, BasicAmount, Quantity, UnitName, MRPValue,
             CGSTPercentage, SGSTPercentage, GSTPercentage, BatchCode,
-            BatchDate, DiscountType, PrimaryUnitName, ItemExpiryDate } = currentItem;
+            BatchDate, DiscountType, PrimaryUnitName, ItemExpiryDate, TrayQuantity } = currentItem;
         let PcsinNumber = ""
         let PcsinNumberUnit = ""
         const pattern = /\((.*?)\)/;
@@ -127,7 +130,7 @@ export const Rows = (data) => {
                 BasicAmount: Number(BasicAmount), Quantity: Number(Quantity),
                 UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchDate,
                 BatchCode: BatchCode, BatchDate: BatchDate,
-                quantityString: ` ${BatchCode} - M(${date_dmy_func(BatchDate)}) - E(${date_dmy_func(ItemExpiryDate)}) - ${Quantity}`, PrimaryUnitName
+                quantityString: ` ${BatchCode} - M(${date_dmy_func(BatchDate)}) - E(${date_dmy_func(ItemExpiryDate)}) - ${Quantity}`, PrimaryUnitName, TrayQuantity
             };
         }
         return accumulator;
@@ -177,17 +180,17 @@ export const Rows = (data) => {
             totalBasicAmount = Number(totalBasicAmount) + Number(element.BasicAmount)
             TotalGst = totalCGst + totalSGst;
             GSTPercentage = Number(element.CGSTPercentage) + Number(element.SGSTPercentage)
+            TrayTotal = (getFixedNumber(TrayTotal, 2)) + (getFixedNumber(element?.TrayQuantity, 2))
             let cgst = data["tableTot"].TotalCGst
             return ({ TotalCGst: Number(totalCGst) + Number(cgst) })
-
         };
 
 
         function totalrow() {
-
+            const trayText = isTrayEnterQuantity ? `Total Tray:${getFixedNumber(TrayTotal, 0)} ` : "";
             return [
                 "",
-                ` GST ${(parseFloat(GSTPercentage))}%  Total:${numberWithCommas(Number(TotalGst).toFixed(2))} `,
+                `${trayText}          GST ${(parseFloat(GSTPercentage))}%  Total:${numberWithCommas(Number(TotalGst).toFixed(2))} `,
                 " ",
                 ``,
                 "",
@@ -253,6 +256,7 @@ export const Rows = (data) => {
 }
 
 export const RowsWithIGST = (data) => {
+    const isTrayEnterQuantity = strToBool(loginSystemSetting().IsTrayEnterQuantity)
     debugger
     const { InvoiceItems = [] } = data
     InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
@@ -264,12 +268,13 @@ export const RowsWithIGST = (data) => {
     let totalQuantity = 0
     let SrNO = 1
     let GSTPercentage = 0
+    let TrayTotal = 0
 
     const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
 
         const { HSNCode, ItemName, IGSTPercentage, MRP, Rate, Discount, CGST, SGST, Amount, DiscountAmount,
             BasicAmount, Quantity, UnitName, MRPValue, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchCode,
-            BatchDate, DiscountType, PrimaryUnitName, IGST, ItemExpiryDate, MixItemId } = currentItem;
+            BatchDate, DiscountType, PrimaryUnitName, IGST, ItemExpiryDate, MixItemId, TrayQuantity } = currentItem;
 
         let PcsinNumber = ""
         let PcsinNumberUnit = ""
@@ -305,7 +310,7 @@ export const RowsWithIGST = (data) => {
                 Amount: Number(Amount), DiscountAmount: Number(DiscountAmount), BasicAmount: Number(BasicAmount),
                 Quantity: Number(Quantity), UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage,
                 BatchDate, BatchCode: BatchCode, BatchDate: BatchDate,
-                quantityString: ` ${BatchCode} - M(${date_dmy_func(BatchDate)}) - E(${date_dmy_func(ItemExpiryDate)}) - ${Quantity}`, PrimaryUnitName, IGST, MixItemId
+                quantityString: ` ${BatchCode} - M(${date_dmy_func(BatchDate)}) - E(${date_dmy_func(ItemExpiryDate)}) - ${Quantity}`, PrimaryUnitName, IGST, MixItemId, TrayQuantity,
             };
         }
         return accumulator;
@@ -348,16 +353,16 @@ export const RowsWithIGST = (data) => {
             totalAmount = Number(totalAmount) + Number(element.Amount)
             totalBasicAmount = Number(totalBasicAmount) + Number(element.BasicAmount)
             GSTPercentage = Number(element.IGSTPercentage)
-
+            TrayTotal = (getFixedNumber(TrayTotal, 2)) + (getFixedNumber(element?.TrayQuantity, 2))
 
         };
 
 
         function totalrow() {
-
+            const trayText = isTrayEnterQuantity ? `Total Tray:${getFixedNumber(TrayTotal, 0)} ` : "";
             return [
                 "",
-                ` GST ${(parseFloat(GSTPercentage))}%  Total:${numberWithCommas(Number(totalIGst).toFixed(2))} `,
+                `${trayText}          GST ${(parseFloat(GSTPercentage))}%  Total:${numberWithCommas(Number(totalIGst).toFixed(2))} `,
                 " ",
                 ``,
                 "",
@@ -419,7 +424,7 @@ export const RowsWithIGST = (data) => {
 
 
 export const RowsForAmericaInvoice = (data) => {
-
+    const isTrayEnterQuantity = strToBool(loginSystemSetting().IsTrayEnterQuantity)
     const { InvoiceItems = [] } = data
     InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
@@ -430,12 +435,13 @@ export const RowsForAmericaInvoice = (data) => {
     let totalQuantity = 0
     let SrNO = 1
     let GSTPercentage = 0
+    let TrayTotal = 0
 
     const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
 
         const { HSNCode, ItemName, IGSTPercentage, MRP, Rate, Discount, CGST, SGST, Amount, DiscountAmount,
             BasicAmount, Quantity, UnitName, MRPValue, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchCode,
-            BatchDate, DiscountType, PrimaryUnitName, IGST, ItemExpiryDate } = currentItem;
+            BatchDate, DiscountType, PrimaryUnitName, IGST, ItemExpiryDate, TrayQuantity } = currentItem;
         const key = ItemName + '_' + MRPValue;
         if (accumulator[key]) {
             accumulator[key].DiscountAmount += Number(DiscountAmount);
@@ -456,7 +462,7 @@ export const RowsForAmericaInvoice = (data) => {
                 Amount: Number(Amount), DiscountAmount: Number(DiscountAmount), BasicAmount: Number(BasicAmount),
                 Quantity: Number(Quantity), UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage,
                 BatchDate, BatchCode: BatchCode, BatchDate: BatchDate,
-                quantityString: ` ${BatchCode} - M(${date_dmy_func(BatchDate)}) - E(${date_dmy_func(ItemExpiryDate)}) - ${Quantity}`, PrimaryUnitName, IGST
+                quantityString: ` ${BatchCode} - M(${date_dmy_func(BatchDate)}) - E(${date_dmy_func(ItemExpiryDate)}) - ${Quantity}`, PrimaryUnitName, IGST, TrayQuantity
             };
         }
         return accumulator;
@@ -498,16 +504,17 @@ export const RowsForAmericaInvoice = (data) => {
             totalAmount = Number(totalAmount) + Number(element.Amount)
             totalBasicAmount = Number(totalBasicAmount) + Number(element.BasicAmount)
             GSTPercentage = Number(element.IGSTPercentage)
+            TrayTotal = (getFixedNumber(TrayTotal, 2)) + (getFixedNumber(element?.TrayQuantity, 2))
 
 
         };
 
 
         function totalrow() {
-
+            const trayText = isTrayEnterQuantity ? `Total Tray:${getFixedNumber(TrayTotal, 0)} ` : "";
             return [
                 "",
-                ` GST ${(parseFloat(GSTPercentage))}%  Total:${numberWithCommas(Number(totalIGst).toFixed(2))} `,
+                `${trayText}          GST ${(parseFloat(GSTPercentage))}%  Total:${numberWithCommas(Number(totalIGst).toFixed(2))} `,
                 " ",
                 "",
                 "",

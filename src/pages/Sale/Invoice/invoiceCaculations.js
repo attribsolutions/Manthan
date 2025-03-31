@@ -1,6 +1,6 @@
-import { amountCommaSeparateFunc, CommonConsole, compareGSTINState, hasDecimalCheckFunc, loginSystemSetting, loginUserDetails, roundToDecimalPlaces } from "../../../components/Common/CommonFunction"
+import { amountCommaSeparateFunc, CommonConsole, compareGSTINState, getFixedNumber, hasDecimalCheckFunc, IsSweetAndSnacksCompany, loginSystemSetting, loginUserDetails, roundToDecimalPlaces } from "../../../components/Common/CommonFunction"
 import { decimalRegx_3dit, onlyNumberRegx } from "../../../CustomValidateForm";
-
+const isSweetAndSnacksCompany = IsSweetAndSnacksCompany()
 
 export const invoice_discountCalculate_Func = (row, index1, IsComparGstIn) => {
 
@@ -214,6 +214,13 @@ export function orderQtyOnChange(event, index1) {
         } else {
             inputValue = priviosValue
         }
+    }
+
+    if (isSweetAndSnacksCompany) {
+        debugger
+        const TotalTray = Math.ceil(getFixedNumber(inputValue, 2) / getFixedNumber(index1.BaseUnitQuantity, 2))
+        const TrayQtyElement = document.getElementById(`TrayQty-${index1.id}`);
+        TrayQtyElement.value = getFixedNumber(TotalTray, 0); // Display with three decimal places
     }
 
     event.target.value = inputValue;
