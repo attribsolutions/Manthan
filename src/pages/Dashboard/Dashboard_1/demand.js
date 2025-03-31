@@ -88,9 +88,8 @@ export default function DemandListForDashboard() {
 
 
     const makeBtnFunc = (list = [], btnId) => {
-
+        debugger
         let subPageMode = url.IB_ORDER_SO_LIST
-        const obj = list[0]
 
         var isGRNSelect = ''
         var challanNo = ''
@@ -100,7 +99,7 @@ export default function DemandListForDashboard() {
 
         grnRef.push({
             Invoice: null,
-            Order: null,
+            Order: list.id,
             ChallanNo: list.FullOrderNumber,
             Inward: false,
             Challan: list.POType === "Challan" ? list.id : '',
@@ -121,9 +120,8 @@ export default function DemandListForDashboard() {
             challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
 
             // define isMode for MakeBtn API
-
             if (subPageMode === url.IB_ORDER_SO_LIST) {
-                path = url.CHALLAN
+                path = url.IB_INVOICE
             }
 
             const jsonBody = JSON.stringify({

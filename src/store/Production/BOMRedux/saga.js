@@ -18,8 +18,7 @@ function* get_BOMList_GenFunc({ filters }) {
   try {
     const response = yield call(BOM_ListPage_API, filters);
     let data = response.Data.map((i) => {
-      i["ID"] = i.id  // use For Dropdown 
-      i.id = `${i.id}/${i.Company}`;  // use For List Page
+      // use For List Page
       var date = date_dmy_func(i.BomDate)
       var time = convertTimefunc(i.CreatedOn)
       i.transactionDateLabel = (`${date} ${time}`)

@@ -319,7 +319,7 @@ export const reportHeder3 = (doc, data) => {
 
     doc.setFont(undefined, 'bold')
     doc.text(`Order No: ${data.FullOrderNumber}`, 415, 25) //Invoice Id
-
+    debugger
     var time = convertOnlyTimefunc(data.CreatedOn)
 
     const dateOnly = data.CreatedOn.substring(0, 10);

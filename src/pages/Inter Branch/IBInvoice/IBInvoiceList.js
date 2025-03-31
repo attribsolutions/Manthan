@@ -4,7 +4,7 @@ import { BreadcrumbReset, commonPageFieldList, commonPageFieldListSuccess, getpd
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
-import { GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { GetVender, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { date_ymd_func, loginPartyID } from "../../../components/Common/CommonFunction";
 import { useHistory } from "react-router-dom";
 import { deleteChallanId, deleteChallanIdSuccess, challanList_ForListPage, } from "../../../store/Inventory/ChallanRedux/actions";
@@ -30,6 +30,7 @@ const IBInvoiceList = () => {
     const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, venderSelect: allLabelWithBlank })
     const reducers = useSelector(
         (state) => ({
+            vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
             vender: state.CommonAPI_Reducer.vender,
             tableList: state.ChallanReducer.ChallanList,
             goBtnLoading: state.ChallanReducer.goBtnLoading,
@@ -44,7 +45,7 @@ const IBInvoiceList = () => {
     );
     const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
-    const { pageField, vender, makeGRN, deleteMsg } = reducers;
+    const { pageField, vender, makeGRN, deleteMsg, vendorSupplierCustomer } = reducers;
     const { fromdate, todate, venderSelect } = hederFilters;
 
     const action = {
@@ -75,12 +76,20 @@ const IBInvoiceList = () => {
             page_Mode = mode.modeSTPList
 
 
+        } else if (subPageMode === url.IB_INVOICE_FOR_GRN) {
+            page_Id = pageId.IB_INVOICE_FOR_GRN;
+            masterPath = url.VDC_INVOICE;
+            page_Mode = mode.modeSTPList
+
         }
+
+
         setOtherState({ masterPath, makeBtnShow, newBtnPath })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(GetVender())
+        // dispatch(GetVender())
+        dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "", "PartyID": commonPartyDropSelect.value }));
         goButtonHandler()
         dispatch(BreadcrumbReset())
     }, []);
@@ -89,6 +98,7 @@ const IBInvoiceList = () => {
 
 
     useEffect(() => {
+        debugger
         if (makeGRN.Status === true && makeGRN.StatusCode === 200) {
             history.push({
                 pathname: makeGRN.path,
@@ -106,7 +116,7 @@ const IBInvoiceList = () => {
 
     }, [deleteMsg])
 
-    const venderOptions = vender.map((i) => ({
+    const venderOptions = vendorSupplierCustomer.map((i) => ({
         value: i.id,
         label: i.Name,
     }));
@@ -121,7 +131,8 @@ const IBInvoiceList = () => {
         const challanNo = list[0].FullChallanNumber
         const grnRef = [{
             Challan: list[0].id,
-            Inward: false
+            Inward: true,
+            GRN_From: subPageMode,
         }];
 
         const jsonBody = JSON.stringify({
@@ -152,7 +163,6 @@ const IBInvoiceList = () => {
             IsVDCChallan: 1
         });
 
-
         const jsonBody_2 = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
@@ -161,7 +171,9 @@ const IBInvoiceList = () => {
             IsVDCChallan: 0
         });
 
-        if (subPageMode === url.VDC_INVOICE_LIST) {
+
+
+        if (subPageMode === url.VDC_INVOICE_LIST || subPageMode === url.IB_INVOICE_FOR_GRN) {
             json = jsonBody_1
 
         } else {

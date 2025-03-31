@@ -48,8 +48,8 @@ function* get_RateList_GenFunc() {
       i["transactionDate"] = i.CreatedOn;
       i["transactionDateLabel"] = listpageConcatDateAndTime(i.EffectiveDate, i.CreatedOn);
 
-      if (!i.PartyName){
-        i.PartyName="All"
+      if (!i.PartyName) {
+        i.PartyName = "All"
       }
 
     })
@@ -59,7 +59,9 @@ function* get_RateList_GenFunc() {
 
 // delete api for GST List
 function* delete_RateList_ID_GenFunc({ config }) {
+  debugger
   try {
+    config["deleteId"] = config.CommonID
     const response = yield call(apiCall.delete_RateList_API, config);
     yield put(action.deleteRateListId_Success(response));
   } catch (error) { yield put(action.RateApiErrorAction()) }

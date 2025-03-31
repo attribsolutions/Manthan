@@ -149,7 +149,7 @@ const GRN_ADD_1 = (props) => {
         dispatch,
         setUserAccState,
     }), [userAccess]);
-
+    debugger
     useEffect(() => saveMsgUseEffect({// saveMsgUseEffect common useEffect 
 
 
@@ -157,7 +157,7 @@ const GRN_ADD_1 = (props) => {
         postMsg, pageMode,
         history, dispatch,
         postSuccss: _act.saveGRNSuccess,
-        listPath: ((postMsg.GRN_Reference === url.GRN_STP_3) || (postMsg.GRN_Reference === url.ORDER_LIST_1)) ? url.GRN_LIST_3 : url.IB_GRN_LIST
+        listPath: ((postMsg.GRN_Reference === url.GRN_STP_3) || (postMsg.GRN_Reference === url.ORDER_LIST_1) || (postMsg.GRN_Reference === url.VDC_INVOICE_LIST)) ? url.GRN_LIST_3 : url.IB_GRN_LIST
     }), [postMsg]);
 
     useEffect(() => {
@@ -261,7 +261,7 @@ const GRN_ADD_1 = (props) => {
             grnDetails["InvoiceDate"] = _cfunc.date_ymd_func(grnDetails.InvoiceDate)
             grnDetails["DemandDate"] = _cfunc.date_ymd_func(grnDetails.DemandDate)
 
-
+            debugger
 
             setGrnDetail(grnDetails)
             setInvoiceNo(grnDetails.GRNReferences[0]?.Invoice_NO)
@@ -990,7 +990,7 @@ const GRN_ADD_1 = (props) => {
                 return
             }
 
-
+            debugger
             const jsonBody = JSON.stringify({
                 GRNDate: grnDate,
                 FullGRNNumber: grnDetail?.FullGRNNumber,  //Only for Accounting GRN Mode
@@ -1005,6 +1005,7 @@ const GRN_ADD_1 = (props) => {
                 UpdatedBy: 1,
                 GRNItems: GRNItemArray,
                 GRNReferences: GRNReferencesUpdate,
+                IsGRNType: (openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN) ? 0 : 1
             });
 
             if (pageMode === mode.edit) {

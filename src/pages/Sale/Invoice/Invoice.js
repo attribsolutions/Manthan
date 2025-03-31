@@ -505,7 +505,7 @@ const Invoice = (props) => {
                             <Select
                                 classNamePrefix="select2-selection"
                                 id={"ddlUnit"}
-                                isDisabled={pageMode === mode.edit && true}
+                                isDisabled={true}
                                 defaultValue={index1.default_UnitDropvalue}
                                 options={index1.UnitDetails.map(i => ({
                                     label: i.UnitName,

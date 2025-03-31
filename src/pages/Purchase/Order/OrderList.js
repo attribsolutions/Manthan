@@ -710,7 +710,7 @@ const OrderList = () => {
 
             }
 
-            if (orderList4_or_app_orderList) {
+            if (orderList4_or_app_orderList || subPageMode === url.IB_ORDER_SO_LIST) {
                 filtersBody = JSON.stringify(SO_filters);
             }
             else if (subPageMode === url.GRN_STP_3) {
