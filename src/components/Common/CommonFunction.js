@@ -765,6 +765,8 @@ export function roundToDecimalPlaces(input, decimalPlaces = 3, returnZerro = fal
   return result;
 };
 
+export const strToBool = (value) => value?.toLowerCase() === "true";
+
 export function hasDecimalCheckFunc(input) {
   const number = Number(input); // Convert the input to a number
   return isNaN(number) ? false : !Number.isInteger(number);
