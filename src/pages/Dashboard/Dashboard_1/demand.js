@@ -39,8 +39,8 @@ export default function DemandListForDashboard() {
             const filtersBody = JSON.stringify({
                 "FromDate": currentDate_ymd,
                 "ToDate": currentDate_ymd,
-                "Supplier": "",//Suppiler swipe
-                "Customer": loginSelectedPartyID(),//customer swipe
+                "Supplier": loginSelectedPartyID(),//Suppiler swipe
+                "Customer": "",//customer swipe
                 "OrderType": 1,
                 "CustomerType": "",
                 "IBType": "IBSO",
