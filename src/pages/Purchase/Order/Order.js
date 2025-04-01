@@ -809,7 +809,7 @@ const Order = (props) => {
                         <CInput
                             key={`Quantity-${k}`}
                             id={`Quantity-${k}`}
-                            cpattern={(subPageMode === url.ORDER_1 || subPageMode === url.ORDER_4 || subPageMode === url.ORDER_2) ? decimalRegx_3dit : onlyNumberRegx}
+                            cpattern={(subPageMode === url.ORDER_1 || subPageMode === url.ORDER_4 || subPageMode === url.ORDER_2 || subPageMode === url.IB_SALES_ORDER || subPageMode === url.IB_ORDER) ? decimalRegx_3dit : onlyNumberRegx}
                             defaultValue={(row.Quantity)}
                             className=" text-end"
                             onChange={(e) => {

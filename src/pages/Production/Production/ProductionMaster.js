@@ -87,8 +87,9 @@ const ProductionMaster = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.PRODUCTION_LIST));
         const jsonBody = JSON.stringify({
-            FromDate: "2022-11-01", //fromdate hard code value is compulsory
+            FromDate: currentDate_ymd, //fromdate hard code value is compulsory
             ToDate: currentDate_ymd,
+            Party: _cfunc.loginSelectedPartyID()
         });
         dispatch(getMaterialIssueListPage(jsonBody));
         return () => {

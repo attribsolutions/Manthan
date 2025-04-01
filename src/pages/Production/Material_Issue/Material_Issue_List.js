@@ -96,10 +96,10 @@ const MaterialIssueList = () => {
     };
 
     const goButtonHandler = (onload) => {
-
         const jsonBody = JSON.stringify({
             FromDate: onload === true ? "" : fromdate,
             ToDate: onload === true ? "" : todate,
+            Party: _cfunc.loginSelectedPartyID()
         });
         dispatch(getMaterialIssueListPage(jsonBody));
     };
