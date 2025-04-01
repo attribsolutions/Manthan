@@ -145,8 +145,8 @@ function* InvoiceListGenFunc({ config }) {
       }
       i["isSendToScm"] = isSendToScm
       i["PartyTypeID"] = PartyTypeID
-
-      if (isSweetAndSnacksCompany && !(url.IB_INVOICE_FOR_GRN)) {
+      debugger
+      if (isSweetAndSnacksCompany && !(subPageMode === url.IB_INVOICE_FOR_GRN)) {
         if (i.IsSendToFTPSAP) {
           i["isSend"] = false
         } else {
