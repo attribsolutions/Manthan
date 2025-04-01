@@ -5,7 +5,7 @@ import { Button, Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import { GetVender, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { date_ymd_func, loginPartyID } from "../../../components/Common/CommonFunction";
+import { date_ymd_func, loginPartyID, loginSelectedPartyID } from "../../../components/Common/CommonFunction";
 import { useHistory } from "react-router-dom";
 import { deleteChallanId, deleteChallanIdSuccess, challanList_ForListPage, } from "../../../store/Inventory/ChallanRedux/actions";
 import { makeGRN_Mode_1Action } from "../../../store/Inventory/GRNRedux/actions";
@@ -158,20 +158,18 @@ const IBInvoiceList = () => {
         const jsonBody_1 = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            Customer: loginPartyID(),
+            Customer: loginSelectedPartyID(),
             Party: venderSelect === "" ? '' : venderSelect.value,
-            IsVDCChallan: 1
+            IsVDCChallan: (subPageMode === url.IB_INVOICE_FOR_GRN) ? 0 : 1
         });
 
         const jsonBody_2 = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            Party: loginPartyID(),
+            Party: loginSelectedPartyID(),
             Customer: venderSelect === "" ? '' : venderSelect.value,
             IsVDCChallan: 0
         });
-
-
 
         if (subPageMode === url.VDC_INVOICE_LIST || subPageMode === url.IB_INVOICE_FOR_GRN) {
             json = jsonBody_1
