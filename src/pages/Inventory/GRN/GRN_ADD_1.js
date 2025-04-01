@@ -822,7 +822,7 @@ const GRN_ADD_1 = (props) => {
             const isvalidMsg = [];
             let sum_roundedTotalAmount = 0
             grnItemList.forEach(i => {
-
+                debugger
                 const calculated = orderCalculateFunc(i)// amount calculation function 
                 sum_roundedTotalAmount = sum_roundedTotalAmount + parseFloat(calculated.roundedTotalAmount)
                 const arr = {
@@ -882,8 +882,10 @@ const GRN_ADD_1 = (props) => {
                     }
                 } else if ((Number(i.Quantity) > 0)) {
                     GRNItemArray.push(arr)
-                    if (i.ItemExpiryDate === undefined && subPageMode === url.GRN_ADD_1) {
-                        isvalidMsg.push(`${i.ItemName}:  This Item ExpiryDate Required . `)
+                    if (!(openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN)) {
+                        if (i.ItemExpiryDate === undefined && subPageMode === url.GRN_ADD_1) {
+                            isvalidMsg.push(`${i.ItemName}:  This Item ExpiryDate Required . `)
+                        }
                     }
                 }
 
@@ -1091,7 +1093,7 @@ const GRN_ADD_1 = (props) => {
                                             style={{ backgroundColor: "white" }}
                                             value={invoiceNo}
                                             placeholder={`Enter Invoice No `}
-                                            disabled={((pageMode === mode.view) || (openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN)) ? true : false}
+                                            disabled={(pageMode === mode.view || openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN)}
                                             onChange={(e) => setInvoiceNo(e.target.value)}
                                         />
                                     </Col>

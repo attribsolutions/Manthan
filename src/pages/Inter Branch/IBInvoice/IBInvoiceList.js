@@ -127,12 +127,12 @@ const IBInvoiceList = () => {
     });
 
     const makeBtnFunc = (list = []) => {
-
-        const challanNo = list[0].FullChallanNumber
+        debugger
         const grnRef = [{
             Challan: list[0].id,
             Inward: true,
             GRN_From: subPageMode,
+            Invoice_NO: list[0].FullChallanNumber
         }];
 
         const jsonBody = JSON.stringify({
@@ -147,7 +147,6 @@ const IBInvoiceList = () => {
                 pageMode: mode.modeSTPsave,
                 grnRef,
                 path: url.GRN_ADD_1,
-                challanNo
             },
         })
     };
