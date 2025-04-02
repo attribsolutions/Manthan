@@ -293,17 +293,16 @@ const MaterialIssueMaster = (props) => {
     }));
 
     const workorderQytChange = (inx_1) => {
-
+        debugger
         let remainingQuantity = inx_1.Quantity;
         inx_1.BatchesData.forEach(inx_2 => {
-            const quantity = (Number(inx_2.ObatchwiseQuantity)).toFixed(2);
+            const quantity = _cfunc.getFixedNumber(inx_2.ObatchwiseQuantity, 3);
             const distributedQuantity = Math.min(remainingQuantity, quantity);
             remainingQuantity -= distributedQuantity;
             const batchQtyElement = document.getElementById(`stock${inx_1.id}-${inx_2.id}`);
-            batchQtyElement.value = (distributedQuantity).toFixed(2); // Display with three decimal places
+            batchQtyElement.value = _cfunc.getFixedNumber(distributedQuantity, 3); // Display with three decimal places
         });
     }
-
 
     const pagesListColumns = [
         {
@@ -354,7 +353,7 @@ const MaterialIssueMaster = (props) => {
                                 style={{ textAlign: "right" }}
                                 disabled={!JSON.parse(isEditable)}
                                 cpattern={decimalRegx}
-                                defaultValue={(Number(row.Quantity)).toFixed(2)}
+                                defaultValue={(_cfunc.getFixedNumber(row.Quantity, 3)).toFixed(3)}
                                 autoComplete='off'
                                 onChange={(e) => {
 
@@ -389,7 +388,7 @@ const MaterialIssueMaster = (props) => {
             text: "Batch Code",
             dataField: "BatchesData",
             formatter: (cellContent, user) => {
-
+                debugger
                 return (
                     <>
                         <Table className="table table-bordered table-responsive mb-1">
@@ -432,20 +431,20 @@ const MaterialIssueMaster = (props) => {
                                                 <div style={{ width: "120px", textAlign: "right" }}>
                                                     <Label
                                                     >
-                                                        {Number(index.ObatchwiseQuantity).toFixed(2)}
+                                                        {(index.ObatchwiseQuantity).toFixed(3)}
                                                     </Label>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div style={{ width: "150px" }}>
-                                                    <CInput
+                                                    <Input
                                                         type="text"
                                                         key={`stock${user.id}-${index.id}`}
                                                         disabled={pageMode === mode.view ? true : false}
                                                         id={`stock${user.id}-${index.id}`}
                                                         style={{ textAlign: "right" }}
                                                         cpattern={decimalRegx}
-                                                        defaultValue={Number(index.Qty).toFixed(2)}
+                                                        defaultValue={(_cfunc.getFixedNumber(index.Qty, 3)).toFixed(3)}
                                                         autoComplete='off'
                                                         onChange={(event) => tableQuantityOnchangeHandler(event, user, index)}
                                                     />

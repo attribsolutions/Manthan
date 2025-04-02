@@ -1,10 +1,14 @@
+import { getFixedNumber } from "../../../components/Common/CommonFunction";
+
 export function Qty_Distribution_Func(Data) {
     debugger
     return Data.map(item => {
         let remainingQuantity = item.Quantity;
         let TotalStock = 0;
         const updatedBatchesData = item.BatchesData.map(batch => {
-            const quantity = Number((batch.ObatchwiseQuantity).toFixed(2));
+
+
+            const quantity = getFixedNumber(batch.ObatchwiseQuantity, 3);
             const distributedQuantity = Math.min(remainingQuantity, quantity);
             TotalStock += quantity;
             remainingQuantity -= distributedQuantity;
