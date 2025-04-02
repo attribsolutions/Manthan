@@ -293,7 +293,7 @@ const MaterialIssueMaster = (props) => {
     }));
 
     const workorderQytChange = (inx_1) => {
-        debugger
+
         let remainingQuantity = inx_1.Quantity;
         inx_1.BatchesData.forEach(inx_2 => {
             const quantity = (Number(inx_2.ObatchwiseQuantity)).toFixed(2);
@@ -547,7 +547,7 @@ const MaterialIssueMaster = (props) => {
     }
 
     function NumberOfLotchange(event) {
-        debugger
+
         let input = event.trim(); // Remove leading and trailing whitespace
         let defaultNoOfLot = parseFloat(noOfLotForDistribution);
         let remainingQuantity = 0
@@ -575,7 +575,8 @@ const MaterialIssueMaster = (props) => {
     }
 
     const tableQuantityOnchangeHandler = (event, index1, index2) => {
-
+        debugger
+        let QuantityTotal = 0
         let input = event.target.value.trim(); // Remove leading and trailing whitespace
         let ObatchwiseQuantity = parseFloat(index2.ObatchwiseQuantity);
 
@@ -585,8 +586,20 @@ const MaterialIssueMaster = (props) => {
             if (parseFloat(input) > ObatchwiseQuantity) {
                 event.target.value = ObatchwiseQuantity;
             }
-            index2.Qty = input; // Assign the input value directly to Qty
+            index2.Qty = event.target.value;  // Assign the input value directly to Qty
         }
+
+        index1.BatchesData.forEach(index2 => {
+            if (Number(index2.Qty) > 0) {
+                QuantityTotal += Number(index2.Qty);
+            }
+        });
+        index1.Quantity = _cfunc.roundToDecimalPlaces(QuantityTotal, 3); //max 3 decimal
+        try {
+            document.getElementById(`stock${index1.id}`).value = index1.Quantity
+        } catch (e) { console.log('inner-Stock-Caculation', e) };
+
+
     };
 
     const SaveHandler = async (event) => {
