@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
-import { date_dmy_func } from "../../../components/Common/CommonFunction";
+import { date_dmy_func, IsSweetAndSnacksCompany } from "../../../components/Common/CommonFunction";
 
 
 var pageHeder = function (doc, data) {
@@ -13,7 +13,11 @@ var pageHeder = function (doc, data) {
 
 };
 function reportBody(doc, data) {
-    style.tableBody(doc, data);
+    if (IsSweetAndSnacksCompany()) {
+        style.tableBody_for_ChitaleSweetsAndSnacks(doc, data);
+    } else {
+        style.tableBody(doc, data);
+    }
 }
 function pageFooter(doc, data) {
     style.pageFooter(doc, data);
