@@ -148,7 +148,7 @@ function* InvoiceListGenFunc({ config }) {
       debugger
       if (isSweetAndSnacksCompany && !(subPageMode === url.IB_INVOICE_FOR_GRN)) {
         if (i.IsSendToFTPSAP) {
-          i["isSend"] = true
+          i["isSend"] = false
         } else {
           i["isSend"] = true
         }
