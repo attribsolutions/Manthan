@@ -176,7 +176,7 @@ const IBInvoice = (props) => {
                 debugger
                 setCustomerID(state.values.Customer)
             }
-
+            let totalAmount = 0;
             const Updated_DemandDetails = DemandItemDetails.map((inx_1, key_1) => {
 
                 const isUnitIDPresent = inx_1?.UnitDetails?.find(findEle => findEle.UnitID === inx_1.Unit);
@@ -186,10 +186,10 @@ const IBInvoice = (props) => {
                     showToastAlert(`${inx_1.ItemName} this Item Not getting defalut Unit id ,UnitId is not present in UnitDetails `)
                 }
                 let totalStockQty = 0;
-                let totalAmount = 0;
+
                 inx_1.StockInValid = false;
                 inx_1.StockInvalidMsg = '';
-
+                debugger
                 inx_1.default_UnitDropvalue = {//initialize
                     value: inx_1.Unit,
                     label: inx_1.UnitName,
@@ -216,13 +216,21 @@ const IBInvoice = (props) => {
                     const stockQty = parseFloat(inx_2.ActualQuantity); // Convert to a number
                     totalStockQty += stockQty
 
-                    stockDistributeFunc(inx_1)
+
+
+
+                    debugger
+
+
 
                     inx_2.id = key_2;
                     return inx_2;
                 })
+                stockDistributeFunc(inx_1)
+
+                totalAmount += inx_1.ItemTotalAmount
                 inx_1.ItemTotalStock = _cfunc.roundToDecimalPlaces(totalStockQty, 3); //max 3 decimal
-                inx_1.ItemTotalAmount = _cfunc.roundToDecimalPlaces(totalAmount, 2); //max 2 decimal
+
                 inx_1.id = key_1; //max 2 decimal
 
 
@@ -240,6 +248,9 @@ const IBInvoice = (props) => {
 
             totalAmountCalcuationFunc(Updated_DemandDetails)
             setTableData(Updated_DemandDetails)
+
+            const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(totalAmount));
+            dispatch(BreadcrumbShowCountlabel(`Count:${Updated_DemandDetails.length} currency_symbol ${commaSeparateAmount}`))
 
         } else {
             if (GRNitem.Message) {
@@ -260,8 +271,10 @@ const IBInvoice = (props) => {
 
 
     useEffect(async () => {
+        
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveChallan_ChallanAddSuccess({ Status: false }))
+            dispatch(makeGRN_Mode_1ActionSuccess({ Status: false }))
             setTableData([]);
             if (pageMode === mode.dropdownAdd) {
                 customAlert({
@@ -270,18 +283,17 @@ const IBInvoice = (props) => {
                 })
             }
             else {
-                let isPermission = await customAlert({
+                debugger
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
                 })
-                if (isPermission) {
-                    history.push({ pathname: url.IB_INVOICE_LIST })
-                }
+                history.push({ pathname: PageDetails.listPath })
             }
         }
         else if (postMsg.Status === true) {
             dispatch(saveChallan_ChallanAddSuccess({ Status: false }))
+            dispatch(makeGRN_Mode_1ActionSuccess({ Status: false }))
             customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMsg.Message),
@@ -400,7 +412,6 @@ const IBInvoice = (props) => {
             headerStyle: { zIndex: "2" },
             formatExtraData: { tableList: tableData },
             formatter: (cellContent, index1, keys_, { tableList = [] }) => {
-
                 return (
                     <div className="table-responsive">
                         <table className="custom-table ">
@@ -427,7 +438,7 @@ const IBInvoice = (props) => {
                                                 className="right-aligned-placeholder"
                                                 key={`batchQty${index1.id}-${index2.id}`}
                                                 id={`batchQty${index1.id}-${index2.id}`}
-                                                value={!isNaN(parseFloat(index2.Qty)) ? parseFloat(index2.Qty).toFixed(3) : ""}
+                                                value={(index2.Qty)}
                                                 onChange={(event) => {
                                                     stockQtyOnChange(event, index1, index2);
                                                     totalAmountCalcuationFunc(tableList);
@@ -442,6 +453,18 @@ const IBInvoice = (props) => {
                                 ))}
                             </tbody>
                         </table>
+                    </div>
+                )
+            },
+        },
+        {//***************StockDetails********************************************************************* */
+            text: "Amount",
+            dataField: "ItemTotalAmount",
+            formatExtraData: { tableList: tableData },
+            formatter: (cellContent, index1, keys_, { tableList = [] }) => {
+                return (
+                    <div style={{ textAlign: "right" }} >
+                        {_cfunc.amountCommaSeparateFunc(_cfunc.getFixedNumber(cellContent))}
                     </div>
                 )
             },

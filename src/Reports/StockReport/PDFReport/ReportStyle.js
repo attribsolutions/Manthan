@@ -55,7 +55,7 @@ export const reportHeder1 = (doc, data) => {
 
         },
         tableLineColor: "black",
-        startY:  63,// 45,
+        startY: 63,// 45,
     };
     doc.autoTable(table.PageHedercolumns, table.ReportHederRows(data), options3);
 }
@@ -200,6 +200,136 @@ export const tableBody = (doc, data) => {
     };
     doc.autoTable(table.columns, table.Rows(data), options,);
 }
+
+export const tableBody_for_ChitaleSweetsAndSnacks = (doc, data) => {
+
+    var options = {
+        didParseCell: (data1) => {
+
+            if (data1.row.cells[0].raw === `Total`) {
+                data1.row.cells[0].styles.fontSize = 8
+                data1.row.cells[3].styles.fontSize = 8
+                data1.row.cells[4].styles.fontSize = 8
+                data1.row.cells[5].styles.fontSize = 8
+                data1.row.cells[6].styles.fontSize = 8
+                data1.row.cells[7].styles.fontSize = 8
+                data1.row.cells[8].styles.fontSize = 8
+                data1.row.cells[9].styles.fontSize = 8
+                data1.row.cells[10].styles.fontSize = 8
+                data1.row.cells[11].styles.fontSize = 8
+
+
+
+                data1.row.cells[0].styles.fontStyle = "bold"
+                data1.row.cells[3].styles.fontStyle = "bold"
+                data1.row.cells[4].styles.fontStyle = "bold"
+                data1.row.cells[5].styles.fontStyle = "bold"
+                data1.row.cells[6].styles.fontStyle = "bold"
+                data1.row.cells[7].styles.fontStyle = "bold"
+                data1.row.cells[8].styles.fontStyle = "bold"
+                data1.row.cells[9].styles.fontStyle = "bold"
+                data1.row.cells[10].styles.fontStyle = "bold"
+                data1.row.cells[11].styles.fontStyle = "bold"
+
+
+
+            }
+
+            if (data1.row.cells[5].raw === "packing") {
+                data1.row.cells[0].colSpan = 12
+
+                data1.row.cells[0].styles.fontSize = 8
+                data1.row.cells[0.].styles.fontStyle = "bold"
+            }
+        },
+        margin: {
+            left: 30, right: 25,//200 bottom
+        },
+        theme: 'grid',
+        headerStyles: {
+            cellPadding: 4,
+            lineWidth: 1,
+            valign: 'top',
+            fontStyle: 'bold',
+            halign: 'center',    //'center' or 'right'
+            fillColor: "white",
+            textColor: [0, 0, 0], //Black     
+            fontSize: 8,
+            rowHeight: 10,
+            lineColor: [0, 0, 0]
+        },
+        bodyStyles: {
+            textColor: [30, 30, 30],
+            cellPadding: 3,
+            fontSize: 7,
+            columnWidth: 'wrap',
+            lineColor: [0, 0, 0],
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 70,
+            },
+            1: {
+                columnWidth: 74,
+            },
+            2: {
+                columnWidth: 100,
+            },
+            3: {
+                columnWidth: 50,
+                halign: 'right',
+            },
+            4: {
+                columnWidth: 40,
+                halign: 'right',
+            },
+            5: {
+                columnWidth: 55,
+                halign: 'right',
+            },
+            6: {
+                columnWidth: 55,
+                halign: 'right',
+            },
+            7: {
+                columnWidth: 54,
+                halign: 'right',
+            },
+            8: {
+                columnWidth: 49,
+                halign: 'right',
+            },
+            9: {
+                columnWidth: 54,
+                halign: 'right',
+            },
+            10: {
+                columnWidth: 50,
+                halign: 'right',
+            },
+            11: {
+                columnWidth: 45,
+                halign: 'right',
+            },
+            12: {
+                columnWidth: 45,
+                halign: 'right',
+            },
+            13: {
+                columnWidth: 45,
+                halign: 'right',
+            },
+
+        },
+
+        tableLineColor: "black",
+        startY: doc.autoTableEndPosY(45),// 45,
+
+    };
+    doc.autoTable(table.columns_for_ChitaleSweetsAndSnacks, table.Rows_for_ChitaleSweetsAndSnacks(data), options,);
+}
+
 
 export const pageFooter = (doc, data) => {
     let finalY = doc.previousAutoTable.finalY;

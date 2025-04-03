@@ -313,11 +313,11 @@ const WorkOrder = (props) => {
     //         StockQty: index.StockQty.toFixed(2),
     //         BOMDate: (_cfunc.date_dmy_func(index.BomDate)),
     //     }));
-
+    debugger
     const ItemDropdown_Options = Items
         .filter(index => index.IsActive && !index.IsRecordDeleted)
         .map(index => ({
-            value: index.ID,
+            value: index.id,
             label: `${index.ItemName} (BOMDate-${index.BomDate})`,
             ItemName: index.ItemName,
             ItemID: index.Item,
@@ -458,6 +458,7 @@ const WorkOrder = (props) => {
             })
             return
         }
+        debugger
         const jsonBody = JSON.stringify({
             Item: (pageMode === mode.edit ? EditData.Item : values.ItemName.ItemID),
             Bom: (pageMode === mode.edit ? EditData.Bom : values.ItemName.value),

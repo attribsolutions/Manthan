@@ -165,6 +165,7 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     || subPageMode === url.IB_INVOICE_LIST
     || subPageMode === url.INWARD_LIST
     || subPageMode === url.IB_SALES_ORDER
+    || subPageMode === url.IB_INVOICE_FOR_GRN
   );
 
 

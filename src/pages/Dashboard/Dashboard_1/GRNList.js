@@ -14,7 +14,7 @@ import SimpleBar from "simplebar-react"
 import { printBtnCss } from '../../../components/Common/ListActionsButtons';
 import * as report from '../../../Reports/ReportIndex'
 import { IB_Invoice_Singel_Get_for_Report_Api, Invoice_Singel_Get_for_Report_Api } from '../../../helpers/backend_helper';
-import { getpdfReportdata, invoiceListGoBtnfilter } from '../../../store/actions';
+import { challanList_ForListPage, getpdfReportdata, invoiceListGoBtnfilter } from '../../../store/actions';
 import C_Report from '../../../components/Common/C_Report';
 
 
@@ -67,17 +67,21 @@ export default function InvoiceForGRN() {
         if (commonPartyDropSelect.value > 0) {
 
             if (IsCompanySweetAndSnacks) {
-                let subPageMode = url.IB_INVOICE_FOR_GRN
+                // let subPageMode = url.IB_INVOICE_FOR_GRN
                 const filtersBody = JSON.stringify({
                     FromDate: currentDate_ymd,
                     ToDate: currentDate_ymd,
                     Customer: "",
                     Party: commonPartyDropSelect.value,
                     IBType: "IBGRN",
-                    DashBoardMode: 0
+                    DashBoardMode: 0,
+                    IsVDCChallan: ""
 
                 });
-                dispatch(invoiceListGoBtnfilter({ subPageMode, filtersBody }));
+
+
+
+                dispatch(challanList_ForListPage(filtersBody));
             } else {
                 let subPageMode = url.GRN_STP_3
                 const gobtnId = `gobtn-${subPageMode}`

@@ -227,7 +227,8 @@ const GRNList = () => {
                 ToDate: todate,
                 Supplier: supplierSelect.value,
                 Party: loginSelectedPartyID(),
-                DashBoardMode: 0
+                DashBoardMode: 0,
+                IsGRNType: (subPageMode === url.IB_GRN_LIST) ? 0 : 1
 
             });
             dispatch(_act.getGRNListPage({ filtersBody, subPageMode }));

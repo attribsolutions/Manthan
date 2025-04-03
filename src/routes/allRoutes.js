@@ -566,7 +566,7 @@ const userRoutes = [
 
 	// { path: path.IB_INVOICE_LIST, component: InvoiceList },
 	{ path: path.IB_GRN_LIST, component: GRNList },
-	{ path: path.IB_INVOICE_FOR_GRN, component: InvoiceList },
+	{ path: path.IB_INVOICE_FOR_GRN, component: IBInvoiceList },
 
 
 	{ path: path.PERIODIC_GRN_REPORT, component: PeriodicGRNReport },

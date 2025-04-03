@@ -200,7 +200,7 @@ export function orderQtyUnit_SelectOnchange(event, index1) {
 // ************************************************************************
 
 export function stockQtyOnChange(event, index1, index2) {
-
+    debugger
     const hasUnit_NO = hasCheckUnitIs_NOFunc(index1);
     const totalStock = parseFloat(index2.BaseUnitQuantity); // Convert to a number
     const priviosValue = index2.Qty;
@@ -236,7 +236,7 @@ export function stockQtyOnChange(event, index1, index2) {
 // ************************************************************************
 
 export const innerStockCaculation = (index1) => {
-
+    debugger
     let QuantityTatal = 0
     let totalAmount = 0;
 

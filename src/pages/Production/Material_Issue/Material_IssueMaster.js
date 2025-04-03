@@ -296,14 +296,13 @@ const MaterialIssueMaster = (props) => {
         debugger
         let remainingQuantity = inx_1.Quantity;
         inx_1.BatchesData.forEach(inx_2 => {
-            const quantity = (Number(inx_2.ObatchwiseQuantity)).toFixed(2);
+            const quantity = _cfunc.getFixedNumber(inx_2.ObatchwiseQuantity, 3);
             const distributedQuantity = Math.min(remainingQuantity, quantity);
             remainingQuantity -= distributedQuantity;
             const batchQtyElement = document.getElementById(`stock${inx_1.id}-${inx_2.id}`);
-            batchQtyElement.value = (distributedQuantity).toFixed(2); // Display with three decimal places
+            batchQtyElement.value = _cfunc.getFixedNumber(distributedQuantity, 3); // Display with three decimal places
         });
     }
-
 
     const pagesListColumns = [
         {
@@ -354,7 +353,7 @@ const MaterialIssueMaster = (props) => {
                                 style={{ textAlign: "right" }}
                                 disabled={!JSON.parse(isEditable)}
                                 cpattern={decimalRegx}
-                                defaultValue={(Number(row.Quantity)).toFixed(2)}
+                                defaultValue={(_cfunc.getFixedNumber(row.Quantity, 3)).toFixed(3)}
                                 autoComplete='off'
                                 onChange={(e) => {
 
@@ -389,7 +388,7 @@ const MaterialIssueMaster = (props) => {
             text: "Batch Code",
             dataField: "BatchesData",
             formatter: (cellContent, user) => {
-
+                debugger
                 return (
                     <>
                         <Table className="table table-bordered table-responsive mb-1">
@@ -432,20 +431,20 @@ const MaterialIssueMaster = (props) => {
                                                 <div style={{ width: "120px", textAlign: "right" }}>
                                                     <Label
                                                     >
-                                                        {Number(index.ObatchwiseQuantity).toFixed(2)}
+                                                        {(index.ObatchwiseQuantity).toFixed(3)}
                                                     </Label>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div style={{ width: "150px" }}>
-                                                    <CInput
+                                                    <Input
                                                         type="text"
                                                         key={`stock${user.id}-${index.id}`}
                                                         disabled={pageMode === mode.view ? true : false}
                                                         id={`stock${user.id}-${index.id}`}
                                                         style={{ textAlign: "right" }}
                                                         cpattern={decimalRegx}
-                                                        defaultValue={Number(index.Qty).toFixed(2)}
+                                                        defaultValue={(_cfunc.getFixedNumber(index.Qty, 3)).toFixed(3)}
                                                         autoComplete='off'
                                                         onChange={(event) => tableQuantityOnchangeHandler(event, user, index)}
                                                     />
@@ -547,7 +546,7 @@ const MaterialIssueMaster = (props) => {
     }
 
     function NumberOfLotchange(event) {
-        debugger
+
         let input = event.trim(); // Remove leading and trailing whitespace
         let defaultNoOfLot = parseFloat(noOfLotForDistribution);
         let remainingQuantity = 0
@@ -575,7 +574,8 @@ const MaterialIssueMaster = (props) => {
     }
 
     const tableQuantityOnchangeHandler = (event, index1, index2) => {
-
+        debugger
+        let QuantityTotal = 0
         let input = event.target.value.trim(); // Remove leading and trailing whitespace
         let ObatchwiseQuantity = parseFloat(index2.ObatchwiseQuantity);
 
@@ -585,8 +585,20 @@ const MaterialIssueMaster = (props) => {
             if (parseFloat(input) > ObatchwiseQuantity) {
                 event.target.value = ObatchwiseQuantity;
             }
-            index2.Qty = input; // Assign the input value directly to Qty
+            index2.Qty = event.target.value;  // Assign the input value directly to Qty
         }
+
+        index1.BatchesData.forEach(index2 => {
+            if (Number(index2.Qty) > 0) {
+                QuantityTotal += Number(index2.Qty);
+            }
+        });
+        index1.Quantity = _cfunc.roundToDecimalPlaces(QuantityTotal, 3); //max 3 decimal
+        try {
+            document.getElementById(`stock${index1.id}`).value = index1.Quantity
+        } catch (e) { console.log('inner-Stock-Caculation', e) };
+
+
     };
 
     const SaveHandler = async (event) => {
@@ -617,12 +629,12 @@ const MaterialIssueMaster = (props) => {
                 materialIssueItems.push({
                     Item: index.Item,
                     Unit: index.Unit,
-                    WorkOrderQuantity: parseFloat(index.Quantity).toFixed(2),
+                    WorkOrderQuantity: parseFloat(index.Quantity).toFixed(3),
                     BatchCode: ele.BatchCode,
                     BatchDate: ele.BatchDate,
                     SystemBatchDate: ele.SystemBatchDate,
                     SystemBatchCode: ele.SystemBatchCode,
-                    IssueQuantity: parseFloat(ele.Qty).toFixed(2),
+                    IssueQuantity: parseFloat(ele.Qty).toFixed(3),
                     BatchID: ele.id,
                     LiveBatchID: ele.LiveBatchID
                 })

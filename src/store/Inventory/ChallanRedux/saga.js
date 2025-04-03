@@ -49,6 +49,13 @@ function* Challan_List_filterGerFunc({ filters }) {          // Challan List Fil
       var date = date_dmy_func(i.ChallanDate)
       var time = convertTimefunc(i.CreatedOn)
       i.ChallanDate = (`${date} ${time}`)
+      if ((i?.inward)) {
+        i.forceMakeBtnHide = true;
+        i.Status = "Close"
+      } else {
+        i.forceMakeBtnHide = false;
+        i.Status = "Open"
+      }
       return i
     })
     yield put(challanList_ForListPageSuccess(newList))

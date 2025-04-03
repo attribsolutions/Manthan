@@ -10,7 +10,7 @@ import { useState } from "react";
 
 
 const ViewDetails_Modal = () => {
-    
+
     const dispatch = useDispatch()
     const [modal_view, setModal_view] = useState(false);
     const [tableArray, setTableArray] = useState([]);
@@ -43,7 +43,7 @@ const ViewDetails_Modal = () => {
             text: "Quantity",
             dataField: "Quantity",
             formatter: (cellContent, index) => (
-                <span>{`${index.Quantity} ${index.PrimaryUnitName} ${index.UnitName}`}</span>
+                <span>{`${index.Quantity} ${index.UnitName}`}</span>
             )
         },
     ];

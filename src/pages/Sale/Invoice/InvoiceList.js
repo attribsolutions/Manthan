@@ -165,15 +165,7 @@ const InvoiceList = () => {
             masterPath = url.IB_INVOICE
             newBtnPath = url.IB_INVOICE_STP
             IBType = "IBInvoice"
-        }
-        else if (subPageMode === url.IB_INVOICE_FOR_GRN) {
-            page_Id = pageId.IB_INVOICE_FOR_GRN;
-            masterPath = url.IB_INVOICE
-            page_Mode = mode.modeSTPList;
-            makeBtnShow = true
-            IBType = "IBGRN"
-        }
-        else if (subPageMode === url.IB_INWARD_STP) {
+        } else if (subPageMode === url.IB_INWARD_STP) {
             page_Id = pageId.IB_INWARD_STP
             page_Mode = mode.modeSTPsave
             makeBtnShow = true;
