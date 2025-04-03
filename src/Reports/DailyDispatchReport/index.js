@@ -7,15 +7,14 @@ import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, pageId, url } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, GetVenderSupplierCustomer } from "../../store/actions";
-import DynamicColumnHook from "../../components/Common/TableCommonFunc";
-import { Return_Report_Action_Success } from "../../store/Report/ReturnReportRedux/action";
+
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import GlobalCustomTable from "../../GlobalCustomTable";
-import { allLabelWithBlank, allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
-import { DemandVSSupply_Report_Action, DemandVSSupply_Report_Action_Success } from "../../store/Report/DemandVsSupply/action";
+import { allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
+
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import { getCommonPartyDrodownOptionAction } from "../../store/Utilites/PartyDrodown/action";
-import { ItemSaleGoButton_API } from "../../store/Report/ItemSaleReport/action";
+import { ItemSaleGoButton_API, ItemSaleGoButton_API_Success } from "../../store/Report/ItemSaleReport/action";
 
 const DailyDispatchReport = (props) => {
 
@@ -34,25 +33,26 @@ const DailyDispatchReport = (props) => {
 
 
 
-
-
     const {
-        goButtonData,
+
         pageField,
         userAccess,
         listBtnLoading,
-        Party,
         partyDropdownLoadings,
         supplierListOnPartyType,
-        ItemSaleReportGobtn
+        ItemSaleReportGobtn,
+        goBtnLoading
     } = useSelector((state) => ({
-        goButtonData: state.DemandVsSupplyReportReducer.DemandVsSupplyReportData,
-        listBtnLoading: state.DemandVsSupplyReportReducer.listBtnLoading,
+
         partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
         Distributor: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
         Party: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
         userAccess: state.Login.RoleAccessUpdateData,
         ItemSaleReportGobtn: state.ItemSaleReportReducer.ItemSaleReportGobtn,
+        goBtnLoading: state.ItemSaleReportReducer.goBtnLoading,
+
+
+
         supplierListOnPartyType: state.CommonAPI_Reducer.vendorSupplierCustomer,
         pageField: state.CommonPageFieldReducer.pageField
     })
@@ -77,7 +77,7 @@ const DailyDispatchReport = (props) => {
             }));
 
         return () => {
-            dispatch(DemandVSSupply_Report_Action_Success([]));
+            dispatch(ItemSaleGoButton_API_Success([]));
             setTableData([]);
 
         }
@@ -163,8 +163,15 @@ const DailyDispatchReport = (props) => {
         ...supplierNames.map((CustomerName) => ({
             dataField: CustomerName,
             text: CustomerName,
+            align: () => "right",
             sort: true,
-        })),
+        })), {
+
+            dataField: 'Unit',
+            text: 'Unit',
+            sort: true, // Optional: Enable sorting
+            formatter: () => <strong>{`Kg`}</strong>, // Render the text in bold   
+        }
     ];
 
     useEffect(() => {
@@ -174,19 +181,15 @@ const DailyDispatchReport = (props) => {
                 if (Mode === "Show") {
                     setTableData(tableData);
 
-                } else {
+                } else if (Mode === "Excel") {
                     ExcelReportComponent({      // Download CSV
                         pageField,
                         excelTableData: tableData,
                         excelFileName: "Daily dispatch report",
                     })
                 }
+            }
 
-                dispatch(DemandVSSupply_Report_Action_Success([]));
-            }
-            else if ((goButtonData.Status === true)) {
-                setTableData([]);
-            }
         }
         catch (e) { }
 
@@ -310,7 +313,7 @@ const DailyDispatchReport = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={listBtnLoading === "Show"}
+                                loading={goBtnLoading && Mode === "Show"}
                                 className="btn btn-success m-3 mr"
                                 onClick={(e) => excel_And_GoBtnHandler(e, "Show")}
                             >
@@ -319,7 +322,7 @@ const DailyDispatchReport = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={listBtnLoading === "Excel"}
+                                loading={goBtnLoading && Mode === "Excel"}
                                 className="btn btn-primary m-3 mr "
                                 onClick={(e) => excel_And_GoBtnHandler(e, "Excel")}
                             >
