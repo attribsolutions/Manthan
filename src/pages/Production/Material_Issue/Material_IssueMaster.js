@@ -629,12 +629,12 @@ const MaterialIssueMaster = (props) => {
                 materialIssueItems.push({
                     Item: index.Item,
                     Unit: index.Unit,
-                    WorkOrderQuantity: parseFloat(index.Quantity).toFixed(2),
+                    WorkOrderQuantity: parseFloat(index.Quantity).toFixed(3),
                     BatchCode: ele.BatchCode,
                     BatchDate: ele.BatchDate,
                     SystemBatchDate: ele.SystemBatchDate,
                     SystemBatchCode: ele.SystemBatchCode,
-                    IssueQuantity: parseFloat(ele.Qty).toFixed(2),
+                    IssueQuantity: parseFloat(ele.Qty).toFixed(3),
                     BatchID: ele.id,
                     LiveBatchID: ele.LiveBatchID
                 })
