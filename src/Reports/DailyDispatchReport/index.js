@@ -30,6 +30,11 @@ const DailyDispatchReport = (props) => {
     const [tableData, setTableData] = useState([]);
     const [SupplierDropdown, setSupplierDropdown] = useState(allLabelWithZero);
 
+    const [Mode, setMode] = useState("");
+
+
+
+
 
     const {
         goButtonData,
@@ -165,15 +170,15 @@ const DailyDispatchReport = (props) => {
     useEffect(() => {
 
         try {
-            if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
-                if (goButtonData.Mode === "Show") {
-                    setTableData(goButtonData.Data);
+            if (Mode) {
+                if (Mode === "Show") {
+                    setTableData(tableData);
 
                 } else {
                     ExcelReportComponent({      // Download CSV
                         pageField,
-                        excelTableData: goButtonData.Data,
-                        excelFileName: "Demand Vs Supply",
+                        excelTableData: tableData,
+                        excelFileName: "Daily dispatch report",
                     })
                 }
 
@@ -185,7 +190,7 @@ const DailyDispatchReport = (props) => {
         }
         catch (e) { }
 
-    }, [goButtonData]);
+    }, [tableData]);
 
     const supplierDropdownOptions = useMemo(() => {
         let options = [];
@@ -212,6 +217,8 @@ const DailyDispatchReport = (props) => {
             CompanyID: _cfunc.loginCompanyID(),
 
         })
+
+        setMode(mode)
         // let config = { jsonBody, Mode: mode }
         dispatch(ItemSaleGoButton_API({ jsonBody, btnId: url.ITEM_SALE_REPORT }));
 
