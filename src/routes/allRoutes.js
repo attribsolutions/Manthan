@@ -261,6 +261,7 @@ import GRNDiscrepancyReport from "../Reports/GRNDiscrepancyReport/GRNDiscrepancy
 import CodeRedemtionReport from "../Reports/CodeRedemtionReport/CodeRedemtionReport.js";
 import VoucherRedemptionClaim from "../Reports/VoucherRedemptionClaim/VoucherRedemptionClaim.js";
 import PeriodicGRNReport from "../Reports/PeriodicGRNReport/PeriodicGRNReport.js";
+import DailyDispatchReport from "../Reports/DailyDispatchReport/index.js";
 
 
 const userRoutes = [
@@ -613,6 +614,10 @@ const userRoutes = [
 
 	{ path: path.CLAIM_TRACKING_ENTRY, component: ClaimTrackingEntry, isPartyWisePage: true },
 	{ path: path.CLAIM_TRACKING_ENTRY_LIST, component: ClaimTrackingEntryList, isPartyWisePage: true },
+
+	{ path: path.DAILY_DISPATCH_REPORT, component: DailyDispatchReport, isPartyWisePage: false },
+
+
 
 
 	//**************************** Reports ***********************************//
