@@ -360,6 +360,9 @@ export const BANK_ASSIGN = "/BankAssign"
 export const CLAIM_TRACKING_ENTRY = "/ClaimTrackingEntry"
 export const CLAIM_TRACKING_ENTRY_LIST = "/ClaimTrackingEntryList"
 
+export const DAILY_DISPATCH_REPORT = "/Daily_Dispatch_Report"
+
+
 export const INVOICE_CONFIGURATION = "/InvoiceConfiguration"
 
 export const CREDIT_NOTE = "/Credit"

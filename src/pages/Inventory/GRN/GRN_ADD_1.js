@@ -871,11 +871,11 @@ const GRN_ADD_1 = (props) => {
 
                     if ((Number(i.Quantity) > 0)) {
 
-                        if (dubli.length === 0) {
-                            GRNItemArray.push(arr)
-                        } else {
-                            isvalidMsg.push(`${i.ItemName}:  This Item Is Dublicate...`)
-                        }
+                        // if (dubli.length === 0) {
+                        GRNItemArray.push(arr)
+                        // } else {
+                        //     isvalidMsg.push(`${i.ItemName}:  This Item Is Dublicate...`)
+                        // }
 
 
 
