@@ -17,6 +17,7 @@ import StockEntryReport from "./StockEntry/Page";
 import OrderThermalPrintReport from "../pages/SweetPOS/Reports/OrderThermalPrint/Page";
 import voucherRedemptionClaimReport from "./VoucherRedemptionClaim/VoucherRedemptionClaimPDF";
 import PeriodicGRNReport from "./PeriodicGRNReport/PDFReport/Page";
+import POSSaleSummaryReport from "../pages/SweetPOS/Reports/PosSummarySaleReport/Page";
 
 export const FrenchiesesOrder = "FrenchiesesOrder"
 export const order1 = "order1"
@@ -39,6 +40,10 @@ export const StockEntry = "StockEntry"
 export const orderThermalPrintReport = "orderThermalPrintReport"
 export const VoucherRedemptionClaimReport = "VoucherRedemptionClaimReport"
 export const PeriodicGRN = "PeriodicGRN"
+
+export const POSSaleSummary = "POSSaleSummary"
+
+
 
 
 const generateReport = (resp) => {
@@ -102,8 +107,10 @@ const generateReport = (resp) => {
             voucherRedemptionClaimReport(resp)
             break;
         case PeriodicGRN:
-
             PeriodicGRNReport(resp.Data)
+            break;
+        case POSSaleSummary:
+            POSSaleSummaryReport(resp.Data)
             break;
         default:
             break;

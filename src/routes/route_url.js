@@ -360,6 +360,9 @@ export const BANK_ASSIGN = "/BankAssign"
 export const CLAIM_TRACKING_ENTRY = "/ClaimTrackingEntry"
 export const CLAIM_TRACKING_ENTRY_LIST = "/ClaimTrackingEntryList"
 
+export const DAILY_DISPATCH_REPORT = "/Daily_Dispatch_Report"
+
+
 export const INVOICE_CONFIGURATION = "/InvoiceConfiguration"
 
 export const CREDIT_NOTE = "/Credit"
@@ -487,4 +490,4 @@ export const BILL_BOOKING_REPORT = "/Bill_Booking_Report"
 export const FRANCHAISE_SALE_WITH_BILL_COUNT = "/Franchise_Sale_With_Bill_Count"
 
 
-
+export const POS_SALE_SUMMARY_REPORT = "/POS_Summary_Sale_Report"

@@ -20,7 +20,7 @@ import SaveButtonDraggable from "../../../../components/Common/saveButtonDraggab
 import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
 import data from '../data.json';
 import GlobalCustomTable from "../../../../GlobalCustomTable";
-import { Save_Bulk_BOM_for_WorkOrder, Save_Bulk_BOM_for_WorkOrderSuccess } from "../../../../store/Production/WorkOrder/action";
+import { Bulk_BOM_for_WorkOrderSuccess, Save_Bulk_BOM_for_WorkOrder, Save_Bulk_BOM_for_WorkOrderSuccess } from "../../../../store/Production/WorkOrder/action";
 
 const BulkWorkOrder = (props) => {
 
@@ -83,6 +83,8 @@ const BulkWorkOrder = (props) => {
 
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id));
+        dispatch(Bulk_BOM_for_WorkOrderSuccess({ Status: false }));
+
 
         if ((commonPartyDropSelect.value > 0)) {
             dispatch(goButtonPartyItemAddPage({
@@ -95,6 +97,10 @@ const BulkWorkOrder = (props) => {
 
         return () => {
             dispatch(goButtonPartyItemAddPageSuccess([]));
+            dispatch(Bulk_BOM_for_WorkOrderSuccess({ Status: false }));
+
+
+
         }
     }, []);
 

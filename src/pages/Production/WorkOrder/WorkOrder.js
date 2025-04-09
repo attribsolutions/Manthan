@@ -295,7 +295,8 @@ const WorkOrder = (props) => {
             Category: 0,
             Company: loginCompanyID(),
             Party: loginPartyID(),
-            ItemID: ""
+            ItemID: "",
+            IsVDCItem: 1,
         });
         dispatch(getBOMListPage(jsonBody));
     }, [])

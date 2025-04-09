@@ -40,6 +40,7 @@ export default function WorkOrderForDashboard() {
             Party: loginSelectedPartyID(),
             ItemID: "",
             Category: 0,
+            IsVDCItem: ""
         });
         dispatch(getBOMListPage(jsonBody));
     }, [commonPartyDropSelect])
@@ -60,7 +61,7 @@ export default function WorkOrderForDashboard() {
     useEffect(() => {
 
         if (GoButton.StatusCode === 200 && GoButton.Status === true) {
-            
+
             const Bomdate = date_ymd_func(bomData.BomDate)
             history.push({
                 pathname: url.WORK_ORDER,

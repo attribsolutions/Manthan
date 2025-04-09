@@ -106,6 +106,7 @@ const BOMList = () => {
             Party: _cfunc.loginPartyID(),
             ItemID: Item.value,
             Category: 0,
+            IsVDCItem: ""
         });
         dispatch(getBOMListPage(jsonBody));
     }

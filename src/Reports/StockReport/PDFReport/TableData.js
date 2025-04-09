@@ -23,7 +23,9 @@ export const columns_for_ChitaleSweetsAndSnacks = [
     "Item Name",
     "Opening balance",
     "GRN Inward",
+    "IB Purchase",
     "Production",
+    "IB Sales",
     "SalesReturn ",
     "Sale",
     "Purchase Return",
@@ -135,17 +137,22 @@ export const Rows_for_ChitaleSweetsAndSnacks = (data) => {
     let TotalActualStock = 0
     let TotalClosingAmount = 0
     let TotalProduction = 0
+    let TotalIBPurchase = 0
+    let TotalIBSale = 0
+
 
 
     StockDetails.forEach((element, key) => {
-
+        debugger
         const tableitemRow = [
             `${element.GroupName}`,
             `${element.SubGroupName}`,
             `${element.ItemName}`,
             `${numberWithCommas(Number(element.OpeningBalance).toFixed(2))}`,
             `${numberWithCommas(Number(element.GRNInward).toFixed(2))}`,
+            `${numberWithCommas(Number(element.IBPurchase).toFixed(2))}`,
             `${numberWithCommas(Number(element.Production).toFixed(2))}`,
+            `${numberWithCommas(Number(element.IBSale).toFixed(2))}`,
             `${numberWithCommas(Number(element.SalesReturn).toFixed(2))}`,
             `${numberWithCommas(Number(element.Sale).toFixed(2))}`,
             `${numberWithCommas(Number(element.PurchaseReturn).toFixed(2))}`,
@@ -168,7 +175,8 @@ export const Rows_for_ChitaleSweetsAndSnacks = (data) => {
             TotalActualStock = Number(TotalActualStock) + Number(element.ActualStock)
             TotalClosingAmount = Number(TotalClosingAmount) + Number(element.ClosingAmount)
             TotalProduction = Number(TotalProduction) + Number(element.Production)
-
+            TotalIBPurchase = Number(TotalIBPurchase) + Number(element.IBPurchase)
+            TotalIBSale = Number(TotalIBSale) + Number(element.IBSale)
 
         };
 
@@ -179,7 +187,9 @@ export const Rows_for_ChitaleSweetsAndSnacks = (data) => {
                 ``,
                 `${numberWithCommas(Number(TotalOpeningBalance).toFixed(2))}`,
                 `${numberWithCommas(Number(TotalGRNInward).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalIBPurchase).toFixed(2))}`,
                 `${numberWithCommas(Number(TotalProduction).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalIBSale).toFixed(2))}`,
                 `${numberWithCommas(Number(TotalSalesReturn).toFixed(2))}`,
                 `${numberWithCommas(Number(TotalSale).toFixed(2))}`,
                 `${numberWithCommas(Number(TotalPurchaseReturn).toFixed(2))}`,

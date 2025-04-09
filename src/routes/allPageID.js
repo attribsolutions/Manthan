@@ -14,6 +14,12 @@ export const POS_LOG = 309
 
 export const TRANSACTION_LOG = 235
 
+
+export const DAILY_DISPATCH_REPORT = 339
+
+
+
+
 // *************************** Administration *******************************//
 
 export const MODULE = 5

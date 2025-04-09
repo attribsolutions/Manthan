@@ -120,7 +120,7 @@ const Dashboard_Admin = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        
+
         const page_Id = pageId.DASHBORD_1//changes
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
@@ -164,7 +164,8 @@ const Dashboard_Admin = (props) => {
             ToDate: lastDate,
             Supplier: "",
             Party: commonPartyDropSelect.value,
-            DashBoardMode: 1
+            DashBoardMode: 1,
+            IsGRNType: 1
 
         };
 

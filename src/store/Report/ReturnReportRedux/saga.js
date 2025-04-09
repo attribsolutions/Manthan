@@ -9,7 +9,7 @@ function* ReturnReport_GenFunc({ config }) {
 	try {
 		const response = yield call(ReturnReport_API, config);
 		response.Data.map((i) => {
-			i["FullReturnNumber"] = (`${i.FullReturnNumber}(${i.id})`);
+			i["FullReturnNumber"] = (`${i.FullReturnNumber}`);
 			i.ReturnDate = date_dmy_func(i.ReturnDate);
 			i["recordsAmountTotal"] = i.Amount  // Breadcrumb Count total
 			return i;

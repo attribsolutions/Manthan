@@ -247,6 +247,9 @@ const Order = (props) => {
     const { fieldLabel } = state;
 
     const location = { ...history.location }
+
+    const orderFromMaterialIssue = location?.editValue?.OrderFromMaterialIssue
+
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
@@ -344,16 +347,25 @@ const Order = (props) => {
 
             let hasEditVal = null
             if (hasShowloction) {
-                setPageMode(location.pageMode)
+                if (orderFromMaterialIssue) {
+                    setPageMode(mode.defaultsave)
+                } else {
+                    setPageMode(location.pageMode)
+                }
                 hasEditVal = location.editValue
             }
             else if (hasShowModal) {
                 hasEditVal = props.editValue
-                setPageMode(props.pageMode)
+                if (orderFromMaterialIssue) {
+                    setPageMode(mode.defaultsave)
+                } else {
+                    setPageMode(props.pageMode)
+
+                }
                 setModalCss(true)
             }
             if (hasEditVal) {
-
+                debugger
                 setorderdate(hasEditVal.OrderDate)
 
                 if (subPageMode === url.ORDER_4) {
@@ -382,8 +394,8 @@ const Order = (props) => {
                 setorderTypeSelect({ value: hasEditVal.POType, label: hasEditVal.POTypeName })
 
 
-                setpoToDate(hasEditVal.POToDate)
-                setpoFromDate(hasEditVal.POFromDate)
+                // setpoToDate(hasEditVal.POToDate)
+                // setpoFromDate(hasEditVal.POFromDate)
 
                 const { TermsAndConditions = [] } = hasEditVal;
                 const termsAndCondition = TermsAndConditions.map(i => ({
@@ -407,8 +419,8 @@ const Order = (props) => {
                 //     return ele
                 // });
 
-                debugger
 
+                debugger
                 let orderItems = hasEditVal.OrderItems.map((ele, k) => {
                     // Calculate weightage and total weightage
                     const weightage = Number(ele["Weightage"]) || 0.00;
@@ -427,8 +439,19 @@ const Order = (props) => {
 
                 setitemSelectOptions(orderItems)
 
-                orderItems = orderItems
-                    .filter((i) => i.Quantity)
+
+                if (orderFromMaterialIssue) {
+                    orderItems = orderItems
+                        .filter(item => hasEditVal?.Item_Id.includes(item.Item_id));
+                    setpoToDate(currentDate_ymd)
+                    setpoFromDate(currentDate_ymd)
+                } else {
+                    orderItems = orderItems.filter((i) => i.Quantity)
+                    setpoToDate(hasEditVal.POToDate)
+                    setpoFromDate(hasEditVal.POFromDate)
+                }
+
+
 
                 const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(hasEditVal.OrderAmount).toFixed(2));
 
@@ -449,9 +472,12 @@ const Order = (props) => {
 
 
 
+
                 dispatch(_act.BreadcrumbShowCountlabel(`Count:${orderItems.length} currency_symbol ${commaSeparateAmount} weight ${(Total_weigtage).toFixed(2)} kg`))
 
+
                 seteditCreatedBy(hasEditVal.CreatedBy)
+
             }
             dispatch(_act.editOrderIdSuccess({ Status: false }))
             dispatch(changeCommonPartyDropDetailsAction({ forceDisable: true }))//change party drop-down disable when edit/view
@@ -587,14 +613,14 @@ const Order = (props) => {
     }, [goBtnOrderdata]);
 
     useEffect(() => {
-        if ((supplierAddress.length > 0) && (!((hasShowloction || hasShowModal)))) {
+        if ((supplierAddress.length > 0) && ((!((hasShowloction || hasShowModal)) || (orderFromMaterialIssue)))) {
             setbillAddr(supplierAddress[0]);
             setshippAddr(supplierAddress[0]);
         }
     }, [supplierAddress]);
 
     useEffect(() => {
-        if ((orderType.length > 0) && (!((hasShowloction || hasShowModal)))) {
+        if ((orderType.length > 0) && ((!((hasShowloction || hasShowModal)) || (orderFromMaterialIssue)))) {
             setorderTypeSelect({
                 value: orderType[0].id,
                 label: orderType[0].Name,
@@ -1297,7 +1323,7 @@ const Order = (props) => {
 
         let totals = tableList.reduce(
             (accumulator, currentObject) => {
-                debugger
+
                 const amount = Number(currentObject["Amount"]) || 0.00;
                 const weightage = (Number(currentObject["Weightage"])) || 0.00;
 
@@ -1342,7 +1368,7 @@ const Order = (props) => {
 
     const item_AddButtonHandler = () => {
 
-        debugger
+
         setGoBtnDissable(true)
         let isfound = orderItemTable.find(i => i.value === itemSelect.value);
 
@@ -1364,7 +1390,7 @@ const Order = (props) => {
     }
 
     const goButtonHandler = async (selectSupplier) => {
-        debugger
+
         if (!supplierSelect > 0 && !selectSupplier) {
             await customAlert({
                 Type: 4,
@@ -1834,7 +1860,7 @@ const Order = (props) => {
                                                 <Col sm="7">
                                                     <C_Select
                                                         value={supplierSelect}
-                                                        isDisabled={(pageMode === mode.edit || goBtnloading) ? true : false}
+                                                        isDisabled={(pageMode === mode.edit || goBtnloading) ? orderFromMaterialIssue ? false : true : false}
                                                         options={supplierOptions}
                                                         onChange={supplierOnchange}
                                                         isLoading={supplierDropLoading}
@@ -1994,7 +2020,7 @@ const Order = (props) => {
                                                                     setOrderItemTable(orderItem)
                                                                     dispatch(_act.BreadcrumbShowCountlabel(`Count:${orderItem.length} currency_symbol ${state.values.OrderAmount} weight ${state.values.Total_weigtage} kg`))
                                                                 } else {
-                                                                    debugger
+
                                                                     let orderItem = orderItemTable
                                                                         .filter((i) => i.Quantity)
                                                                         .sort((a, b) => a.Quantity - b.Quantity)
