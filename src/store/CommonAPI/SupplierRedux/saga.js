@@ -124,7 +124,7 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     Company = loginCompanyID() } = data
 
   let response;
-
+  debugger
   const isVender = (subPageMode === url.ORDER_1 //vendor mode 1
     || subPageMode === url.ORDER_LIST_1
     || subPageMode === url.GRN_STP_1);

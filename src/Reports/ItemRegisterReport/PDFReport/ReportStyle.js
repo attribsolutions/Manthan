@@ -393,7 +393,251 @@ export const tableBody = (doc, data) => {
 
 }
 
+export const tableBody_for_ChitaleSweetsAndSnacks = (doc, data) => {
+    var options = {
 
+        didParseCell: (data1) => {
+
+
+
+            if (data1.row.cells[0].raw === "Total") {
+                data1.row.cells[0].colSpan = 2
+
+                data1.row.cells[0].styles.fontSize = 8
+                data1.row.cells[0].styles.fontStyle = "bold"
+
+                data1.row.cells[3].styles.fontSize = 8
+                data1.row.cells[3].styles.fontStyle = "bold"
+
+                data1.row.cells[4].styles.fontSize = 8
+                data1.row.cells[4].styles.fontStyle = "bold"
+
+                data1.row.cells[5].styles.fontSize = 8
+                data1.row.cells[5].styles.fontStyle = "bold"
+
+                data1.row.cells[6].styles.fontSize = 8
+                data1.row.cells[6].styles.fontStyle = "bold"
+
+                data1.row.cells[7].styles.fontSize = 8
+                data1.row.cells[7].styles.fontStyle = "bold"
+
+                data1.row.cells[8].styles.fontSize = 8
+                data1.row.cells[8].styles.fontStyle = "bold"
+
+                data1.row.cells[9].styles.fontSize = 8
+                data1.row.cells[9].styles.fontStyle = "bold"
+            }
+
+
+            if (data1.row.cells[2].raw === "Total") {
+
+                data1.row.cells[0].colSpan = 10
+                data1.row.cells[0].styles.fontSize = 9
+                data1.row.cells[0].styles.fontStyle = "bold"
+
+
+            }
+
+
+            if (data1.cell.raw === "STOCK") {
+
+                // data1.cell.styles.fontStyle = "bold"
+                // data1.row.cells[2].styles.fontSize = 9
+                data1.row.cells[0].styles.fontStyle = "bold"
+                data1.row.cells[1].styles.fontStyle = "bold"
+                data1.row.cells[2].styles.fontStyle = "bold"
+                data1.row.cells[3].styles.fontStyle = "bold"
+                data1.row.cells[9].styles.fontStyle = "bold"
+            }
+
+            if (data1.column.index === 4) {
+                if (data1.cell.raw !== "0.00") {
+                    data1.row.cells[4].styles.fontStyle = "bold"
+
+                }
+
+            }
+            if (data1.column.index === 5) {
+                if (data1.cell.raw !== "0.00") {
+                    data1.row.cells[5].styles.fontStyle = "bold"
+
+                }
+
+            } if (data1.column.index === 6) {
+                if (data1.cell.raw !== "0.00") {
+                    data1.row.cells[6].styles.fontStyle = "bold"
+
+                }
+
+            } if (data1.column.index === 7) {
+                if (data1.cell.raw !== "0.00") {
+                    data1.row.cells[7].styles.fontStyle = "bold"
+
+                }
+
+            }
+            if (data1.column.index === 8) {
+                if (data1.cell.raw !== "0.00") {
+                    data1.row.cells[8].styles.fontStyle = "bold"
+
+                }
+
+            }
+            if (data1.column.index === 9) {
+                if (data1.cell.raw !== "0.00") {
+                    data1.row.cells[9].styles.fontStyle = "bold"
+
+                }
+
+            }
+
+            if (data1.column.index === 10) {
+                if (data1.cell.raw !== "0.00") {
+                    data1.row.cells[10].styles.fontStyle = "bold"
+
+                }
+
+            }
+            if (data1.column.index === 11) {
+                if (data1.cell.raw !== "0.00") {
+                    data1.row.cells[11].styles.fontStyle = "bold"
+
+                }
+
+            }
+            if (data1.column.index === 12) {
+                if (data1.cell.raw !== "0.00") {
+                    data1.row.cells[12].styles.fontStyle = "bold"
+
+                }
+
+            }
+            if (data1.column.index === 13) {
+                if (data1.cell.raw !== "0.00") {
+                    data1.row.cells[13].styles.fontStyle = "bold"
+
+                }
+
+            }
+
+
+        },
+
+        margin: {
+            left: 30, right: 25, top: 55
+        },
+        theme: 'grid',
+        headerStyles: {
+            cellPadding: 4,
+            lineWidth: 1,
+            valign: 'top',
+            fontStyle: 'bold',
+            halign: 'center',    //'center' or 'right'
+            fillColor: "white",
+            textColor: [0, 0, 0], //Black     
+            fontSize: 8,
+            rowHeight: 10,
+            lineColor: [0, 0, 0]
+        },
+        bodyStyles: {
+            textColor: [30, 30, 30],
+            cellPadding: 3,
+            fontSize: 7,
+            columnWidth: 'wrap',
+            lineColor: [0, 0, 0],
+        },
+        columnStyles: {
+            0: {
+                columnWidth: 19,
+                halign: 'left',
+
+            },
+            1: {
+                columnWidth: 68,
+                halign: 'left',
+
+            },
+            2: {
+                columnWidth: 70,
+                halign: 'left',
+            },
+            3: {
+                columnWidth: 30,
+                halign: 'right',
+            },
+            4: {
+                columnWidth: 32,
+                halign: 'right',
+            },
+            5: {
+                columnWidth: 43,
+                halign: 'right',
+            },
+            6: {
+                columnWidth: 30,
+                halign: 'right',
+            },
+            7: {
+                columnWidth: 30,
+                halign: 'right',
+            },
+            8: {
+                columnWidth: 35,
+                halign: 'right',
+            },
+            9: {
+                columnWidth: 35,
+                halign: 'right',
+            },
+            10: {
+                columnWidth: 32,
+                halign: 'right',
+            },
+            11: {
+                columnWidth: 43,
+                halign: 'right',
+            },
+            12: {
+                columnWidth: 35,
+                halign: 'right',
+            },
+            13: {
+                columnWidth: 38,
+                halign: 'right',
+            },
+
+
+        },
+        tableLineColor: "black",
+        startY: doc.autoTableEndPosY(),// 45,
+    };
+
+    doc.autoTable(table.columns_for_ChitaleSweetsAndSnacks, table.Rows_for_ChitaleSweetsAndSnacks(data), options, {
+
+
+    });
+    // Auto table for footer
+    const optionsTable4 = {
+        margin: {
+            left: 30, right: 30, bottom: 100
+        },
+        showHead: 'never',
+    };
+
+    doc.autoTable(optionsTable4);
+
+    doc.autoTable({
+        html: '#table',
+        didParseCell(data) {
+            if (data.cell.row.index === 0) {
+                data.cell.styles.textColor = [255, 255, 255];
+                data.cell.styles.fillColor = '#FF5783';
+            }
+        }
+    })
+
+
+}
 
 
 export const pageFooter = (doc, data) => {

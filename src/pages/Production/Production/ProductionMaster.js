@@ -114,6 +114,7 @@ const ProductionMaster = (props) => {
                 setPageMode(location.pageMode)
                 insidePageMode = location.pageMode;
                 hasEditVal = location.editValue
+                debugger
             }
             else if (hasShowModal) {
                 hasEditVal = props.editValue
@@ -122,10 +123,10 @@ const ProductionMaster = (props) => {
             }
 
             if (hasEditVal) {
-
+                debugger
                 const { Item, ItemName, UnitName, Unit, id,
                     EstimatedQuantity = 0,
-                    BestBefore = currentDate_ymd,
+                    ShelfDate,
                     Remark = "", PrintedBatchCode = '',
                     NumberOfLot = 0, ActualQuantity = '',
                     ProductionDate = currentDate_ymd } = hasEditVal;
@@ -152,7 +153,7 @@ const ProductionMaster = (props) => {
                     i.values.EstimatedQuantity = EstimatedQuantity;//EstimatedQuantity===LoQuantity
                     i.values.NumberOfLot = NumberOfLot;      //NumberOfLot===NumberOfLot
                     i.values.ActualQuantity = ActualQuantity;
-                    i.values.BestBefore = BestBefore;
+                    i.values.BestBefore = ShelfDate;
                     i.values.PrintedBatchCode = PrintedBatchCode;
                     i.values.Remark = Remark;
 

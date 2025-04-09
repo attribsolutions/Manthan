@@ -1,14 +1,16 @@
 import React, { useEffect, useState, } from "react";
 import {
+    Card,
     Col,
     FormGroup,
     Input,
     Label,
+    Modal,
     Row,
     Table
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
+import { Breadcrumb_inputName, commonPageFieldSuccess, GetVenderSupplierCustomer, GoButton_For_Order_Add } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -20,7 +22,7 @@ import {
     onChangeSelect,
     resetFunction,
 } from "../../../components/Common/validationFunction";
-import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
+import { C_Button, Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import { saveBOMMasterSuccess } from "../../../store/Production/BOMRedux/action";
 import {
     editMaterialIssueIdSuccess,
@@ -40,7 +42,10 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { Qty_Distribution_Func, updateWorkOrderQuantity_By_Lot } from "./DistributionFunc";
 import Select, { components } from "react-select";
-import { getWorkOrderListPage } from "../../../store/Production/WorkOrder/action";
+import { Bulk_BOM_for_WorkOrder, getWorkOrderListPage, Save_Bulk_BOM_for_WorkOrderSuccess } from "../../../store/Production/WorkOrder/action";
+import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
+import { order_Type } from "../../../components/Common/C-Varialbes";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const MaterialIssueMaster = (props) => {
 
@@ -55,10 +60,12 @@ const MaterialIssueMaster = (props) => {
         NumberOfLot: 0,
         LotQuantity: 0,
         TotalQty: 0,
-        TotalNumberOfLot: 0
+        TotalNumberOfLot: 0,
+        Suppiler: "",
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
+
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
@@ -67,7 +74,7 @@ const MaterialIssueMaster = (props) => {
     const [goButtonList, setGoButtonList] = useState([]);
     const [originalQty, setOriginalQty] = useState([]);
 
-
+    const [modal_view, setModal_view] = useState(false);
 
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [noOfLotForDistribution, setNoOfLotForDistribution] = useState(0);
@@ -81,7 +88,12 @@ const MaterialIssueMaster = (props) => {
         Items,
         GoButton = [],
         saveBtnloading,
-        goBtnloading
+        OrderBtnloading,
+        supplier,
+        commonPartyDropSelect,
+        goBtnloading,
+        goBtnOrderdata,
+        Bulk_Data
     } = useSelector((state) => ({
         saveBtnloading: state.MaterialIssueReducer.saveBtnloading,
         postMsg: state.MaterialIssueReducer.postMsg,
@@ -89,7 +101,16 @@ const MaterialIssueMaster = (props) => {
         pageField: state.CommonPageFieldReducer.pageField,
         Items: state.WorkOrderReducer.WorkOrderList,
         GoButton: state.MaterialIssueReducer.GoButton,
-        goBtnloading: state.MaterialIssueReducer.goBtnloading
+        goBtnloading: state.MaterialIssueReducer.goBtnloading,
+        supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
+        commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect,
+        OrderBtnloading: state.OrderReducer.goBtnLoading,
+        goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
+        Bulk_Data: state.WorkOrderReducer.Bulk_Bom_for_WorkOrder,
+
+
+
+
     }));
 
     useEffect(() => {
@@ -102,6 +123,7 @@ const MaterialIssueMaster = (props) => {
             Party: _cfunc.loginSelectedPartyID()
         });
         dispatch(getWorkOrderListPage({ jsonBody }));
+        dispatch(GetVenderSupplierCustomer({ subPageMode: url.IB_ORDER, PartyID: _cfunc.loginSelectedPartyID() }));
 
         return () => {
             dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
@@ -268,6 +290,41 @@ const MaterialIssueMaster = (props) => {
     }, [postMsg])
 
     useEffect(() => {
+
+        const Item_Id = goButtonList.filter((index => index.selectCheck === true)).map((index => index.Item))
+        if (Item_Id.length > 0 && goBtnOrderdata) {
+            debugger
+            setModal_view(true);
+            goBtnOrderdata["Item_Id"] = Item_Id
+            goBtnOrderdata["SupplierName"] = values.Suppiler.label
+            goBtnOrderdata["Supplier"] = values.Suppiler.value
+            goBtnOrderdata["OrderFromMaterialIssue"] = true
+            goBtnOrderdata["OrderDate"] = currentDate_ymd
+
+
+            history.push({
+                pathname: url.IB_ORDER,
+                editValue: goBtnOrderdata,
+                pageMode: mode.edit
+            })
+        }
+    }, [goBtnOrderdata])
+
+    useEffect(() => {
+
+        if (Bulk_Data.Status === true && Bulk_Data.StatusCode === 200) {
+            dispatch(Save_Bulk_BOM_for_WorkOrderSuccess({ Status: false }));
+            history.push({
+                pathname: url.BULK_WORK_ORDER,
+                state: Bulk_Data.Data
+            })
+
+        }
+    }, [Bulk_Data]);
+
+
+
+    useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })
@@ -291,9 +348,13 @@ const MaterialIssueMaster = (props) => {
         TotalQty: index.Quantity,
 
     }));
+    function modalToggleFunc() {
+        setModal_view(false);
+
+    }
 
     const workorderQytChange = (inx_1) => {
-        debugger
+
         let remainingQuantity = inx_1.Quantity;
         inx_1.BatchesData.forEach(inx_2 => {
             const quantity = _cfunc.getFixedNumber(inx_2.ObatchwiseQuantity, 3);
@@ -388,7 +449,7 @@ const MaterialIssueMaster = (props) => {
             text: "Batch Code",
             dataField: "BatchesData",
             formatter: (cellContent, user) => {
-                debugger
+
                 return (
                     <>
                         <Table className="table table-bordered table-responsive mb-1">
@@ -431,7 +492,7 @@ const MaterialIssueMaster = (props) => {
                                                 <div style={{ width: "120px", textAlign: "right" }}>
                                                     <Label
                                                     >
-                                                        {(index.ObatchwiseQuantity).toFixed(3)}
+                                                        {_cfunc.getFixedNumber(index.ObatchwiseQuantity, 3)}
                                                     </Label>
                                                 </div>
                                             </td>
@@ -475,6 +536,8 @@ const MaterialIssueMaster = (props) => {
             return i
         })
     }
+
+
 
     function goButtonHandler(event) {
 
@@ -573,8 +636,13 @@ const MaterialIssueMaster = (props) => {
         });
     }
 
+    const supplierOptions = supplier.map((i) => ({
+        value: i.id,
+        label: i.Name,
+    }));
+
     const tableQuantityOnchangeHandler = (event, index1, index2) => {
-        debugger
+
         let QuantityTotal = 0
         let input = event.target.value.trim(); // Remove leading and trailing whitespace
         let ObatchwiseQuantity = parseFloat(index2.ObatchwiseQuantity);
@@ -685,6 +753,81 @@ const MaterialIssueMaster = (props) => {
             }
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
+    function rowSelected() {
+        return goButtonList.map((index) => { return (index.selectCheck) && index.id })
+    }
+
+
+    const PurchaseOrderhandler = (event) => {
+        const Item_Id = goButtonList.filter((index => index.selectCheck)).map((index => index.id))
+        if (Item_Id.length > 0) {
+            setModal_view(true);
+        }
+    };
+
+    const makeOrdrrHandler = () => {
+
+        const PO_Body = {
+            Party: values.Suppiler.value,
+            Customer: commonPartyDropSelect.value,
+            RateParty: commonPartyDropSelect.value,
+            EffectiveDate: currentDate_ymd,
+            OrderID: 0,
+            Demand: 0,
+            OrderType: order_Type.PurchaseOrder,
+        }
+        const jsonBody = JSON.stringify({ ...PO_Body, });
+        let config = { subPageMode: url.ORDER_1, jsonBody }
+        dispatch(GoButton_For_Order_Add(config))
+
+    }
+
+    const BulkWorkOrder_Handler = async () => {
+        debugger
+
+        let validMsg = []
+        let checkRows = goButtonList.filter(i => (i.selectCheck))
+        let BomNotExist = checkRows.filter(i => (i.Bom_id === null))
+
+        BomNotExist.forEach(i => {
+            validMsg.push(`Item ${i.ItemName}: "BOM Not Exist"`);
+        });
+
+
+        if (!checkRows.length > 0) {
+            customAlert({
+                Type: 4,
+                Message: alertMessages.selectOneOrder,
+            });
+            return
+        }
+
+        if (BomNotExist.length > 0) {
+            customAlert({
+                Type: 10,
+                Message: JSON.stringify(validMsg),
+            });
+            return
+        }
+
+
+        let ID_String = checkRows.map(row => row.Bom_id).join(',')
+        let Quantity_String = checkRows.map(row => row.OriginalWorkOrderQty).join(',')
+        let Item_String = checkRows.map(row => row.Item).join(',')
+
+
+
+        const jsonBody = JSON.stringify({
+            Company: _cfunc.loginCompanyID(),
+            BOM_ID: ID_String,
+            Quantity: Quantity_String,
+            Item: Item_String,
+            Party: _cfunc.loginPartyID(),
+        });
+
+        dispatch(Bulk_BOM_for_WorkOrder({ jsonBody }))
+    }
+
 
     const customOption = (props) => {
 
@@ -869,6 +1012,15 @@ const MaterialIssueMaster = (props) => {
                                                     keyField={"id"}
                                                     id="table_Arrow"
                                                     responsive
+                                                    selectRow={
+
+                                                        selectAllCheck({
+                                                            rowSelected: rowSelected(),
+                                                            bgColor: '',
+                                                            position: "left",
+                                                            tableList: goButtonList
+                                                        })
+                                                    }
                                                     bordered={false}
                                                     striped={false}
                                                     classes={"table  table-bordered"}
@@ -891,9 +1043,104 @@ const MaterialIssueMaster = (props) => {
                                 module={"Material Issue"}
                                 editCreatedBy={editCreatedBy}
                             />
+
+                            <SaveButton pageMode={pageMode}
+                                // loading={saveBtnloading}
+                                onClick={PurchaseOrderhandler}
+                                userAcc={userPageAccessState}
+                                // module={"Material Issue"}
+                                Button_Name={"Make Demand"}
+                                editCreatedBy={editCreatedBy}
+                            />
+                            <SaveButton pageMode={pageMode}
+                                // loading={saveBtnloading}
+                                onClick={BulkWorkOrder_Handler}
+                                userAcc={userPageAccessState}
+                                // module={"Material Issue"}
+                                Button_Name={"Make Work Order"}
+
+                                editCreatedBy={editCreatedBy}
+                            />
                         </SaveButtonDraggable>}
 
                     </form>
+
+
+
+                    <Modal
+                        isOpen={modal_view}
+                        toggle={modalToggleFunc}
+                        centered={true}
+                    >
+                        <div className="modal-header" style={{ position: "relative" }}>
+                            <h4 className="modal-title mt-0 align-middle">Make Order For Selected Item</h4>
+                            <button
+                                type="button"
+                                onClick={modalToggleFunc}
+                                className="close"
+                                data-dismiss="modal"
+                                aria-label="Close"
+                            >
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <Row className="mt-1">
+                                <Col sm={12}>
+                                    <FormGroup className="row mt-2 ">
+                                        <Label className="mt-2" style={{ width: "100px" }}> Suppiler </Label>
+                                        <Col sm={8}>
+                                            <Select
+                                                name="Suppiler"
+                                                defaultValue={values.Suppiler}
+                                                isSearchable={true}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                options={supplierOptions}
+
+                                                onChange={(hasSelect, evn) => {
+                                                    onChangeSelect({ hasSelect, evn, state, setState });
+                                                }}
+
+
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                            />
+
+                                        </Col>
+                                    </FormGroup>
+                                </Col >
+                            </Row>
+
+                            <div className="modal-footer justify-content-start modal-footer p-4 mt-4">
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary pr-3 pl-3"
+                                    onClick={modalToggleFunc}
+
+
+                                >
+                                    Cancel
+                                </button>
+                                <Go_Button
+                                    loading={OrderBtnloading}
+                                    type="submit"
+                                    className="btn btn-primary pr-3 pl-3"
+                                    onClick={makeOrdrrHandler}
+                                />
+
+                            </div>
+
+
+                        </div>
+                    </Modal>
+
+
+
+
+
+
                 </div>
             </React.Fragment>
         );

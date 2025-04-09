@@ -314,10 +314,11 @@ const GRN_ADD_1 = (props) => {
             grnDetails.GRNReferences[0]["Order"] = OrderDetail.id
             grnDetails.GRNReferences[0]["OrderDate"] = OrderDetail.OrderDate
             grnDetails.GRNReferences[0]["POType"] = OrderDetail.POType.id
-
+            debugger
 
             initialTableData = grnDetails.GRNItems;
             setgrnItemList(initialTableData)
+            setgrnDate(grnDetails.GRNDate)
             grnDetails.GRNItems = []
 
             grnDetails["InvoiceDate"] = _cfunc.date_ymd_func(grnDetails.InvoiceDate)
@@ -1040,7 +1041,7 @@ const GRN_ADD_1 = (props) => {
                                     <Col sm="7">
                                         <C_DatePicker
                                             name="GRNDate"
-                                            value={values.GRNDate}
+                                            value={grnDate}
                                             disabled={((pageMode === mode.view) || subPageMode === url.ACCOUNTING_GRN) ? true : false}
                                             onChange={(e, date) => { setgrnDate(date) }}
                                         />

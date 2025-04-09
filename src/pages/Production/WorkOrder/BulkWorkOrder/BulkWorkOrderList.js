@@ -22,7 +22,7 @@ import { getOrdersMakeInvoiceDataAction, getOrdersMakeInvoiceDataActionSuccess }
 import { allLabelWithBlank, allLabelWithZero } from "../../../../components/Common/CommonErrorMsg/HarderCodeData";
 import { sideBarPageFiltersInfoAction } from "../../../../store/Utilites/PartyDrodown/action";
 import { getBOMListPage } from "../../../../store/Production/BOMRedux/action";
-import { Bulk_BOM_for_WorkOrder, Bulk_BOM_for_WorkOrderSuccess } from "../../../../store/Production/WorkOrder/action";
+import { Bulk_BOM_for_WorkOrder, Bulk_BOM_for_WorkOrderSuccess, Save_Bulk_BOM_for_WorkOrderSuccess } from "../../../../store/Production/WorkOrder/action";
 import Select from "react-select"
 
 const BulkWorkOrderList = () => {
@@ -183,6 +183,7 @@ const BulkWorkOrderList = () => {
             dispatch(_act.GetVenderSupplierCustomerSuccess([]));
             dispatch(priceListByCompay_ActionSuccess([]));
             dispatch(Bulk_BOM_for_WorkOrderSuccess({ Status: false }));
+            dispatch(Save_Bulk_BOM_for_WorkOrderSuccess({ Status: false }));
 
 
 
@@ -201,16 +202,17 @@ const BulkWorkOrderList = () => {
 
 
     useEffect(() => {
-
+        debugger
         if (Bulk_Data.Status === true && Bulk_Data.StatusCode === 200) {
+    
             history.push({
                 pathname: url.BULK_WORK_ORDER,
                 state: Bulk_Data.Data
             })
 
         }
-    }, [Bulk_Data]);
 
+    }, [Bulk_Data]);
     function CategoryType_Handler(e) {
         debugger
         setState((i) => {
@@ -233,7 +235,8 @@ const BulkWorkOrderList = () => {
                 Company: _cfunc.loginCompanyID(),
                 Party: _cfunc.loginPartyID(),
                 Category: values.Category.value,
-                ItemID: ""
+                ItemID: "",
+                IsVDCItem: 0
             });
             dispatch(getBOMListPage(jsonBody));
 
@@ -250,7 +253,7 @@ const BulkWorkOrderList = () => {
             });
             return
         }
-        let ID_String = checkRows.map(row => row.ID).join(',')
+        let ID_String = checkRows.map(row => row.id).join(',')
         let Quantity_String = checkRows.map(row => row.EstimatedOutputQty).join(',')
         let Item_String = checkRows.map(row => row.Item).join(',')
 

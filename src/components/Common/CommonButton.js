@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 export function SaveButton(props) {
 
-  const { pageMode = '', userAcc = {}, editCreatedBy } = props
+  const { pageMode = '', userAcc = {}, editCreatedBy, Button_Name = '' } = props
   const isCreated = (loginUserID() === editCreatedBy)
 
   if (pageMode === mode.edit) {
@@ -24,7 +24,7 @@ export function SaveButton(props) {
   }
   return null
 }
-const SaveBtn = ({ onClick, type = "button", userAcc, loading, forceDisabled, }) => {
+const SaveBtn = ({ onClick, type = "button", userAcc, loading, forceDisabled, Button_Name = "Save" }) => {
   const { Name } = userAcc;
   const btnId = `Save-${Name.replace(/ /g, "")}`;
   return (
@@ -49,7 +49,7 @@ const SaveBtn = ({ onClick, type = "button", userAcc, loading, forceDisabled, })
           title={`Save ${Name}`}
           className="btn btn-primary w-md"
           onClick={onClick}
-        > <i className="fas fa-save me-2"></i> Save
+        > <i className="fas fa-save me-2"></i> {Button_Name} &nbsp;
         </button>}
     </div>
   )
@@ -89,7 +89,7 @@ export function Go_Button(props) {
 
 
   const { onClick, id, type = "button", loading, forceDisabled, Lable = "Go", iconClass, styles } = props
-  
+
   return loading ?
     <button
       id={id}

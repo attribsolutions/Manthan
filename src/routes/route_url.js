@@ -490,4 +490,4 @@ export const BILL_BOOKING_REPORT = "/Bill_Booking_Report"
 export const FRANCHAISE_SALE_WITH_BILL_COUNT = "/Franchise_Sale_With_Bill_Count"
 
 
-
+export const POS_SALE_SUMMARY_REPORT = "/POS_Summary_Sale_Report"

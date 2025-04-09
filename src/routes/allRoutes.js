@@ -262,6 +262,7 @@ import CodeRedemtionReport from "../Reports/CodeRedemtionReport/CodeRedemtionRep
 import VoucherRedemptionClaim from "../Reports/VoucherRedemptionClaim/VoucherRedemptionClaim.js";
 import PeriodicGRNReport from "../Reports/PeriodicGRNReport/PeriodicGRNReport.js";
 import DailyDispatchReport from "../Reports/DailyDispatchReport/index.js";
+import PosSummarySale from "../pages/SweetPOS/Reports/PosSummarySaleReport/PosSummarySale.js";
 
 
 const userRoutes = [
@@ -737,8 +738,9 @@ const userRoutes = [
 
 	{ path: path.BILL_BOOKING_REPORT, component: BillBookingReport },//not party wise
 
+	{ path: path.POS_SALE_SUMMARY_REPORT, component: PosSummarySale },//not party wise
 
-
+	
 
 
 
