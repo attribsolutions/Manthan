@@ -83,11 +83,14 @@ const PeriodicGRNReport = (props) => {
                     })
                     dispatch(Periodic_GRN_Report_Success({ status: false }));
                 } else if (PrediocGrnData.BtnMode === "print") {
-                    let config = { rowData: {} }
+                    let config = { rowData: { Data: [] } }
                     config.rowData["ReportType"] = report.PeriodicGRN;
                     config.rowData["Status"] = PrediocGrnData.Status
                     config.rowData["StatusCode"] = PrediocGrnData.StatusCode
                     config.rowData["Data"] = PrediocGrnData.Data
+                    config.rowData["Data"]["FromDate"] = fromdate
+                    config.rowData["Data"]["ToDate"] = todate
+
                     dispatch(getpdfReportdataSuccess(config.rowData))
                     dispatch(Periodic_GRN_Report_Success({ status: false }));
                 }
