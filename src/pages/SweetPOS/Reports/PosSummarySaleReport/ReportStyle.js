@@ -21,7 +21,7 @@ export const pageHeder1 = (doc, data) => {
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(18)
-    doc.text(' Franchies Order List Reports', 170, 45,)
+    doc.text('POS Item Sale Summary Report', 170, 45,)
 
 }
 
@@ -29,16 +29,14 @@ export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
-    doc.text("Supplier", 80, 75)
-    doc.text('Customer', 280, 75)
-    doc.text('Shipping Address', 440, 75)
+
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 63, 30, 63)  //Image below line  1
-    doc.line(570, 16, 30, 16);//horizontal line 2
-    doc.line(570, 80, 30, 80);//horizontal line 3
-    doc.line(30, 789, 30, 16);//vertical left 1
+    // doc.line(570, 16, 30, 16);//horizontal line 2
+    // doc.line(570, 80, 30, 80);//horizontal line 3
+    // doc.line(30, 789, 30, 16);//vertical left 1
 
-    doc.line(570, 789, 570, 16);//vertical left 2
+    // doc.line(570, 789, 570, 16);//vertical left 2
 
     //Header Table Style 
     var BilledByStyle = {
@@ -58,7 +56,7 @@ export const reportHeder1 = (doc, data) => {
                 let y = data1.cursor.y + 9
                 doc.setFontSize(8)
                 doc.setFont(undefined, 'bold')
-                doc.text('Address: ', x, y)
+                doc.text('GSTIN: ', x, y)
             };
 
             if (rowIdx === 2 && colIdx === 0) {
@@ -67,23 +65,15 @@ export const reportHeder1 = (doc, data) => {
                 let y = data1.cursor.y + 9
                 doc.setFontSize(8)
                 doc.setFont(undefined, 'bold')
-                doc.text('GSTIN: ', x, y)
-            };
-            if (rowIdx === 3 && colIdx === 0) {
-
-                let x = data1.cursor.x + 2
-                let y = data1.cursor.y + 9
-                doc.setFontSize(8)
-                doc.setFont(undefined, 'bold')
-                doc.text('FSSAI No: ', x, y)
+                doc.text('Date: ', x, y)
             };
 
         },
         margin: {
             top: 45, left: 30, right: 35,
         },
-        showHead: 'always',
-        theme: 'plain',
+        showHead: 'never',
+        theme: 'grid',
         styles: {
             overflow: 'linebreak',
             fontSize: 8,
@@ -100,160 +90,18 @@ export const reportHeder1 = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 190,
+                columnWidth: 540,
                 halign: 'lfet',
             }
 
         },
         tableLineColor: "black",
 
-        startY: 80,
+        startY: 63,
 
     };
 
-    var BilledToStyle = {
-        didDrawCell: (data1) => {
 
-            const rowIdx = data1.row.index;
-            const colIdx = data1.column.index;
-            if (rowIdx === 0 && colIdx === 0) {
-                let x = data1.cursor.x + 2
-                let y = data1.cursor.y + 9
-                doc.setFontSize(8)
-                doc.setFont(undefined, 'bold')
-                doc.text('Customer : ', x, y)
-            };
-            if (rowIdx === 1 && colIdx === 0) {
-                let x = data1.cursor.x + 2
-                let y = data1.cursor.y + 9
-                doc.setFontSize(8)
-                doc.setFont(undefined, 'bold')
-                doc.text('Address: ', x, y)
-            };
-
-            if (rowIdx === 2 && colIdx === 0) {
-                let x = data1.cursor.x + 2
-                let y = data1.cursor.y + 9
-                doc.setFontSize(8)
-                doc.setFont(undefined, 'bold')
-                doc.text('GSTIN: ', x, y)
-            };
-            if (rowIdx === 3 && colIdx === 0) {
-
-                let x = data1.cursor.x + 2
-                let y = data1.cursor.y + 9
-                doc.setFontSize(8)
-                doc.setFont(undefined, 'bold')
-                doc.text('FSSAI No: ', x, y)
-            };
-
-        },
-        margin: {
-            top: 45, left: 220, right: 35,
-        },
-        showHead: 'always',
-        theme: 'plain',
-        styles: {
-            overflow: 'linebreak',
-            fontSize: 8,
-            height: 0,
-        },
-        bodyStyles: {
-            columnWidth: 'wrap',
-            textColor: [30, 30, 30],
-            cellPadding: 2,
-            fontSize: 8,
-            fontStyle: 'normal',
-            lineColor: [0, 0, 0]
-        },
-        columnStyles: {
-            0: {
-                valign: "top",
-                columnWidth: 188,
-                halign: 'lfet',
-            },
-        },
-        tableLineColor: "black",
-        startY: 80,
-
-    };
-    var DetailsOfTransportStyle = {
-        didDrawCell: (data1) => {
-            const rowIdx = data1.row.index;
-            const colIdx = data1.column.index;
-            if (rowIdx === 0 && colIdx === 0) {
-                let x = data1.cursor.x + 2
-                let y = data1.cursor.y + 9
-                doc.setFontSize(8)
-                doc.setFont(undefined, 'bold')
-                doc.text('PO Type : ', x, y)
-            };
-            if (rowIdx === 1 && colIdx === 0) {
-
-                let x = data1.cursor.x + 2
-                let y = data1.cursor.y + 9
-                doc.setFontSize(8)
-                doc.setFont(undefined, 'bold')
-                doc.text('Customer: ', x, y)
-            };
-
-            if (rowIdx === 2 && colIdx === 0) {
-
-                let x = data1.cursor.x + 2
-                let y = data1.cursor.y + 9
-                doc.setFontSize(8)
-                doc.setFont(undefined, 'bold')
-                doc.text('Address: ', x, y)
-            };
-            if (rowIdx === 3 && colIdx === 0) {
-
-                let x = data1.cursor.x + 2
-                let y = data1.cursor.y + 9
-                doc.setFontSize(8)
-                doc.setFont(undefined, 'bold')
-                doc.text('FSSAI No: ', x, y)
-            };
-            if (rowIdx === 4 && colIdx === 0) {
-                let x = data1.cursor.x + 2
-                let y = data1.cursor.y + 9
-                doc.setFontSize(8)
-                doc.setFont(undefined, 'bold')
-                doc.text('Description: ', x, y)
-            };
-
-        },
-
-        margin: {
-            top: 45, left: 408, right: 35,
-        },
-        showHead: 'always',
-        theme: 'plain',
-        styles: {
-            overflow: 'linebreak',
-            fontSize: 8,
-            height: 0,
-        },
-        bodyStyles: {
-            columnWidth: 'wrap',
-            textColor: [30, 30, 30],
-            cellPadding: 2,
-            fontSize: 8,
-            fontStyle: 'normal',
-            lineColor: [0, 0, 0]
-        },
-        columnStyles: {
-            0: {
-                valign: "top",
-                columnWidth: 162,
-                halign: 'lfet',
-            },
-
-        },
-        tableLineColor: "black",
-
-        startY: 80,
-
-    };
 
     // let initial_y = 0
     const priLength = () => {
@@ -268,15 +116,10 @@ export const reportHeder1 = (doc, data) => {
     doc.autoTable(table.BilledBy, table.BilledByRow(data), BilledByStyle);
     priLength()
 
-    doc.autoTable(table.BilledTo, table.BilledToRow(data), BilledToStyle);
-    priLength()
-
-    doc.autoTable(table.DetailsOfTransport, table.DetailsOfTransportRow(data), DetailsOfTransportStyle);
-    priLength()
     data["initial_y"] = initial_y
 
-    doc.line(408, initial_y, 408, 16);//vertical right 1
-    doc.line(220, initial_y, 220, 63);//vertical right 2
+    // doc.line(408, initial_y, 408, 16);//vertical right 1
+    // doc.line(220, initial_y, 220, 63);//vertical right 2
 
     doc.line(30, initial_y, 570, initial_y);//vertical right 2
 
@@ -294,7 +137,7 @@ export const reportHeder2 = (doc, data) => {
 
 
 export const reportHeder3 = (doc, data) => {
-    
+
     // Check if data.CreatedOn is defined and is a valid string before using substring
     if (!data || !data.CreatedOn) {
         console.error('CreatedOn is missing or undefined in the data');

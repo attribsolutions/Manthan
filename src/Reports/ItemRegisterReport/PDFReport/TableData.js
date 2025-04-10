@@ -1,4 +1,4 @@
-import { convertOnlyTimefunc, date_dmy_func, loginUserDetails } from "../../../components/Common/CommonFunction";
+import { convertOnlyTimefunc, date_dmy_func, getFixedNumber, loginUserDetails } from "../../../components/Common/CommonFunction";
 import { numberWithCommas } from "../../Report_common_function";
 
 export const columns = [
@@ -24,6 +24,7 @@ export const columns_for_ChitaleSweetsAndSnacks = [
     "Doc No.",
     "GRN",
     "IB        purchase ",
+    "Material Issue",
     "Prod.",
     "IB Sales ",
     "Sales Return",
@@ -241,6 +242,7 @@ export const Rows_for_ChitaleSweetsAndSnacks = (data) => {
 
     const openingBalance = Number(data[data.length - 1].OpeningBalance);
 
+
     // InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
     let SN = 1
@@ -254,6 +256,7 @@ export const Rows_for_ChitaleSweetsAndSnacks = (data) => {
     let TotalProduction = 0
     let TotalIBSale = 0
     let TotalIBPurchase = 0
+    let TotalMaterialIssue = 0
 
 
 
@@ -269,6 +272,7 @@ export const Rows_for_ChitaleSweetsAndSnacks = (data) => {
     let Production = 0
     let IBSale = 0
     let IBPurchase = 0
+    let materialIssue = 0
 
 
 
@@ -285,6 +289,7 @@ export const Rows_for_ChitaleSweetsAndSnacks = (data) => {
         let RowProduction = 0
         let RowIBSale = 0
         let RowIBPurchase = 0
+        let RowMaterialIssue = 0
 
 
         if (Unit === "No") {
@@ -297,6 +302,7 @@ export const Rows_for_ChitaleSweetsAndSnacks = (data) => {
             Production = Number(element.QtyInNo)
             IBSale = Number(element.QtyInNo)
             IBPurchase = Number(element.QtyInNo)
+            materialIssue = Number(element.QtyInNo)
 
 
         }
@@ -311,6 +317,7 @@ export const Rows_for_ChitaleSweetsAndSnacks = (data) => {
             Production = Number(element.QtyInKg)
             IBSale = Number(element.QtyInKg)
             IBPurchase = Number(element.QtyInKg)
+            materialIssue = Number(element.QtyInKg)
 
         }
         if (Unit === "Box") {
@@ -323,6 +330,7 @@ export const Rows_for_ChitaleSweetsAndSnacks = (data) => {
             Production = Number(element.QtyInBox)
             IBSale = Number(element.QtyInBox)
             IBPurchase = Number(element.QtyInBox)
+            materialIssue = Number(element.QtyInBox)
         }
 
         if (element.Sequence === 1) {
@@ -343,6 +351,8 @@ export const Rows_for_ChitaleSweetsAndSnacks = (data) => {
             RowIBSale = IBSale
         } if (element.Sequence === 9) {
             RowIBPurchase = IBPurchase
+        } if (element.Sequence === 10) {
+            RowMaterialIssue = materialIssue
         }
 
         const rowGRN = Number(RowGRN);
@@ -353,26 +363,28 @@ export const Rows_for_ChitaleSweetsAndSnacks = (data) => {
         const rowProduction = Number(RowProduction);
         const rowIBSale = Number(RowIBSale);
         const rowIBPurchase = Number(RowIBPurchase);
+        const rowMaterialIssue = Number(RowMaterialIssue);
 
         if (element.TransactionNumber === "STOCK") {
             BalanceAmount = RowStock
         }
-        BalanceAmount = (BalanceAmount + rowGRN + rowSalesReturn + rowStockAdjustment + rowIBPurchase + rowProduction) - (rowSale + rowPurchaseReturn + rowIBSale);
+        BalanceAmount = (BalanceAmount + rowGRN + rowSalesReturn + rowStockAdjustment + rowIBPurchase + rowProduction) - (rowSale + rowPurchaseReturn + rowIBSale + rowMaterialIssue);
         const tableitemRow = [
             SN++,
             `${date_dmy_func(element.TransactionDate)} ${convertOnlyTimefunc(element.CreatedOn)}`,
             element.Name,
             element.TransactionNumber,
-            (element.Sequence === 1) ? (numberWithCommas(Number(GRN).toFixed(2))) : "0.00",
-            (element.Sequence === 9) ? (numberWithCommas(Number(IBPurchase).toFixed(2))) : "0.00",
-            (element.Sequence === 7) ? (numberWithCommas(Number(Production).toFixed(2))) : "0.00",
-            (element.Sequence === 8) ? (numberWithCommas(Number(IBSale).toFixed(2))) : "0.00",
-            (element.Sequence === 2) ? (numberWithCommas(Number(SalesReturn).toFixed(2))) : "0.00",
-            (element.Sequence === 3) ? (numberWithCommas(Number(Stock).toFixed(2))) : "0.00",
-            (element.Sequence === 4) ? (numberWithCommas(Number(Sale).toFixed(2))) : "0.00",
-            (element.Sequence === 5) ? (numberWithCommas(Number(PurchaseReturn).toFixed(2))) : "0.00",
-            (element.Sequence === 6) ? (numberWithCommas(Number(StockAdjustment).toFixed(2))) : "0.00",
-            element.TransactionNumber === "STOCK" ? numberWithCommas(Number(RowStock).toFixed(2)) : numberWithCommas(Number(BalanceAmount).toFixed(2))
+            (element.Sequence === 1) ? (numberWithCommas(Number(GRN).toFixed(3))) : "0.00",
+            (element.Sequence === 9) ? (numberWithCommas(Number(IBPurchase).toFixed(3))) : "0.00",
+            (element.Sequence === 10) ? (numberWithCommas(Number(materialIssue).toFixed(3))) : "0.00",
+            (element.Sequence === 7) ? (numberWithCommas(Number(Production).toFixed(3))) : "0.00",
+            (element.Sequence === 8) ? (numberWithCommas(Number(IBSale).toFixed(3))) : "0.00",
+            (element.Sequence === 2) ? (numberWithCommas(Number(SalesReturn).toFixed(3))) : "0.00",
+            (element.Sequence === 3) ? (numberWithCommas(Number(Stock).toFixed(3))) : "0.00",
+            (element.Sequence === 4) ? (numberWithCommas(Number(Sale).toFixed(3))) : "0.00",
+            (element.Sequence === 5) ? (numberWithCommas(Number(PurchaseReturn).toFixed(3))) : "0.00",
+            (element.Sequence === 6) ? (numberWithCommas(Number(StockAdjustment).toFixed(3))) : "0.00",
+            element.TransactionNumber === "STOCK" ? numberWithCommas(Number(RowStock).toFixed(3)) : numberWithCommas(Number(BalanceAmount).toFixed(3))
         ];
 
         function totalLots() {
@@ -387,6 +399,7 @@ export const Rows_for_ChitaleSweetsAndSnacks = (data) => {
             TotalProduction = Number(TotalProduction) + Number(RowProduction)
             TotalIBSale = Number(TotalIBSale) + Number(RowIBSale)
             TotalIBPurchase = Number(TotalIBPurchase) + Number(RowIBPurchase)
+            TotalMaterialIssue = Number(TotalMaterialIssue) + Number(RowMaterialIssue)
 
 
 
@@ -402,15 +415,16 @@ export const Rows_for_ChitaleSweetsAndSnacks = (data) => {
                 "",
                 "",
                 "",
-                `${numberWithCommas(Number(TotalGRN).toFixed(2))}`,
-                `${numberWithCommas(Number(TotalIBPurchase).toFixed(2))}`,
-                `${numberWithCommas(Number(TotalProduction).toFixed(2))}`,
-                `${numberWithCommas(Number(TotalIBSale).toFixed(2))}`,
-                `${numberWithCommas(Number(TotalSalesReturn).toFixed(2))}`,
-                `${numberWithCommas(Number(TotalStock).toFixed(2))}`,
-                `${numberWithCommas(Number(TotalSale).toFixed(2))}`,
-                `${numberWithCommas(Number(TotalPurchaseReturn).toFixed(2))}`,
-                `${numberWithCommas(Number(TotalStockAdjustment).toFixed(2))}`,
+                `${numberWithCommas(getFixedNumber(TotalGRN, 3).toFixed(3))}`,
+                `${numberWithCommas(getFixedNumber(TotalIBPurchase, 3).toFixed(3))}`,
+                `${numberWithCommas(getFixedNumber(TotalMaterialIssue, 3).toFixed(3))}`,
+                `${numberWithCommas(getFixedNumber(TotalProduction, 3).toFixed(3))}`,
+                `${numberWithCommas(getFixedNumber(TotalIBSale, 3).toFixed(3))}`,
+                `${numberWithCommas(getFixedNumber(TotalSalesReturn, 3).toFixed(3))}`,
+                `${numberWithCommas(getFixedNumber(TotalStock, 3).toFixed(3))}`,
+                `${numberWithCommas(getFixedNumber(TotalSale, 3).toFixed(3))}`,
+                `${numberWithCommas(getFixedNumber(TotalPurchaseReturn, 3).toFixed(3))}`,
+                `${numberWithCommas(getFixedNumber(TotalStockAdjustment, 3).toFixed(3))}`,
                 ``,
 
             ];
@@ -430,6 +444,7 @@ export const Rows_for_ChitaleSweetsAndSnacks = (data) => {
                 ``,
                 ``,
                 ``,
+                ``,
 
             ];
         };
@@ -439,6 +454,7 @@ export const Rows_for_ChitaleSweetsAndSnacks = (data) => {
                 `Closing Balance: ${data[data.length - 1].ClosingBalance}`,
                 "",
                 "Total",
+                ``,
                 ``,
                 ``,
                 ``,

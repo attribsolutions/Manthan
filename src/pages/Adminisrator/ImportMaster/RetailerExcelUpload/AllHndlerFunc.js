@@ -1,7 +1,7 @@
 
 // import { groupBy } from 'lodash';
-import { groupBy, date_dmy_func, btnIsDissablefunc,  loginUserID, loginCompanyID } from '../../../../components/Common/CommonFunction';
-import {  RetailerExcelUpload_save_action } from '../../../../store/Administrator/ImportExcelPartyMapRedux/action';
+import { groupBy, date_dmy_func, btnIsDissablefunc, loginUserID, loginCompanyID } from '../../../../components/Common/CommonFunction';
+import { RetailerExcelUpload_save_action } from '../../../../store/Administrator/ImportExcelPartyMapRedux/action';
 
 
 
@@ -94,6 +94,7 @@ export const retailer_SaveHandler = async ({
                 "City": ele[parArr.City] ? ele[parArr.City] : "",
                 "GSTIN": ele[parArr.GSTIN] ? ele[parArr.GSTIN] : "",
                 "MkUpMkDn": ele[parArr.MkUpMkDn] ? ele[parArr.MkUpMkDn] : false,
+                "SAPPartyCode": ele[parArr.SAPPartyCode] ? ele[parArr.SAPPartyCode] : "",
                 "CreatedBy": loginUserID(),
                 "UpdatedBy": loginUserID(),
                 "PartySubParty": [
