@@ -590,7 +590,7 @@ const OrderList = () => {
                 OrderType: ((subPageMode === url.ORDER_4) || (subPageMode === url.APP_ORDER_LIST)) ? order_Type.SaleOrder : order_Type.PurchaseOrder
             })
 
-            dispatch(_act.editOrderId({ jsonBody, ...config }));
+            dispatch(_act.editOrderId({ jsonBody, ...config, subPageMode }));
         } catch (error) { }
     }
 

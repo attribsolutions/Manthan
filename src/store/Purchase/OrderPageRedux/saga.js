@@ -150,9 +150,18 @@ function* saveOrder_GenFunc({ config }) {
 
 function* editOrderGenFunc({ config }) {     //  Edit Order by subPageMode
 
-  const { btnmode, btnId } = config;
+  const { btnmode, btnId, subPageMode } = config;
   try {
+    const isRateForSweetAndSnacksCompany = CheckRateFromCompany().isRateForSweetAndSnacksCompany;
     let response = yield call(OrderPage_Edit_Post_API, config);
+    if ((subPageMode === url.ORDER_LIST_1) || (subPageMode === url.IB_ORDER_PO_LIST) || isRateForSweetAndSnacksCompany) {
+      response.Data.OrderItems.forEach((ele, k) => {
+        ele.Rate = Number(ele.VRate)
+        ele.UnitDetails = ele.UnitDetails.map(unit => ({
+          ...unit, Rate: Number(ele.VRate),
+        }))
+      })
+    }
 
     response.pageMode = btnmode
     response.btnId = btnId

@@ -31,7 +31,7 @@ const BulkWorkOrder = (props) => {
     const [subPageMode] = useState(history.location.pathname)
     const [userPageAccessState, setUserAccState] = useState('');
     const [BulkData, setBulkData] = useState(location.state);
-
+    debugger
     const [checked, setchecked] = useState(false);
     const [LotChange, setLotChange] = useState(false);
 
@@ -156,11 +156,12 @@ const BulkWorkOrder = (props) => {
 
 
     const QuantityCalculationFunc = ({ inx_1, Input_Qty }) => {
-
         inx_1.BOMItems = inx_1.BOMItems.map(inx_2 => {
+            debugger
             try {
                 const Qty = parseFloat(inx_2.BomQuantity) / parseFloat(inx_1.EstimatedOutputQty)
                 const ActualQuantity = parseFloat(Number(Input_Qty) * Qty)
+                inx_2.Quantity = ActualQuantity.toFixed(3)
                 document.getElementById(`Quantity${inx_1.Item}-${inx_2.id}`).value = ActualQuantity
             } catch (error) {
                 _cfunc.CommonConsole('QuantityCalculationFunc', error);
@@ -174,7 +175,7 @@ const BulkWorkOrder = (props) => {
         event.preventDefault();
         try {
             {
-                const WorkOrderItems = location.state.map((inx_1) => ({
+                const WorkOrderItems = BulkData.map((inx_1) => ({
                     Bom: inx_1.id,
                     WorkOrderDate: _cfunc.currentDate_ymd,
                     IsActive: inx_1.IsActive,
@@ -196,7 +197,7 @@ const BulkWorkOrder = (props) => {
                         ItemName: inx_2.ItemName,
                         Unit: inx_2.Unit,
                         UnitName: inx_2.UnitName,
-                        StockQuantity: (Number(inx_2.Quantity)).toFixed(3),
+                        StockQuantity: (Number(inx_2.StockQuantity)).toFixed(3),
                         BomQuantity: (Number(inx_2.BomQuantity)).toFixed(3),
                         Quantity: (Number(inx_2.Quantity)).toFixed(3),
                     })),
@@ -367,8 +368,11 @@ const BulkWorkOrder = (props) => {
             formatter: (cellContent, inx_1, key,) => {
                 const LotsOnchange = (event, inx_1, key) => {
                     let inputQty = event.target.value;
+                    debugger
                     if (!isNaN(Number(inputQty))) {
                         const quantity = Number(inputQty) * Number(inx_1.EstimatedOutputQty);
+                        inx_1.Number_Lots = inputQty;
+                        inx_1.Qty = quantity;
                         QuantityCalculationFunc({ inx_1: inx_1, Input_Qty: quantity })
                         document.getElementById(`Quantity${inx_1.Item}`).value = quantity;
                     } else {
@@ -403,9 +407,9 @@ const BulkWorkOrder = (props) => {
                     if (!isNaN(Number(inputQty))) {
                         QuantityCalculationFunc({ inx_1: inx_1, Input_Qty: inputQty })
                         let NumberLot = Number(inputQty) / Number(inx_1.EstimatedOutputQty)
-                        inx_1.Number_Lots = NumberLot;
+                        inx_1.Number_Lots = _cfunc.getFixedNumber(NumberLot, 3).toFixed(3);
                         inx_1.Qty = inputQty;
-                        document.getElementById(`Number_Lots${inx_1.Item}`).value = NumberLot
+                        document.getElementById(`Number_Lots${inx_1.Item}`).value = _cfunc.getFixedNumber(NumberLot, 3).toFixed(3)
                     } else {
                         event.target.value = "";
                     }

@@ -94,7 +94,7 @@ export const retailer_SaveHandler = async ({
                 "City": ele[parArr.City] ? ele[parArr.City] : "",
                 "GSTIN": ele[parArr.GSTIN] ? ele[parArr.GSTIN] : "",
                 "MkUpMkDn": ele[parArr.MkUpMkDn] ? ele[parArr.MkUpMkDn] : false,
-                "SAPPartyCode": ele[parArr.SAPPartyCode] ? ele[parArr.SAPPartyCode] : "",
+                "SAPPartyCode": ele[parArr.SAPPartyCode] ? ele[parArr.SAPPartyCode] : null,
                 "CreatedBy": loginUserID(),
                 "UpdatedBy": loginUserID(),
                 "PartySubParty": [

@@ -14,6 +14,7 @@ import GlobalCustomTable from "../../GlobalCustomTable";
 import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
 import { allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 import { CodeRedemption_Report_Action, CodeRedemption_Report_Action_Success } from "../../store/Report/CodeRedemptionRedux/action";
+import { GenralMasterSubType, Get_Scheme_List } from "../../helpers/backend_helper";
 
 const CodeRedemtionReport = (props) => {
 
@@ -25,8 +26,10 @@ const CodeRedemtionReport = (props) => {
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
+    const [Scheme, setSchemeTypeSelect] = useState(allLabelWithZero);
     const [tableData, setTableData] = useState([]);
     const [PartyDropdown, setPartyDropdown] = useState(allLabelWithZero);
+    const [Scheme_Option, setSchemeOption] = useState([]);
 
 
     const {
@@ -95,6 +98,27 @@ const CodeRedemtionReport = (props) => {
 
     const [tableColumns] = DynamicColumnHook({ pageField, })
 
+
+
+
+    useEffect(() => {
+        const fetchSchemeList = async () => {
+            const resp = await Get_Scheme_List();
+            debugger;
+            if (resp.StatusCode === 200) {
+                const option = resp.Data.map((index) => ({
+                    value: index.id,
+                    label: index.SchemeName,
+                }));
+                option.unshift(allLabelWithZero);
+                setSchemeOption(option);
+
+            }
+        };
+
+        fetchSchemeList();
+    }, []);
+
     useEffect(() => {
 
         try {
@@ -125,10 +149,10 @@ const CodeRedemtionReport = (props) => {
     function excel_And_GoBtnHandler(mode) {
 
         const jsonBody = JSON.stringify({
-            "FromDate": fromdate,
-            "ToDate": todate,
-            "Party": !isSCMParty ? _cfunc.loginPartyID() : PartyDropdown.value
-
+            FromDate: fromdate,
+            ToDate: todate,
+            Party: !isSCMParty ? _cfunc.loginPartyID() : PartyDropdown.value,
+            SchemeID: Scheme.value
         });
         let config = { jsonBody, Mode: mode }
         dispatch(CodeRedemption_Report_Action(config));
@@ -161,7 +185,7 @@ const CodeRedemtionReport = (props) => {
             <div className="page-content">
                 <div className="px-2   c_card_filter text-black " >
                     <Row>
-                        <Col sm={3} className="">
+                        <Col sm={2} className="">
                             <FormGroup className=" row mt-2  " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
@@ -175,7 +199,7 @@ const CodeRedemtionReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={3} className="">
+                        <Col sm={2} className="">
                             <FormGroup className=" row mt-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
@@ -190,7 +214,8 @@ const CodeRedemtionReport = (props) => {
                         </Col>
 
 
-                        {isSCMParty && < Col sm={3} className="">
+
+                        < Col sm={3} className="">
                             <FormGroup className=" row mt-2" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px", marginRight: "20px" }}>Party</Label>
@@ -211,12 +236,36 @@ const CodeRedemtionReport = (props) => {
                                     />
                                 </Col>
                             </FormGroup>
+                        </Col>
+
+
+                        {isSCMParty && < Col sm={3} className="">
+                            <FormGroup className=" row mt-2" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "65px", marginRight: "20px" }}>Scheme </Label>
+                                <Col sm="8">
+                                    <C_Select
+                                        name="Scheme"
+                                        value={Scheme}
+                                        isSearchable={true}
+
+                                        // isLoading={partyDropdownLoading}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={Scheme_Option}
+                                        onChange={(e) => { setSchemeTypeSelect(e) }}
+                                    />
+                                </Col>
+                            </FormGroup>
                         </Col>}
 
 
 
 
-                        <Col sm={isSCMParty ? 3 : 6} className=" d-flex justify-content-end" >
+                        <Col sm={isSCMParty ? 2 : 6} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
