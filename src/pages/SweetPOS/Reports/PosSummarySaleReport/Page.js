@@ -3,7 +3,6 @@ import "jspdf-autotable";
 import * as style from './ReportStyle'
 import * as table from './TableData'
 import { currentDate_dmy, CurrentTime } from "../../../../components/Common/CommonFunction";
-import Data from './Data.json'
 
 
 
@@ -16,7 +15,10 @@ var pageHeder = function (doc, data) {
 };
 
 
-const POSSaleSummaryReport = (data) => {
+const POSSaleSummaryReport = (tableData) => {
+    
+
+    let data = [tableData]
     let previousPageCount = 0;
     function generatePDF() {
 
@@ -34,7 +36,7 @@ const POSSaleSummaryReport = (data) => {
         const sectionWidth = (printWidth - ((sections - 1) * spacing)) / sections;
 
         // Iterate over each data set (or table) to be printed
-        Data.data.forEach((tableData, tableIndex) => {
+        data.forEach((tableData, tableIndex) => {
             let i = {
                 SAPOrderNo: tableData?.SAPOrderNo || "", // Default to an empty string if null or undefined
                 FullOrderNumber: tableData?.FullOrderNumber || "", // Default to an empty string if null or undefined
@@ -65,7 +67,7 @@ const POSSaleSummaryReport = (data) => {
             doc.autoTable({
                 theme: 'grid',
                 head: [table.columns_1],
-                body: table.Rows_1({ OrderItem: tableData.OrderItem }),
+                body: table.Rows_1(tableData),
                 tableWidth: sectionWidth,
                 headerStyles: {
                     cellPadding: 3,
@@ -90,20 +92,21 @@ const POSSaleSummaryReport = (data) => {
                     0: {
                         valign: "top",
                         columnWidth: 133,
-
-
-
                     },
                     1: {
-                        columnWidth: 65,
-                        halign: 'left',
-
-
-                    },
-                    2: {
-                        columnWidth: 70,
+                        columnWidth: 40,
                         halign: 'right',
                     },
+                    2: {
+                        columnWidth: 40,
+                        halign: 'right',
+                    },
+
+                    3: {
+                        columnWidth: 50,
+                        halign: 'right',
+                    },
+
 
                 },
                 margin: {
@@ -133,33 +136,13 @@ const POSSaleSummaryReport = (data) => {
                     }
 
 
-
-
                 },
-                didDrawCell: (data1) => {
-                    const rowIdx = data1.row.index;
-                    const colIdx = data1.column.index;
 
-                    const cellWidth = data1.cell.width;
-                    const cellHeight = data1.cell.height;
-                    const startX = data1.cell.x;
-                    const startY = data1.cell.y + cellHeight / 2;
-                    const endX = startX + cellWidth;
-                    const endY = startY;
-
-                    const startXVertical = data1.cell.x + cellWidth / 2;  // X-coordinate at the middle of the cell
-                    const startY1vertical = data1.cell.y + 9;
-                    const endYvertical = startY + cellHeight;
-
-                    if (colIdx === 2) {
-                        doc.line(startXVertical, startY1vertical - 8, startXVertical, endYvertical - 8); // Draw a vertical line
-                    }
-
-                },
 
                 didParseCell: (data1) => {
-                    if (data1.row.cells[1].raw === "") {
-                        data1.row.cells[0].colSpan = 3;
+                    
+                    if (data1.row.cells[3].raw === "Span") {
+                        data1.row.cells[0].colSpan = 4;
                         data1.row.cells[0].styles.halign = "left";
                         data1.row.cells[0].styles.fontSize = 8;
                         data1.row.cells[0].styles.fontStyle = "bold";

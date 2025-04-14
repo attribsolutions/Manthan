@@ -548,17 +548,17 @@ export const tableBody_for_ChitaleSweetsAndSnacks = (doc, data) => {
         },
         columnStyles: {
             0: {
-                columnWidth: 19,
+                columnWidth: 18,
                 halign: 'left',
 
             },
             1: {
-                columnWidth: 68,
+                columnWidth: 53,
                 halign: 'left',
 
             },
             2: {
-                columnWidth: 70,
+                columnWidth: 53,
                 halign: 'left',
             },
             3: {
@@ -574,7 +574,7 @@ export const tableBody_for_ChitaleSweetsAndSnacks = (doc, data) => {
                 halign: 'right',
             },
             6: {
-                columnWidth: 30,
+                columnWidth: 38,
                 halign: 'right',
             },
             7: {
@@ -582,7 +582,7 @@ export const tableBody_for_ChitaleSweetsAndSnacks = (doc, data) => {
                 halign: 'right',
             },
             8: {
-                columnWidth: 35,
+                columnWidth: 30,
                 halign: 'right',
             },
             9: {
@@ -590,18 +590,22 @@ export const tableBody_for_ChitaleSweetsAndSnacks = (doc, data) => {
                 halign: 'right',
             },
             10: {
-                columnWidth: 32,
+                columnWidth: 31,
                 halign: 'right',
             },
             11: {
-                columnWidth: 43,
+                columnWidth: 32,
                 halign: 'right',
             },
             12: {
-                columnWidth: 35,
+                columnWidth: 43,
                 halign: 'right',
             },
             13: {
+                columnWidth: 35,
+                halign: 'right',
+            },
+            14: {
                 columnWidth: 38,
                 halign: 'right',
             },

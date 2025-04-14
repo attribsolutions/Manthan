@@ -355,6 +355,20 @@ export const GRN = "/GRN"
 export const ACCOUNTING_GRN_UPDATE = "/GRNUpdate"
 
 
+export const ACCOUNTING_GRN_DELETE_API = "/DeleteAccountingGRN"
+
+
+
+export const SCHEME_LIST = "/SchemeList"
+
+
+
+
+
+
+
+
+
 
 export const GRN_LiST_BY_FILTERS = "/GRNFilter"
 export const HIDE_INVOICE_FOR_GRN = "/InvoiceHide"

@@ -13,6 +13,7 @@ import {
 } from "./actions";
 import {
   Accounting_GRN_update_API,
+  AccountingGRN_delete_API,
   CheckStockEntryforBackDatedTransaction,
   get_Demand_Details_Post_API,
   GRN_delete_API,
@@ -45,7 +46,8 @@ function* saveGRNGenFunc({ config }) {            // Save GRN  genrator function
 }
 
 
-function* DeleteGRNGenFunc({ config }) {            // Delete GRN  genrator function
+function* DeleteGRNGenFunc({ config }) {
+  debugger
   try {
     const SelectedPartyID = JSON.parse(localStorage.getItem("selectedParty")).value
     const jsonBodyForBackdatedTransaction = JSON.stringify({
@@ -58,7 +60,12 @@ function* DeleteGRNGenFunc({ config }) {            // Delete GRN  genrator func
       yield put(GrnApiErrorAction())
       return
     }
-    const response = yield call(GRN_delete_API, config);
+    let response = {}
+    if (config.subPageMode === url.ACCOUNTING_GRN_LIST) {
+      response = yield call(AccountingGRN_delete_API, config);
+    } else {
+      response = yield call(GRN_delete_API, config);
+    }
     yield put(deleteGRNIdSuccess(response));
   } catch (error) { yield put(GrnApiErrorAction()) }
 }

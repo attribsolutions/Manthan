@@ -527,7 +527,7 @@ const PartyItems = (props) => {
 	};
 	var IsEditMode_Css = ''
 	if (props.isAssing) { IsEditMode_Css = "1%" };
-
+	debugger
 	return (
 		<>
 			<PageLoadingSpinner isLoading={(GoBtnlistloading || !pageField)} />

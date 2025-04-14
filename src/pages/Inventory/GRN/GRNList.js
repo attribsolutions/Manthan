@@ -128,7 +128,6 @@ const GRNList = () => {
         }
         else if (subPageMode === url.ACCOUNTING_GRN_LIST) {
             page_Id = pageId.ACCOUNTING_GRN_LIST;
-            page_Mode = mode.modeSTPsave
             newBtnPath = url.GRN_FOR_ACCOUNTING_GRN;
         }
 

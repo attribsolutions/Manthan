@@ -18,6 +18,7 @@ export const TRANSACTION_LOG = 235
 export const DAILY_DISPATCH_REPORT = 339
 
 
+export const POS_SALE_SUMMARY_REPORT = 340
 
 
 // *************************** Administration *******************************//

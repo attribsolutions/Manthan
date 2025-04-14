@@ -271,10 +271,10 @@ export const tableBody_for_ChitaleSweetsAndSnacks = (doc, data) => {
                 columnWidth: 50,
             },
             1: {
-                columnWidth: 74,
+                columnWidth: 50,
             },
             2: {
-                columnWidth: 70,
+                columnWidth: 50,
             },
             3: {
                 columnWidth: 50,
@@ -328,6 +328,11 @@ export const tableBody_for_ChitaleSweetsAndSnacks = (doc, data) => {
                 columnWidth: 33,
                 halign: 'right',
             },
+            16: {
+                columnWidth: 40,
+                halign: 'right',
+            },
+
 
         },
 

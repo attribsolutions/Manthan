@@ -84,11 +84,11 @@ const WorkOrderList = () => {
         }
     }, [makeProductionReIssue])
 
-    const goButtonHandler = () => {
+    const goButtonHandler = (onload) => {
 
         const jsonBody = JSON.stringify({
-            FromDate: fromdate,
-            ToDate: todate,
+            FromDate: ((onload === true) && (subPageMode === url.MATERIAL_ISSUE_STP)) ? "" : fromdate,
+            ToDate: ((onload === true) && (subPageMode === url.MATERIAL_ISSUE_STP)) ? "" : todate,
             Party: _cfunc.loginSelectedPartyID()
         });
         dispatch(getWorkOrderListPage({ jsonBody, subPageMode }));

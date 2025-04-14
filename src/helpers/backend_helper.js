@@ -543,6 +543,22 @@ export const Accounting_GRN_update_API = ({ jsonBody, updateId }) => put(`${url.
 
 
 export const GRN_delete_API = ({ deleteId }) => del(`${url.GRN}/${deleteId}`)//Delete Order
+
+
+export const AccountingGRN_delete_API = ({ deleteId }) => del(`${url.ACCOUNTING_GRN_DELETE_API}/${deleteId}`)//Delete Order
+
+
+
+
+export const Get_Scheme_List = () => get(url.SCHEME_LIST) // get api
+
+
+
+
+
+
+
+
 export const GRN_Make_API = ({ jsonBody }) => post(url.GRN_MAKE_API, jsonBody)
 // export const Hide_Invoice_For_GRN_API = ({ InvoiceId, IsHide }) => del(`${url.HIDE_INVOICE_FOR_GRN}/${InvoiceId}/${IsHide}`)
 
@@ -901,7 +917,11 @@ export const ServiceItemAssign_Save_API = ({ jsonBody }) => post(url.SERVICE_ITE
 export const ServiceItemAssign_GoButton_API = ({ jsonBody }) => post(url.SERVICE_ITEM_ASSIGN_GO_BUTTON, jsonBody) // get api
 
 // Party Details
-export const Get_PartyDetails_List = ({ employeeID, groupID }) => get(`${url.GET_PARTY_DETAILS_LIST}/${employeeID}/${groupID}`)
+// export const Get_PartyDetails_List = ({ employeeID, groupID }) => get(`${url.GET_PARTY_DETAILS_LIST}/${employeeID}/${groupID}`)
+export const Get_PartyDetails_List = ({ jsonBody }) => post(url.GET_PARTY_DETAILS_LIST, jsonBody)// post api
+
+
+
 export const post_PartyDetails = ({ jsonBody }) => post(url.POST_PARTY_DETAILS, jsonBody)// post api
 
 //ItemWiseUpdate

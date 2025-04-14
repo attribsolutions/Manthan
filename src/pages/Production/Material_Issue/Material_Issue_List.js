@@ -97,8 +97,8 @@ const MaterialIssueList = () => {
 
     const goButtonHandler = (onload) => {
         const jsonBody = JSON.stringify({
-            FromDate: onload === true ? "" : fromdate,
-            ToDate: onload === true ? "" : todate,
+            FromDate: ((onload === true) && (hasPagePath === url.PRODUCTION_STP)) ? "" : fromdate,
+            ToDate: ((onload === true) && (hasPagePath === url.PRODUCTION_STP)) ? "" : todate,
             Party: _cfunc.loginSelectedPartyID()
         });
         dispatch(getMaterialIssueListPage(jsonBody));

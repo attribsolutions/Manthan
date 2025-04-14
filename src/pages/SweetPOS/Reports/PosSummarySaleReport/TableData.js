@@ -1,12 +1,12 @@
-import { groupBy } from "../../../../components/Common/CommonFunction";
+import { getFixedNumber, groupBy } from "../../../../components/Common/CommonFunction";
 import { numberWithCommas } from "../../../../Reports/Report_common_function";
 
 // original
 export const columns_1 = [
     "Item Name",
-    "Unit",
-    "Morning   Evening",
-
+    "Quantity",
+    "Rate",
+    "Amount"
 ];
 
 
@@ -31,76 +31,117 @@ export const DetailsOfTransport = [
 ]
 
 
-const replaceValues = (target, source) => {
+export const Rows_1 = (data) => {
+    data.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
 
-    return target.map((item, index) => {
-        if (source[index]) {
-            item[4] = source[index].ItemName;
-            item[5] = source[index].Quantity;
-            item[6] = source[index].Comments;
+    const returnArr = [];
+    let Gst = 0
+    let totalGst = 0
+    let totalAmount = 0
+    let totalQuantity = 0
+    let GSTPercentage = 0
+    let finalTotal = 0
+    let finalTotalGST = 0
+    let finalBasicAmount = 0
+    let finalDiscountAmount = 0
+
+    const groupedItems = data.reduce((accumulator, currentItem) => {
+        const { ItemName, BaseItemUnitQuantity, Rate, GrandTotal, GSTPercentage, GSTAmount, BasicAmount, DiscountAmount, Amount, MRPValue } = currentItem;
+        const key = ItemName;
+        if (accumulator[key]) {
+            accumulator[key].BaseItemUnitQuantity += getFixedNumber(BaseItemUnitQuantity, 3);
+            accumulator[key].GrandTotal += getFixedNumber(GrandTotal, 3);
+            accumulator[key].GSTAmount += getFixedNumber(GSTAmount, 3);
+            accumulator[key].BasicAmount += getFixedNumber(BasicAmount, 3);
+            accumulator[key].DiscountAmount += getFixedNumber(DiscountAmount, 3);
+            accumulator[key].Amount += getFixedNumber(Amount, 3);
+
+        } else {
+            accumulator[key] = {
+                Rate, ItemName, GrandTotal: getFixedNumber(GrandTotal, 3), MRPValue,
+                BaseItemUnitQuantity: getFixedNumber(BaseItemUnitQuantity, 3), GSTPercentage: GSTPercentage, GSTAmount: getFixedNumber(GSTAmount, 3), BasicAmount: getFixedNumber(BasicAmount, 3), DiscountAmount: getFixedNumber(DiscountAmount, 3), Amount: getFixedNumber(Amount, 3)
+            };
         }
-        return item;
-    });
-};
+        return accumulator;
+    }, {});
 
-export const Rows_1 = ({ OrderItem = [] }) => {
+    const TotalItemlength = Object.values(groupedItems).length;
+    data["TotalItemlength"] = TotalItemlength;
 
-    OrderItem.sort((a, b) => {
-        const compare = (x, y) => {
-            // Convert strings to numbers and handle null or 0
-            const numX = x === null ? 0 : Number(x);
-            const numY = y === null ? 0 : Number(y);
+    Object.values(groupedItems).forEach((element, key) => {
 
-            if (numX === 0) return -1; // Treat null or 0 as smaller
-            if (numY === 0) return 1;  // Treat null or 0 as smaller
-            return numX - numY;
-        };
+        finalTotal += element.Amount;
+        finalTotalGST += element.GSTAmount;
+        finalBasicAmount += element.BasicAmount;
+        finalDiscountAmount += element.DiscountAmount;
 
-        const groupComparison = compare(a.GroupSequence, b.GroupSequence);
-        if (groupComparison !== 0) return groupComparison;
-
-        const subgroupComparison = compare(a.SubGroupSequence, b.SubGroupSequence);
-        if (subgroupComparison !== 0) return subgroupComparison;
-
-        return compare(a.ItemSequence, b.ItemSequence);
-    });
-
-
-    const grouped = groupBy(OrderItem, ele => ele.SubGroup);
-
-    let hasHedRow = []
-    let Data = []
-
-    grouped.forEach((i, inx_1) => {
+        const tableitemRow = [
+            `${element.ItemName}`,
+            `${(getFixedNumber(element.BaseItemUnitQuantity, 2)).toFixed(2)}`,
+            `${(getFixedNumber(element.MRPValue, 2)).toFixed(2)}`,
+            `${(getFixedNumber(element.Amount, 2)).toFixed(2)}`,
+        ];
+        // returnArr.push(tableitemRow);
 
         function totalrow() {
             return [
-                `${inx_1}`,
+                `GST ${(parseFloat(GSTPercentage))}%             Total GST: ${numberWithCommas(Number(totalGst).toFixed(2))}                Total:${numberWithCommas(Number(totalAmount).toFixed(2))} `,
                 ``,
                 ``,
-
+                `Span`,
             ];
         };
-        hasHedRow.push(totalrow());
 
-        i.forEach((element, inx_2) => {
+        function totalLots() {
+            totalQuantity = getFixedNumber(totalQuantity, 3) + getFixedNumber(element.BaseItemUnitQuantity, 3)
+            totalAmount = getFixedNumber(totalAmount, 3) + getFixedNumber(element.Amount, 3)
+            totalGst = getFixedNumber(totalGst, 3) + getFixedNumber(element.GSTAmount, 3)
+            GSTPercentage = Number(element.GSTPercentage)
+        };
 
+        if (Gst === 0) { Gst = element.GSTPercentage };
 
-            const tableitemRow = [
-                `${element.ItemName}${element.Comment ? `           \n(${element.Comment})` : ""}`,
-                `${Number(element.Quantity)} ${element.UnitName}`,
-                ``,
-                { Item_id: element.Item, IsHighlightItemInPrint: element.IsHighlightItemInPrint }
-            ];
-            hasHedRow.push(tableitemRow);
-        });
+        if ((Gst === element.GSTPercentage)) {
+            returnArr.push(tableitemRow)
+            totalLots()
+        }
+        else {
+            debugger
+            returnArr.push(totalrow());
+            returnArr.push(tableitemRow);
+            totalGst = 0;
+            totalAmount = 0;
+            totalQuantity = 0;
+            Gst = element.GSTPercentage;
+            totalLots()
 
+        }
+
+        if (key === Object.keys(groupedItems).length - 1) {
+            returnArr.push(totalrow());
+        }
     })
 
-    // const updatedArray = replaceValues(hasHedRow, Data);
-    return hasHedRow
-}
+    if (returnArr.length - 1) {
+        returnArr.push([
+            `GST Total: ${numberWithCommas(Number(finalTotalGST).toFixed(2))}            Amount: ${numberWithCommas(Number(finalTotal).toFixed(2))}`,
+            ``,
+            ``,
+            `Span`,
+        ]);
+    }
 
+    if (returnArr.length - 1) {
+        returnArr.push([
+            `Discount Amount: ${numberWithCommas(Number(finalDiscountAmount).toFixed(2))}            Gross Amount: ${numberWithCommas(Number(finalBasicAmount).toFixed(2))}`,
+            ``,
+            ``,
+            `Span`,
+        ]);
+    }
+
+    return returnArr;
+}
 
 
 
@@ -131,39 +172,13 @@ export const ReportRows = (data, doc) => {
 export const BilledByRow = (data) => {
     var BilledByArray = [
         [`                  ${data.SupplierName}`],
-        [`                ${data.SupplierAddress}`],
-        // [`              ${data.SupplierGSTIN}`],
-
-
+        [`                ${(data.GSTIN === null || data.GSTIN === undefined) ? "" : data.GSTIN}`],
+        [`                ${data.Date}`],
     ]
     return BilledByArray;
 }
 
-export const BilledToRow = (data) => {
 
-    var BilledToArray = [
-        [`                    ${data.CustomerName}`],
-        [`                 ${data.BillingAddress}`],
-        // [`             ${data.CustomerGSTIN}`],
-
-    ]
-
-    return BilledToArray;
-}
-
-export const DetailsOfTransportRow = (data) => {
-
-    var DetailsOfTransportArray = [
-        [`                   ${data.CustomerName}`],
-        [`                 ${data.BillingAddress}`],
-
-
-
-
-    ]
-
-    return DetailsOfTransportArray;
-}
 
 
 
