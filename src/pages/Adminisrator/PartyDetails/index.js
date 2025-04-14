@@ -599,6 +599,7 @@ const PartyDetails = (props) => {
                 Type: 3,
                 Message: "Please Select Party Or Cluster",
             })
+            return
         }
 
         const jsonBody = JSON.stringify({
