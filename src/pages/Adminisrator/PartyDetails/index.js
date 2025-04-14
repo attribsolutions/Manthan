@@ -14,7 +14,7 @@ import {
     comAddPageFieldFunc,
     initialFiledFunc,
 } from "../../../components/Common/validationFunction";
-import { Change_Button, Go_Button, SaveButton, } from "../../../components/Common/CommonButton";
+import { C_Button, Change_Button, Go_Button, SaveButton, } from "../../../components/Common/CommonButton";
 import { breadcrumbReturnFunc, metaTagLabel, } from "../../../components/Common/CommonFunction";
 import { mode, pageId } from "../../../routes/index"
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -31,6 +31,8 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import SimpleBar from "simplebar-react"
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { allLabelWithZero } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
+import Select from "react-select";
+
 
 const PartyDetails = (props) => {
 
@@ -61,6 +63,11 @@ const PartyDetails = (props) => {
     const [forceRefreshSuperstokiest, setforceRefreshSuperstokiest] = useState(false);
 
     const [groupSelect, setGroupSelect] = useState(allLabelWithZero);
+    const [ClusterSelect, setClusterSelect] = useState(allLabelWithZero);
+    const [partySelect, setPartySelect] = useState(allLabelWithZero);
+
+
+
     const [goBtnLoading, setGoBtnLoading] = useState(false);
 
     const {
@@ -73,10 +80,12 @@ const PartyDetails = (props) => {
         groupList,
         employeeList,
         groupListLoading,
+        Parties,
         userAccess } = useSelector((state) => ({
             goBtnList: state.PartyDetailsReducer.goBtnList,
             goBtnloadingRedux: state.PartyDetailsReducer.loading,
-            
+
+            Parties: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
 
             clusterDropdown: state.ClusterReducer.ClusterListData,
 
@@ -251,6 +260,12 @@ const PartyDetails = (props) => {
         value: 0,
         label: "All"
     });
+
+    const Party_Option = Parties.map(i => ({
+        value: i.id,
+        label: i.Name
+    }));
+    Party_Option.unshift(allLabelWithZero)
 
     const fetchSubClusterOptions = async (clusterID, row) => {
         try {
@@ -578,7 +593,15 @@ const PartyDetails = (props) => {
     ];
 
     async function goButtonHandler() {
-        dispatch(GoButton_For_PartyDetails({ employeeID: _cfunc.loginEmployeeID(), groupID: groupSelect.value }))
+
+        const jsonBody = JSON.stringify({
+            "employeeID": _cfunc.loginEmployeeID(),
+            "groupID": groupSelect.value,
+            "Party": partySelect.value,
+            "Cluster": ClusterSelect.value,
+        });
+
+        dispatch(GoButton_For_PartyDetails({ jsonBody }))
     }
 
     const SaveHandler = async (event) => {
@@ -644,7 +667,7 @@ const PartyDetails = (props) => {
             <React.Fragment>
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" >
-                    <div className="px-2  mb-1 c_card_filter text-black" >
+                    {/* <div className="px-2  mb-1 c_card_filter text-black" >
                         <div className="row" >
 
                             <Col sm={4} >
@@ -655,7 +678,103 @@ const PartyDetails = (props) => {
                                         <C_Select
                                             name="groupSelect"
                                             value={groupSelect}
-                                           
+
+                                            isSearchable={true}
+                                            isLoading={groupListLoading}
+                                            className="react-dropdown"
+                                            isDisabled={(tableData.length > 0) ? true : true}
+                                            classNamePrefix="dropdown"
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
+                                            options={GroupList_Options}
+                                            onChange={(e) => { setGroupSelect(e) }}
+                                        />
+                                    </Col>
+
+                                    <Row>
+
+                                        <Col md="4" >
+                                            <FormGroup className="mb-3">
+                                                <Label htmlFor="validationCustom01"> ClusterName </Label>
+                                                <Col sm={12} >
+                                                    <Select
+                                                        name="ClusterName"
+                                                        value={values.ClusterName}
+                                                        isSearchable={true}
+                                                        className="react-dropdown"
+                                                        classNamePrefix="dropdown"
+                                                        options={Cluster_Options}
+                                                        onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+
+                                                    />
+                                                    {isError.ClusterName.length > 0 && (
+                                                        <span className="text-danger f-8"><small>{isError.ClusterName}</small></span>
+                                                    )}
+                                                </Col>
+                                            </FormGroup>
+                                        </Col>
+
+
+                                        <FormGroup className=" row mt-2 " >
+                                            <Label className="col-sm-1 p-2"
+                                                style={{ width: "115px", marginRight: "0.1cm" }}>Party</Label>
+                                            <Col sm="7">
+                                                <Select
+                                                    name="Party"
+                                                    value={partySelect}
+                                                    isSearchable={true}
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
+                                                    options={Party_Option}
+                                                    onChange={(e) => { setPartySelect(e) }}
+                                                />
+                                            </Col>
+                                            <Col md={1}></Col>
+                                            <Col sm="1" className="mx-6" >
+                                                < Go_Button
+                                                    loading={goBtnLoading}
+                                                    onClick={(e) => goButtonHandler()}
+                                                />
+                                            </Col>
+                                        </FormGroup>
+
+
+                                    </Row>
+
+
+
+
+
+                                </FormGroup>
+                            </Col>
+
+                            <Col sm="1" className="mt-3 mb-3">
+                                {tableData.length === 0 ?
+                                    <Go_Button
+                                        loading={goBtnLoading || goBtnloadingRedux}
+                                        onClick={goButtonHandler}
+                                    />
+                                    :
+                                    <Change_Button onClick={(e) => dispatch(GoButton_For_PartyDetails_Success([]))} />
+                                }
+                            </Col>
+                        </div>
+                    </div> */}
+
+
+
+                    <div className="px-2   c_card_filter text-black " >
+                        <Row>
+                            <Col sm={3} className="">
+                                <FormGroup className=" row mt-2  " >
+                                    <Label className="col-sm-4 p-2"
+                                        style={{ width: "83px" }}>Group</Label>
+                                    <Col sm="7">
+                                        <C_Select
+                                            name="groupSelect"
+                                            value={groupSelect}
                                             isSearchable={true}
                                             isLoading={groupListLoading}
                                             className="react-dropdown"
@@ -671,41 +790,85 @@ const PartyDetails = (props) => {
                                 </FormGroup>
                             </Col>
 
-                            <Col sm="1" className="mt-3 mb-3">
-                                {tableData.length === 0 ?
-                                    <Go_Button
-                                        loading={goBtnLoading||goBtnloadingRedux}
-                                        onClick={goButtonHandler}
-                                    />
-                                    :
-                                    <Change_Button onClick={(e) => dispatch(GoButton_For_PartyDetails_Success([]))} />
-                                }
+                            <Col sm={3} className="">
+                                <FormGroup className=" row mt-2 " >
+                                    <Label className="col-sm-4 p-2"
+                                        style={{ width: "65px" }}>Cluster</Label>
+                                    <Col sm="7">
+                                        <Select
+                                            name="ClusterName"
+                                            value={ClusterSelect}
+                                            isSearchable={true}
+                                            className="react-dropdown"
+                                            classNamePrefix="dropdown"
+                                            options={Cluster_Options}
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
+                                            onChange={(e) => { setClusterSelect(e) }}
+                                        />
+                                    </Col>
+                                </FormGroup>
                             </Col>
-                        </div>
+
+                            <Col sm={3} className="">
+                                <FormGroup className=" row mt-2" >
+                                    <Label className="col-sm-4 p-2"
+                                        style={{ width: "65px", marginRight: "20px" }}>Party</Label>
+                                    <Col sm="8">
+                                        <Select
+                                            name="Party"
+                                            value={partySelect}
+                                            isSearchable={true}
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
+                                            options={Party_Option}
+                                            onChange={(e) => { setPartySelect(e) }}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+
+                            <Col sm={2} className=" d-flex justify-content-end" >
+                                <Col sm="1" className="mt-2 ">
+                                    {tableData.length === 0 ?
+                                        <Go_Button
+                                            loading={goBtnLoading || goBtnloadingRedux}
+                                            onClick={goButtonHandler}
+                                        />
+                                        :
+                                        <Change_Button onClick={(e) => dispatch(GoButton_For_PartyDetails_Success([]))} />
+                                    }
+                                </Col>
+
+                            </Col>
+                        </Row>
                     </div>
+
 
                     <div className="mb-4" >
                         <ToolkitProvider
                             keyField="PartyID"
                             data={tableData}
                             columns={pagesListColumns}
-                            
+
                             search
                         >
                             {(toolkitProps) => (
                                 <React.Fragment>
-                                            <BootstrapTable
-                                                keyField="PartyID"
-                                                id="table_Arrow"
-                                                classes='custom-table'
-                                                noDataIndication={<div className="text-danger text-center">Party Not available</div>}
-                                                onDataSizeChange={({ dataSize }) => {
-                                                    dispatch(BreadcrumbShowCountlabel(`Count : ${dataSize}`));
-                                                }}
-                                                pagination={paginationFactory(paginationOptions)} // Add pagination options
-                                                {...toolkitProps.baseProps}
-                                            />
-                                            {globalTableSearchProps(toolkitProps.searchProps)}
+                                    <BootstrapTable
+                                        keyField="PartyID"
+                                        id="table_Arrow"
+                                        classes='custom-table'
+                                        noDataIndication={<div className="text-danger text-center">Party Not available</div>}
+                                        onDataSizeChange={({ dataSize }) => {
+                                            dispatch(BreadcrumbShowCountlabel(`Count : ${dataSize}`));
+                                        }}
+                                        pagination={paginationFactory(paginationOptions)} // Add pagination options
+                                        {...toolkitProps.baseProps}
+                                    />
+                                    {globalTableSearchProps(toolkitProps.searchProps)}
                                 </React.Fragment>
                             )}
                         </ToolkitProvider>
@@ -721,6 +884,8 @@ const PartyDetails = (props) => {
                     }
 
                 </div>
+
+
             </React.Fragment >
         );
     }
