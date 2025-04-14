@@ -224,6 +224,7 @@ const CodeRedemtionReport = (props) => {
                                         name="Party"
                                         value={PartyDropdown}
                                         isSearchable={true}
+                                        isDisabled={_cfunc.loginUserIsFranchisesRole()}
 
                                         isLoading={partyDropdownLoading}
                                         className="react-dropdown"
@@ -239,7 +240,7 @@ const CodeRedemtionReport = (props) => {
                         </Col>
 
 
-                        {isSCMParty && < Col sm={3} className="">
+                        {< Col sm={3} className="">
                             <FormGroup className=" row mt-2" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px", marginRight: "20px" }}>Scheme </Label>
@@ -265,7 +266,7 @@ const CodeRedemtionReport = (props) => {
 
 
 
-                        <Col sm={isSCMParty ? 2 : 6} className=" d-flex justify-content-end" >
+                        <Col sm={2} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
