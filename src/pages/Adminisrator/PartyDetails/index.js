@@ -63,7 +63,7 @@ const PartyDetails = (props) => {
     const [forceRefreshSuperstokiest, setforceRefreshSuperstokiest] = useState(false);
 
     const [groupSelect, setGroupSelect] = useState(allLabelWithZero);
-    const [ClusterSelect, setClusterSelect] = useState(allLabelWithZero);
+    const [ClusterSelect, setClusterSelect] = useState("");
     const [partySelect, setPartySelect] = useState(allLabelWithZero);
 
 
@@ -593,6 +593,14 @@ const PartyDetails = (props) => {
     ];
 
     async function goButtonHandler() {
+        debugger
+        if (ClusterSelect === "") {
+            customAlert({
+                Type: 3,
+                Message: "Please Select Cluster",
+            })
+            return;
+        }
 
         const jsonBody = JSON.stringify({
             "employeeID": _cfunc.loginEmployeeID(),
