@@ -235,6 +235,7 @@ const PartyMaster = (props) => {
 
 						let baseValue = {
 							Name: hasEditVal.Name,
+							ShortName: hasEditVal.ShortName,
 							MobileNo: hasEditVal.MobileNo,
 							Latitude: hasEditVal.Latitude,
 							Longitude: hasEditVal.Longitude,
@@ -557,6 +558,7 @@ const PartyMaster = (props) => {
 
 			const jsonBody = JSON.stringify({
 				"Name": baseValue.Name,
+				"ShortName": baseValue.ShortName,
 				"PriceList": priceListSelect.value,
 				"PartyType": baseValue.PartyType.value,
 				"Company": (pageMode === mode.defaultsave) ? loginCompanyID() : EditData.Company.id,
