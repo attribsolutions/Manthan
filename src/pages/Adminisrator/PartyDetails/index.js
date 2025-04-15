@@ -250,6 +250,8 @@ const PartyDetails = (props) => {
         value: Data.id,
         label: Data.Name
     }));
+    Cluster_Options.unshift(allLabelWithZero)
+
 
     const GroupList_Options = groupList.map((Data) => ({
         value: Data.id,
