@@ -26,6 +26,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
     const fileds = {
         Name: "",
         MobileNo: "",
+        ShortName: "",
         PartyType: "",
         SAPPartyCode: "",
         Supplier: [],
@@ -153,6 +154,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
             a.values.isActive = true
             a.values.Latitude = ''
             a.values.Longitude = ''
+            a.values.ShortName = ''
 
             a.hasValid.Name.valid = false;
             a.hasValid.MobileNo.valid = false;
@@ -170,6 +172,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
             a.hasValid.Latitude.valid = false;
             a.hasValid.Longitude.valid = false;
             a.hasValid.Route.valid = false;
+            a.hasValid.ShortName.valid = false;
 
 
 
@@ -405,6 +408,33 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                 </FormGroup>
                             </Col>
                             <Col md="1">  </Col>
+
+                            <Col md="3">
+                                <FormGroup className="mb-3">
+                                    <Label >{fieldLabel.ShortName} </Label>
+                                    <Input
+                                        name="ShortName"
+                                        id="txtName"
+                                        value={values.ShortName}
+                                        type="text"
+                                        disabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
+                                        className={isError.ShortName.length > 0 ? "is-invalid form-control" : "form-control"}
+                                        placeholder="Please Enter ShortName"
+                                        autoComplete='off'
+                                        autoFocus={true}
+                                        onChange={(event) => {
+                                            onChangeText({ event, state, setState })
+                                            dispatch(Breadcrumb_inputName(event.target.value))
+                                        }}
+                                    />
+                                    {isError.ShortName.length > 0 && (
+                                        <span className="invalid-feedback">{isError.ShortName}</span>
+                                    )}
+                                </FormGroup>
+                            </Col>
+
+                            <Col md="1">  </Col>
+
                             <Col md="3">
                                 <FormGroup className="mb-3">
                                     <Label >{fieldLabel.MobileNo} </Label>
@@ -424,6 +454,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                     )}
                                 </FormGroup>
                             </Col>
+
                             <Col md="1">  </Col>
 
                             <Col md="3">
