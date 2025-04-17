@@ -66,7 +66,7 @@ const CheckRateFromCompany = () => {
 function* goButtonGenFunc({ config }) {                     // GO-Botton order Add Page by subPageMode  
 
   try {
-    debugger
+
     const { subPageMode, } = config
     let response;
     if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_2) || (subPageMode === url.ORDER_4) || (subPageMode === url.IB_ORDER) || (subPageMode === url.IB_SALES_ORDER) || (subPageMode === url.ORDER_QUATATION)) {
@@ -208,7 +208,9 @@ function* UpdateOrder_ID_GenFunc({ config }) {         // Update Order by subPag
 function* orderList_GoBtn_GenFunc({ config }) {
 
   //  Order List Filter by subPageMode
-  debugger
+  const isSweetAndSnacksCompany = IsSweetAndSnacksCompany()
+
+
   try {
     const hasRole = (role) => config?.userAccess[role];
     const { subPageMode } = config
@@ -245,9 +247,9 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.forceDeleteHide = false;
       i.forceSelectDissabled = false;
       i.forceHideOrderAprovalBtn = true;
-      i.printAllSelect = false
+      i.ExtraSelect = false
 
-
+      debugger
       if (i.Inward > 0) {
 
         i.Inward = "Close"
@@ -257,6 +259,9 @@ function* orderList_GoBtn_GenFunc({ config }) {
       } else {
         i.Status = "Open";
         i.Inward = "Open";
+        if ((subPageMode === url.ORDER_LIST_4) && (isSweetAndSnacksCompany)) {
+          i.forceExtraSelectDissabled = true;
+        }
         if (subPageMode === url.GRN_STP_1 || (subPageMode === url.ORDER_LIST_1) || (subPageMode === url.IB_ORDER_SO_LIST) || (subPageMode === url.GRN_STP_3) || (subPageMode === url.IB_ORDER_PO_LIST)) {
           if ((subPageMode === url.IB_ORDER_SO_LIST || subPageMode === url.IB_ORDER_PO_LIST) && i.InvoiceCreated) {
             i.forceEditHide = true;
@@ -275,9 +280,17 @@ function* orderList_GoBtn_GenFunc({ config }) {
 
       if (i.InvoiceCreated === true) {
         i.Status = "Invoice Created"
+        if ((subPageMode === url.ORDER_LIST_4) && (isSweetAndSnacksCompany)) {
+          i.forceExtraSelectDissabled = true;
+        }
       }
       else if (i.IsConfirm === true) {
         i.Status = "Order Confirm"
+        if ((subPageMode === url.ORDER_LIST_4) && (isSweetAndSnacksCompany)) {
+          i.forceExtraSelectDissabled = false;;
+        }
+
+
       }
 
       //**********************************order Aproval button Show Condition ********************************************************** */

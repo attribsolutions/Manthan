@@ -117,7 +117,7 @@ const DailyDispatchReport = (props) => {
 
 
     // Step 2: Pivot the data and aggregate dynamically based on qtyType
-    const supplierNames = [...new Set(ItemSaleReportGobtn.map((item) => item.CustomerName))];
+    const supplierNames = [...new Set(ItemSaleReportGobtn.map((item) => item.Cust_ShortName))];
 
     useEffect(() => {
 
@@ -126,11 +126,11 @@ const DailyDispatchReport = (props) => {
         const tableData = skuNames.map((sku) => {
             const row = { SKUName: sku };
 
-            supplierNames.forEach((CustomerName) => {
+            supplierNames.forEach((Cust_ShortName) => {
                 const totalQty = ItemSaleReportGobtn
                     .filter((item) => {
 
-                        return item.ItemName === sku && item.CustomerName === CustomerName
+                        return item.ItemName === sku && item.Cust_ShortName === Cust_ShortName
                     })
                     .reduce((sum, item) => {
 
@@ -138,7 +138,7 @@ const DailyDispatchReport = (props) => {
                         return sum + (isNaN(qty) ? 0 : qty);
                     }, 0);
 
-                row[CustomerName] = totalQty > 0 ? _cfunc.getFixedNumber(totalQty, 3) : 0;
+                row[Cust_ShortName] = totalQty > 0 ? _cfunc.getFixedNumber(totalQty, 3) : 0;
             });
 
             return addTotalField(row);
@@ -160,9 +160,9 @@ const DailyDispatchReport = (props) => {
             sort: true, // Optional: Enable sorting
             formatter: (cell) => <strong>{cell}</strong>, // Render the text in bold
         },
-        ...supplierNames.map((CustomerName) => ({
-            dataField: CustomerName,
-            text: CustomerName,
+        ...supplierNames.map((Cust_ShortName) => ({
+            dataField: Cust_ShortName,
+            text: Cust_ShortName,
             align: () => "right",
             sort: true,
         })), {

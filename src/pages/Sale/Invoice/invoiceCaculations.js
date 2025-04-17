@@ -13,7 +13,7 @@ export const invoice_discountCalculate_Func = (row, index1, IsComparGstIn) => {
 
     // Calculate the base amount
     const basicAmount = rate * quantity;
-
+    debugger
     // Calculate the discount amount based on the discount type
     const disCountAmt = discountType === 2 ? basicAmount - (basicAmount / ((100 + discount) / 100)) : quantity * discount;
 
@@ -66,6 +66,7 @@ export const invoice_discountCalculate_Func = (row, index1, IsComparGstIn) => {
 // ************************************************************************
 
 export const settingBaseRoundOffAmountFunc = (tableList = []) => {
+
     const Weight = loginUserDetails().Weight
 
     // Get the system settings
@@ -79,8 +80,8 @@ export const settingBaseRoundOffAmountFunc = (tableList = []) => {
     // }, 0);
 
 
-    let result = tableList.reduce(
 
+    let result = tableList.reduce(
         (accumulator, index1) => {
             const weightage = Number(index1["Weightage"]) || 0.00;
             const row_weightage = Number(weightage) === 0 ? 0 : (Number(index1.Quantity) * Number(index1.default_UnitDropvalue.BaseUnitQuantity)) / Number(weightage)
@@ -218,7 +219,7 @@ export function orderQtyOnChange(event, index1) {
 
     if (isSweetAndSnacksCompany) {
         debugger
-        const TotalTray = Math.ceil(getFixedNumber(inputValue, 2) / getFixedNumber(index1.BaseUnitQuantity, 2))
+        const TotalTray = Math.ceil(getFixedNumber(inputValue, 2) / getFixedNumber(index1.ConversionUnit, 2))
         const TrayQtyElement = document.getElementById(`TrayQty-${index1.id}`);
         TrayQtyElement.value = getFixedNumber(TotalTray, 0); // Display with three decimal places
     }
