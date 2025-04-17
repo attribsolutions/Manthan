@@ -13,6 +13,7 @@ import GlobalCustomTable from "../../../GlobalCustomTable";
 import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
 import { DataExportTo_SAP_Action, Fetch_UploadFile_Action } from "../../../store/Administrator/ExportToSAPRedux/action";
 import { allLabelWithZero } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 ;
 
 const DataExportToSAP = (props) => {
@@ -35,7 +36,8 @@ const DataExportToSAP = (props) => {
         userAccess,
         partyDropdownLoadings,
         UploaledFileData,
-        Party
+        Party,
+        ExportToSAPData
     } = useSelector((state) => ({
         ExportToSAPData: state.ExportToSapReducer.ExportToSAPData,
         UploaledFileData: state.ExportToSapReducer.UploaledFileData,
@@ -90,10 +92,26 @@ const DataExportToSAP = (props) => {
     }, [UploaledFileData])
 
 
+    useEffect(() => {
+
+        if (ExportToSAPData?.StatusCode === 200 && ExportToSAPData?.Status === true) {
+            customAlert({
+                Type: 1,
+                Message: ExportToSAPData.Message,
+            })
+        } else if (ExportToSAPData?.Status === false && [404, 400, 204].includes(ExportToSAPData?.StatusCode)) {
+            customAlert({
+                Type: 9,
+                Message: ExportToSAPData.Message,
+            })
+        }
+    }, [ExportToSAPData])
+
+
 
     const [tableColumns] = DynamicColumnHook({ pageField, })
 
-
+    debugger
 
     function UploadHandler(e) {
 
