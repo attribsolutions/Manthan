@@ -39,6 +39,9 @@ const OrderList = () => {
     const IsFranchises = _cfunc.loginUserIsFranchisesRole()
     let originalStorageDetails = JSON.parse(localStorage.getItem("roleId"));
 
+
+    const isSweetAndSnacksCompany = _cfunc.IsSweetAndSnacksCompany()
+
     const LoginDetails = _cfunc.loginUserDetails();
     const isVisibleRateDrop = _cfunc.checkRateDropVisibility()
 
@@ -351,6 +354,7 @@ const OrderList = () => {
 
     useEffect(() => {
         if (gobutton_Add_invoice.Status === true && gobutton_Add_invoice.StatusCode === 200) {
+
             history.push({
                 pathname: gobutton_Add_invoice.path,
             })
@@ -359,6 +363,7 @@ const OrderList = () => {
 
     useEffect(() => {
         if (ordersBulkInvoiceData.Status === true && ordersBulkInvoiceData.StatusCode === 200) {
+
             dispatch(getOrdersMakeInvoiceDataActionSuccess({ ...ordersBulkInvoiceData, Status: false }));
             history.push({
                 pathname: url.BULK_INVOICE,
@@ -511,9 +516,9 @@ const OrderList = () => {
             });
         }
         else {
-            debugger
+
             var isGRNSelect = ''
-            debugger
+
             const grnRef = []
             if (list.length > 0) {
                 list.forEach(ele => {
@@ -545,8 +550,8 @@ const OrderList = () => {
                     }
 
                     if (subPageMode === url.GRN_STP_3) {
-                        isMode = _cfunc.IsSweetAndSnacksCompany() ? 1 : 3
-                        path = _cfunc.IsSweetAndSnacksCompany() ? url.GRN_ADD_1 : url.GRN_ADD_3
+                        isMode = isSweetAndSnacksCompany ? 1 : 3
+                        path = isSweetAndSnacksCompany ? url.GRN_ADD_1 : url.GRN_ADD_3
                     } else if (subPageMode === url.IB_ORDER_SO_LIST) {
                         path = url.IB_INVOICE
                     }
@@ -702,7 +707,7 @@ const OrderList = () => {
                 "ToDate": values.ToDate,
                 "Supplier": values.Supplier.value,
                 "Customer": _cfunc.loginSelectedPartyID(),
-                "OrderType": _cfunc.IsSweetAndSnacksCompany() ? order_Type.PurchaseOrder : order_Type.InvoiceToGRN,
+                "OrderType": isSweetAndSnacksCompany ? order_Type.PurchaseOrder : order_Type.InvoiceToGRN,
                 "CustomerType": '',
                 "IBType": IBType ? IBType : otherState.IBType,
                 "DashBoardMode": 0,
@@ -807,8 +812,24 @@ const OrderList = () => {
     }
 
     const BulkInvoice_Handler = (allList = []) => {
+        debugger
+        // let checkRows = allList.filter(i => ((i.selectCheck || i.ExtraSelect) && (!i.forceSelectDissabled) || (!i.forceExtraSelectDissabled)))
 
-        let checkRows = allList.filter(i => (i.selectCheck && !i.forceSelectDissabled))
+        let checkRows = allList.filter(i => {
+            return (((i.selectCheck || i.ExtraSelect)) && ((!i.forceSelectDissabled) || (!i.forceExtraSelectDissabled)));
+        });
+
+        if (((subPageMode === url.ORDER_LIST_4) && (isSweetAndSnacksCompany))) {
+            const isSameCustumer = checkRows.every(item => item.CustomerID === checkRows[0].CustomerID);
+            if (!isSameCustumer) {
+                customAlert({
+                    Type: 3,
+                    Message: alertMessages.selectSameCustomer,
+                });
+                return
+            }
+        }
+
         if (!checkRows.length > 0) {
             customAlert({
                 Type: 4,
@@ -825,7 +846,7 @@ const OrderList = () => {
         }
 
 
-        dispatch(getOrdersMakeInvoiceDataAction({ jsonBody }))
+        dispatch(getOrdersMakeInvoiceDataAction({ jsonBody, subPageMode: subPageMode, path: url.INVOICE_1 }));
     }
 
     const pageFieldMaster = reducers?.pageField?.PageFieldMaster;
@@ -914,7 +935,7 @@ const OrderList = () => {
                             <Label className="col-md-4 p-2"
 
                                 style={{ width: "115px" }}>{(!(fieldLabel.Supplier === '')) ? fieldLabel.Supplier : (orderList4_or_app_orderList ? "Customer" : "Supplier")}</Label>
-                            <Col sm="5">
+                            <Col sm="8">
 
                                 <C_Select
                                     name="Supplier"
@@ -969,10 +990,10 @@ const OrderList = () => {
         )
     }
 
-    const PrintAlldownBtnFunc = (row = []) => {
+    const ExtraSelectBtnHandler = (row = []) => {
 
         let config = {};
-        let ischeck = row.filter(i => (i.printAllSelect))
+        let ischeck = row.filter(i => (i.ExtraSelect))
         if (!ischeck.length > 0) {
             customAlert({
                 Type: 4,
@@ -996,19 +1017,20 @@ const OrderList = () => {
         const isChecked = event.currentTarget.checked
         let updatedTableList = []
 
-        if (isChecked) {
+        if (subPageMode === url.ORDER_LIST_4 && isSweetAndSnacksCompany) {
             updatedTableList = tableList.map(row => ({
-                ...row,
-                printAllSelect: isChecked
-            }));
 
+                ...row,
+                ExtraSelect: row.InvoiceCreated ? false : isChecked
+            }));
         } else {
             updatedTableList = tableList.map(row => ({
                 ...row,
-                printAllSelect: isChecked
+                ExtraSelect: isChecked
             }));
-
         }
+
+
 
         dispatch(_act.getOrderListPageSuccess(updatedTableList))
     }
@@ -1016,7 +1038,7 @@ const OrderList = () => {
 
     const selecthandler = ({ event, rowData, tableList }) => {
         const isChecked = event.currentTarget.checked
-        rowData.printAllSelect = isChecked
+        rowData.ExtraSelect = isChecked
 
     }
 
@@ -1054,11 +1076,12 @@ const OrderList = () => {
                             oderAprovalBtnFunc={oderAprovalBtnFunc}
                             extraSelect={extraSelect}
                             selectCheckParams={{
-                                isPrintAllShow: (subPageMode === url.ORDER_LIST_4 || subPageMode === url.ORDER_LIST_2),
-                                selectPrintAllBtnHandler: PrintAlldownBtnFunc,
+                                isExtraSelectShow: (subPageMode === url.ORDER_LIST_4 && LoginDetails?.PartyType === "Division") || (subPageMode === url.ORDER_LIST_4 && (isSweetAndSnacksCompany)) ? true : false,
+                                ExtraSelectBtnHandler: ((subPageMode === url.ORDER_LIST_4) && (isSweetAndSnacksCompany)) ? BulkInvoice_Handler : ExtraSelectBtnHandler,
+                                ExtraSelectLabel: (subPageMode === url.ORDER_LIST_4 && LoginDetails?.PartyType === "Division") ? "Print All" : "Bulk Invoice",
                                 headerselecthandler: headerselecthandler,
                                 selecthandler: selecthandler,
-                                selectPrintAllBtnLoading: printAllBtnLoading,
+                                ExtraBtnLoading: printAllBtnLoading || makeBulkInvoiceLoading,
                                 // isShow: (subPageMode === url.ORDER_LIST_4 || (hasBulkinvoiceSaveAccess && subPageMode === url.APP_ORDER_LIST)),
                                 selectSaveBtnHandler: (subPageMode === url.ORDER_LIST_4) ? OrderConfirm_Handler : BulkInvoice_Handler,
                                 selectSaveBtnLabel: (subPageMode === url.ORDER_LIST_4) ? "Confirm" : "Bulk Invoice",

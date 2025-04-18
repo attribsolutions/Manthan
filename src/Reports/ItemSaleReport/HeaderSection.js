@@ -432,6 +432,7 @@ const HeaderSection = (props) => {
   }
 
   function goButtonHandler() {
+    debugger
     try {
       const jsonBody = JSON.stringify({
         FromDate: fromdate,
@@ -439,6 +440,7 @@ const HeaderSection = (props) => {
         PartyType: states.supplierSelect.value > 0 ? 0 : states.channelFromSelect.value,
         Party: !isSCMParty ? _cfunc.loginSelectedPartyID() : states.supplierSelect.value,
         Employee: !isSCMParty ? 0 : _cfunc.loginEmployeeID(),
+        ItemID: states.itemNameSelect.map(inx => inx.value).join(','),
         CompanyID: _cfunc.loginCompanyID()
 
       });

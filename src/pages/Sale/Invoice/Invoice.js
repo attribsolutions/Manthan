@@ -884,7 +884,7 @@ const Invoice = (props) => {
                     //**calculate Amount ,Discount Amount based on Discound type */
 
                     const calculate = invoice_discountCalculate_Func(ele, index, IsComparGstIn)
-                    debugger
+
                     invoiceItems.push({
                         "Item": index.Item,
                         "Unit": index.default_UnitDropvalue.value,
@@ -953,11 +953,17 @@ const Invoice = (props) => {
 
         //**grand total and Tcs Round Off calculations  */ 
         const calcalateGrandTotal = settingBaseRoundOffAmountFunc(orderItemDetails)//Pass Table Data 
-
+        debugger
         const forInvoice_1_json = () => ({  //** Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
             InvoiceDate: values.InvoiceDate,
             InvoiceItems: invoiceItems,
-            InvoicesReferences: [{ Order: orderIDs }],
+            // InvoicesReferences: [{ Order: orderIDs }],
+
+            InvoicesReferences: orderIDs
+                .split(',')
+                .filter(id => id)
+                .map(id => ({ Order: id })),
+
         });
 
         const forIB_Invoice_json = async () => ({   //**   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
@@ -1016,7 +1022,7 @@ const Invoice = (props) => {
                         <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
 
                             <div className="row" >
-                                <Col sm={3} className="">
+                                <Col sm={2} className="">
                                     <FormGroup className="mb- row mt-2 " >
                                         <Label className="col-sm-8 p-2" style={{ width: "100px" }}>{fieldLabel.InvoiceDate}</Label>
                                         <Col sm="7">
@@ -1034,13 +1040,12 @@ const Invoice = (props) => {
                                     </FormGroup>
                                 </Col>
 
-                                <Col sm={3} className="">
+                                <Col sm={4} className="">
                                     <FormGroup className="mb- row mt-2 " >
                                         <Label className="col-sm-6 p-2"
                                             style={{ width: "70px" }}>{fieldLabel.Customer}</Label>
-                                        <Col sm="7">
+                                        <Col sm="10">
                                             <Select
-
                                                 name="Customer"
                                                 value={values.Customer}
                                                 isSearchable={true}

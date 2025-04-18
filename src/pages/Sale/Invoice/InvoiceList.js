@@ -532,7 +532,7 @@ const InvoiceList = () => {
                         <FormGroup className="mb-2 row mt-3 " >
                             <Label className="col-md-4 p-2"
                                 style={{ width: "115px" }}>Customer</Label>
-                            <Col sm="5">
+                            <Col sm="8">
                                 <C_Select
                                     classNamePrefix="react-select"
                                     value={supplierSelect}

@@ -545,12 +545,15 @@ export const Accounting_GRN_update_API = ({ jsonBody, updateId }) => put(`${url.
 export const GRN_delete_API = ({ deleteId }) => del(`${url.GRN}/${deleteId}`)//Delete Order
 
 
-export const AccountingGRN_delete_API = ({ deleteId }) => del(`${url.ACCOUNTING_GRN_DELETE_API}/${deleteId}`)//Delete Order
+export const AccountingGRN_delete_API = ({ deleteId }) => put(`${url.ACCOUNTING_GRN_DELETE_API}/${deleteId}`)//Delete Order
 
 
 
 
 export const Get_Scheme_List = () => get(url.SCHEME_LIST) // get api
+
+export const Get_ledger = () => get(url.LEDGER) // get api
+
 
 
 

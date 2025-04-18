@@ -1,6 +1,6 @@
 
 import Select from "react-select";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     Button, Col, Dropdown, DropdownMenu, DropdownToggle, Input, Label, Row, FormGroup
@@ -12,7 +12,7 @@ import { useHistory } from "react-router-dom";
 import FeatherIcon from "feather-icons-react";
 
 import { orderCalculateFunc } from "../../Purchase/Order/OrderPageCalulation";
-import { SaveButton } from "../../../components/Common/CommonButton";
+import { C_Button, SaveButton } from "../../../components/Common/CommonButton";
 import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 import { mode, url, pageId } from "../../../routes/index";
@@ -22,12 +22,11 @@ import * as _act from "../../../store/actions";
 
 import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
-import { useLayoutEffect } from "react";
 import { pageFieldUseEffect, saveMsgUseEffect, table_ArrowUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { goButtonForRate_Master, saveRateMaster } from "../../../store/Administrator/RateMasterRedux/action";
-import { Invoice_No_Message } from "../../../helpers/backend_helper";
+import { Get_ledger, Invoice_No_Message } from "../../../helpers/backend_helper";
 
 
 
@@ -75,6 +74,14 @@ const GRN_ADD_1 = (props) => {
     const [listPath] = useState(() => initialState(history).listPath)
     const [subPageMode] = useState(initialState(history).sub_Mode)
 
+    const [ledgerSelect, setLedgerSelect] = useState();
+
+    const [ledgerOptions, setledgerOptions] = useState([]);
+
+    const [ledgerDetailList, setledgerDetailList] = useState([]);
+
+
+
     const [userPageAccessState, setUserAccState] = useState('');
 
     const fileds = {
@@ -85,6 +92,7 @@ const GRN_ADD_1 = (props) => {
 
     const [grnDate, setgrnDate] = useState(currentDate_ymd);
     const [orderAmount, setOrderAmount] = useState(0);
+
     const [grnDetail, setGrnDetail] = useState({});
     const [grnItemList, setgrnItemList] = useState([]);
     const [openPOdrp, setOpenPOdrp] = useState(false);
@@ -116,7 +124,7 @@ const GRN_ADD_1 = (props) => {
 
     useEffect(() => {
 
-        debugger
+
         dispatch(_act.commonPageFieldSuccess(null));
         dispatch(_act.commonPageField(page_id));
         const jsonBody = JSON.stringify({
@@ -149,7 +157,7 @@ const GRN_ADD_1 = (props) => {
         dispatch,
         setUserAccState,
     }), [userAccess]);
-    debugger
+
     useEffect(() => saveMsgUseEffect({// saveMsgUseEffect common useEffect 
 
 
@@ -210,6 +218,67 @@ const GRN_ADD_1 = (props) => {
 
     useEffect(() => table_ArrowUseEffect("#table_Arrow"), [grnItemList]);
 
+    useEffect(async () => {
+
+        console.log("grnDetail", grnDetail)
+        const resp = await Get_ledger()
+        if (resp.Status === true && resp.StatusCode === 200) {
+
+            setledgerOptions(resp.Data.map((i) => ({  //initial decleration
+                ...i,
+                value: i.id,
+                label: i.Name,
+                BasicAmount: 0,
+                GST_Amount: 0,
+                Taxable_Amount: 0,
+                CGST: 0,
+                SGST: 0,
+                IGST: 0,
+            })));
+        }
+    }, [])
+
+
+    const onchangeHandler = (e, row, k) => {
+
+        let BasicAmount = _cfunc.getFixedNumber(e.target.value, 2)
+        const GST_Amount = (BasicAmount * Number(row.GST_Percent)) / 100;
+        const Taxable_Amount = GST_Amount + BasicAmount;
+        row["BasicAmount"] = BasicAmount
+        row["GST_Amount"] = GST_Amount;
+        row["Taxable_Amount"] = Taxable_Amount;
+        row["CGST"] = GST_Amount / 2;
+        row["SGST"] = GST_Amount / 2;
+        row["IGST"] = GST_Amount;
+
+        const Taxable_Amount_elment = document.getElementById(`Taxable_Amount${row.id}`)
+        if (Taxable_Amount_elment) {
+            Taxable_Amount_elment.innerText = Taxable_Amount
+        }
+        const CGST_elment = document.getElementById(`CGST${row.id}`)
+        if (CGST_elment) {
+            CGST_elment.innerText = row.CGST
+        }
+        const SGST_elment = document.getElementById(`SGST${row.id}`)
+        if (SGST_elment) {
+            SGST_elment.innerText = row.SGST
+        }
+        const IGST_elment = document.getElementById(`IGST${row.id}`)
+        if (IGST_elment) {
+            IGST_elment.innerText = row.IGST
+        }
+        const ledgerAmount = ledgerDetailList.reduce((acc, ele) => acc + Number(ele.Taxable_Amount), 0)
+
+        const GRNAmount = grnItemList.reduce((total, ind) => {
+            return total + (parseFloat(ind.Amount) || 0);
+        }, 0);
+        const AmountWithExpence = Number((Number(GRNAmount) + Number(ledgerAmount)).toFixed(2))
+
+        const elements = document.querySelectorAll('.amount-countable-Calulation');
+        elements.forEach(element => { element.innerText = _cfunc.amountCommaSeparateFunc(AmountWithExpence); });
+
+    }
+
     useEffect(() => {
 
         if ((items.Status === true) && (items.StatusCode === 200)) {
@@ -261,7 +330,7 @@ const GRN_ADD_1 = (props) => {
             grnDetails["InvoiceDate"] = _cfunc.date_ymd_func(grnDetails.InvoiceDate)
             grnDetails["DemandDate"] = _cfunc.date_ymd_func(grnDetails.DemandDate)
 
-            debugger
+
 
             setGrnDetail(grnDetails)
             setInvoiceNo(grnDetails.GRNReferences[0]?.Invoice_NO)
@@ -297,7 +366,10 @@ const GRN_ADD_1 = (props) => {
                 ele["Invoice"] = null
                 ele["ItemExpiryDate"] = ele.ItemExpiryDate
             });
-            dispatch(_act.BreadcrumbShowCountlabel(`Count:${Data.GRNItems.length} currency_symbol ${sum.toFixed(2)}`));
+            setOrderAmount(sum.toFixed(2))
+
+
+            dispatch(_act.BreadcrumbShowCountlabel(`Count:${Data.GRNItems.length} currency_symbol ${_cfunc.amountCommaSeparateFunc(sum)}`));
 
             initialTableData = []
             const grnDetails = { ...Data }
@@ -314,7 +386,7 @@ const GRN_ADD_1 = (props) => {
             grnDetails.GRNReferences[0]["Order"] = OrderDetail.id
             grnDetails.GRNReferences[0]["OrderDate"] = OrderDetail.OrderDate
             grnDetails.GRNReferences[0]["POType"] = OrderDetail.POType.id
-            debugger
+
 
             initialTableData = grnDetails.GRNItems;
             setgrnItemList(initialTableData)
@@ -323,6 +395,8 @@ const GRN_ADD_1 = (props) => {
 
             grnDetails["InvoiceDate"] = _cfunc.date_ymd_func(grnDetails.InvoiceDate)
             grnDetails["DemandDate"] = _cfunc.date_ymd_func(grnDetails.DemandDate)
+            grnDetails["SupplierGSTIN"] = OrderDetail?.Supplier?.GSTIN
+            grnDetails["CustomerGSTIN"] = OrderDetail?.Customer?.GSTIN
 
             setGrnDetail(grnDetails)
             setInvoiceNo(grnDetails?.InvoiceNumber)
@@ -351,7 +425,7 @@ const GRN_ADD_1 = (props) => {
             if (hasEditVal) {
                 setEditData(hasEditVal);
                 const { GRNItems = [], GRNReferences = [], InvoiceNumber } = hasEditVal;
-                debugger
+
                 let ChallanNo1 = ''
                 GRNReferences[0]["Full_OrderNumber"] = GRNReferences[0]?.Order?.FullOrderNumber
                 GRNReferences.forEach(ele => {
@@ -370,7 +444,7 @@ const GRN_ADD_1 = (props) => {
 
     }, [])
 
-    function val_onChange(val, row, type) {
+    function val_onChange(val, row, type,) {
 
         if (type === "qty") {
             row["Quantity"] = val;
@@ -390,8 +464,17 @@ const GRN_ADD_1 = (props) => {
         grnItemList.forEach(ind => {
             sum = sum + parseFloat(ind.Amount)
         });
-        setOrderAmount(sum.toFixed(2))
-        dispatch(_act.BreadcrumbShowCountlabel(`Count:${grnItemList.length} currency_symbol ${sum.toFixed(2)}`));
+
+        // setOrderAmount(sum.toFixed(2))
+        console.log("sum", ledgerDetailList)
+        debugger
+        const AmountWithExpence = Number((Number(sum) + Number(ledgerDetailList.reduce((acc, ele) => acc + Number(ele.Taxable_Amount), 0))).toFixed(2))
+
+        const elements = document.querySelectorAll('.amount-countable-Calulation');
+        elements.forEach(element => { element.innerText = _cfunc.amountCommaSeparateFunc(AmountWithExpence); });
+
+
+        // dispatch(_act.BreadcrumbShowCountlabel(`Count:${grnItemList.length} currency_symbol ${sum.toFixed(2)}`));
 
     }
 
@@ -426,8 +509,8 @@ const GRN_ADD_1 = (props) => {
         {//  ------------Quntity column -----------------------------------  
             text: subPageMode === url.ACCOUNTING_GRN ? "Accounting GRN-Qty" : "GRN-Qty",
             dataField: "",
-
-            formatter: (value, row, k) => {
+            formatExtraData: ledgerDetailList,
+            formatter: (value, row, k,) => {
 
                 try {
                     document.getElementById(`Quantity${k}`).value = row.Quantity
@@ -730,6 +813,213 @@ const GRN_ADD_1 = (props) => {
         },
     ];
 
+    const DeleteHandler = (row) => {
+        const Data = ledgerDetailList.filter((item) => item.id !== row.id);
+
+        const ledgerAmount = Data.reduce((acc, ele) => acc + Number(ele.Taxable_Amount), 0)
+
+        const GRNAmount = grnItemList.reduce((total, ind) => {
+            return total + (parseFloat(ind.Amount) || 0);
+        }, 0);
+        const AmountWithExpence = Number((Number(GRNAmount) + Number(ledgerAmount)).toFixed(2))
+
+        const elements = document.querySelectorAll('.amount-countable-Calulation');
+        elements.forEach(element => { element.innerText = _cfunc.amountCommaSeparateFunc(AmountWithExpence); });
+
+
+        setledgerDetailList(Data);
+    }
+
+    const IsIGST = useMemo(() => {
+        return _cfunc.compareGSTINState(grnDetail.SupplierGSTIN, grnDetail.CustomerGSTIN);
+    }, [grnDetail.SupplierGSTIN, grnDetail.CustomerGSTIN]);
+
+    const ledgerColumn = [
+        {//------------- ItemName column ----------------------------------
+            text: "Ledger Name",
+            dataField: "Name",
+            formatter: (cellContent, row) => {
+
+                return (<div className=" mt-2">
+                    <span key={row.id}>{cellContent}</span>
+                </div>)
+            }
+        },
+
+        {  //-------------MRP column ----------------------------------
+            text: "Basic Amount",
+            dataField: "BasicAmount",
+            formatExtraData: grnItemList,
+            formatter: (value, row, k) => {
+
+                return (
+                    <span className="text-right" >
+                        <CInput
+                            type="text"
+                            className=" text-end"
+                            defaultValue={row.BasicAmount}
+                            cpattern={decimalRegx}
+                            placeholder="Enter BasicAmount"
+                            onChange={(e) => { onchangeHandler(e, row, k) }}
+                            id={`BasicAmount${row.id}`}
+                            autoComplete="off"
+                            key={row.id}
+
+                        />
+                    </span>
+                )
+            },
+
+            headerStyle: (colum, colIndex) => {
+                return { width: '433px', textAlign: 'center' };
+            }
+        },
+
+        {
+            text: "GST Type",
+            dataField: "GST_Type",
+
+            formatter: (value, row, k) => (
+                <div className="row mt-1" >
+                    <div className="text-end ">
+                        <samp key={row.id} id={`abc${row.id}`}>{value}</samp>
+                    </div>
+                </div>
+            ),
+            headerStyle: (colum, colIndex) => {
+                return { width: '100px', textAlign: 'center', text: "center" };
+            }
+        },
+
+
+        {
+            text: "GST %",
+            dataField: "GST_Percent",
+
+            formatter: (value, row, k) => (
+                <div className="row mt-1" >
+                    <div className="text-end ">
+                        <samp key={row.id} id={`abc${row.id}`}>{value}</samp>
+                    </div>
+                </div>
+            ),
+            headerStyle: (colum, colIndex) => {
+                return { width: IsIGST ? "140px" : '100px', textAlign: 'center', text: "center" };
+            }
+        },
+
+        {
+            text: "CGST Amount",
+            dataField: "CGST",
+            hidden: IsIGST,
+            formatter: (value, row, k) => (
+                <div className="row mt-1" >
+                    <div className="text-end ">
+                        <samp key={row.id} id={`CGST${row.id}`}>{row.CGST}</samp>
+                    </div>
+                </div>
+            ),
+            headerStyle: (colum, colIndex) => {
+                return {
+                    width: IsIGST ? '100px' : '136px', textAlign: 'center', text: "center"
+                };
+            }
+        },
+
+        {
+            text: "SGST Amount",
+            dataField: "SGST",
+            hidden: IsIGST,
+            formatter: (value, row, k) => (
+                <div className="row mt-1" >
+                    <div className="text-end ">
+                        <samp key={row.id} id={`SGST${row.id}`}>{row.SGST}</samp>
+                    </div>
+                </div>
+            ),
+            headerStyle: (colum, colIndex) => {
+                return { width: '100px', textAlign: 'center', text: "center" };
+            }
+        },
+
+        {
+            text: "IGST Amount",
+            dataField: "IGST",
+            hidden: !IsIGST,
+            formatter: (value, row, k) => (
+                <div className="row mt-1" >
+                    <div className="text-end ">
+                        <samp key={row.id} id={`IGST${row.id}`}>{row.IGST}</samp>
+                    </div>
+                </div>
+            ),
+            headerStyle: (colum, colIndex) => {
+                return { width: '100px', textAlign: 'center', text: "center" };
+            }
+        },
+        {//------------- ItemName column ----------------------------------
+            text: "Taxable Amount",
+            dataField: "Taxable_Amount",
+            // sort: true,
+            formatter: (value, row, k) => (
+                <div className="row mt-1" >
+                    <div className="text-end ">
+                        <samp key={row.id} id={`Taxable_Amount${row.id}`}>{row.Taxable_Amount}</samp>
+                    </div>
+                </div>
+            ),
+            headerStyle: (colum, colIndex) => {
+                return { width: '130px', textAlign: 'center', text: "center" };
+            }
+        },
+
+
+
+        {//------------- ItemName column ----------------------------------
+            text: "Action",
+            dataField: "",
+            formatExtraData: grnItemList,
+            // sort: true,
+            formatter: (value, row, k) => (
+                <div className="row mt-1" >
+                    <span className="d-flex justify-content-center align-items-center">
+                        <Button
+                            id={"deleteid"}
+                            type="button"
+
+                            className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light btn btn-secondary"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete Item'
+                            onClick={() => { DeleteHandler(row); }}
+                        >
+                            <i className="mdi mdi-delete font-size-16"></i>
+                        </Button>
+                    </span>
+                </div>
+            ),
+            headerStyle: (colum, colIndex) => {
+                return { width: '130px', textAlign: 'center', text: "center" };
+            }
+
+        },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ];
+
     const defaultSorted = [
         {
             dataField: "Name", // if dataField is not match to any column you defined, it will be ignored.
@@ -808,6 +1098,68 @@ const GRN_ADD_1 = (props) => {
         }
     };
 
+
+    const ledgerAddHandler = () => {
+        if (ledgerDetailList.length > 0) {
+            const isfound = ledgerDetailList.filter(ind => {
+
+                return ind.id === ledgerSelect.id
+            })
+            if (isfound.length > 0) {
+                customAlert({
+                    Type: 3,
+                    Message: `${isfound[0].label} Ledger Already Added...`,
+                })
+                return
+            }
+
+        }
+
+        grnItemList.sort((a, b) => a.GSTPercentage - b.GSTPercentage);
+
+        let GST_Details = [];
+        let currentGST = null;
+        let SGST = 0;
+        let CGST = 0;
+
+        grnItemList.forEach((item, index) => {
+            const gst = Number(item.GSTPercentage);
+
+            if (currentGST === null) {
+                currentGST = gst;
+            }
+
+            if (gst === currentGST) {
+                SGST += Number(item.SGST);
+                CGST += Number(item.CGST);
+            }
+
+            const isLastItem = index === grnItemList.length - 1;
+            const nextGST = !isLastItem ? Number(grnItemList[index + 1].GSTPercentage) : null;
+
+            if (gst !== nextGST || isLastItem) {
+                GST_Details.push({
+                    GSTPercentage: currentGST,
+                    SGST: Number(SGST.toFixed(2)),
+                    CGST: Number(CGST.toFixed(2))
+                });
+
+                currentGST = nextGST;
+                SGST = 0;
+                CGST = 0;
+            }
+        });
+
+        const GST_Type = _cfunc.compareGSTINState(grnDetail.SupplierGSTIN, grnDetail.CustomerGSTIN)
+        const updatedLedgerSelect = {
+            ...ledgerSelect,
+            GST_Type: GST_Type ? "IGST" : "CGST/SGST",
+        };
+
+        setledgerDetailList(item => [...item, updatedLedgerSelect])
+    }
+
+
     const saveHandeller = async (event) => {
 
         event.preventDefault();
@@ -823,7 +1175,7 @@ const GRN_ADD_1 = (props) => {
             const isvalidMsg = [];
             let sum_roundedTotalAmount = 0
             grnItemList.forEach(i => {
-                debugger
+
                 const calculated = orderCalculateFunc(i)// amount calculation function 
                 sum_roundedTotalAmount = sum_roundedTotalAmount + parseFloat(calculated.roundedTotalAmount)
                 const arr = {
@@ -857,6 +1209,7 @@ const GRN_ADD_1 = (props) => {
                     DiscountType: 1,
                     Discount: Number(i.Discount) || 0,
                     DiscountAmount: Number(calculated.disCountAmt).toFixed(2),
+
 
                 }
 
@@ -993,7 +1346,19 @@ const GRN_ADD_1 = (props) => {
                 return
             }
 
-            debugger
+            console.log("ledgerDetailList", ledgerDetailList)
+
+            const GRNExpenses = ledgerDetailList.map(item => ({
+                GRN: grnDetail.id,
+                Ledger: item.id,
+                BasicAmount: item.BasicAmount,
+                GSTPercentage: item.GST_Percent,
+                CGST: item.CGST,
+                SGST: item.SGST,
+                IGST: item.IGST,
+                Amount: item.Taxable_Amount
+            }))
+
             const jsonBody = JSON.stringify({
                 GRNDate: grnDate,
                 FullGRNNumber: grnDetail?.FullGRNNumber,  //Only for Accounting GRN Mode
@@ -1008,7 +1373,9 @@ const GRN_ADD_1 = (props) => {
                 UpdatedBy: 1,
                 GRNItems: GRNItemArray,
                 GRNReferences: GRNReferencesUpdate,
-                IsGRNType: (openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN) ? 0 : 1
+                IsGRNType: (openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN) ? 0 : 1,
+                GRNExpenses: (subPageMode === url.ACCOUNTING_GRN) ? GRNExpenses : undefined
+
             });
 
             if (pageMode === mode.edit) {
@@ -1085,7 +1452,7 @@ const GRN_ADD_1 = (props) => {
                                         />
                                     </Col>
                                 </FormGroup>
-                                <FormGroup className="mb-2 row  " >
+                                <FormGroup className="row  " >
                                     <Label className="col-md-4 p-2"
                                         style={{ width: "130px" }}>{"Invoice No"}</Label>
                                     <Col md="7">
@@ -1099,6 +1466,36 @@ const GRN_ADD_1 = (props) => {
                                         />
                                     </Col>
                                 </FormGroup>
+
+
+
+                                {(subPageMode === url.ACCOUNTING_GRN) && <FormGroup className=" row  " >
+                                    <Label className="col-md-4 p-2"
+                                        style={{ width: "130px" }}>{"Ledger"}</Label>
+                                    <Col md="7">
+                                        <Select
+                                            value={ledgerSelect}
+                                            classNamePrefix="select2-Customer"
+                                            options={ledgerOptions}
+                                            onChange={(e) => {
+                                                setLedgerSelect(e)
+                                            }}
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
+                                        />
+                                    </Col>
+
+                                    <Col className="mt-1">
+                                        {pageMode !== mode.view &&
+                                            <C_Button
+                                                className="btn btn-outline-primary"
+                                                onClick={ledgerAddHandler}
+                                            >Add
+                                            </C_Button>
+                                        }
+                                    </Col>
+                                </FormGroup>}
 
 
                                 {(subPageMode === url.ACCOUNTING_GRN) ? null : <FormGroup className="mb-2 row  " >
@@ -1209,6 +1606,30 @@ const GRN_ADD_1 = (props) => {
                             </React.Fragment>
                         )}
                     </ToolkitProvider>
+
+                    {(subPageMode === url.ACCOUNTING_GRN && (ledgerDetailList.length > 0)) && <ToolkitProvider
+                        keyField="id"
+                        data={ledgerDetailList}
+                        columns={ledgerColumn}
+                        search
+                    >
+                        {toolkitProps => (
+                            <React.Fragment>
+                                <BootstrapTable
+                                    keyField={"id"}
+                                    bordered={true}
+                                    striped={false}
+                                    noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
+                                    classes={"table align-middle table-nowrap table-hover"}
+                                    headerWrapperClasses={"thead-light"}
+                                    {...toolkitProps.baseProps}
+                                />
+                                {globalTableSearchProps(toolkitProps.searchProps)}
+
+                            </React.Fragment>
+                        )
+                        }
+                    </ToolkitProvider>}
 
                     {
                         (grnItemList.length > 0) &&

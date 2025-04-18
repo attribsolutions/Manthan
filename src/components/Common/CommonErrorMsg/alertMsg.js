@@ -15,6 +15,11 @@ const IsRequired = 'Is Required.'
 const changeCustomerName = "Are you sure you want to change the customer ?"
 const deleteOrNot = "Are you sure you want to delete this "
 
+const selectSameCustomer = "Multiple customers are not allowed"
+
+
+
+
 // Loading Sheet Master
 const routeNameIsRequired = "RouteName Is Required"
 
@@ -294,7 +299,8 @@ export const alertMessages = {
     atLeastOneCheckboxCheck,
     RateIsRequired,
     AllItemExist,
-    AdvanceAmount
+    AdvanceAmount,
+    selectSameCustomer
 };
 
 

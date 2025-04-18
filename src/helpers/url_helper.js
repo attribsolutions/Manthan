@@ -362,6 +362,10 @@ export const ACCOUNTING_GRN_DELETE_API = "/DeleteAccountingGRN"
 export const SCHEME_LIST = "/SchemeList"
 
 
+export const LEDGER = "/TallyLedger"
+
+
+
 
 
 

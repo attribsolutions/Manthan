@@ -415,11 +415,11 @@ const CommonPurchaseList = (props) => {
 
 
   const ExtraSelectColumn = () => {  // ======================== for List Page Action Button ================================
-
-    if (loginUserDetails().RoleName === "Division") {
+    debugger
+    if ((selectCheckParams.isExtraSelectShow)) {
 
       return {
-        dataField: 'printAllSelect',
+        dataField: 'ExtraSelect',
         formatExtraData: tableList,
         text: (
           <div>
@@ -428,14 +428,19 @@ const CommonPurchaseList = (props) => {
 
               onChange={(e) => selectCheckParams.headerselecthandler({ event: e, tableList: tableList })}
             />
-            &nbsp;&nbsp; Print All
+            &nbsp;&nbsp; {selectCheckParams.ExtraSelectLabel}
           </div>
         ),
         formatter: (cell, row, rowindex, formatExtraData) => {
           return (
             <Input
               type="checkbox"
-              defaultChecked={row.printAllSelect}
+              defaultChecked={row.ExtraSelect}
+              disabled={row.forceExtraSelectDissabled}
+              style={row.forceExtraSelectDissabled ? {
+                opacity: 0.5,
+                backgroundColor: "#ababab82",
+              } : {}}
               onChange={(e) => {
                 selectCheckParams.selecthandler({ event: e, rowData: row, tableList: formatExtraData })
               }}
@@ -543,20 +548,20 @@ const CommonPurchaseList = (props) => {
                 </C_Button>
               </div>
 
-              {loginUserDetails().RoleName === "Division" && <div>
+              {(selectCheckParams.isExtraSelectShow) && <div>
 
 
                 <C_Button
                   forceDisabled={listBtnLoading}
-                  loading={selectCheckParams.selectPrintAllBtnLoading}
+                  loading={selectCheckParams.ExtraBtnLoading}
 
                   // style={{ marginTop: "-10px", padding: "3px", paddingInline: "5px" }}
                   type="button"
                   spinnerColor="white"
                   className="btn btn-primary"
-                  onClick={() => { selectCheckParams.selectPrintAllBtnHandler(tableList) }}
+                  onClick={() => { selectCheckParams.ExtraSelectBtnHandler(tableList) }}
                 >
-                  Print All
+                  {selectCheckParams.ExtraSelectLabel}
                 </C_Button>
 
 

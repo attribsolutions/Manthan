@@ -295,7 +295,8 @@ function* DeleteInvoiceGenFunc({ config }) {
 }
 
 // GO-Botton SO-invoice Add Page API
-function invoice_GoButton_dataConversion_Func(response, customer = '') {
+export function invoice_GoButton_dataConversion_Func(response, customer = '') {
+  debugger
   const isTrayEnterQuantity = strToBool(loginSystemSetting().IsTrayEnterQuantity)
   const isSweetAndSnacksCompany = IsSweetAndSnacksCompany()
 
@@ -480,7 +481,7 @@ function invoice_GoButton_dataConversion_Func(response, customer = '') {
 
 function* gobutton_invoiceAdd_genFunc({ config }) {
   const { subPageMode, path, pageMode, customer, errorMsg, OrderID } = config;
-
+  debugger
   try {
 
     let response;
