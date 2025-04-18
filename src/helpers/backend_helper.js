@@ -545,9 +545,9 @@ export const Accounting_GRN_update_API = ({ jsonBody, updateId }) => put(`${url.
 export const GRN_delete_API = ({ deleteId }) => del(`${url.GRN}/${deleteId}`)//Delete Order
 
 
-// export const AccountingGRN_delete_API = ({ deleteId }) => put(`${url.ACCOUNTING_GRN_DELETE_API}/${deleteId}`)//Delete Order
+export const AccountingGRN_delete_API = ({ deleteId }) => put(`${url.ACCOUNTING_GRN_DELETE_API}/${deleteId}`)//Delete Order
 
-export const AccountingGRN_delete_API = (jsonBody) => post(url.ACCOUNTING_GRN_DELETE_API, jsonBody)//get api
+// export const AccountingGRN_delete_API = (jsonBody) => post(url.ACCOUNTING_GRN_DELETE_API, jsonBody)//get api
 
 
 
