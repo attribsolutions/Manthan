@@ -123,7 +123,7 @@ function* InvoiceListGenFunc({ config }) {
   try {
     const { subPageMode } = config
     let response;
-    debugger
+
     if ((subPageMode === url.INVOICE_LIST_1) || (subPageMode === url.LOADING_SHEET) || (subPageMode === url.POS_INVOICE_LIST)) {
       response = yield call(Invoice_1_Get_Filter_API, config);
     } else if (subPageMode === url.IB_INVOICE_LIST || subPageMode === url.IB_INVOICE_FOR_GRN || subPageMode === url.IB_INWARD_STP) {
@@ -145,7 +145,7 @@ function* InvoiceListGenFunc({ config }) {
       }
       i["isSendToScm"] = isSendToScm
       i["PartyTypeID"] = PartyTypeID
-      debugger
+
       if (isSweetAndSnacksCompany && !(subPageMode === url.IB_INVOICE_FOR_GRN)) {
         if (i.IsSendToFTPSAP) {
           i["isSend"] = false
@@ -296,7 +296,7 @@ function* DeleteInvoiceGenFunc({ config }) {
 
 // GO-Botton SO-invoice Add Page API
 export function invoice_GoButton_dataConversion_Func(response, customer = '') {
-  debugger
+
   const isTrayEnterQuantity = strToBool(loginSystemSetting().IsTrayEnterQuantity)
   const isSweetAndSnacksCompany = IsSweetAndSnacksCompany()
 
@@ -309,7 +309,7 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
       const isUnitIDPresent = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
       const isMCunitID = index1.UnitDetails.find(findEle => findEle.DeletedMCUnitsUnitID === index1.DeletedMCUnitsUnitID);
       const defaultunit = isUnitIDPresent !== undefined ? isUnitIDPresent : isMCunitID;
-      debugger
+
       const { IsTCSParty, ISCustomerPAN } = customer;
 
       index1.Quantity = roundToDecimalPlaces(index1.Quantity, 3);  //initialize // Round to 3 decimal places
@@ -334,7 +334,7 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
       index1.IsTCSParty = IsTCSParty  //initialize  //is tcsParty flag for
       index1.IsCustomerPAN = ISCustomerPAN //initialize
 
-      debugger
+
       index1["TrayQuantity"] = index1.OrderQty
 
       let totalAmount = 0;
@@ -392,7 +392,7 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
       const isUnitIDPresent = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
       const isMCunitID = index1.UnitDetails.find(findEle => findEle.DeletedMCUnitsUnitID === index1.DeletedMCUnitsUnitID);
       const defaultunit = isUnitIDPresent !== undefined ? isUnitIDPresent : isMCunitID;
-      debugger
+
       const { IsTCSParty, ISCustomerPAN } = customer;
 
       index1.Quantity = roundToDecimalPlaces(index1.Quantity, 3);  //initialize // Round to 3 decimal places
@@ -481,7 +481,7 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
 
 function* gobutton_invoiceAdd_genFunc({ config }) {
   const { subPageMode, path, pageMode, customer, errorMsg, OrderID } = config;
-  debugger
+
   try {
 
     let response;
@@ -526,16 +526,27 @@ function* gobutton_invoiceAdd_genFunc({ config }) {
       response = yield call(Invoice_1_GoButton_API, config); // invoice Edit API
     }
 
+    const { AdvanceAmount, CustomerGSTIN, CustomerPAN, IsTCSParty, OrderIDs, CustomerName, CustomerID } = response?.Data[0];
+    const cunstomerDetail = {
+      OrderIDs: OrderIDs,
+      label: CustomerName,
+      IsTCSParty: IsTCSParty,
+      CustomerPAN: CustomerPAN,
+      CustomerGSTIN: CustomerGSTIN,
+      value: CustomerID,
+      AdvanceAmount: AdvanceAmount,
+    }
+    debugger
     response["path"] = path
     response["page_Mode"] = pageMode
-    response["customer"] = customer
+    response["customer"] = cunstomerDetail
     response.Data = response.Data[0];
     let updatedResp
     if (subPageMode !== url.FRANCHAISE_INVOICE) {
-      updatedResp = invoice_GoButton_dataConversion_Func(response, customer)
+      updatedResp = invoice_GoButton_dataConversion_Func(response, cunstomerDetail)
     }
     else {
-      updatedResp = { ...response, ...customer }
+      updatedResp = { ...response, ...cunstomerDetail }
     }
 
     yield put(GoButtonForinvoiceAddSuccess(updatedResp));

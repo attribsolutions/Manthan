@@ -192,25 +192,25 @@ const RoleMaster = (props) => {
         customAlert({
           Type: 1,
           Message: postMsg.Message,
-      })
+        })
       }
       else {
         let isPermission = await customAlert({
           Type: 1,
           Status: true,
           Message: postMsg.Message,
-      })
-      if (isPermission) {
+        })
+        if (isPermission) {
           history.push({ pathname: url.ROLE_lIST })
-      }
+        }
       }
     }
     else if ((postMsg.Status === true)) {
       dispatch(PostSuccess({ Status: false }))
       customAlert({
         Type: 4,
-         Message: JSON.stringify(postMsg.Message),
-    })
+        Message: JSON.stringify(postMsg.Message),
+      })
     }
   }, [postMsg.Status])
 
@@ -223,9 +223,9 @@ const RoleMaster = (props) => {
     } else if (updateMsg.Status === true && !modalCss) {
       dispatch(userUpdateActionSuccess({ Status: false }));
       customAlert({
-                Type: 3,
-                Message: JSON.stringify(updateMsg.Message),
-            })
+        Type: 3,
+        Message: JSON.stringify(updateMsg.Message),
+      })
     }
   }, [updateMsg, modalCss]);
 
@@ -260,7 +260,8 @@ const RoleMaster = (props) => {
           CreatedBy: loginUserID(),
           CreatedOn: "2022-05-20T11:22:55.711483Z",
           UpdatedBy: loginUserID(),
-          UpdatedOn: "2022-05-20T11:22:55.711483Z"
+          UpdatedOn: "2022-05-20T11:22:55.711483Z",
+          IdentifyKey: null,
         });
 
         if (pageMode === mode.edit) {
