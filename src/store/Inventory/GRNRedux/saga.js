@@ -62,7 +62,9 @@ function* DeleteGRNGenFunc({ config }) {
     }
     let response = {}
     if (config.subPageMode === url.ACCOUNTING_GRN_LIST) {
-      response = yield call(AccountingGRN_delete_API, config);
+      const jsonBody = JSON.stringify({ GRNid: config.deleteId })
+
+      response = yield call(AccountingGRN_delete_API, jsonBody);
     } else {
       response = yield call(GRN_delete_API, config);
     }
