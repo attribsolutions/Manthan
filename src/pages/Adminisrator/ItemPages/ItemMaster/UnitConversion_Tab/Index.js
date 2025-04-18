@@ -10,7 +10,7 @@ import { CInput, decimalRegx_3dit } from '../../../../../CustomValidateForm';
 export default function UnitConverstion(props) {
     const { pageMode, formValue, TableData = [], BaseUnit = [] } = props.state;
     const { settable, setFormValue } = props;
-    
+
     // Map BaseUnit to dropdown options
     const BaseUnit_DropdownOptions = BaseUnit.map((data) => ({
         value: data.id,
@@ -77,7 +77,7 @@ export default function UnitConverstion(props) {
 
     // Handle changes in the table rows
     function baseUnit2_onChange(event, type = '', Id) {
-        
+
         settable((prevTableData) =>
             prevTableData.map((row) => {
 
@@ -89,16 +89,23 @@ export default function UnitConverstion(props) {
                 }
                 if (row.id === Id) {
                     row[type] = event;
+                    debugger
+                    const element = document.getElementById(`ShowUnit-${row.id}`)
+                    if (element) {
+                        element.checked = event;
+                    }
+                    row.IsShowUnit = event;
                 }
                 return row;
             })
         );
+
     }
 
 
 
     function ShowUnit_onChange(event, type = '', Id) {
-        
+
         settable((prevTableData) =>
             prevTableData.map((row) => {
                 if ((!row.IsShowUnit) && (pageMode !== mode.edit)) {
@@ -106,6 +113,7 @@ export default function UnitConverstion(props) {
                 }
                 if (row.Unit.value === Id) {
                     row.IsShowUnit = event;
+
                 }
 
                 return row;
@@ -124,6 +132,7 @@ export default function UnitConverstion(props) {
 
     // Generate table body rows
     const tbodyfunction = () => {
+
         return TableData.map((index, key) => {
 
             if (formValue.values.BaseUnitName.value === index.Unit.value) {
@@ -187,6 +196,7 @@ export default function UnitConverstion(props) {
                         <Input
                             type="checkbox"
                             key={`ShowUnit-${index.id}`}
+                            id={`ShowUnit-${index.id}`}
                             disabled={formValue.values.BaseUnitName.value === index.Unit.value}
                             // defaultChecked={formValue.values.BaseUnitName.value === index.Unit.value}
                             defaultChecked={index.IsShowUnit}
