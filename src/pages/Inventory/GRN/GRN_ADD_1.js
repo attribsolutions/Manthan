@@ -1356,6 +1356,7 @@ const GRN_ADD_1 = (props) => {
                 CGST: item.CGST,
                 SGST: item.SGST,
                 IGST: item.IGST,
+
                 Amount: item.Taxable_Amount
             }))
 
@@ -1374,8 +1375,8 @@ const GRN_ADD_1 = (props) => {
                 GRNItems: GRNItemArray,
                 GRNReferences: GRNReferencesUpdate,
                 IsGRNType: (openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN) ? 0 : 1,
-                GRNExpenses: (subPageMode === url.ACCOUNTING_GRN) ? GRNExpenses : undefined
-
+                GRNExpenses: (subPageMode === url.ACCOUNTING_GRN) ? GRNExpenses : undefined,
+                TotalExpense: (subPageMode === url.ACCOUNTING_GRN) ? ledgerDetailList.reduce((acc, ele) => acc + Number(ele.Taxable_Amount), 0) : undefined,
             });
 
             if (pageMode === mode.edit) {
