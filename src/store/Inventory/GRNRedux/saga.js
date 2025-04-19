@@ -125,9 +125,15 @@ function* GRNListfilterGerFunc({ config }) {          // Grn_List filter  genrat
   try {
     const response = yield call(GRN_get_API, config);
     let filteredData = response.Data;
-    debugger
     if (config.subPageMode === url.ACCOUNTING_GRN_LIST) {
+      debugger
       filteredData = response.Data.filter(i => i.IsSave === 0);
+
+      filteredData = filteredData.map((i) => {
+        i.TotalExpenses = (i.TotalExpenses === null) ? 0 : i.TotalExpenses;
+        i["FinalTotal"] = (Number(i.GrandTotal) + Number(i.TotalExpenses)).toFixed(2);
+        return i;
+      });
     } if (config.subPageMode === url.GRN_LIST_3) {
       filteredData = response.Data;
     } if (config.subPageMode === url.GRN_FOR_ACCOUNTING_GRN) {

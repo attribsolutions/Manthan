@@ -27,6 +27,7 @@ import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable"
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { goButtonForRate_Master, saveRateMaster } from "../../../store/Administrator/RateMasterRedux/action";
 import { Get_ledger, Invoice_No_Message } from "../../../helpers/backend_helper";
+import { ORDER_LIST_1 } from "../../../routes/route_url";
 
 
 
@@ -239,10 +240,22 @@ const GRN_ADD_1 = (props) => {
     }, [])
 
 
-    const onchangeHandler = (e, row, k) => {
 
-        let BasicAmount = _cfunc.getFixedNumber(e.target.value, 2)
-        const GST_Amount = (BasicAmount * Number(row.GST_Percent)) / 100;
+    const onchangeHandler = (e, row, k, Type) => {
+        debugger
+        let BasicAmount = 0
+        let GST_Percentage = 0
+        if (Type === "Amount") {
+            BasicAmount = _cfunc.getFixedNumber(e.target.value, 2)
+            GST_Percentage = row.GST_Percent
+        } else if (Type === "GST") {
+            BasicAmount = row.BasicAmount
+            GST_Percentage = _cfunc.getFixedNumber(e.target.value, 2)
+        }
+
+
+
+        const GST_Amount = (BasicAmount * Number(GST_Percentage)) / 100;
         const Taxable_Amount = GST_Amount + BasicAmount;
         row["BasicAmount"] = BasicAmount
         row["GST_Amount"] = GST_Amount;
@@ -331,7 +344,7 @@ const GRN_ADD_1 = (props) => {
             grnDetails["DemandDate"] = _cfunc.date_ymd_func(grnDetails.DemandDate)
 
 
-
+            debugger
             setGrnDetail(grnDetails)
             setInvoiceNo(grnDetails.GRNReferences[0]?.Invoice_NO)
 
@@ -422,7 +435,7 @@ const GRN_ADD_1 = (props) => {
             grnDetails["DemandDate"] = _cfunc.date_ymd_func(grnDetails.DemandDate)
             grnDetails["SupplierGSTIN"] = OrderDetail?.Supplier?.GSTIN
             grnDetails["CustomerGSTIN"] = OrderDetail?.Customer?.GSTIN
-
+            debugger
             setGrnDetail(grnDetails)
             setInvoiceNo(grnDetails?.InvoiceNumber)
 
@@ -934,7 +947,7 @@ const GRN_ADD_1 = (props) => {
                             defaultValue={row.BasicAmount}
                             cpattern={decimalRegx}
                             placeholder="Enter BasicAmount"
-                            onChange={(e) => { onchangeHandler(e, row, k) }}
+                            onChange={(e) => { onchangeHandler(e, row, k, "Amount") }}
                             id={`BasicAmount${row.id}`}
                             autoComplete="off"
                             key={row.id}
@@ -972,9 +985,32 @@ const GRN_ADD_1 = (props) => {
 
             formatter: (value, row, k) => (
                 <div className="row mt-1" >
-                    <div className="text-end ">
+                    {/* <div className="text-end ">
                         <samp key={row.id} id={`abc${row.id}`}>{value}</samp>
-                    </div>
+                    </div> */}
+
+                    <Input type="text"
+                        id={`GST_Percent${row.id}`}
+                        defaultValue={row.Quantity}
+                        className="text-end"
+                        placeholder="Enter GST %"
+                        autoComplete="off"
+                        key={row.id}
+                        disabled={((pageMode === mode.view) || openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN) ? true : false}
+                        onChange={(e) => {
+
+                            let val = e.target.value
+                            let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                            if ((isnum) || (val === '')) {
+                                row["GST_Percent"] = val;
+                                onchangeHandler(e, row, k, "GST")
+                            } else {
+                                document.getElementById(`GST_Percent${row.id}`).value = row.GST_Percent
+                            }
+                        }}
+                    />
+
+
                 </div>
             ),
             headerStyle: (colum, colIndex) => {
@@ -1522,7 +1558,7 @@ const GRN_ADD_1 = (props) => {
                                     <Col md="7">
                                         <C_DatePicker
                                             value={openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN ? (grnDetail.InvoiceDate) : (grnDetail.DemandDate)}
-                                            disabled={openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN ? true : false}
+                                            disabled={(openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN || openPOdata[0]?.GRN_From === ORDER_LIST_1) ? false : true}
                                         />
                                     </Col>
                                 </FormGroup>
