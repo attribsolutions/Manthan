@@ -352,19 +352,44 @@ const GRN_ADD_1 = (props) => {
 
             const Data = history.location.state
             let sum = 0
-            Data.GRNItems.forEach((ele, k) => {
-                const calculate = orderCalculateFunc(ele)
+            Data.GRNItems.forEach((index, k) => {
+                index["GSToption"] = index.GSTDropdown?.map(i => ({ value: i.GST, label: i.GSTPercentage, }));
+                if (index.GST === null) {
+                    const deFaultValue = index.GSTDropdown?.filter(i => i.GSTPercentage === index.GSTPercentage);
+                    if (deFaultValue.length === 0) {
+                        const highestGSTObject = index.GSTDropdown?.reduce((maxObj, current) =>
+                            current.GST > maxObj.GST ? current : maxObj, index.GSTDropdown[0]);
+                        index["GSTPercentage"] = highestGSTObject.GSTPercentage
+                        index["GST"] = highestGSTObject.GST;
+                    }
+                    else {
+                        index["GSTPercentage"] = deFaultValue[0]?.GSTPercentage
+                        index["GST"] = deFaultValue[0]?.GST;
+                    }
+
+                } else {
+                    if (index.GSTDropdown) {
+                        const deFaultValue = index.GSTDropdown?.filter(i => i.GST === index.GST);
+                        index["GSTPercentage"] = (deFaultValue === undefined) ? "" : deFaultValue[0]?.GSTPercentage;
+                        index["GST"] = (deFaultValue === undefined) ? "" : deFaultValue[0]?.GST;
+                    } else {
+                        index["GSTPercentage"] = index.GSTPercentage
+                    }
+                }
+
+
+                const calculate = orderCalculateFunc(index)
                 sum = sum + parseFloat(calculate.roundedTotalAmount)
-                ele.id = k + 1;
-                ele["poQuantity"] = ele.Quantity
-                ele["Quantity"] = ""
-                ele["poAmount"] = ele.Amount
-                ele["Amount"] = calculate.roundedTotalAmount
-                ele["BatchDate"] = currentDate_ymd
-                ele["BatchCode"] = ele.BatchCode
-                ele["delbtn"] = false
-                ele["Invoice"] = null
-                ele["ItemExpiryDate"] = ele.ItemExpiryDate
+                index.id = k + 1;
+                index["poQuantity"] = index.Quantity
+                index["Quantity"] = index.Quantity
+                index["poAmount"] = index.Amount
+                index["Amount"] = calculate.roundedTotalAmount
+                index["BatchDate"] = currentDate_ymd
+                index["BatchCode"] = index.BatchCode
+                index["delbtn"] = false
+                index["Invoice"] = null
+                index["ItemExpiryDate"] = index.ItemExpiryDate
             });
             setOrderAmount(sum.toFixed(2))
 
@@ -444,6 +469,27 @@ const GRN_ADD_1 = (props) => {
 
     }, [])
 
+
+    const GSTChangeHandler = (event, row, k) => {
+        debugger
+        const calculate = orderCalculateFunc(row)// change
+        row["Amount"] = calculate.roundedTotalAmount
+        try {
+            document.getElementById(`abc${row.id}`).innerText = calculate.roundedTotalAmount
+            const ledgerAmount = ledgerDetailList.reduce((acc, ele) => acc + Number(ele.Taxable_Amount), 0)
+
+            const GRNAmount = grnItemList.reduce((total, ind) => {
+                return total + (parseFloat(ind.Amount) || 0);
+            }, 0);
+            const AmountWithExpence = Number((Number(GRNAmount) + Number(ledgerAmount)).toFixed(2))
+
+            const elements = document.querySelectorAll('.amount-countable-Calulation');
+            elements.forEach(element => { element.innerText = _cfunc.amountCommaSeparateFunc(AmountWithExpence); });
+        }
+        catch { alert("`abc${row.id}`") }
+    }
+
+
     function val_onChange(val, row, type,) {
 
         if (type === "qty") {
@@ -466,8 +512,7 @@ const GRN_ADD_1 = (props) => {
         });
 
         // setOrderAmount(sum.toFixed(2))
-        console.log("sum", ledgerDetailList)
-        debugger
+
         const AmountWithExpence = Number((Number(sum) + Number(ledgerDetailList.reduce((acc, ele) => acc + Number(ele.Taxable_Amount), 0))).toFixed(2))
 
         const elements = document.querySelectorAll('.amount-countable-Calulation');
@@ -551,6 +596,35 @@ const GRN_ADD_1 = (props) => {
                 return { width: '150px', textAlign: 'center' };
             }
         },
+        {  //-------------GST column ----------------------------------
+            text: "GST",
+            dataField: "GSTDropdown",
+            align: () => ('right'),
+            style: () => ({ minWidth: "100px" }),
+            formatExtraData: ledgerDetailList,
+            formatter: (cellContent, row, key) => (
+                <Select
+                    id={`GST${key}`}
+                    name="GST"
+                    defaultValue={{ value: row.GST, label: row.GSTPercentage, }}
+                    isSearchable={true}
+                    className="react-dropdown"
+                    classNamePrefix="dropdown"
+                    options={row.GSToption}
+                    onChange={(event) => {
+                        row.GSTPercentage = event.label;
+                        row.GST = event.value;
+                        GSTChangeHandler(event, row, key)
+
+                    }}
+                />
+            ),
+
+            headerStyle: (colum, colIndex) => {
+                return { width: '140px', textAlign: 'center' };
+            }
+        },
+
 
         {  //------------- Unit column ----------------------------------
             text: "Unit",
@@ -590,7 +664,7 @@ const GRN_ADD_1 = (props) => {
                 )
             },
             headerStyle: (colum, colIndex) => {
-                return { width: '170px', textAlign: 'center' };
+                return { width: '130px', textAlign: 'center' };
             }
         },
 
@@ -668,7 +742,7 @@ const GRN_ADD_1 = (props) => {
             },
 
             headerStyle: (colum, colIndex) => {
-                return { width: '100px', textAlign: 'center' };
+                return { width: '170px', textAlign: 'center' };
             }
         },
 
@@ -1159,7 +1233,6 @@ const GRN_ADD_1 = (props) => {
         setledgerDetailList(item => [...item, updatedLedgerSelect])
     }
 
-
     const saveHandeller = async (event) => {
 
         event.preventDefault();
@@ -1449,7 +1522,7 @@ const GRN_ADD_1 = (props) => {
                                     <Col md="7">
                                         <C_DatePicker
                                             value={openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN ? (grnDetail.InvoiceDate) : (grnDetail.DemandDate)}
-                                            disabled={true}
+                                            disabled={openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN ? true : false}
                                         />
                                     </Col>
                                 </FormGroup>
