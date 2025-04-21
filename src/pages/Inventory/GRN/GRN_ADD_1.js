@@ -234,6 +234,7 @@ const GRN_ADD_1 = (props) => {
                 BasicAmount: 0,
                 GST_Amount: 0,
                 Taxable_Amount: 0,
+                GST_Percent: 0,
                 CGST: 0,
                 SGST: 0,
                 IGST: 0,
@@ -993,7 +994,7 @@ const GRN_ADD_1 = (props) => {
 
                     <Input type="text"
                         id={`GST_Percent${row.id}`}
-                        defaultValue={row.Quantity}
+                        defaultValue={row.GST_Percent}
                         className="text-end"
                         placeholder="Enter GST %"
                         autoComplete="off"
