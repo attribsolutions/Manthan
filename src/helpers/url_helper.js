@@ -355,7 +355,7 @@ export const GRN = "/GRN"
 export const ACCOUNTING_GRN_UPDATE = "/GRNUpdate"
 
 
-export const ACCOUNTING_GRN_DELETE_API = "/DeleteAccountingGRN"
+export const ACCOUNTING_GRN_DELETE_API = "/AccountGRN_del"
 
 
 
