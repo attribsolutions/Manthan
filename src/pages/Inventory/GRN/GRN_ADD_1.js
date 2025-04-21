@@ -99,6 +99,8 @@ const GRN_ADD_1 = (props) => {
     const [openPOdrp, setOpenPOdrp] = useState(false);
     const [openPOdata, setOpenPOdata] = useState([]);
 
+    const [roundoffAmount, setRoundoffAmount] = useState(0);
+    debugger
     const [invoiceNo, setInvoiceNo] = useState('');
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [EditData, setEditData] = useState({});
@@ -242,7 +244,7 @@ const GRN_ADD_1 = (props) => {
 
 
     const onchangeHandler = (e, row, k, Type) => {
-        debugger
+
         let BasicAmount = 0
         let GST_Percentage = 0
         if (Type === "Amount") {
@@ -344,7 +346,7 @@ const GRN_ADD_1 = (props) => {
             grnDetails["DemandDate"] = _cfunc.date_ymd_func(grnDetails.DemandDate)
 
 
-            debugger
+
             setGrnDetail(grnDetails)
             setInvoiceNo(grnDetails.GRNReferences[0]?.Invoice_NO)
 
@@ -435,7 +437,7 @@ const GRN_ADD_1 = (props) => {
             grnDetails["DemandDate"] = _cfunc.date_ymd_func(grnDetails.DemandDate)
             grnDetails["SupplierGSTIN"] = OrderDetail?.Supplier?.GSTIN
             grnDetails["CustomerGSTIN"] = OrderDetail?.Customer?.GSTIN
-            debugger
+
             setGrnDetail(grnDetails)
             setInvoiceNo(grnDetails?.InvoiceNumber)
 
@@ -484,7 +486,7 @@ const GRN_ADD_1 = (props) => {
 
 
     const GSTChangeHandler = (event, row, k) => {
-        debugger
+
         const calculate = orderCalculateFunc(row)// change
         row["Amount"] = calculate.roundedTotalAmount
         try {
@@ -1470,6 +1472,7 @@ const GRN_ADD_1 = (props) => {
             }))
 
             const jsonBody = JSON.stringify({
+                RoundOffAmount: roundoffAmount,
                 GRNDate: grnDate,
                 FullGRNNumber: grnDetail?.FullGRNNumber,  //Only for Accounting GRN Mode
                 IsSave: (subPageMode === url.ACCOUNTING_GRN) ? 0 : 1,
@@ -1510,7 +1513,7 @@ const GRN_ADD_1 = (props) => {
 
                     <div className="px-2 c_card_filter text-black mb-1" >
                         <Row>
-                            <Col sm={5}>
+                            <Col sm={4}>
 
                                 <FormGroup className=" row mt-2 " >
                                     <Label className="col-sm-4 p-2"
@@ -1551,14 +1554,14 @@ const GRN_ADD_1 = (props) => {
                                     </Col>
                                 </FormGroup>
                             </Col>
-                            <Col sm={5}>
+                            <Col sm={4}>
                                 <FormGroup className=" row mt-2" >
                                     <Label className="col-md-4 p-2"
                                         style={{ width: "130px" }}>{"Invoice Date"}</Label>
                                     <Col md="7">
                                         <C_DatePicker
                                             value={openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN ? (grnDetail.InvoiceDate) : (grnDetail.DemandDate)}
-                                            disabled={(openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN || openPOdata[0]?.GRN_From === ORDER_LIST_1) ? false : true}
+                                            disabled={(openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN || openPOdata[0]?.GRN_From === url.ORDER_LIST_1 || grnDetail.isAccountingGRN) ? false : true}
                                         />
                                     </Col>
                                 </FormGroup>
@@ -1680,6 +1683,49 @@ const GRN_ADD_1 = (props) => {
                                 </FormGroup>}
 
                             </Col>
+
+
+                            {subPageMode === url.ACCOUNTING_GRN && <Col sm={4}>
+
+                                <FormGroup className="row mt-2 " >
+                                    <Label className="col-md-4 p-2"
+                                        style={{ width: "130px" }}>{"Round off Total"}</Label>
+                                    <Col md="7">
+                                        <Input
+                                            type="text"
+                                            style={{ backgroundColor: "white" }}
+                                            value={roundoffAmount}
+                                            placeholder={`Enter Roundoff Amount`}
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                if (value === "" || /^-?\d*\.?\d*$/.test(value)) {
+                                                    setRoundoffAmount(value);
+                                                }
+                                            }}
+                                        />
+                                    </Col>
+                                </FormGroup>
+
+                            </Col>}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         </Row>
                     </div>
 
