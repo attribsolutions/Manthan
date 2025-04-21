@@ -1489,6 +1489,7 @@ const GRN_ADD_1 = (props) => {
                 IsGRNType: (openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN) ? 0 : 1,
                 GRNExpenses: (subPageMode === url.ACCOUNTING_GRN) ? GRNExpenses : undefined,
                 TotalExpense: (subPageMode === url.ACCOUNTING_GRN) ? ledgerDetailList.reduce((acc, ele) => acc + Number(ele.Taxable_Amount), 0) : undefined,
+                AccountingGRNStatus: 0,
             });
 
             if (pageMode === mode.edit) {
@@ -1504,6 +1505,14 @@ const GRN_ADD_1 = (props) => {
 
         } catch (error) { returnFunc() }
     }
+
+    const amountWithExpence = useMemo(() => {
+        const ledgerAmount = ledgerDetailList.reduce((acc, ele) => acc + Number(ele.Taxable_Amount), 0);
+        const GRNAmount = grnItemList.reduce((total, ind) => {
+            return total + (parseFloat(ind.Amount) || 0);
+        }, 0);
+        return Number((GRNAmount + ledgerAmount).toFixed(2));
+    }, [ledgerDetailList, grnItemList]); // dependencies
 
     if (!(userPageAccessState === "")) {
         return (
@@ -1694,14 +1703,28 @@ const GRN_ADD_1 = (props) => {
                                         <Input
                                             type="text"
                                             style={{ backgroundColor: "white" }}
-                                            value={roundoffAmount}
+                                            defaultValue={roundoffAmount}
                                             placeholder={`Enter Roundoff Amount`}
                                             onChange={(e) => {
                                                 const value = e.target.value;
+
                                                 if (value === "" || /^-?\d*\.?\d*$/.test(value)) {
-                                                    setRoundoffAmount(value);
+                                                    // Convert user input to number, default to 0 if blank
+                                                    const inputAdjustment = Number(value) || 0;
+
+                                                    // Add/subtract from amountWithExpence
+                                                    const Amount = Number(amountWithExpence) + (inputAdjustment);
+
+                                                    // Update DOM elements
+                                                    const elements = document.querySelectorAll('.amount-countable-Calulation');
+                                                    elements.forEach(element => {
+                                                        element.innerText = _cfunc.amountCommaSeparateFunc(Amount);
+                                                    });
+
+                                                    setRoundoffAmount(inputAdjustment);
                                                 }
                                             }}
+
                                         />
                                     </Col>
                                 </FormGroup>
