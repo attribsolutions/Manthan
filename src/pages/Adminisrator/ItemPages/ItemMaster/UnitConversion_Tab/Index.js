@@ -89,12 +89,13 @@ export default function UnitConverstion(props) {
                 }
                 if (row.id === Id) {
                     row[type] = event;
-                    debugger
-                    const element = document.getElementById(`ShowUnit-${row.id}`)
-                    if (element) {
-                        element.checked = event;
+                    if (type === 'POUnit' || type === 'SOUnit') {
+                        const element = document.getElementById(`ShowUnit-${row.id}`)
+                        if (element) {
+                            element.checked = event;
+                        }
+                        row.IsShowUnit = event;
                     }
-                    row.IsShowUnit = event;
                 }
                 return row;
             })
