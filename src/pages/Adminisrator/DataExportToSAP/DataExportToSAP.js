@@ -14,6 +14,7 @@ import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/Part
 import { DataExportTo_SAP_Action, Fetch_UploadFile_Action } from "../../../store/Administrator/ExportToSAPRedux/action";
 import { allLabelWithZero } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 ;
 
 const DataExportToSAP = (props) => {
@@ -93,8 +94,9 @@ const DataExportToSAP = (props) => {
 
 
     useEffect(() => {
-
+        debugger
         if (ExportToSAPData?.StatusCode === 200 && ExportToSAPData?.Status === true) {
+            dispatch(Fetch_UploadFile_Action())
             customAlert({
                 Type: 1,
                 Message: ExportToSAPData.Message,
@@ -111,10 +113,14 @@ const DataExportToSAP = (props) => {
 
     const [tableColumns] = DynamicColumnHook({ pageField, })
 
-    debugger
+
 
     function UploadHandler(e) {
 
+        if (!PartyDropdown) {
+            customAlert({ Type: 3, Message: alertMessages.selectPartyName });
+            return
+        }
         const jsonBody = JSON.stringify({
             "InvoiceDate": headerFilters.InvoiceDate,
             "Party": isFrenchieses ? _cfunc.loginPartyID() : PartyDropdown.value
@@ -163,11 +169,11 @@ const DataExportToSAP = (props) => {
                             </FormGroup>
                         </Col>
 
-                        {!isFrenchieses && < Col sm={3} className="">
+                        {!isFrenchieses && < Col sm={4} className="">
                             <FormGroup className=" row mt-2" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px", marginRight: "20px" }}>Party</Label>
-                                <Col sm="8">
+                                <Col sm="9">
                                     <C_Select
                                         name="Party"
                                         value={PartyDropdown}
@@ -187,7 +193,7 @@ const DataExportToSAP = (props) => {
 
 
 
-                        <Col sm={isFrenchieses ? 9 : 3} className=" d-flex justify-content-end" >
+                        <Col sm={isFrenchieses ? 9 : 5} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"

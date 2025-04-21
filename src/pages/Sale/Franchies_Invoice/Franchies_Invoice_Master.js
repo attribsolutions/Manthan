@@ -309,7 +309,7 @@ const Franchies_Invoice_Master = (props) => {
                 obj.values.Customer = gobutton_Add.customer;
                 obj.hasValid.Customer.valid = true;
                 obj.values.AdvanceAmount = gobutton_Add.customer.AdvanceAmount;
-                obj.values.OrderID = gobutton_Add.customer.OrderID;
+                obj.values.OrderID = gobutton_Add.customer.OrderIDs;
                 return obj
             })
 

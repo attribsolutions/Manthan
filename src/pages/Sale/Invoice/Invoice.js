@@ -57,6 +57,7 @@ import DriverMaster from "../../Adminisrator/DriverPage/DriverMaster";
 import AddMaster from "../../Adminisrator/EmployeePages/Drodown";
 import { getDriverList } from "../../../store/Administrator/DriverRedux/action";
 import { width } from "dom-helpers";
+import { getOrdersMakeInvoiceDataActionSuccess } from "../../../store/Sales/bulkInvoice/action";
 
 const Invoice = (props) => {
 
@@ -316,6 +317,7 @@ const Invoice = (props) => {
             totalAmountCalcuationFunc(gobutton_Add.Data.OrderItemDetails)// show breadcrump tolat amount function//passs table array 
             //*********************************************************** */
             setOrderIDs(gobutton_Add.Data.OrderIDs)
+            dispatch(getOrdersMakeInvoiceDataActionSuccess({ Status: false }))
             dispatch(GoButtonForinvoiceAddSuccess({ Status: false }))
 
         }
