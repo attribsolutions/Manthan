@@ -407,17 +407,13 @@ const GRN_ADD_1 = (props) => {
                 index["Invoice"] = null
                 index["ItemExpiryDate"] = index.ItemExpiryDate
             });
-            const RoundAmount = (Number(sum) + Number(Data.RoundOffAmount))
-
-            setOrderAmount((RoundAmount).toFixed(2))
+            setOrderAmount(sum.toFixed(2))
 
 
-            dispatch(_act.BreadcrumbShowCountlabel(`Count:${Data.GRNItems.length} currency_symbol ${_cfunc.amountCommaSeparateFunc(RoundAmount)}`));
+            dispatch(_act.BreadcrumbShowCountlabel(`Count:${Data.GRNItems.length} currency_symbol ${_cfunc.amountCommaSeparateFunc(sum)}`));
 
             initialTableData = []
             const grnDetails = { ...Data }
-            setRoundoffAmount(Data.RoundOffAmount)
-
             grnDetails["SupplierName"] = Data.PartyName
             grnDetails["Supplier"] = Data.Party
 
@@ -445,6 +441,7 @@ const GRN_ADD_1 = (props) => {
 
             setGrnDetail(grnDetails)
             setInvoiceNo(grnDetails?.InvoiceNumber)
+
             setOpenPOdata(grnDetails.GRNReferences)
             items.Status = false
 
@@ -1475,8 +1472,6 @@ const GRN_ADD_1 = (props) => {
                 Amount: item.Taxable_Amount
             }))
 
-            const Manual_sum_roundedTotalAmount = Number(sum_roundedTotalAmount) + Number(roundoffAmount);
-
             const jsonBody = JSON.stringify({
                 RoundOffAmount: roundoffAmount,
                 GRNDate: grnDate,
@@ -1485,7 +1480,7 @@ const GRN_ADD_1 = (props) => {
                 InvoiceDate: openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN ? (grnDetail?.InvoiceDate) : (grnDetail?.DemandDate),
                 Customer: grnDetail?.Customer,
                 GRNNumber: 1,
-                GrandTotal: (subPageMode === url.ACCOUNTING_GRN) ? (Manual_sum_roundedTotalAmount).toFixed(2) : Number(sum_roundedTotalAmount).toFixed(2),
+                GrandTotal: Number(sum_roundedTotalAmount).toFixed(2),
                 Party: grnDetail?.Supplier,
                 InvoiceNumber: invoiceNo,
                 CreatedBy: _cfunc.loginUserID(),

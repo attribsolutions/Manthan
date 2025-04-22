@@ -152,7 +152,6 @@ const PosSummarySale = (props) => {
             Party: _cfunc.loginSelectedPartyID(),
             Employee: _cfunc.loginEmployeeID(),
             CompanyID: _cfunc.loginCompanyID(),
-            ItemID: "0"
 
         })
         // setMode(mode)
