@@ -448,7 +448,9 @@ const GRNAdd3 = (props) => {
                 GRNItems: itemArray,
                 Comment: comment,
                 GRNReferences: GRNReferencesUpdate,
-                IsGRNType: 1
+                IsGRNType: 1,
+                AccountingGRNStatus: 0,
+                RoundOffAmount: 0,
             });
 
             if (pageMode === mode.edit) {
