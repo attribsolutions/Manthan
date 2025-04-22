@@ -54,12 +54,15 @@ function* DeleteGRNGenFunc({ config }) {
       "TransactionDate": config.rowData.GRNDate,
       "PartyID": SelectedPartyID,
     });
-    const BackDateresponse = yield CheckStockEntryforBackDatedTransaction({ jsonBody: jsonBodyForBackdatedTransaction })
-    if (BackDateresponse.Status === true && BackDateresponse.StatusCode === 400) {
-      customAlert({ Type: 3, Message: BackDateresponse.Message });
-      yield put(GrnApiErrorAction())
-      return
+    if (!(config.subPageMode === url.ACCOUNTING_GRN_LIST)) {
+      const BackDateresponse = yield CheckStockEntryforBackDatedTransaction({ jsonBody: jsonBodyForBackdatedTransaction })
+      if (BackDateresponse.Status === true && BackDateresponse.StatusCode === 400) {
+        customAlert({ Type: 3, Message: BackDateresponse.Message });
+        yield put(GrnApiErrorAction())
+        return
+      }
     }
+
     let response = {}
     if (config.subPageMode === url.ACCOUNTING_GRN_LIST) {
       const jsonBody = JSON.stringify({ GRNid: config.deleteId })

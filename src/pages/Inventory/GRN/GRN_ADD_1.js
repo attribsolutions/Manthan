@@ -289,9 +289,9 @@ const GRN_ADD_1 = (props) => {
             return total + (parseFloat(ind.Amount) || 0);
         }, 0);
         const AmountWithExpence = Number((Number(GRNAmount) + Number(ledgerAmount)).toFixed(2))
-
+        const RoundAmount = Number(AmountWithExpence) + Number(roundoffAmount)
         const elements = document.querySelectorAll('.amount-countable-Calulation');
-        elements.forEach(element => { element.innerText = _cfunc.amountCommaSeparateFunc(AmountWithExpence); });
+        elements.forEach(element => { element.innerText = _cfunc.amountCommaSeparateFunc((RoundAmount).toFixed(2)); });
 
     }
 
@@ -412,7 +412,7 @@ const GRN_ADD_1 = (props) => {
             setOrderAmount((RoundAmount).toFixed(2))
 
 
-            dispatch(_act.BreadcrumbShowCountlabel(`Count:${Data.GRNItems.length} currency_symbol ${_cfunc.amountCommaSeparateFunc(RoundAmount)}`));
+            dispatch(_act.BreadcrumbShowCountlabel(`Count:${Data.GRNItems.length} currency_symbol ${_cfunc.amountCommaSeparateFunc((RoundAmount).toFixed(2))}`));
 
             initialTableData = []
             const grnDetails = { ...Data }
@@ -501,9 +501,9 @@ const GRN_ADD_1 = (props) => {
                 return total + (parseFloat(ind.Amount) || 0);
             }, 0);
             const AmountWithExpence = Number((Number(GRNAmount) + Number(ledgerAmount)).toFixed(2))
-
+            const RoundAmount = Number(AmountWithExpence) + Number(roundoffAmount)
             const elements = document.querySelectorAll('.amount-countable-Calulation');
-            elements.forEach(element => { element.innerText = _cfunc.amountCommaSeparateFunc(AmountWithExpence); });
+            elements.forEach(element => { element.innerText = _cfunc.amountCommaSeparateFunc((RoundAmount).toFixed(2)); });
         }
         catch { alert("`abc${row.id}`") }
     }
@@ -531,11 +531,11 @@ const GRN_ADD_1 = (props) => {
         });
 
         // setOrderAmount(sum.toFixed(2))
-
+        debugger
         const AmountWithExpence = Number((Number(sum) + Number(ledgerDetailList.reduce((acc, ele) => acc + Number(ele.Taxable_Amount), 0))).toFixed(2))
-
+        const Roundoffamount = Number(AmountWithExpence) + Number(roundoffAmount)
         const elements = document.querySelectorAll('.amount-countable-Calulation');
-        elements.forEach(element => { element.innerText = _cfunc.amountCommaSeparateFunc(AmountWithExpence); });
+        elements.forEach(element => { element.innerText = _cfunc.amountCommaSeparateFunc((Roundoffamount).toFixed(2)); });
 
 
         // dispatch(_act.BreadcrumbShowCountlabel(`Count:${grnItemList.length} currency_symbol ${sum.toFixed(2)}`));
@@ -573,7 +573,7 @@ const GRN_ADD_1 = (props) => {
         {//  ------------Quntity column -----------------------------------  
             text: subPageMode === url.ACCOUNTING_GRN ? "Accounting GRN-Qty" : "GRN-Qty",
             dataField: "",
-            formatExtraData: ledgerDetailList,
+            formatExtraData: { ledgerDetailList, roundoffAmount },
             formatter: (value, row, k,) => {
 
                 try {
@@ -620,7 +620,7 @@ const GRN_ADD_1 = (props) => {
             dataField: "GSTDropdown",
             align: () => ('right'),
             style: () => ({ minWidth: "100px" }),
-            formatExtraData: ledgerDetailList,
+            formatExtraData: { ledgerDetailList, roundoffAmount },
             formatter: (cellContent, row, key) => (
                 <Select
                     id={`GST${key}`}
@@ -727,6 +727,7 @@ const GRN_ADD_1 = (props) => {
         {  //-------------Rate column ----------------------------------
             text: "Basic Rate",
             dataField: "",
+            formatExtraData: { ledgerDetailList, roundoffAmount },
             formatter: (value, row, k) => {
                 if (row.Rate === undefined) { row["Rate"] = 0 }
                 if (row.Amount === undefined) { row["Amount"] = 0 }
@@ -942,7 +943,7 @@ const GRN_ADD_1 = (props) => {
         {  //-------------MRP column ----------------------------------
             text: "Basic Amount",
             dataField: "BasicAmount",
-            formatExtraData: grnItemList,
+            formatExtraData: { grnItemList, roundoffAmount },
             formatter: (value, row, k) => {
 
                 return (
@@ -988,7 +989,7 @@ const GRN_ADD_1 = (props) => {
         {
             text: "GST %",
             dataField: "GST_Percent",
-
+            formatExtraData: { grnItemList, roundoffAmount },
             formatter: (value, row, k) => (
                 <div className="row mt-1" >
                     {/* <div className="text-end ">
@@ -1117,20 +1118,6 @@ const GRN_ADD_1 = (props) => {
             }
 
         },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1512,13 +1499,20 @@ const GRN_ADD_1 = (props) => {
         } catch (error) { returnFunc() }
     }
 
-    const amountWithExpence = useMemo(() => {
+
+    function calculateAmountWithExpense(ledgerDetailList = [], grnItemList = []) {
         const ledgerAmount = ledgerDetailList.reduce((acc, ele) => acc + Number(ele.Taxable_Amount), 0);
+
         const GRNAmount = grnItemList.reduce((total, ind) => {
+            debugger; // Keep this if you want to debug
             return total + (parseFloat(ind.Amount) || 0);
         }, 0);
+
         return Number((GRNAmount + ledgerAmount).toFixed(2));
-    }, [ledgerDetailList, grnItemList]); // dependencies
+    }
+
+
+
 
     if (!(userPageAccessState === "")) {
         return (
@@ -1719,12 +1713,12 @@ const GRN_ADD_1 = (props) => {
                                                     const inputAdjustment = Number(value) || 0;
 
                                                     // Add/subtract from amountWithExpence
-                                                    const Amount = Number(amountWithExpence) + (inputAdjustment);
+                                                    const Amount = Number(calculateAmountWithExpense(ledgerDetailList, grnItemList)) + (inputAdjustment);
 
                                                     // Update DOM elements
                                                     const elements = document.querySelectorAll('.amount-countable-Calulation');
                                                     elements.forEach(element => {
-                                                        element.innerText = _cfunc.amountCommaSeparateFunc(Amount);
+                                                        element.innerText = _cfunc.amountCommaSeparateFunc((Amount).toFixed(2));
                                                     });
 
                                                     setRoundoffAmount(inputAdjustment);

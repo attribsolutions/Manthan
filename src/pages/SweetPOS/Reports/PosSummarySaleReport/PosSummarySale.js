@@ -26,7 +26,7 @@ const PosSummarySale = (props) => {
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
 
-
+    const IsFranchises = _cfunc.loginUserIsFranchisesRole()
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
     const [SupplierDropdown, setSupplierDropdown] = useState(allLabelWithZero);
@@ -129,7 +129,7 @@ const PosSummarySale = (props) => {
 
     const supplierDropdownOptions = useMemo(() => {
         let options = [];
-        debugger
+
         options = supplierListOnPartyType.map((i) => ({
             value: i.id,
             label: i.Name,
@@ -199,11 +199,11 @@ const PosSummarySale = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={3} className="">
+                        <Col sm={!IsFranchises ? 3 : 7} className="">
                             <FormGroup className=" row mt-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>To Date</Label>
-                                <Col sm="5">
+                                <Col sm="4">
                                     <C_DatePicker
                                         nane='todate'
                                         value={todate}
@@ -213,7 +213,7 @@ const PosSummarySale = (props) => {
                             </FormGroup>
                         </Col>
 
-                        {< Col sm={4} className="">
+                        {!IsFranchises && < Col sm={4} className="">
                             <FormGroup className=" row mt-2" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px", marginRight: "20px" }}>Supplier</Label>
