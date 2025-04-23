@@ -25,12 +25,12 @@ const PosSummarySale = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-
+    const isSCMParty = !_cfunc.loginUserIsFranchisesRole();
     const IsFranchises = _cfunc.loginUserIsFranchisesRole()
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
-    const [SupplierDropdown, setSupplierDropdown] = useState(allLabelWithZero);
 
+    const [PartyDropdown, setPartyDropdown] = useState(allLabelWithZero);
 
 
 
@@ -42,13 +42,12 @@ const PosSummarySale = (props) => {
             userAccess: state.Login.RoleAccessUpdateData,
             ItemSaleReportGobtn: state.ItemSaleReportReducer.ItemSaleReportGobtn,
             partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
-            supplierListOnPartyType: state.CommonAPI_Reducer.vendorSupplierCustomer,
-
+            Party: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
 
             pageField: state.CommonPageFieldReducer.pageField
         })
     );
-    const { userAccess, BtnLoading, PrediocGrnData, pageField, pdfdata, ItemSaleReportGobtn, partyDropdownLoading, supplierListOnPartyType } = reducers
+    const { userAccess, BtnLoading, PrediocGrnData, pageField, pdfdata, ItemSaleReportGobtn, partyDropdownLoading, Party } = reducers
 
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
@@ -75,12 +74,9 @@ const PosSummarySale = (props) => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.POS_SALE_SUMMARY_REPORT));
-        dispatch(
-            GetVenderSupplierCustomer({
-                subPageMode: url.ORDER_LIST_2,
-                PartyID: _cfunc.loginSelectedPartyID(),
-                RouteID: "",
-            }));
+        if (_cfunc.CommonPartyDropValue().value > 0) {
+            setPartyDropdown(_cfunc.CommonPartyDropValue());
+        }
         return () => {
             dispatch(commonPageFieldSuccess(null));
         }
@@ -90,6 +86,9 @@ const PosSummarySale = (props) => {
 
         try {
             if ((ItemSaleReportGobtn.Status === true) && (ItemSaleReportGobtn.StatusCode === 200)) {
+
+                const Details = _cfunc.loginUserDetails()
+                debugger
                 if (ItemSaleReportGobtn.BtnMode === "excel") {
                     ExcelReportComponent({
                         pageField,
@@ -103,8 +102,8 @@ const PosSummarySale = (props) => {
                     config.rowData["Status"] = ItemSaleReportGobtn.Status
                     config.rowData["StatusCode"] = ItemSaleReportGobtn.StatusCode
                     config.rowData["Data"] = ItemSaleReportGobtn.Data
-                    config.rowData["Data"]["GSTIN"] = SupplierDropdown.GSTIN
-                    config.rowData["Data"]["SupplierName"] = SupplierDropdown.label
+                    config.rowData["Data"]["GSTIN"] = isSCMParty ? PartyDropdown.GSTIN : Details.GSTIN
+                    config.rowData["Data"]["SupplierName"] = isSCMParty ? PartyDropdown.label : Details.PartyName
                     config.rowData["Data"]["Date"] = `From  ${_cfunc.date_dmy_func(fromdate)}  To  ${_cfunc.date_dmy_func(todate)}`
 
 
@@ -127,17 +126,17 @@ const PosSummarySale = (props) => {
 
     }, [ItemSaleReportGobtn]);
 
-    const supplierDropdownOptions = useMemo(() => {
+    const Party_Option = useMemo(() => {
         let options = [];
 
-        options = supplierListOnPartyType.map((i) => ({
+        options = Party.map((i) => ({
             value: i.id,
             label: i.Name,
             GSTIN: i.GSTIN,
         }));
         options.unshift(allLabelWithZero);
         return options;
-    }, [supplierListOnPartyType]);
+    }, [Party]);
 
 
 
@@ -148,8 +147,8 @@ const PosSummarySale = (props) => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            PartyType: SupplierDropdown.value,
-            Party: _cfunc.loginSelectedPartyID(),
+            PartyType: 0,
+            Party: !isSCMParty ? _cfunc.loginPartyID() : PartyDropdown.value,
             Employee: _cfunc.loginEmployeeID(),
             CompanyID: _cfunc.loginCompanyID(),
             ItemID: "0"
@@ -175,9 +174,10 @@ const PosSummarySale = (props) => {
         setHeaderFilters(newObj)
     }
 
-    function SupplierDrodownOnChange(e) {
-        setSupplierDropdown(e);
+    function PartyDrodownOnChange(e) {
+        setPartyDropdown(e);
     }
+
 
     return (
         <React.Fragment>
@@ -216,20 +216,22 @@ const PosSummarySale = (props) => {
                         {!IsFranchises && < Col sm={4} className="">
                             <FormGroup className=" row mt-2" >
                                 <Label className="col-sm-4 p-2"
-                                    style={{ width: "65px", marginRight: "20px" }}>Supplier</Label>
+                                    style={{ width: "65px", marginRight: "20px" }}>Party</Label>
                                 <Col sm="8">
                                     <C_Select
                                         name="Party"
-                                        value={SupplierDropdown}
+                                        value={PartyDropdown}
                                         isSearchable={true}
+                                        isDisabled={_cfunc.loginUserIsFranchisesRole()}
+
                                         isLoading={partyDropdownLoading}
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
                                         styles={{
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
-                                        options={supplierDropdownOptions}
-                                        onChange={SupplierDrodownOnChange}
+                                        options={Party_Option}
+                                        onChange={PartyDrodownOnChange}
                                     />
                                 </Col>
                             </FormGroup>

@@ -48,7 +48,7 @@ export const reportHeder1 = (doc, data) => {
                 let y = data1.cursor.y + 9
                 doc.setFontSize(8)
                 doc.setFont(undefined, 'bold')
-                doc.text('Supplier : ', x, y)
+                doc.text('Party : ', x, y)
             };
             if (rowIdx === 1 && colIdx === 0) {
 
