@@ -1,5 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState, } from "react";
 import {
+    Button,
     Col,
     FormGroup,
     Input,
@@ -45,7 +46,7 @@ import "./invoice.scss"
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 import { getVehicleList, getVehicleListSuccess } from "../../../store/Administrator/VehicleRedux/action";
-import { Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
+import { Get_Invoice_Batch_Details, Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
 import GlobalCustomTable from "../../../GlobalCustomTable";
 import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
@@ -58,6 +59,7 @@ import AddMaster from "../../Adminisrator/EmployeePages/Drodown";
 import { getDriverList } from "../../../store/Administrator/DriverRedux/action";
 import { width } from "dom-helpers";
 import { getOrdersMakeInvoiceDataActionSuccess } from "../../../store/Sales/bulkInvoice/action";
+import { hideBtnCss } from "../../../components/Common/ListActionsButtons";
 
 const Invoice = (props) => {
 
@@ -84,6 +86,11 @@ const Invoice = (props) => {
 
     const [Vehicle_AddAccess, setVehicle_AddAccess] = useState(false)
     const [Driver_AddAccess, setDriver_AddAccess] = useState(false)
+
+    const [ReloadedBatch, setReloadedBatch] = useState([])
+
+
+
 
 
 
@@ -403,6 +410,24 @@ const Invoice = (props) => {
         label: index.VehicleNumber,
     }));
 
+
+
+    const Reloadhandler = async ({ ItemID }) => {
+
+
+        const jsonBody = JSON.stringify({
+            Item: ItemID,
+            Party: _cfunc.loginSelectedPartyID()
+        });
+
+        const Reloaded_Batch = await Get_Invoice_Batch_Details({ jsonBody })
+        if (Reloaded_Batch.Status === true && Reloaded_Batch.StatusCode === 200) {
+            setReloadedBatch(Reloaded_Batch.Data)
+        }
+
+
+    }
+
     const pagesListColumns = [
         {//***************ItemName********************************************************************* */
             text: "Item Name",
@@ -586,50 +611,78 @@ const Invoice = (props) => {
             dataField: "StockDetails",
             attrs: () => ({ 'data-label1': "Stock Details", "stock-header": "true" }),
             headerStyle: { zIndex: "2" },
-            formatExtraData: { tableList: orderItemDetails },
-            formatter: (cellContent, index1, keys_, { tableList = [] }) => (
-                <div className="table-responsive">
-                    <table className="custom-table ">
-                        <thead >
-                            <tr>
-                                <th>BatchCode</th>
-                                <th>Stock </th>
-                                <th>Quantity</th>
-                                <th>Basic Rate</th>
-                                {!isSweetsAndSnacksCompany && <th>MRP</th>}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {cellContent.map((index2) => (
-                                <tr key={index1.id}>
-                                    <td data-label="BatchCode">{index2.BatchCode}</td>
-                                    <td data-label="Stock Quantity" style={{ textAlign: "right" }} >
-                                        <samp id={`ActualQuantity-${index1.id}-${index2.id}`}>{index2.ActualQuantity}</samp>
-                                    </td>
-                                    <td data-label='Quantity'>
-                                        <Input
-                                            type="text"
-                                            placeholder="Manually enter quantity"
-                                            className="right-aligned-placeholder"
-                                            key={`batchQty${index1.id}-${index2.id}`}
-                                            id={`batchQty${index1.id}-${index2.id}`}
-                                            defaultValue={index2.Qty}
-                                            onChange={(event) => {
-                                                stockQtyOnChange(event, index1, index2);
-                                                totalAmountCalcuationFunc(tableList);
-                                            }}
-                                        />
-                                    </td>
-                                    <td data-label='Basic Rate' style={{ textAlign: "right" }}>
-                                        <span id={`stockItemRate-${index1.id}-${index2.id}`}>{_cfunc.amountCommaSeparateFunc(index2.Rate)}</span>
-                                    </td>
-                                    {!isSweetsAndSnacksCompany && <td data-label='MRP' style={{ textAlign: "right" }}>{_cfunc.amountCommaSeparateFunc(_cfunc.roundToDecimalPlaces(index2.MRP, 2))}</td>}
+            formatExtraData: { tableList: orderItemDetails, ReloadedBatch: ReloadedBatch },
+            formatter: (cellContent, index1, keys_, { tableList = [], ReloadedBatch = [] }) => {
+                debugger
+                if (ReloadedBatch.length > 0) {
+                    tableList.forEach(item => {
+                        if (item.Item === ReloadedBatch[0].Item) {
+                            item.StockDetails = ReloadedBatch;
+                        }
+                    });
+                    cellContent = ReloadedBatch
+                }
+                return (
+                    <div className="table-responsive">
+                        <table className="custom-table ">
+                            <thead >
+                                <tr>
+                                    <th>
+                                        <div className="d-flex justify-content-between align-items-center">
+                                            <span>BatchCode</span>
+                                            <Button
+                                                id="Reload"
+                                                type="button"
+                                                style={{ borderRadius: "20px" }}
+                                                className={hideBtnCss}
+                                                onClick={() => { Reloadhandler({ ItemID: index1.Item }) }}
+                                                data-mdb-toggle="tooltip"
+                                                data-mdb-placement="top"
+                                                title="Reload Batch"
+                                            >
+                                                <i className="bx bx-sync" style={{ fontSize: "20px" }}></i>
+                                            </Button>
+                                        </div>
+                                    </th>
+
+                                    <th>Stock </th>
+                                    <th>Quantity</th>
+                                    <th>Basic Rate</th>
+                                    {!isSweetsAndSnacksCompany && <th>MRP</th>}
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            ),
+                            </thead>
+                            <tbody>
+                                {cellContent.map((index2) => (
+                                    <tr key={index1.id}>
+                                        <td data-label="BatchCode">{index2.BatchCode}</td>
+                                        <td data-label="Stock Quantity" style={{ textAlign: "right" }} >
+                                            <samp id={`ActualQuantity-${index1.id}-${index2.id}`}>{index2.ActualQuantity}</samp>
+                                        </td>
+                                        <td data-label='Quantity'>
+                                            <Input
+                                                type="text"
+                                                placeholder="Manually enter quantity"
+                                                className="right-aligned-placeholder"
+                                                key={`batchQty${index1.id}-${index2.id}`}
+                                                id={`batchQty${index1.id}-${index2.id}`}
+                                                defaultValue={index2.Qty}
+                                                onChange={(event) => {
+                                                    stockQtyOnChange(event, index1, index2);
+                                                    totalAmountCalcuationFunc(tableList);
+                                                }}
+                                            />
+                                        </td>
+                                        <td data-label='Basic Rate' style={{ textAlign: "right" }}>
+                                            <span id={`stockItemRate-${index1.id}-${index2.id}`}>{_cfunc.amountCommaSeparateFunc(index2.Rate)}</span>
+                                        </td>
+                                        {!isSweetsAndSnacksCompany && <td data-label='MRP' style={{ textAlign: "right" }}>{_cfunc.amountCommaSeparateFunc(_cfunc.roundToDecimalPlaces(index2.MRP, 2))}</td>}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )
+            },
         },
         {//***************Discount********************************************************************* */
             text: "Discount/unit",
