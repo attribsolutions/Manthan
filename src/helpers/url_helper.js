@@ -458,6 +458,7 @@ export const INVOICE_1_BULK_DELETE_API = '/InvoiceBulkDelete'// invoice_1 Bulk D
 
 
 export const UPDATE_VEHICLE_CUSTOMER_INVOICE = '/SweetPOS/UpdateCustomerVehiclePOSinvoice' // Uploaded_E-wayBill
+export const INVOICE_BATCH_DETAILS = '/InvoiceBatchDetails' // Uploaded_E-wayBill
 
 
 

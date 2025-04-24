@@ -659,6 +659,11 @@ export const Invoice_1_Bulk_Delete_API = ({ jsonBody }) => delwithPostBody(url.I
 export const Update_Vehicle_Customer_Invoice_API = ({ jsonBody }) => post(url.UPDATE_VEHICLE_CUSTOMER_INVOICE, jsonBody)// Cancel_EwayBill
 
 
+export const Get_Invoice_Batch_Details = ({ jsonBody }) => post(url.INVOICE_BATCH_DETAILS, jsonBody)// Cancel_EwayBill
+
+
+
+
 export const IB_Invoice_Singel_Get_for_Report_Api = ({ editId }) => get(`${url.IB_INVOICE_SINGEL_GET}/${editId}`)// delete api
 
 /// Franchies Invoice
