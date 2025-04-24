@@ -11,7 +11,7 @@ export const orderCalculateFunc = (row, IsComparGstIn) => {
 
   // Calculate basic amount
   const basicAmount = rate * quantity;
-
+  debugger
   // Calculate the discount amount based on the discount type
   const disCountAmt = discountType === 2 ? basicAmount - (basicAmount / ((100 + discount) / 100)) : quantity * discount;
 
@@ -32,7 +32,7 @@ export const orderCalculateFunc = (row, IsComparGstIn) => {
   let IGST_Percentage = 0;
   let SGST_Percentage = (GST_Percentage / 2);
   let CGST_Percentage = (GST_Percentage / 2);
-
+  debugger
   if (IsComparGstIn) {  //compare Supplier and Customer are Same State by GSTIn Number
     let isSameSate = compareGSTINState(IsComparGstIn.GSTIn_1, IsComparGstIn.GSTIn_2)
     if (isSameSate) {// iF isSameSate = true ===not same GSTIn
@@ -55,7 +55,7 @@ export const orderCalculateFunc = (row, IsComparGstIn) => {
     roundedGstAmount: roundedGstAmount.toFixed(2),
     CGST_Amount: CGST_Amount.toFixed(2),
     SGST_Amount: SGST_Amount.toFixed(2),
-    IGST_Amount: IGST_Amount,
+    IGST_Amount: (IGST_Amount).toFixed(2),
 
     GST_Percentage: GST_Percentage.toFixed(2),
     CGST_Percentage: CGST_Percentage.toFixed(2),
