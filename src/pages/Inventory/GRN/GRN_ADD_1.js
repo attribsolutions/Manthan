@@ -20,7 +20,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import * as _act from "../../../store/actions";
 
-import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, decimalRegx, floatRegx, integier } from "../../../CustomValidateForm";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import { pageFieldUseEffect, saveMsgUseEffect, table_ArrowUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
@@ -100,7 +100,7 @@ const GRN_ADD_1 = (props) => {
     const [openPOdata, setOpenPOdata] = useState([]);
 
     const [roundoffAmount, setRoundoffAmount] = useState(0);
-    debugger
+
     const [invoiceNo, setInvoiceNo] = useState('');
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [EditData, setEditData] = useState({});
@@ -126,8 +126,6 @@ const GRN_ADD_1 = (props) => {
     }));
 
     useEffect(() => {
-
-
         dispatch(_act.commonPageFieldSuccess(null));
         dispatch(_act.commonPageField(page_id));
         const jsonBody = JSON.stringify({
@@ -144,9 +142,6 @@ const GRN_ADD_1 = (props) => {
             dispatch(_act.Update_accounting_GRN_Success({ Status: false }))
         }
     }, [])
-
-
-
 
 
     const values = { ...state.values }
@@ -245,7 +240,6 @@ const GRN_ADD_1 = (props) => {
 
 
     const onchangeHandler = (e, row, k, Type) => {
-
         let BasicAmount = 0
         let GST_Percentage = 0
         if (Type === "Amount") {
@@ -256,20 +250,30 @@ const GRN_ADD_1 = (props) => {
             GST_Percentage = _cfunc.getFixedNumber(e.target.value, 2)
         }
 
+        let GST_Amount = Number((((BasicAmount) * Number(GST_Percentage)) / 100).toFixed(2));
+        let CGST_Amount = 0.00
+        let SGST_Amount = 0.00
+        let IGST_Amount = 0.00
+        let Taxable_Amount = 0.00
+        if (IsIGST) {
+            IGST_Amount = GST_Amount
+            Taxable_Amount = Number(((BasicAmount) + (IGST_Amount)).toFixed(2))
+        } else {
+            CGST_Amount = Number(((GST_Amount) / 2).toFixed(2))
+            SGST_Amount = Number(((GST_Amount) / 2).toFixed(2))
+            Taxable_Amount = Number((((CGST_Amount) + (SGST_Amount)) + (BasicAmount)).toFixed(2));
+        }
 
-
-        const GST_Amount = (BasicAmount * Number(GST_Percentage)) / 100;
-        const Taxable_Amount = GST_Amount + BasicAmount;
         row["BasicAmount"] = BasicAmount
-        row["GST_Amount"] = GST_Amount;
-        row["Taxable_Amount"] = Taxable_Amount;
-        row["CGST"] = GST_Amount / 2;
-        row["SGST"] = GST_Amount / 2;
-        row["IGST"] = GST_Amount;
+        row["GST_Amount"] = (GST_Amount).toFixed(2);
+        row["Taxable_Amount"] = (Taxable_Amount).toFixed(2);
+        row["CGST"] = CGST_Amount;
+        row["SGST"] = SGST_Amount;
+        row["IGST"] = IGST_Amount;
 
         const Taxable_Amount_elment = document.getElementById(`Taxable_Amount${row.id}`)
         if (Taxable_Amount_elment) {
-            Taxable_Amount_elment.innerText = Taxable_Amount
+            Taxable_Amount_elment.innerText = (Taxable_Amount).toFixed(2)
         }
         const CGST_elment = document.getElementById(`CGST${row.id}`)
         if (CGST_elment) {
@@ -305,6 +309,7 @@ const GRN_ADD_1 = (props) => {
 
                 grnItems.OrderItem.forEach((ele, k) => {
                     const calculate = orderCalculateFunc(ele)
+
 
                     sum = sum + parseFloat(calculate.roundedTotalAmount)
                     ele.id = k + 1;
@@ -367,7 +372,11 @@ const GRN_ADD_1 = (props) => {
         if (history?.location?.state?.isAccountingGRN && subPageMode === url.ACCOUNTING_GRN) { // Accounting GRN
 
             const Data = history.location.state
+            const grnDetails = { ...Data }
+
+            const OrderDetail = grnDetails?.GRNReferences[0]?.Order
             let sum = 0
+
             Data.GRNItems.forEach((index, k) => {
                 index["GSToption"] = index.GSTDropdown?.map(i => ({ value: i.GST, label: i.GSTPercentage, }));
                 if (index.GST === null) {
@@ -393,13 +402,16 @@ const GRN_ADD_1 = (props) => {
                     }
                 }
 
+                const calculate = orderCalculateFunc(index, { GSTIn_1: OrderDetail?.Supplier?.GSTIN, GSTIn_2: OrderDetail?.Customer?.GSTIN })
 
-                const calculate = orderCalculateFunc(index)
                 sum = sum + parseFloat(calculate.roundedTotalAmount)
                 index.id = k + 1;
                 index["poQuantity"] = index.Quantity
                 index["Quantity"] = index.Quantity
                 index["poAmount"] = index.Amount
+                index["CGST"] = calculate.CGST_Amount
+                index["SGST"] = calculate.SGST_Amount
+                index["IGST"] = calculate.IGST_Amount
                 index["Amount"] = calculate.roundedTotalAmount
                 index["BatchDate"] = currentDate_ymd
                 index["BatchCode"] = index.BatchCode
@@ -415,13 +427,11 @@ const GRN_ADD_1 = (props) => {
             dispatch(_act.BreadcrumbShowCountlabel(`Count:${Data.GRNItems.length} currency_symbol ${_cfunc.amountCommaSeparateFunc((RoundAmount).toFixed(2))}`));
 
             initialTableData = []
-            const grnDetails = { ...Data }
             setRoundoffAmount(Data.RoundOffAmount)
 
             grnDetails["SupplierName"] = Data.PartyName
             grnDetails["Supplier"] = Data.Party
 
-            const OrderDetail = grnDetails?.GRNReferences[0]?.Order
 
             grnDetails.GRNReferences[0]["Full_OrderNumber"] = OrderDetail.FullOrderNumber
             grnDetails.GRNReferences[0]["Order"] = null  // If accounting Grn then send null  Order
@@ -488,12 +498,25 @@ const GRN_ADD_1 = (props) => {
 
     }, [])
 
-
     const GSTChangeHandler = (event, row, k) => {
 
-        const calculate = orderCalculateFunc(row)// change
+        const calculate = orderCalculateFunc(row, { GSTIn_1: grnDetail?.SupplierGSTIN, GSTIn_2: grnDetail?.CustomerGSTIN })// change
         row["Amount"] = calculate.roundedTotalAmount
         try {
+
+            const CGST_elment = document.getElementById(`CGST${row.id}`)
+            if (CGST_elment) {
+                CGST_elment.innerText = calculate.CGST_Amount
+            }
+            const SGST_elment = document.getElementById(`SGST${row.id}`)
+            if (SGST_elment) {
+                SGST_elment.innerText = calculate.SGST_Amount
+            }
+            const IGST_elment = document.getElementById(`IGST${row.id}`)
+            if (IGST_elment) {
+                IGST_elment.innerText = calculate.IGST_Amount
+            }
+
             document.getElementById(`abc${row.id}`).innerText = calculate.roundedTotalAmount
             const ledgerAmount = ledgerDetailList.reduce((acc, ele) => acc + Number(ele.Taxable_Amount), 0)
 
@@ -508,7 +531,6 @@ const GRN_ADD_1 = (props) => {
         catch { alert("`abc${row.id}`") }
     }
 
-
     function val_onChange(val, row, type,) {
 
         if (type === "qty") {
@@ -517,21 +539,35 @@ const GRN_ADD_1 = (props) => {
         else {
             row["Rate"] = val
         }
-        const calculate = orderCalculateFunc(row)// change
+        const calculate = orderCalculateFunc(row, { GSTIn_1: grnDetail?.SupplierGSTIN, GSTIn_2: grnDetail?.CustomerGSTIN })// change
         row["Amount"] = calculate.roundedTotalAmount
         try {
             document.getElementById(`abc${row.id}`).innerText = calculate.roundedTotalAmount
 
         }
-        catch { alert("`abc${row.id}`") }
+        catch { alert(`abc${row.id}`) }
 
         let sum = 0
         grnItemList.forEach(ind => {
             sum = sum + parseFloat(ind.Amount)
         });
 
+
+        const CGST_elment = document.getElementById(`CGST${row.id}`)
+        if (CGST_elment) {
+            CGST_elment.innerText = calculate.CGST_Amount
+        }
+        const SGST_elment = document.getElementById(`SGST${row.id}`)
+        if (SGST_elment) {
+            SGST_elment.innerText = calculate.SGST_Amount
+        }
+        const IGST_elment = document.getElementById(`IGST${row.id}`)
+        if (IGST_elment) {
+            IGST_elment.innerText = calculate.IGST_Amount
+        }
+
         // setOrderAmount(sum.toFixed(2))
-        debugger
+
         const AmountWithExpence = Number((Number(sum) + Number(ledgerDetailList.reduce((acc, ele) => acc + Number(ele.Taxable_Amount), 0))).toFixed(2))
         const Roundoffamount = Number(AmountWithExpence) + Number(roundoffAmount)
         const elements = document.querySelectorAll('.amount-countable-Calulation');
@@ -541,6 +577,9 @@ const GRN_ADD_1 = (props) => {
         // dispatch(_act.BreadcrumbShowCountlabel(`Count:${grnItemList.length} currency_symbol ${sum.toFixed(2)}`));
 
     }
+    const IsIGST = useMemo(() => {
+        return _cfunc.compareGSTINState(grnDetail.SupplierGSTIN, grnDetail.CustomerGSTIN);
+    }, [grnDetail.SupplierGSTIN, grnDetail.CustomerGSTIN]);
 
     const tableColumnsMode_1 = [
         {//------------- ItemName column ----------------------------------
@@ -629,6 +668,9 @@ const GRN_ADD_1 = (props) => {
                     isSearchable={true}
                     className="react-dropdown"
                     classNamePrefix="dropdown"
+                    styles={{
+                        menu: provided => ({ ...provided, zIndex: 2 })
+                    }}
                     options={row.GSToption}
                     onChange={(event) => {
                         row.GSTPercentage = event.label;
@@ -643,7 +685,6 @@ const GRN_ADD_1 = (props) => {
                 return { width: '140px', textAlign: 'center' };
             }
         },
-
 
         {  //------------- Unit column ----------------------------------
             text: "Unit",
@@ -766,6 +807,60 @@ const GRN_ADD_1 = (props) => {
             }
         },
 
+
+        {
+            text: "CGST",
+            dataField: "CGST",
+            formatExtraData: { ledgerDetailList, roundoffAmount },
+            hidden: IsIGST || !(subPageMode === url.ACCOUNTING_GRN),
+            formatter: (value, row, k) => (
+                <div className="row mt-1" >
+                    <div className="text-end ">
+                        <samp key={row.id} id={`CGST${row.id}`}>{row.CGST}</samp>
+                    </div>
+                </div>
+            ),
+            headerStyle: (colum, colIndex) => {
+                return {
+                    width: IsIGST ? '100px' : '136px', textAlign: 'center', text: "center"
+                };
+            }
+        },
+
+        {
+            text: "SGST",
+            dataField: "SGST",
+            formatExtraData: { ledgerDetailList, roundoffAmount },
+            hidden: IsIGST || !(subPageMode === url.ACCOUNTING_GRN),
+            formatter: (value, row, k) => (
+                <div className="row mt-1" >
+                    <div className="text-end ">
+                        <samp key={row.id} id={`SGST${row.id}`}>{row.SGST}</samp>
+                    </div>
+                </div>
+            ),
+            headerStyle: (colum, colIndex) => {
+                return { width: '100px', textAlign: 'center', text: "center" };
+            }
+        },
+
+        {
+            text: "IGST",
+            dataField: "IGST",
+            formatExtraData: { ledgerDetailList, roundoffAmount },
+            hidden: !IsIGST || !(subPageMode === url.ACCOUNTING_GRN),
+            formatter: (value, row, k) => (
+                <div className="row mt-1" >
+                    <div className="text-end ">
+                        <samp key={row.id} id={`IGST${row.id}`}>{row.IGST}</samp>
+                    </div>
+                </div>
+            ),
+            headerStyle: (colum, colIndex) => {
+                return { width: '100px', textAlign: 'center', text: "center" };
+            }
+        },
+
         {//------------- ItemName column ----------------------------------
             text: "Amount",
             dataField: "",
@@ -785,6 +880,7 @@ const GRN_ADD_1 = (props) => {
         {//------------- Batch Code column ----------------------------------
             text: "BatchCode",
             dataField: "",
+            hidden: (subPageMode === url.ACCOUNTING_GRN),
             style: {
                 width: "250px"
             },
@@ -816,7 +912,7 @@ const GRN_ADD_1 = (props) => {
         {//------------- Batch Date column ----------------------------------
             text: "Item Expiry Date",
             dataField: "",
-            hidden: openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN,
+            hidden: openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN || (subPageMode === url.ACCOUNTING_GRN),
             formatter: (value, row, k) => {
 
                 return (
@@ -844,6 +940,7 @@ const GRN_ADD_1 = (props) => {
         {//------------- Batch Date column ----------------------------------
             text: "Batch Date",
             dataField: "",
+            hidden: (subPageMode === url.ACCOUNTING_GRN),
             formatter: (value, row, k) => {
                 try {
                     document.getElementById(`BatchDate${k}`).value = row.BatchDate
@@ -924,9 +1021,7 @@ const GRN_ADD_1 = (props) => {
         setledgerDetailList(Data);
     }
 
-    const IsIGST = useMemo(() => {
-        return _cfunc.compareGSTINState(grnDetail.SupplierGSTIN, grnDetail.CustomerGSTIN);
-    }, [grnDetail.SupplierGSTIN, grnDetail.CustomerGSTIN]);
+
 
     const ledgerColumn = [
         {//------------- ItemName column ----------------------------------
@@ -940,24 +1035,32 @@ const GRN_ADD_1 = (props) => {
             }
         },
 
-        {  //-------------MRP column ----------------------------------
+        {
             text: "Basic Amount",
             dataField: "BasicAmount",
             formatExtraData: { grnItemList, roundoffAmount },
             formatter: (value, row, k) => {
-
                 return (
                     <span className="text-right" >
-                        <CInput
+                        <Input
                             type="text"
                             className=" text-end"
-                            defaultValue={row.BasicAmount}
-                            cpattern={decimalRegx}
-                            placeholder="Enter BasicAmount"
-                            onChange={(e) => { onchangeHandler(e, row, k, "Amount") }}
+                            style={{ backgroundColor: "white" }}
                             id={`BasicAmount${row.id}`}
                             autoComplete="off"
                             key={row.id}
+                            defaultValue={row.BasicAmount}
+                            placeholder="Enter BasicAmount"
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                let input = ""
+                                if (value === "" || /^-?\d*\.?\d*$/.test(value)) {
+                                    input = e.target.value
+                                    onchangeHandler(e, row, k, "Amount")
+                                } else {
+                                    e.target.value = input
+                                }
+                            }}
 
                         />
                     </span>
@@ -1026,7 +1129,7 @@ const GRN_ADD_1 = (props) => {
         },
 
         {
-            text: "CGST Amount",
+            text: "CGST",
             dataField: "CGST",
             hidden: IsIGST,
             formatter: (value, row, k) => (
@@ -1044,7 +1147,7 @@ const GRN_ADD_1 = (props) => {
         },
 
         {
-            text: "SGST Amount",
+            text: "SGST",
             dataField: "SGST",
             hidden: IsIGST,
             formatter: (value, row, k) => (
@@ -1060,7 +1163,7 @@ const GRN_ADD_1 = (props) => {
         },
 
         {
-            text: "IGST Amount",
+            text: "IGST",
             dataField: "IGST",
             hidden: !IsIGST,
             formatter: (value, row, k) => (
@@ -1278,7 +1381,7 @@ const GRN_ADD_1 = (props) => {
             let sum_roundedTotalAmount = 0
             grnItemList.forEach(i => {
 
-                const calculated = orderCalculateFunc(i)// amount calculation function 
+                const calculated = orderCalculateFunc(i, { GSTIn_1: grnDetail?.SupplierGSTIN, GSTIn_2: grnDetail?.CustomerGSTIN })// amount calculation function 
                 sum_roundedTotalAmount = sum_roundedTotalAmount + parseFloat(calculated.roundedTotalAmount)
                 const arr = {
                     Item: i.Item,
@@ -1504,7 +1607,7 @@ const GRN_ADD_1 = (props) => {
         const ledgerAmount = ledgerDetailList.reduce((acc, ele) => acc + Number(ele.Taxable_Amount), 0);
 
         const GRNAmount = grnItemList.reduce((total, ind) => {
-            debugger; // Keep this if you want to debug
+            ; // Keep this if you want to debug
             return total + (parseFloat(ind.Amount) || 0);
         }, 0);
 
@@ -1707,11 +1810,11 @@ const GRN_ADD_1 = (props) => {
                                             placeholder={`Enter Roundoff Amount`}
                                             onChange={(e) => {
                                                 const value = e.target.value;
-
+                                                let input = ""
                                                 if (value === "" || /^-?\d*\.?\d*$/.test(value)) {
                                                     // Convert user input to number, default to 0 if blank
                                                     const inputAdjustment = Number(value) || 0;
-
+                                                    input = e.target.value
                                                     // Add/subtract from amountWithExpence
                                                     const Amount = Number(calculateAmountWithExpense(ledgerDetailList, grnItemList)) + (inputAdjustment);
 
@@ -1722,6 +1825,8 @@ const GRN_ADD_1 = (props) => {
                                                     });
 
                                                     setRoundoffAmount(inputAdjustment);
+                                                } else {
+                                                    e.target.value = input
                                                 }
                                             }}
 

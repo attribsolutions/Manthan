@@ -5,6 +5,7 @@ import {
     FormGroup,
     Input,
     Label,
+    Spinner,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, commonPageFieldSuccess, getpdfReportdata } from "../../../store/actions";
@@ -88,6 +89,9 @@ const Invoice = (props) => {
     const [Driver_AddAccess, setDriver_AddAccess] = useState(false)
 
     const [ReloadedBatch, setReloadedBatch] = useState([])
+
+    const [BatchReload, setBatchReload] = useState(false)
+
 
 
 
@@ -411,9 +415,8 @@ const Invoice = (props) => {
     }));
 
 
-
     const Reloadhandler = async ({ ItemID }) => {
-
+        setBatchReload(ItemID)
 
         const jsonBody = JSON.stringify({
             Item: ItemID,
@@ -423,6 +426,7 @@ const Invoice = (props) => {
         const Reloaded_Batch = await Get_Invoice_Batch_Details({ jsonBody })
         if (Reloaded_Batch.Status === true && Reloaded_Batch.StatusCode === 200) {
             setReloadedBatch(Reloaded_Batch.Data)
+            setBatchReload(false)
         }
 
 
@@ -462,7 +466,7 @@ const Invoice = (props) => {
         {//***************Quantity********************************************************************* */
             text: "Quantity/Unit",
             dataField: "",
-            formatExtraData: { tableList: orderItemDetails },
+            formatExtraData: { tableList: orderItemDetails, ReloadedBatch: ReloadedBatch },
             attrs: () => ({ 'data-label': "Quantity/Unit" }),
             formatter: (cellContent, index1, keys_, { tableList = [] }) => (
                 <>
@@ -614,13 +618,44 @@ const Invoice = (props) => {
             formatExtraData: { tableList: orderItemDetails, ReloadedBatch: ReloadedBatch },
             formatter: (cellContent, index1, keys_, { tableList = [], ReloadedBatch = [] }) => {
                 debugger
-                if (ReloadedBatch.length > 0) {
-                    tableList.forEach(item => {
-                        if (item.Item === ReloadedBatch[0].Item) {
-                            item.StockDetails = ReloadedBatch;
+                if ((ReloadedBatch.length > 0) && (index1.Item === ReloadedBatch[0].Item) && (!index1._batchProcessed)) {
+
+                    // index1.StockDetails = ReloadedBatch
+                    let totalAmount = 0;
+                    let remainingOrderQty = parseFloat(index1.Quantity); // Convert to a number
+                    let totalStockQty = 0;
+                    index1.StockDetails = ReloadedBatch.map(index2 => {
+
+                        index2.initialRate = index2.Rate;  //initialize
+
+                        const _hasRate = ((index1.default_UnitDropvalue.BaseUnitQuantity / index1.default_UnitDropvalue.BaseUnitQuantityNoUnit) * index2.initialRate);
+                        const _hasActualQuantity = (index2.BaseUnitQuantity / index1.default_UnitDropvalue.BaseUnitQuantity);
+
+
+                        index2.Rate = _cfunc.roundToDecimalPlaces(_hasRate, 2);//max 2 decimal  //initialize
+                        index2.ActualQuantity = _cfunc.roundToDecimalPlaces(_hasActualQuantity, 3);//max 3 decimal  //initialize
+
+                        //+++++++++++++++++++++ stock Distribute +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                        const stockQty = parseFloat(index2.ActualQuantity); // Convert to a number
+                        totalStockQty += stockQty;
+
+                        const qtyToDeduct = Math.min(remainingOrderQty, stockQty);
+                        index2.Qty = _cfunc.roundToDecimalPlaces(qtyToDeduct, 3); // Round to three decimal places
+                        remainingOrderQty = _cfunc.roundToDecimalPlaces(remainingOrderQty - qtyToDeduct, 3); // Round the remaining order quantity
+
+                        if (qtyToDeduct > 0) {// Calculate total amount if quantity is greater than 0
+
+                            const calculatedItem = invoice_discountCalculate_Func(index2, index1);
+
+                            totalAmount += parseFloat(calculatedItem.roundedTotalAmount); // Convert to a number
                         }
+                        index1._batchProcessed = true;
+                        return index2;
                     });
-                    cellContent = ReloadedBatch
+
+
+
+                    cellContent = index1.StockDetails
                 }
                 return (
                     <div className="table-responsive">
@@ -633,14 +668,14 @@ const Invoice = (props) => {
                                             <Button
                                                 id="Reload"
                                                 type="button"
-                                                style={{ borderRadius: "20px" }}
+                                                style={{ borderRadius: "20px", cursor: "pointer" }}
                                                 className={hideBtnCss}
                                                 onClick={() => { Reloadhandler({ ItemID: index1.Item }) }}
                                                 data-mdb-toggle="tooltip"
                                                 data-mdb-placement="top"
                                                 title="Reload Batch"
                                             >
-                                                <i className="bx bx-sync" style={{ fontSize: "20px" }}></i>
+                                                {(BatchReload === index1.Item) ? <Spinner style={{ width: "19px", height: "19px" }} ></Spinner> : <i className="bx bx-sync" style={{ fontSize: "20px" }}></i>}
                                             </Button>
                                         </div>
                                     </th>
@@ -864,7 +899,6 @@ const Invoice = (props) => {
     }, [values.InvoiceDate, commonPartyDropSelect.value])
 
 
-
     useEffect(() => {
         if (StockEnteryForFirstYear.Status === true && StockEnteryForFirstYear.StatusCode === 400) {
             customAlert({
@@ -890,8 +924,6 @@ const Invoice = (props) => {
             return v1
         })
     };
-
-
 
     const DriverOptions = DriverList.map((index) => ({
         value: index.id,
@@ -1008,7 +1040,7 @@ const Invoice = (props) => {
 
         //**grand total and Tcs Round Off calculations  */ 
         const calcalateGrandTotal = settingBaseRoundOffAmountFunc(orderItemDetails)//Pass Table Data 
-        debugger
+
         const forInvoice_1_json = () => ({  //** Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
             InvoiceDate: values.InvoiceDate,
             InvoiceItems: invoiceItems,
