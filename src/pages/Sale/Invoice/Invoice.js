@@ -411,7 +411,6 @@ const Invoice = (props) => {
     }));
 
 
-
     const Reloadhandler = async ({ ItemID }) => {
 
 
@@ -462,7 +461,7 @@ const Invoice = (props) => {
         {//***************Quantity********************************************************************* */
             text: "Quantity/Unit",
             dataField: "",
-            formatExtraData: { tableList: orderItemDetails },
+            formatExtraData: { tableList: orderItemDetails, ReloadedBatch: ReloadedBatch },
             attrs: () => ({ 'data-label': "Quantity/Unit" }),
             formatter: (cellContent, index1, keys_, { tableList = [] }) => (
                 <>
@@ -613,13 +612,43 @@ const Invoice = (props) => {
             headerStyle: { zIndex: "2" },
             formatExtraData: { tableList: orderItemDetails, ReloadedBatch: ReloadedBatch },
             formatter: (cellContent, index1, keys_, { tableList = [], ReloadedBatch = [] }) => {
-                debugger
-                if (ReloadedBatch.length > 0) {
-                    tableList.forEach(item => {
-                        if (item.Item === ReloadedBatch[0].Item) {
-                            item.StockDetails = ReloadedBatch;
-                        }
-                    });
+
+                if (ReloadedBatch.length > 0 && (index1.Item === ReloadedBatch[0].Item)) {
+
+                    index1.StockDetails = ReloadedBatch
+                    // index1.StockDetails = index1.StockDetails.map(index2 => {
+
+                    //     index2.initialRate = index2.Rate;  //initialize
+
+                    //     const _hasRate = ((isBaseUnit.BaseUnitQuantity / isBaseUnit.BaseUnitQuantityNoUnit) * index2.initialRate);
+                    //     const _hasActualQuantity = (index2.BaseUnitQuantity / isBaseUnit.BaseUnitQuantity);
+
+
+                    //     index2.Rate = roundToDecimalPlaces(_hasRate, 2);//max 2 decimal  //initialize
+                    //     index2.ActualQuantity = roundToDecimalPlaces(_hasActualQuantity, 3);//max 3 decimal  //initialize
+
+                    //     //+++++++++++++++++++++ stock Distribute +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                    //     const stockQty = parseFloat(index2.ActualQuantity); // Convert to a number
+                    //     totalStockQty += stockQty;
+
+                    //     const qtyToDeduct = Math.min(remainingOrderQty, stockQty);
+                    //     index2.Qty = roundToDecimalPlaces(qtyToDeduct, 3); // Round to three decimal places
+                    //     remainingOrderQty = roundToDecimalPlaces(remainingOrderQty - qtyToDeduct, 3); // Round the remaining order quantity
+
+                    //     if (qtyToDeduct > 0) {// Calculate total amount if quantity is greater than 0
+
+                    //         const calculatedItem = invoice_discountCalculate_Func(index2, index1);
+
+                    //         totalAmount += parseFloat(calculatedItem.roundedTotalAmount); // Convert to a number
+                    //     }
+
+                    //     return index2;
+                    // });
+                    // tableList.forEach(item => {
+                    //     if (item.Item === ReloadedBatch[0].Item) {
+                    //         item.StockDetails = ReloadedBatch;
+                    //     }
+                    // });
                     cellContent = ReloadedBatch
                 }
                 return (
@@ -630,7 +659,7 @@ const Invoice = (props) => {
                                     <th>
                                         <div className="d-flex justify-content-between align-items-center">
                                             <span>BatchCode</span>
-                                            <Button
+                                            {/* <Button
                                                 id="Reload"
                                                 type="button"
                                                 style={{ borderRadius: "20px" }}
@@ -641,7 +670,7 @@ const Invoice = (props) => {
                                                 title="Reload Batch"
                                             >
                                                 <i className="bx bx-sync" style={{ fontSize: "20px" }}></i>
-                                            </Button>
+                                            </Button> */}
                                         </div>
                                     </th>
 
@@ -864,7 +893,6 @@ const Invoice = (props) => {
     }, [values.InvoiceDate, commonPartyDropSelect.value])
 
 
-
     useEffect(() => {
         if (StockEnteryForFirstYear.Status === true && StockEnteryForFirstYear.StatusCode === 400) {
             customAlert({
@@ -890,8 +918,6 @@ const Invoice = (props) => {
             return v1
         })
     };
-
-
 
     const DriverOptions = DriverList.map((index) => ({
         value: index.id,
@@ -1008,7 +1034,7 @@ const Invoice = (props) => {
 
         //**grand total and Tcs Round Off calculations  */ 
         const calcalateGrandTotal = settingBaseRoundOffAmountFunc(orderItemDetails)//Pass Table Data 
-        debugger
+
         const forInvoice_1_json = () => ({  //** Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
             InvoiceDate: values.InvoiceDate,
             InvoiceItems: invoiceItems,
