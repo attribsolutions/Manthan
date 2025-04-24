@@ -417,6 +417,7 @@ const GRN_ADD_1 = (props) => {
                 index["BatchCode"] = index.BatchCode
                 index["delbtn"] = false
                 index["Invoice"] = null
+                index["BasicAmount"] = calculate.basicAmount
                 index["ItemExpiryDate"] = index.ItemExpiryDate
             });
             const RoundAmount = (Number(sum) + Number(Data.RoundOffAmount))
@@ -518,6 +519,8 @@ const GRN_ADD_1 = (props) => {
             }
 
             document.getElementById(`abc${row.id}`).innerText = calculate.roundedTotalAmount
+            document.getElementById(`BasicAmount${row.id}`).innerText = calculate.basicAmount
+
             const ledgerAmount = ledgerDetailList.reduce((acc, ele) => acc + Number(ele.Taxable_Amount), 0)
 
             const GRNAmount = grnItemList.reduce((total, ind) => {
@@ -543,6 +546,9 @@ const GRN_ADD_1 = (props) => {
         row["Amount"] = calculate.roundedTotalAmount
         try {
             document.getElementById(`abc${row.id}`).innerText = calculate.roundedTotalAmount
+
+            document.getElementById(`BasicAmount${row.id}`).innerText = calculate.basicAmount
+
 
         }
         catch { alert(`abc${row.id}`) }
@@ -724,7 +730,7 @@ const GRN_ADD_1 = (props) => {
                 )
             },
             headerStyle: (colum, colIndex) => {
-                return { width: '130px', textAlign: 'center' };
+                return { width: '160px', textAlign: 'center' };
             }
         },
 
@@ -853,6 +859,23 @@ const GRN_ADD_1 = (props) => {
                 <div className="row mt-1" >
                     <div className="text-end ">
                         <samp key={row.id} id={`IGST${row.id}`}>{row.IGST}</samp>
+                    </div>
+                </div>
+            ),
+            headerStyle: (colum, colIndex) => {
+                return { width: '100px', textAlign: 'center', text: "center" };
+            }
+        },
+
+
+        {//------------- ItemName column ----------------------------------
+            text: "Basic Amount",
+            dataField: "",
+            // sort: true,
+            formatter: (value, row, k) => (
+                <div className="row mt-1" >
+                    <div className="text-end ">
+                        <samp key={row.id} id={`BasicAmount${row.id}`}>{row.BasicAmount}</samp>
                     </div>
                 </div>
             ),

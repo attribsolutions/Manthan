@@ -6,7 +6,19 @@ import { DELETE_MATERIAL_ISSUE_LIST_PAGE, EDIT_MATERIAL_ISSUE_LIST_PAGE, GET_MAT
 
 function* GoButton_MaterialIssue_masterPage_genfun({ config }) {  // GO Botton Post API
   try {
-    const response = yield call(Material_Issue_GoButton_Post_API, config);
+    let response = yield call(Material_Issue_GoButton_Post_API, config);
+    debugger
+    response.Data.forEach(item => {
+      let StockQuantity = 0;
+      if (Array.isArray(item.BatchesData)) {
+        StockQuantity = item.BatchesData.reduce((total, batch) => {
+          return total + (Number(batch.ObatchwiseQuantity) || 0);
+        }, 0);
+      }
+      item.StockQuantity = StockQuantity;
+    });
+
+
     const resp1 = { ...response, ...config }
     yield put(goButtonForMaterialIssue_Master_ActionSuccess(resp1));
   } catch (error) { yield put(MaterialIssueApiErrorAction()) }
