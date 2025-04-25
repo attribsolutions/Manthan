@@ -618,7 +618,7 @@ const Invoice = (props) => {
             formatExtraData: { tableList: orderItemDetails, ReloadedBatch: ReloadedBatch },
             formatter: (cellContent, index1, keys_, { tableList = [], ReloadedBatch = [] }) => {
                 debugger
-                if ((ReloadedBatch.length > 0) && (index1.Item === ReloadedBatch[0].Item) && (!index1._batchProcessed)) {
+                if ((ReloadedBatch.length > 0) && (index1.Item === ReloadedBatch[0].Item)) {
 
                     // index1.StockDetails = ReloadedBatch
                     let totalAmount = 0;
@@ -653,9 +653,22 @@ const Invoice = (props) => {
                         return index2;
                     });
 
+                    index1.ItemTotalStock = _cfunc.roundToDecimalPlaces(totalStockQty, 3); //max 3 decimal
+                    index1.ItemTotalAmount = _cfunc.roundToDecimalPlaces(totalAmount, 2); //max 2 decimal
 
+                    // Check for stock availability and set corresponding message
+                    if (index1.ItemTotalStock < Number(index1.Quantity)) {
+                        index1.StockInValid = true;
+                        const diffrence = Math.abs(Number(index1.ItemTotalStock) - Number(index1.Quantity));
+                        const msg1 = `Short Stock Quantity ${index1.Quantity}`;
+                        const msg2 = `Short Stock Quantity ${diffrence}`;
+                        index1.StockInvalidMsg = index1.ItemTotalStock === 0 ? msg1 : msg2;
+                    } else {
+                        index1.StockInValid = false
+                    }
 
                     cellContent = index1.StockDetails
+                    setReloadedBatch([])
                 }
                 return (
                     <div className="table-responsive">
