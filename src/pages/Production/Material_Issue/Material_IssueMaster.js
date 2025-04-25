@@ -37,7 +37,7 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import { mode, pageId, url } from "../../../routes/index";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { CInput, C_DatePicker, decimalRegx, onlyNumberRegx } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, decimalRegx, decimalRegx_3dit, onlyNumberRegx } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { Qty_Distribution_Func, updateWorkOrderQuantity_By_Lot } from "./DistributionFunc";
@@ -359,7 +359,7 @@ const MaterialIssueMaster = (props) => {
             const distributedQuantity = Math.min(remainingQuantity, quantity);
             remainingQuantity -= distributedQuantity;
             const batchQtyElement = document.getElementById(`stock${inx_1.id}-${inx_2.id}`);
-            batchQtyElement.value = _cfunc.getFixedNumber(distributedQuantity, 3); // Display with three decimal places
+            batchQtyElement.value = (Number(distributedQuantity)).toFixed(3); // Display with three decimal places
         });
     }
 
@@ -418,22 +418,27 @@ const MaterialIssueMaster = (props) => {
                                 cpattern={decimalRegx}
                                 defaultValue={(_cfunc.getFixedNumber(row.Quantity, 3)).toFixed(3)}
                                 autoComplete='off'
-                                onChange={(e) => {
 
-                                    let Qty = e.target.value
-                                    let result = decimalRegx.test(Qty);
-                                    if (result || Qty === "") {
-                                        if (Number(Qty) > row.TotalStock) {
-                                            e.target.value = row.TotalStock
+                                onChange={(e) => {
+                                    let Qty = e.target.value;
+                                    debugger
+                                    // Check for valid decimal input or empty string
+                                    if (decimalRegx_3dit.test(Qty) || Qty === "") {
+                                        let inputQty = Number(Qty) || 0;
+
+                                        if (inputQty > row.TotalStock) {
+                                            e.target.value = row.TotalStock;
                                             row["Quantity"] = row.TotalStock;
                                         } else {
-                                            row["Quantity"] = Number(Qty) || 0;
+                                            row["Quantity"] = inputQty;
                                         }
-                                        workorderQytChange(row);
                                     } else {
-                                        e.target.value = row.TotalStock
-                                        workorderQytChange(row);
+                                        // Invalid input: reset to TotalStock
+                                        e.target.value = row.TotalStock;
+                                        row["Quantity"] = row.TotalStock;
                                     }
+
+                                    workorderQytChange(row);
                                 }}
                             />
                         </div>
@@ -494,7 +499,7 @@ const MaterialIssueMaster = (props) => {
                                                 <div style={{ width: "120px", textAlign: "right" }}>
                                                     <Label
                                                     >
-                                                        {_cfunc.getFixedNumber(index.ObatchwiseQuantity, 3)}
+                                                        {(Number(index.ObatchwiseQuantity)).toFixed(3)}
                                                     </Label>
                                                 </div>
                                             </td>
@@ -507,7 +512,7 @@ const MaterialIssueMaster = (props) => {
                                                         id={`stock${user.id}-${index.id}`}
                                                         style={{ textAlign: "right" }}
                                                         cpattern={decimalRegx}
-                                                        defaultValue={(_cfunc.getFixedNumber(index.Qty, 3)).toFixed(3)}
+                                                        defaultValue={(Number(index.Qty)).toFixed(3)}
                                                         autoComplete='off'
                                                         onChange={(event) => tableQuantityOnchangeHandler(event, user, index)}
                                                     />

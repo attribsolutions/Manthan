@@ -15,7 +15,7 @@ function* GoButton_MaterialIssue_masterPage_genfun({ config }) {  // GO Botton P
           return total + (Number(batch.ObatchwiseQuantity) || 0);
         }, 0);
       }
-      item.StockQuantity = StockQuantity;
+      item.StockQuantity = (Number(StockQuantity)).toFixed(3);
     });
 
 

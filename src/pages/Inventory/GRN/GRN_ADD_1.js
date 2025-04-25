@@ -591,7 +591,6 @@ const GRN_ADD_1 = (props) => {
         {//------------- ItemName column ----------------------------------
             text: "Item Name",
             dataField: "ItemName",
-
             formatter: (value, row) => {
                 return (<div className=" mt-2">
                     <span key={row.id}>{value}</span>
@@ -620,10 +619,6 @@ const GRN_ADD_1 = (props) => {
             dataField: "",
             formatExtraData: { ledgerDetailList, roundoffAmount },
             formatter: (value, row, k,) => {
-
-                try {
-                    document.getElementById(`Quantity${k}`).value = row.Quantity
-                } catch (e) { }
                 return (
                     <span >
                         <Input type="text"
@@ -880,10 +875,7 @@ const GRN_ADD_1 = (props) => {
                 return { width: '100px', textAlign: 'center', text: "center" };
             }
         },
-
-
-
-
+        
         {//------------- ItemName column ----------------------------------
             text: "Amount",
             dataField: "",
@@ -1118,7 +1110,7 @@ const GRN_ADD_1 = (props) => {
             formatExtraData: { grnItemList, roundoffAmount },
             formatter: (value, row, k) => (
                 <div className="row mt-1" >
-                 
+
 
                     <Input type="text"
                         id={`GST_Percent${row.id}`}
