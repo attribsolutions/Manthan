@@ -110,7 +110,6 @@ const MaterialIssueMaster = (props) => {
 
 
 
-
     }));
 
     useEffect(() => {
@@ -354,7 +353,6 @@ const MaterialIssueMaster = (props) => {
     }
 
     const workorderQytChange = (inx_1) => {
-
         let remainingQuantity = inx_1.Quantity;
         inx_1.BatchesData.forEach(inx_2 => {
             const quantity = _cfunc.getFixedNumber(inx_2.ObatchwiseQuantity, 3);
@@ -379,7 +377,7 @@ const MaterialIssueMaster = (props) => {
                 )
             },
             style: (cellContent, user,) => {
-
+                debugger
                 let Stock = user.BatchesData.map((index) => {
                     return index.ObatchwiseQuantity
                 })
@@ -394,6 +392,10 @@ const MaterialIssueMaster = (props) => {
                     };
                 }
             },
+        },
+        {
+            text: "Stock Quantity",
+            dataField: "StockQuantity",
         },
         {
             text: "Original Work Order Qty",
@@ -1058,6 +1060,16 @@ const MaterialIssueMaster = (props) => {
                                 userAcc={userPageAccessState}
                                 // module={"Material Issue"}
                                 Button_Name={"Make Work Order"}
+
+                                editCreatedBy={editCreatedBy}
+                            />
+
+                            <SaveButton pageMode={pageMode}
+                                // loading={saveBtnloading}
+                                onClick={BulkWorkOrder_Handler}
+                                userAcc={userPageAccessState}
+                                // module={"Material Issue"}
+                                Button_Name={"Make Stock Adjust"}
 
                                 editCreatedBy={editCreatedBy}
                             />

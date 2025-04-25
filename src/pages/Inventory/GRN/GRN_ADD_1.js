@@ -275,15 +275,15 @@ const GRN_ADD_1 = (props) => {
         if (Taxable_Amount_elment) {
             Taxable_Amount_elment.innerText = (Taxable_Amount).toFixed(2)
         }
-        const CGST_elment = document.getElementById(`CGST${row.id}`)
+        const CGST_elment = document.getElementById(`CGST-Ledger-${row.id}`)
         if (CGST_elment) {
             CGST_elment.innerText = row.CGST
         }
-        const SGST_elment = document.getElementById(`SGST${row.id}`)
+        const SGST_elment = document.getElementById(`SGST-Ledger-${row.id}`)
         if (SGST_elment) {
             SGST_elment.innerText = row.SGST
         }
-        const IGST_elment = document.getElementById(`IGST${row.id}`)
+        const IGST_elment = document.getElementById(`IGST-Ledger-${row.id}`)
         if (IGST_elment) {
             IGST_elment.innerText = row.IGST
         }
@@ -812,7 +812,21 @@ const GRN_ADD_1 = (props) => {
                 return { width: '170px', textAlign: 'center' };
             }
         },
-
+        {//------------- ItemName column ----------------------------------
+            text: "Basic Amount",
+            dataField: "",
+            // sort: true,
+            formatter: (value, row, k) => (
+                <div className="row mt-1" >
+                    <div className="text-end ">
+                        <samp key={row.id} id={`BasicAmount${row.id}`}>{row.BasicAmount}</samp>
+                    </div>
+                </div>
+            ),
+            headerStyle: (colum, colIndex) => {
+                return { width: '100px', textAlign: 'center', text: "center" };
+            }
+        },
 
         {
             text: "CGST",
@@ -868,21 +882,7 @@ const GRN_ADD_1 = (props) => {
         },
 
 
-        {//------------- ItemName column ----------------------------------
-            text: "Basic Amount",
-            dataField: "",
-            // sort: true,
-            formatter: (value, row, k) => (
-                <div className="row mt-1" >
-                    <div className="text-end ">
-                        <samp key={row.id} id={`BasicAmount${row.id}`}>{row.BasicAmount}</samp>
-                    </div>
-                </div>
-            ),
-            headerStyle: (colum, colIndex) => {
-                return { width: '100px', textAlign: 'center', text: "center" };
-            }
-        },
+
 
         {//------------- ItemName column ----------------------------------
             text: "Amount",
@@ -1102,7 +1102,7 @@ const GRN_ADD_1 = (props) => {
             formatter: (value, row, k) => (
                 <div className="row mt-1" >
                     <div className="text-end ">
-                        <samp key={row.id} id={`abc${row.id}`}>{value}</samp>
+                        <samp key={row.id} id={`GST_Type${row.id}`}>{value}</samp>
                     </div>
                 </div>
             ),
@@ -1118,9 +1118,7 @@ const GRN_ADD_1 = (props) => {
             formatExtraData: { grnItemList, roundoffAmount },
             formatter: (value, row, k) => (
                 <div className="row mt-1" >
-                    {/* <div className="text-end ">
-                        <samp key={row.id} id={`abc${row.id}`}>{value}</samp>
-                    </div> */}
+                 
 
                     <Input type="text"
                         id={`GST_Percent${row.id}`}
@@ -1158,7 +1156,7 @@ const GRN_ADD_1 = (props) => {
             formatter: (value, row, k) => (
                 <div className="row mt-1" >
                     <div className="text-end ">
-                        <samp key={row.id} id={`CGST${row.id}`}>{row.CGST}</samp>
+                        <samp key={row.id} id={`CGST-Ledger-${row.id}`}>{row.CGST}</samp>
                     </div>
                 </div>
             ),
@@ -1176,7 +1174,7 @@ const GRN_ADD_1 = (props) => {
             formatter: (value, row, k) => (
                 <div className="row mt-1" >
                     <div className="text-end ">
-                        <samp key={row.id} id={`SGST${row.id}`}>{row.SGST}</samp>
+                        <samp key={row.id} id={`SGST-Ledger-${row.id}`}>{row.SGST}</samp>
                     </div>
                 </div>
             ),
@@ -1192,7 +1190,7 @@ const GRN_ADD_1 = (props) => {
             formatter: (value, row, k) => (
                 <div className="row mt-1" >
                     <div className="text-end ">
-                        <samp key={row.id} id={`IGST${row.id}`}>{row.IGST}</samp>
+                        <samp key={row.id} id={`IGST-Ledger-${row.id}`}>{row.IGST}</samp>
                     </div>
                 </div>
             ),
