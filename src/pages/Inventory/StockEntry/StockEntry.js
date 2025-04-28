@@ -1570,7 +1570,7 @@ const StockEntry = (props) => {
             "BatchDate": index.BatchDate,
             "BatchCode": index.BatchCode,
             "BatchCodeID": 0,
-            "ClientID": isSweetAndSnacksCompany ? 0 : undefined
+            "ClientID": 0
         });
 
         // const ReturnItems = TableArr.map(mapItemArray, values.IsAllStockZero);
