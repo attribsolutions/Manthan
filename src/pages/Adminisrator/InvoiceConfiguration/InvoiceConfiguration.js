@@ -37,6 +37,7 @@ import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     btnIsDissablefunc,
     CommonConsole,
+    IsSweetAndSnacksCompany,
     loginCompanyID,
     loginPartyName,
     loginSelectedPartyID,
@@ -72,7 +73,9 @@ const InvoiceConfiguration = (props) => {
         PaymentQr: "",
         ReturnA4Print: "",
         CRDRNoteA4Print: "",
-        EWayBillApplicable: ""
+        EWayBillApplicable: "",
+        OrderA4Print: "",
+        AutoInvoiceSendToSap: ""
         // IsTCSPercentageforNonValidatedPANCustomer: "",
         // IsTCSPercentageforValidatedPANCustomer: ""
     }
@@ -192,8 +195,6 @@ const InvoiceConfiguration = (props) => {
         dispatch(getpartysetting_API(loginSelectedPartyID(), loginCompanyID()))
     }, [postMsg])
 
-
-
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             setState(() => resetFunction(fileds, state))// Clear form values
@@ -209,13 +210,13 @@ const InvoiceConfiguration = (props) => {
         }
     }, [updateMsg, modalCss]);
 
-
     useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
+
     useEffect(() => {
         if (imageTable.length > 0) {
             setmodal_backdrop(true)
@@ -256,10 +257,8 @@ const InvoiceConfiguration = (props) => {
                 a.values.ReturnA4Print = Data.ReturnA4Print;
                 a.values.CRDRNoteA4Print = Data.CRDRNoteA4Print;
                 a.values.EWayBillApplicable = Data.EWayBillApplicable;
-
-
-
-
+                a.values.OrderA4Print = Data.OrderA4Print;
+                a.values.AutoInvoiceSendToSap = Data.AutoInvoiceSendToSap;
 
                 return a
             })
@@ -844,6 +843,91 @@ const InvoiceConfiguration = (props) => {
 
 
                                             </Row>
+
+
+
+
+
+                                            <Row>
+
+
+
+
+
+                                                <Col sm={4}>
+                                                    <FormGroup className="mb-3">
+                                                        <Row>
+                                                            <Col sm={5} >
+                                                                <Label htmlFor="validationCustom01">  {fieldLabel.OrderA4Print} </Label>
+                                                            </Col>
+                                                            <Col sm={7} >
+                                                                <Input
+                                                                    style={{ marginLeft: "53px" }}
+                                                                    type="checkbox"
+                                                                    className="p-2"
+                                                                    checked={values.OrderA4Print.Value === "0" ? false : true}
+                                                                    onChange={(e) => {
+
+                                                                        setState((i) => {
+                                                                            const a = { ...i }
+                                                                            a.values.OrderA4Print.Value = e.target.checked === false ? "0" : "1";
+                                                                            return a
+                                                                        })
+                                                                    }}
+                                                                >
+                                                                </Input>
+
+                                                            </Col>
+                                                        </Row>
+                                                    </FormGroup>
+                                                </Col>
+                                                {
+                                                    IsSweetAndSnacksCompany() && <Col sm={8}>
+                                                        <FormGroup className="mb-3">
+                                                            <Row>
+                                                                <Col sm={3} >
+                                                                    <Label htmlFor="validationCustom01">  {fieldLabel.AutoInvoiceSendToSap} </Label>
+                                                                </Col>
+                                                                <Col sm={9} >
+                                                                    <Input
+                                                                        style={{ marginLeft: "53px" }}
+                                                                        type="checkbox"
+                                                                        className="p-2"
+                                                                        checked={values.AutoInvoiceSendToSap.Value === "0" ? false : true}
+                                                                        onChange={(e) => {
+                                                                            setState((i) => {
+                                                                                const a = { ...i }
+
+                                                                                a.values.AutoInvoiceSendToSap.Value = e.target.checked === false ? "0" : "1";
+                                                                                return a
+                                                                            })
+                                                                        }}
+                                                                    >
+                                                                    </Input>
+
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup>
+                                                    </Col>}
+
+                                            </Row>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -27,7 +27,7 @@ const DataExportToSAP = (props) => {
 
     const [headerFilters, setHeaderFilters] = useState({ InvoiceDate: currentDate_ymd, });
     const [userPageAccessState, setUserAccState] = useState('');
-    const [PartyDropdown, setPartyDropdown] = useState();
+    const [PartyDropdown, setPartyDropdown] = useState([]);
 
     const [tableData, setTableData] = useState([]);
 
@@ -116,17 +116,17 @@ const DataExportToSAP = (props) => {
 
 
     function UploadHandler(e) {
-
+        debugger
         if (!PartyDropdown) {
             customAlert({ Type: 3, Message: alertMessages.selectPartyName });
             return
         }
         const jsonBody = JSON.stringify({
             "InvoiceDate": headerFilters.InvoiceDate,
-            "Party": isFrenchieses ? _cfunc.loginPartyID() : PartyDropdown.value
+            "Party": isFrenchieses ? String(_cfunc.loginPartyID()) : PartyDropdown.map(i => i.value).join(',')
         });
         let config = { jsonBody }
-        dispatch(DataExportTo_SAP_Action(config));
+        // dispatch(DataExportTo_SAP_Action(config));
     }
 
     function DateOnchange(e, date) {
@@ -177,6 +177,7 @@ const DataExportToSAP = (props) => {
                                     <C_Select
                                         name="Party"
                                         value={PartyDropdown}
+                                        isMulti={true}
                                         isSearchable={true}
                                         isLoading={partyDropdownLoadings}
                                         className="react-dropdown"

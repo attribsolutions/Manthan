@@ -37,13 +37,15 @@ import {
     metaTagLabel,
     currentDate_ymd,
     loginPartyID,
+    loginJsonBody,
+    loginSelectedPartyID,
 } from "../../../../components/Common/CommonFunction";
 import * as pageId from "../../../../routes/allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { C_DatePicker } from "../../../../CustomValidateForm";
-import { GenralMasterSubType } from "../../../../helpers/backend_helper";
+import { GenralMasterSubType, User_Component_GetMethod_API } from "../../../../helpers/backend_helper";
 import { SPos_MachineTypeList_Success, SPos_MachineTypeSave_Action, SPos_MachineTypeSave_Success } from "../../../../store/SweetPOSStore/Administrator/MachineTypeMasterRedux/action";
 import SaveButtonDraggable from "../../../../components/Common/saveButtonDraggable";
 
@@ -73,7 +75,8 @@ const MachineTypeMaster = (props) => {
         ServerName: "",
         ServerPassWord: "",
         ServerUser: "",
-        Invoiceprefix: ""
+        Invoiceprefix: "",
+        UserDetails: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -81,6 +84,11 @@ const MachineTypeMaster = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
     const [machineTypeOptions, setMachineTypeOptions] = useState([]);
+
+    const [UserOptions, setUserOptions] = useState([]);
+
+
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -95,7 +103,7 @@ const MachineTypeMaster = (props) => {
             pageField: state.CommonPageFieldReducer.pageField,
         }));
 
-   const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
     useEffect(() => {
         const page_Id = pageId.SWEET_POS_MACHINE_MASTER
         dispatch(commonPageFieldSuccess(null));
@@ -149,6 +157,17 @@ const MachineTypeMaster = (props) => {
         };
         const response = await GenralMasterSubType(jsonBody)
 
+        const loginjson = loginJsonBody()
+        loginjson["PartyID"] = loginSelectedPartyID()
+        const UserJsonBody = JSON.stringify(loginjson)
+
+        const UserResponse = await User_Component_GetMethod_API(UserJsonBody)
+        debugger
+        setUserOptions(UserResponse.Data.map((index) => ({
+            value: index.id,
+            label: index.LoginName,
+        })))
+
         setMachineTypeOptions(response.Data.map((index) => ({
             value: index.id,
             label: index.Name,
@@ -185,7 +204,7 @@ const MachineTypeMaster = (props) => {
                 const { id, ClientID, IsAutoUpdate, IsGiveUpdate, IsServer, IsService,
                     MacID, MachineName, MachineRoleName, MachineTypeDetails, ServerSequence,
                     UploadSaleRecordCount, Validity, Version, Invoiceprefix,
-                    ServerDatabase, ServerHost, ServerName, ServerPassWord, ServerUser
+                    ServerDatabase, ServerHost, ServerName, ServerPassWord, ServerUser, PrimaryUserID, PrimaryUserName
 
                 } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
@@ -208,7 +227,12 @@ const MachineTypeMaster = (props) => {
                 hasValid.ServerName.valid = true;
                 hasValid.ServerPassWord.valid = true;
                 hasValid.ServerUser.valid = true;
-                hasValid.Invoiceprefix.valid = true
+                hasValid.Invoiceprefix.valid = true;
+                hasValid.UserDetails.valid = true;
+
+
+
+
 
 
                 values.id = id
@@ -235,6 +259,11 @@ const MachineTypeMaster = (props) => {
                 values.ServerPassWord = ServerPassWord
                 values.ServerUser = ServerUser
                 values.Invoiceprefix = Invoiceprefix
+                values.UserDetails = {
+                    label: PrimaryUserName,
+                    value: PrimaryUserID
+                };
+
 
 
                 setState({ values, fieldLabel, hasValid, required, isError })
@@ -315,7 +344,7 @@ const MachineTypeMaster = (props) => {
                     "UploadSaleRecordCount": values.UploadSaleRecordCount,
                     "Validity": values.Validity,
                     "Version": values.Version,
-
+                    "PrimaryUser": values.UserDetails.value,
                     "IsServer": values.IsServer,
                     "IsService": !(values.IsServer) ? false : values.IsService,
                     "ServerDatabase": !(values.IsServer) ? null : values.ServerDatabase,
@@ -585,6 +614,26 @@ const MachineTypeMaster = (props) => {
                                                             </Row>
                                                         </FormGroup>
                                                     </Col>
+
+                                                    <Col md="1">  </Col>
+
+
+                                                    <FormGroup className="mb-2 col col-sm-3 ">
+                                                        <Label htmlFor="validationCustom01">{fieldLabel.UserDetails} </Label>
+                                                        <Select
+                                                            id="UserDetails"
+                                                            name="UserDetails"
+                                                            value={values.UserDetails}
+                                                            isSearchable={true}
+                                                            className="react-dropdown"
+                                                            classNamePrefix="dropdown"
+                                                            options={UserOptions}
+                                                            onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                                        />
+                                                        {isError.UserDetails.length > 0 && (
+                                                            <span className="invalid-feedback">{isError.UserDetails}</span>
+                                                        )}
+                                                    </FormGroup>
                                                 </Row>
                                             </CardBody>
                                         </Card>
