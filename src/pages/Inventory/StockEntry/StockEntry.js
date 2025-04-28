@@ -1016,7 +1016,7 @@ const StockEntry = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
     const currentDate_ymd = _cfunc.date_ymd_func();
-
+    const isSweetAndSnacksCompany = _cfunc.IsSweetAndSnacksCompany()
     const isVisibleRateDrop = _cfunc.checkRateDropVisibility()
     const IsFranchise = _cfunc.loginUserIsFranchisesRole()
     const [pageMode] = useState(mode.defaultsave);
@@ -1569,7 +1569,8 @@ const StockEntry = (props) => {
             "RateValue": index.defaultRate.label,
             "BatchDate": index.BatchDate,
             "BatchCode": index.BatchCode,
-            "BatchCodeID": 0
+            "BatchCodeID": 0,
+            "ClientID": isSweetAndSnacksCompany ? 0 : undefined
         });
 
         // const ReturnItems = TableArr.map(mapItemArray, values.IsAllStockZero);
