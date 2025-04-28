@@ -31,7 +31,8 @@ import {
     makeIB_InvoiceActionSuccess,
     editInvoiceActionSuccess,
     updateInvoiceAction,
-    updateInvoiceActionSuccess
+    updateInvoiceActionSuccess,
+    InvoiceSendToScm
 } from "../../../store/Sales/Invoice/action";
 import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
@@ -232,7 +233,7 @@ const Invoice = (props) => {
 
     useEffect(async () => {
         if (postMsg.Status === true && postMsg.StatusCode === 200) {
-
+            debugger
             dispatch(invoiceSaveActionSuccess({ Status: false })); // Reset the status to false
             const config = {
                 editId: postMsg.TransactionID.join(', '),////for saveAndDownloadPdfMode
@@ -251,6 +252,12 @@ const Invoice = (props) => {
                 try {
                     dispatch(Uploaded_EInvoiceAction(config));
                 } catch (error) { }
+            }
+
+            if (_cfunc.IsSweetAndSnacksCompany() && systemSetting.AutoInvoiceSendToSap === "1") {
+                const jsonBody = JSON.stringify({ InvoiceID: postMsg.TransactionID[0] })
+                const btnId = config.btnId
+                dispatch(InvoiceSendToScm({ jsonBody, btnId }))
             }
 
             customAlert({

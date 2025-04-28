@@ -337,6 +337,8 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
 
       index1["TrayQuantity"] = index1.OrderQty
 
+
+
       let totalAmount = 0;
       let remainingOrderQty = parseFloat(index1.Quantity); // Convert to a number
       let totalStockQty = 0;
@@ -463,17 +465,6 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
     });
 
   }
-
-
-
-
-
-
-
-
-
-
-
 
 
   return response;

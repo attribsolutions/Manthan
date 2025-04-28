@@ -3,7 +3,7 @@ import cbm_logo from "../../assets/images/cbm_logo.png"
 
 import * as table from './TableData'
 import { toWords, numberWithCommas } from "../Report_common_function";
-import { CurrentTime, IsSweetAndSnacksCompany, compareGSTINState, convertOnlyTimefunc, currentDate_dmy, date_dmy_func, loginUserIsFranchisesRole } from "../../components/Common/CommonFunction";
+import { CurrentTime, IsSweetAndSnacksCompany, compareGSTINState, convertOnlyTimefunc, currentDate_dmy, date_dmy_func, loginSystemSetting, loginUserIsFranchisesRole } from "../../components/Common/CommonFunction";
 import { url } from "../../routes";
 let initial_y = 0
 const isSweetAndSnacksCompany = IsSweetAndSnacksCompany()
@@ -17,7 +17,24 @@ export const pageBorder = (doc) => {
     doc.line(570, 815, 30, 815);//horizontal line (Bottom)    
 }
 
+
+
+
+export const pageBorder_A5 = (doc) => {
+    doc.setDrawColor(0, 0, 0);
+    doc.line(570, 16, 30, 16);//horizontal line (Top)
+    doc.line(30, 400, 30, 16);//vertical line (left)
+    doc.line(570, 400, 570, 16);//vertical line (Right)
+    doc.line(570, 400, 30, 400);//horizontal line (Bottom)    
+}
+
+
+
+
+
 export const pageHeder = (doc, data) => {
+  
+
     if (isSweetAndSnacksCompany) {
         doc.addImage(cbm_logo, 'PNG', 33, 17, 80, 46, null, 'FAST')
     } else {
@@ -40,6 +57,8 @@ export const pageHeder = (doc, data) => {
 }
 
 export const reportHeder1 = (doc, data) => {
+
+    const IsA4Print = Number(loginSystemSetting().OrderA4Print)
     doc.setFont('Tahoma')
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
@@ -49,10 +68,16 @@ export const reportHeder1 = (doc, data) => {
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 63, 30, 63)  //Image below line  1
     doc.line(570, 16, 30, 16);//horizontal line 2
-    doc.line(570, 80, 30, 80);//horizontal line 3
-    doc.line(30, 789, 30, 16);//vertical left 1
+    doc.line(570, 80, 30, 80);//horizontal line 3\
 
-    doc.line(570, 789, 570, 16);//vertical left 2
+    if (IsA4Print) {
+        doc.line(30, 789, 30, 16);//vertical left 1
+        doc.line(570, 789, 570, 16);//vertical left 2
+    } else {
+        doc.line(30, 400, 30, 16);//vertical left 1
+        doc.line(570, 400, 570, 16);//vertical left 2
+    }
+
 
 
     //Header Table Style 
@@ -298,14 +323,6 @@ export const reportHeder1 = (doc, data) => {
 }
 
 
-
-export const reportHeder2 = (doc, data) => {
-    doc.setFont('Tahoma')
-    doc.setFontSize(10)
-    doc.setFont(undefined, 'bold')
-}
-
-
 export const reportHeder3 = (doc, data) => {
 
     doc.setFont('Tahoma')
@@ -331,53 +348,6 @@ export const reportHeder3 = (doc, data) => {
 
 
 }
-
-export const reportFooter = (doc, data) => {
-    var options1 = {
-        didParseCell: (data1) => {
-            if (data1.row.cells[0].raw === "Terms And Condition") {
-                data1.row.cells[0].styles.fontSize = 10
-                data1.row.cells[0].styles.fontStyle = "bold"
-            }
-
-        },
-        margin: {
-            top: 45, left: 30, right: 30, bottom: 10
-        },
-        showHead: 'always',
-        theme: 'plain',
-        styles: {
-            overflow: 'linebreak',
-            fontSize: 8,
-            height: 0,
-        },
-        bodyStyles: {
-            columnWidth: 'wrap',
-            textColor: [30, 30, 30],
-            cellPadding: 1,
-            fontSize: 8,
-            fontStyle: 'bold',
-            lineColor: [0, 0, 0]
-        },
-        columnStyles: {
-            0: {
-                valign: "top",
-                columnWidth: 395,
-                halign: 'lfet',
-            },
-
-        },
-        tableLineColor: "black",
-
-        startY: 765,
-
-    };
-
-    doc.autoTable(table.Footercolumn, table.ReportRows(data), options1);
-    doc.setFontSize(9)
-}
-
-
 export const tableBody = (doc, data) => {
     const { OrderItem = [] } = data
     var options = {
@@ -590,7 +560,6 @@ export const tableBody = (doc, data) => {
         }
     })
 }
-
 export const tableBodyWithIGST = (doc, data) => {
 
     const { OrderItem = [] } = data
@@ -770,7 +739,6 @@ export const tableBodyWithIGST = (doc, data) => {
         }
     })
 }
-
 export const tableBodyForAmericanOrder = (doc, data) => {
 
     const { OrderItem = [] } = data
@@ -944,8 +912,50 @@ export const tableBodyForAmericanOrder = (doc, data) => {
         }
     })
 }
-
 export const pageFooter = (doc, data) => {
+
+    var options1 = {
+        didParseCell: (data1) => {
+            if (data1.row.cells[0].raw === "Terms And Condition") {
+                data1.row.cells[0].styles.fontSize = 10
+                data1.row.cells[0].styles.fontStyle = "bold"
+            }
+
+        },
+        margin: {
+            top: 45, left: 30, right: 30, bottom: 10
+        },
+        showHead: 'always',
+        theme: 'plain',
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 8,
+            height: 0,
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: [30, 30, 30],
+            cellPadding: 1,
+            fontSize: 8,
+            fontStyle: 'bold',
+            lineColor: [0, 0, 0]
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 395,
+                halign: 'lfet',
+            },
+
+        },
+        tableLineColor: "black",
+
+        startY: 765,
+
+    };
+
+    doc.autoTable(table.Footercolumn, table.ReportRows(data), options1);
+    doc.setFontSize(9)
 
     const GrandTotal = Number(data.OrderAmount)
     const Total = numberWithCommas((GrandTotal).toFixed(2))
@@ -953,8 +963,8 @@ export const pageFooter = (doc, data) => {
     doc.setDrawColor(0, 0, 0);
 
     doc.line(570, 735, 30, 735);//horizontal line Footer 2
-
     doc.line(430, 735, 430, 815);//vertical right1 Sub Total
+
     doc.setFont('Tahoma')
     // doc.line(430, 750, 30, 750);//horizontal line (Bottom)
 
@@ -1121,6 +1131,232 @@ export const pageFooter = (doc, data) => {
         doc.setPage(i)
         pageHeder(doc, data)
         pageBorder(doc)
+        reportHeder3(doc, data)
+        doc.setFont('helvetica', 'Normal')
+
+        doc.text('Print Date :' + String(currentDate_dmy) + 'Time' + String(CurrentTime()), 30, 828,)
+        doc.text('Page' + String(i) + ' of ' + String(pageCount), 500, 828,)
+
+    }
+}
+export const pageFooter_A5 = (doc, data) => {
+
+
+    var options1 = {
+        didParseCell: (data1) => {
+            if (data1.row.cells[0].raw === "Terms And Condition") {
+                data1.row.cells[0].styles.fontSize = 10
+                data1.row.cells[0].styles.fontStyle = "bold"
+            }
+
+        },
+        margin: {
+            top: 45, left: 30, right: 30, bottom: 10
+        },
+        showHead: 'always',
+        theme: 'plain',
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 8,
+            height: 0,
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: [30, 30, 30],
+            cellPadding: 1,
+            fontSize: 8,
+            fontStyle: 'bold',
+            lineColor: [0, 0, 0]
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 395,
+                halign: 'lfet',
+            },
+
+        },
+        tableLineColor: "black",
+
+        startY: 340,
+
+    };
+
+    doc.autoTable(table.Footercolumn, table.ReportRows(data), options1);
+    doc.setFontSize(9)
+
+    const GrandTotal = Number(data.OrderAmount)
+    const Total = numberWithCommas((GrandTotal).toFixed(2))
+    // doc.addImage(upi_qr_code, 'PNG', 470, 750, 80, 60)
+    doc.setDrawColor(0, 0, 0);
+
+    doc.line(570, 320, 30, 320);//horizontal line Footer 2
+
+    doc.line(430, 320, 430, 400);//vertical right1 Sub Total
+    doc.setFont('Tahoma')
+    // doc.line(430, 750, 30, 750);//horizontal line (Bottom)
+
+    const a = data.OrderItem.map((data) => ({
+        CGST: Number(data.CGST),
+        SGST: Number(data.SGST),
+        BasicAmount: Number(data.BasicAmount),
+        IGST: Number(data.IGST),
+        DiscountAmount: Number(data.DiscountAmount),
+
+    }));
+    let totalCGST = 0;
+    let totalSGST = 0;
+    let TotalBasicAmount = 0;
+    let totalIGST = 0;
+    let totalDiscount = 0;
+
+    a.forEach(arg => {
+        totalCGST += arg.CGST;
+        totalSGST += arg.SGST;
+        TotalBasicAmount += arg.BasicAmount;
+        totalIGST += arg.IGST;
+        totalDiscount += arg.DiscountAmount;
+    });
+
+    const TotalGST = totalCGST + totalSGST;
+
+    const isIGST = compareGSTINState(data.CustomerGSTIN, data.SupplierGSTIN)
+    if (isIGST || data.isAmerica) {
+        doc.setFontSize(8)
+        doc.text(`Total Basic:`, 434, 300,)
+        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 568, 300, 'right')
+
+        doc.text(`Total Disc:`, 434, 752,)
+        doc.text(`${numberWithCommas(Number(totalDiscount).toFixed(2))}`, 568, 752, 'right')
+
+        doc.text(`Total IGST:`, 434, 762,)
+        doc.text(`${numberWithCommas(Number(totalIGST).toFixed(2))}`, 568, 762, 'right')
+
+        doc.text(`Total GST:`, 434, 772,)
+        doc.text(` ${numberWithCommas(Number(totalIGST).toFixed(2))}`, 568, 772, 'right')
+
+        if (loginUserIsFranchisesRole()) {
+            doc.text(`Advance Amount:`, 434, 782,)
+            doc.text(` ${numberWithCommas(Number(data.AdvanceAmount).toFixed(2))}`, 568, 782, 'right')
+        }
+
+
+
+    } else {
+
+        doc.setFontSize(8)
+        doc.text(`Total Basic:`, 434, 330,)
+        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 568, 330, 'right')
+
+        doc.text(`Total Disc:`, 434, 340,)
+        doc.text(`${numberWithCommas(Number(totalDiscount).toFixed(2))}`, 568, 340, 'right')
+
+        doc.text(`Total CGST:`, 434, 350,)
+        doc.text(`${numberWithCommas(Number(totalCGST).toFixed(2))}`, 568, 350, 'right')
+
+        doc.text(`Total SGST:`, 434, 360,)
+        doc.text(`${numberWithCommas(Number(totalSGST).toFixed(2))}`, 568, 360, 'right')
+
+        doc.text(`Total GST:`, 434, 370,)
+        doc.text(` ${numberWithCommas(Number(TotalGST).toFixed(2))}`, 568, 370, 'right')
+
+        if (loginUserIsFranchisesRole()) {
+            doc.text(`Advance Amount:`, 434, 380,)
+            doc.text(` ${numberWithCommas(Number(data.AdvanceAmount).toFixed(2))}`, 568, 380, 'right')
+        }
+
+    }
+
+
+    doc.setFont(undefined, 'Normal')
+    doc.setFontSize(10)
+    doc.setFont(undefined, 'bold')
+    doc.text(`Order Amount:`, 433, 395,)
+    // const GrandTotal = Math.round(data.OrderAmount)
+    //  const GrandTotal = numberWithCommas((56784936).toFixed(2))
+    doc.text(`${Total}`, 568, 395, 'right')
+    doc.setFont(undefined, 'Normal')
+    doc.setFont('Tahoma')
+    doc.setFontSize(9)
+    doc.setFont('Tahoma')
+    doc.setFontSize(8)
+    const terms = data.OrderTermsAndCondition
+    doc.setFont(undefined, 'bold')
+    doc.setFontSize(10)
+    // doc.text(`Terms And Condition  `, 33, 775, "justify")
+    doc.setFont(undefined, 'Normal')
+    doc.setFontSize(9)
+
+
+
+    doc.setFontSize(10)
+    // doc.text(`${data.SupplierName} `, 390, 785, "justify")
+    doc.setFontSize(10)
+    // doc.text(`${data.CustomerName} `, 175, 811,"justify")
+    doc.setFontSize(9)
+    // doc.text(`Signature `, 400, 811, "justify")
+    doc.setFont("Arimo");
+
+
+
+    let DetailsOfCurrencyStyle = {
+
+        didDrawCell: (data1) => {
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(9)
+                doc.setFont(undefined, 'bold')
+                if (data.isAmerica) {
+                    doc.text('Dollars: ', x, y)
+                } else {
+                    doc.text('Rupees: ', x, y)
+                }
+            }
+        },
+
+        margin: {
+            top: 0, left: 30,
+        },
+        showHead: 'always',
+        theme: 'grid',
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 8,
+            height: 0,
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: "black",
+            cellPadding: 1,
+            fontSize: 9,
+            lineColor: "black"
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 400,
+                halign: 'lfet',
+            }
+
+        },
+        tableLineColor: "black",
+        startY: 320,
+
+    };
+
+    doc.autoTable(table.Currencycolumn, table.CurrencyRow(data), DetailsOfCurrencyStyle,);
+
+
+    const pageCount = doc.internal.getNumberOfPages()
+    doc.setFont('helvetica', 'Normal')
+    // doc.setFontSize(8)
+    for (var i = 1; i <= pageCount; i++) {
+        doc.setPage(i)
+        pageHeder(doc, data)
+        pageBorder_A5(doc)
         reportHeder3(doc, data)
         doc.setFont('helvetica', 'Normal')
 
