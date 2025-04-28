@@ -11,7 +11,7 @@ import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } fro
 import DynamicColumnHook from "../../../components/Common/TableCommonFunc";
 import GlobalCustomTable from "../../../GlobalCustomTable";
 import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
-import { DataExportTo_SAP_Action, Fetch_UploadFile_Action } from "../../../store/Administrator/ExportToSAPRedux/action";
+import { DataExportTo_SAP_Action, DataExportTo_SAP_Action_Success, Fetch_UploadFile_Action } from "../../../store/Administrator/ExportToSAPRedux/action";
 import { allLabelWithZero } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
@@ -67,6 +67,7 @@ const DataExportToSAP = (props) => {
 
             setTableData([]);
             dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore show state
+            dispatch(DataExportTo_SAP_Action_Success([]))
         }
     }, []);
 
@@ -97,11 +98,13 @@ const DataExportToSAP = (props) => {
         debugger
         if (ExportToSAPData?.StatusCode === 200 && ExportToSAPData?.Status === true) {
             dispatch(Fetch_UploadFile_Action())
+
             customAlert({
                 Type: 1,
                 Message: ExportToSAPData.Message,
             })
         } else if (ExportToSAPData?.Status === false && [404, 400, 204].includes(ExportToSAPData?.StatusCode)) {
+            dispatch(DataExportTo_SAP_Action_Success([]))
             customAlert({
                 Type: 9,
                 Message: ExportToSAPData.Message,
@@ -126,7 +129,7 @@ const DataExportToSAP = (props) => {
             "Party": isFrenchieses ? String(_cfunc.loginPartyID()) : PartyDropdown.map(i => i.value).join(',')
         });
         let config = { jsonBody }
-        // dispatch(DataExportTo_SAP_Action(config));
+        dispatch(DataExportTo_SAP_Action(config));
     }
 
     function DateOnchange(e, date) {

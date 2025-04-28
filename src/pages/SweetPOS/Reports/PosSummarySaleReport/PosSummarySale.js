@@ -95,7 +95,7 @@ const PosSummarySale = (props) => {
                         excelTableData: ItemSaleReportGobtn.Data,
                         excelFileName: "Periodic GRN Report"
                     })
-                    dispatch(Periodic_GRN_Report_Success({ status: false }));
+                    dispatch(ItemSaleGoButton_API_Success([]));
                 } else if (ItemSaleReportGobtn.BtnMode === "print") {
                     let config = { rowData: { Data: [] } }
                     config.rowData["ReportType"] = report.POSSaleSummary;
@@ -110,7 +110,7 @@ const PosSummarySale = (props) => {
 
 
                     dispatch(getpdfReportdataSuccess(config.rowData))
-                    // dispatch(Periodic_GRN_Report_Success({ status: false }));
+                    dispatch(ItemSaleGoButton_API_Success([]));
                 }
             }
             else if ((ItemSaleReportGobtn.Status === true) && (ItemSaleReportGobtn.StatusCode === 204)) {
@@ -154,7 +154,7 @@ const PosSummarySale = (props) => {
             ItemID: "0"
 
         })
-        // setMode(mode)
+        
         let response = await ItemSaleReport_GoBtn_API({ jsonBody })
         if (response.Status === true) {
             response["BtnMode"] = btnMode
@@ -243,7 +243,7 @@ const PosSummarySale = (props) => {
                                 type="button"
                                 spinnerColor="white"
                                 className="btn btn-success m-3 mr"
-                                loading={PrediocGrnData.BtnMode === "print"}
+                                loading={ItemSaleReportGobtn.BtnMode === "print"}
                                 onClick={(e) => excel_And_GoBtnHandler(e, "print")}
                             >
                                 Print
