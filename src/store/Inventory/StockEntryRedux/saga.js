@@ -12,7 +12,7 @@ function* StockEntry_API_GenFunc({ config }) { // Save GRN  genrator function
         if (loginUserIsFranchisesRole()) {
             response = yield call(apiCall.Franchise_StockEntry_Post_API, config);
         } else if (subPageMode === url.RATE_ADJUSTMENT) {
-            response = yield call(apiCall.RateAdjustment_API, config);
+            response = yield call(apiCall.BatchAdjustment_API, config);
         } else {
             response = yield call(apiCall.StockEntry_Post_API, config);
         }

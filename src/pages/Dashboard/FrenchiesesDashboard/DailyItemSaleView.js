@@ -252,8 +252,25 @@ const DailyItemSaleView = () => {
                         </div>
 
 
+                        {data?.UnitPerTransaction && <div className="d-flex align-items-center">
+                            <div className="flex-grow-1 ms-1">
+                                <span className="font-size-16">{"Unit Per Transaction"}</span>
+                            </div>
+
+                            <div className="flex-shrink-0" style={{ marginRight: "10px" }}>
+                                <span style={{ width: "170px" }} className="badge rounded-pill badge-soft-info fs-6 fw-medium">{data.UnitPerTransaction}</span>
+                            </div>
+                        </div>}
+                        {data?.AverageTransactionValue && <div className="d-flex align-items-center">
+                            <div className="flex-grow-1 ms-1">
+                                <span className="font-size-16">{"Average Transaction Value"}</span>
+                            </div>
+                            <div className="flex-shrink-0" style={{ marginRight: "10px" }}>
+                                <span style={{ width: "170px" }} className="badge rounded-pill badge-soft-info  fs-6 fw-medium">{data.AverageTransactionValue}</span>
+                            </div>
+                        </div>}
                     </Col>
-                </Row>
+                </Row> 
 
                 {/* <CardBody> */}
                 <span className="badge rounded-pill badge-soft-primary font-size-18 fw-medium"> First Bill :{data?.FirstBillTime ? convertTo12Hour(data?.FirstBillTime) : ""} </span>
