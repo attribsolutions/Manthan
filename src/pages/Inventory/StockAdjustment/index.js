@@ -719,7 +719,7 @@ const StockAdjustment = (props) => {
                                 </Col>
 
 
-                                <Col sm={4} className="">
+                                {subPageMode === url.RATE_ADJUSTMENT && <Col sm={4} className="">
                                     <FormGroup className="mb- row mt-3 mb-1 " >
                                         <Label className="col-sm-5 p-2"
                                             style={{ width: "130px" }}> Adjustment Type</Label>
@@ -739,7 +739,7 @@ const StockAdjustment = (props) => {
                                             />
                                         </Col>
                                     </FormGroup>
-                                </Col>
+                                </Col>}
 
                                 <Col sm={3} className="">
                                 </Col>
