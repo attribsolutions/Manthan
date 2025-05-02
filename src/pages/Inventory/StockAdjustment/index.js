@@ -26,6 +26,9 @@ import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable"
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import GlobalCustomTable from "../../../GlobalCustomTable";
 import { GroupSubgroupDisplay, ModifyTableData_func } from "../../../components/Common/TableCommonFunc";
+import { GenralMasterSubType } from "../../../helpers/backend_helper";
+import { AdjustmentTypeID, GST, GSTPercentage, MRPValue, Rate } from "../../../routes/GeneralMasterID";
+import { allLabelWithBlank, selectLabelWithZero } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const StockAdjustment = (props) => {
 
@@ -39,6 +42,15 @@ const StockAdjustment = (props) => {
 
     const [TableArr, setTableArr] = useState([]);
     const [itemNameSelect, setItemNameSelect] = useState('');
+
+    const [TypeList_Options, setTypeList_Options] = useState({});
+
+    const [TypeSelect, setTypeSelect] = useState(selectLabelWithZero);
+
+
+
+
+
 
 
     const location = { ...history.location }
@@ -120,8 +132,10 @@ const StockAdjustment = (props) => {
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+
             dispatch(saveStockEntrySuccess({ Status: false }))
             setTableArr([])
+            setTypeSelect([])
             customAlert({
                 Type: 1,
                 Message: postMsg.Message,
@@ -137,11 +151,39 @@ const StockAdjustment = (props) => {
         }
     }, [postMsg])
 
+
+
+    useEffect(async () => {
+        const jsonBody = JSON.stringify({
+            Company: _cfunc.loginCompanyID(),
+            TypeID: AdjustmentTypeID,
+        });
+
+        const resp = await GenralMasterSubType(jsonBody);
+        if (resp.StatusCode === 200) {
+
+            const TypeOptions = resp.Data.map((index) => ({
+                value: index.id,
+                label: index.Name,
+            }));
+
+            setTypeList_Options(TypeOptions);
+        }
+
+    }, [])
+
+
+
     const ItemList_Options = ItemList.map((index) => ({
         value: index.Item,
         label: index.ItemName,
         itemCheck: index.selectCheck
     })).filter((index) => index.itemCheck === true);
+
+
+
+
+
 
     const deleteHandeler = (id, tableList) => {
         let filterData = tableList.filter((i) => {
@@ -167,7 +209,10 @@ const StockAdjustment = (props) => {
 
 
     const ItemAddButtonHandler = async () => {
-
+        if (subPageMode === url.RATE_ADJUSTMENT && TypeSelect.value === 0) {
+            customAlert({ Type: 3, Message: "Please Select Adjustment Type" });
+            return
+        }
         const { TableArr: updatedTableArr, message, type } = await AddItemInTableFunc({
             itemNameSelect,
             TableArr,
@@ -184,7 +229,7 @@ const StockAdjustment = (props) => {
     }
 
     function QuantityOnchange(event, index1, index2) {
-        debugger
+
         const InputQty = event.target.value;
         index2.Qty = InputQty
 
@@ -198,6 +243,20 @@ const StockAdjustment = (props) => {
         } catch (e) { _cfunc.CommonConsole('inner-Stock-Caculation', e) };
 
     }
+
+
+
+
+    const handleChange = (event, index1, index2, tableList) => {
+        const value = Number(event.target.value);
+        if (subPageMode === url.RATE_ADJUSTMENT) {
+            if (TypeSelect.value === Rate) index2.Rate = value;
+            else if (TypeSelect.value === GSTPercentage) index2.GSTPercentage = value;
+            else if (TypeSelect.value === MRPValue) index2.MRPValue = value;
+        } else {
+            QuantityOnchange(event, index1, index2, tableList);
+        }
+    };
 
     function BatchCode_Add_Handler(event, index1, tableList, setTableList) {
 
@@ -380,9 +439,20 @@ const StockAdjustment = (props) => {
             dataField: "StockDetails",
             attrs: () => ({ 'data-label1': "Stock Details", "stock-header": "true" }),
             headerStyle: { zIndex: "2" },
-            formatExtraData: { tableList: TableArr },
-            formatter: (cellContent, index1, keys_, { tableList = [] }) => {
+            formatExtraData: { tableList: TableArr, TypeSelect: TypeSelect },
+            formatter: (cellContent, index1, keys_, { tableList = [], TypeSelect = {} }) => {
                 if (index1.GroupRow || index1.SubGroupRow) { return }
+
+                const getdefaultValue = (inx) => {
+                    if (subPageMode === url.RATE_ADJUSTMENT) {
+                        if (TypeSelect.value === Rate) return inx.Rate;
+                        else if (TypeSelect.value === GSTPercentage) return { valve: inx.GSTID, label: inx.GSTPercentage };
+                        else if (TypeSelect.value === MRPValue) return inx.MRPValue;
+                    }
+                    return inx.Qty;
+                }
+
+
 
                 return <>
                     <div className="table-responsive">
@@ -391,47 +461,31 @@ const StockAdjustment = (props) => {
                                 <tr>
                                     <th>BatchCode</th>
                                     <th>Stock </th>
-                                    {(subPageMode === url.RATE_ADJUSTMENT) ? <th>Rate</th> : <th>Quantity</th>}
+                                    {(subPageMode === url.RATE_ADJUSTMENT) ? <th>{TypeSelect.label}</th> : <th>Quantity</th>}
                                     {!(subPageMode === url.RATE_ADJUSTMENT) && <th>MRP</th>}
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {cellContent.map((index2) => (
+                                {/* {cellContent.map((index2) => (
                                     <tr key={index1.id}>
                                         <td data-label="BatchCode">{index2.BatchCode}</td>
                                         <td data-label="Stock Quantity" style={{ textAlign: "right" }} >
                                             <samp id={`ActualQuantity-${index1.id}-${index2.id}`}>{index2.ActualQuantity}</samp>
                                         </td>
-                                        <td data-label={(subPageMode === url.RATE_ADJUSTMENT) ? `Quantity` : `Rate`}>
+                                        <td data-label={(subPageMode === url.RATE_ADJUSTMENT) ? `${TypeSelect.label}` : `Quantity`}>
 
-                                            {(subPageMode === url.RATE_ADJUSTMENT) ?
-                                                <Input
-                                                    type="text"
-                                                    disabled={pageMode === 'edit' ? true : false}
-                                                    placeholder="Manually enter quantity"
-                                                    className="right-aligned-placeholder"
-                                                    key={`batchQty${index1.id}-${index2.id}`}
-                                                    id={`batchQty${index1.id}-${index2.id}`}
-                                                    autoComplete="off"
-                                                    defaultValue={index2.Rate}
-                                                    onChange={(event) => {
-                                                        index2.Rate = Number(event.target.value)
-                                                    }}
-                                                />
-                                                : <Input
-                                                    type="text"
-                                                    disabled={pageMode === 'edit' ? true : false}
-                                                    placeholder="Manually enter quantity"
-                                                    className="right-aligned-placeholder"
-                                                    key={`batchQty${index1.id}-${index2.id}`}
-                                                    id={`batchQty${index1.id}-${index2.id}`}
-                                                    autoComplete="off"
-                                                    defaultValue={index2.Qty}
-                                                    onChange={(event) => {
-                                                        QuantityOnchange(event, index1, index2, tableList);
-                                                    }}
-                                                />}
+                                            <Input
+                                                type="text"
+                                                disabled={pageMode === 'edit' ? true : false}
+                                                placeholder="Manually enter quantity"
+                                                className="right-aligned-placeholder"
+                                                key={`batchQty${index1.id}-${index2.id}`}
+                                                id={`batchQty${index1.id}-${index2.id}`}
+                                                autoComplete="off"
+                                                defaultValue={getdefaultValue(index2)}
+                                                onChange={(event) => { handleChange(event, index1, index2, tableList) }}
+                                            />
                                         </td>
                                         {!(subPageMode === url.RATE_ADJUSTMENT) && <td data-label="MRP">{index2.MRP}</td>}
                                         < td >
@@ -450,7 +504,74 @@ const StockAdjustment = (props) => {
                                             </span>
                                         </td>
                                     </tr>
-                                ))}
+                                ))} */}
+                                {cellContent.map((index2) => {
+                                    const defaultValue = getdefaultValue(index2)
+                                    return (
+                                        <tr key={index1.id}>
+                                            <td data-label="BatchCode">{index2.BatchCode}</td>
+                                            <td data-label="Stock Quantity" style={{ textAlign: "right" }}>
+                                                <samp id={`ActualQuantity-${index1.id}-${index2.id}`}>{index2.ActualQuantity}</samp>
+                                            </td>
+                                            <td data-label={(subPageMode === url.RATE_ADJUSTMENT) ? `${TypeSelect.label}` : `Quantity`}>
+                                                {!(TypeSelect.value === GSTPercentage) ? <Input
+                                                    type="text"
+                                                    disabled={pageMode === 'edit' ? true : false}
+                                                    placeholder="Manually enter quantity"
+                                                    className="right-aligned-placeholder"
+                                                    key={`batchQty${index1.id}-${index2.id}-${TypeSelect.value}`}
+                                                    id={`batchQty${index1.id}-${index2.id}`}
+                                                    autoComplete="off"
+                                                    defaultValue={defaultValue}
+                                                    onChange={(event) => { handleChange(event, index1, index2, tableList) }}
+                                                />
+                                                    :
+                                                    <C_Select
+                                                        id="GSTPercentage"
+                                                        name="GSTPercentage"
+                                                        defaultValue={defaultValue}
+                                                        isSearchable={true}
+                                                        className="react-dropdown"
+                                                        classNamePrefix="dropdown"
+                                                        styles={{
+                                                            menu: provided => ({ ...provided, zIndex: 4 })
+                                                        }}
+                                                        options={
+                                                            index2.GSTOptions.map((index) => ({
+                                                                value: index.id,
+                                                                label: index.GSTPercentage,
+                                                            }))
+
+                                                        }
+                                                        onChange={(e) => {
+                                                            index1.GSTID = e.value
+                                                            index1.GSTPercentage = e.lable
+                                                        }}
+                                                    />
+
+                                                }
+                                            </td>
+                                            {!(subPageMode === url.RATE_ADJUSTMENT) && <td data-label="MRP">{index2.MRP}</td>}
+                                            <td>
+                                                <span className="d-flex justify-content-center align-items-center">
+                                                    <Button
+                                                        id={"deleteid"}
+                                                        type="button"
+                                                        disabled={!(index2.ActualQuantity === "0.000" || index2.ActualQuantity === "") && true}
+                                                        className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light btn btn-secondary"
+                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete Item'
+                                                        onClick={(event) => { batchDeleteHandler(event, index1, index2, tableList); }}
+                                                    >
+                                                        <i className="mdi mdi-delete font-size-16"></i>
+                                                    </Button>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    )
+                                })}
+
+
+
                             </tbody>
                         </table>
                     </div ></>
@@ -493,11 +614,11 @@ const StockAdjustment = (props) => {
 
         const flatStockTableArr = TableArr.reduce((accumulator, index1) => {
 
+            const isRequired = (Type) => { return ((subPageMode === url.RATE_ADJUSTMENT) && (TypeSelect.value) === Type) }
             index1.StockDetails.forEach((index2) => {
 
                 index2.Qty = Number(_cfunc.roundToDecimalPlaces(index2.Qty, 3));
                 index2.ActualQuantity = Number(_cfunc.roundToDecimalPlaces(index2.ActualQuantity, 3));
-
                 // const hasChange = index2.Qty !== index2.ActualQuantity;
 
                 // function changebodyFunc() {
@@ -505,12 +626,12 @@ const StockAdjustment = (props) => {
                     "Item": index2.Item,
                     // "Quantity": index2.Qty,
                     "Quantity": (subPageMode === url.RATE_ADJUSTMENT) ? undefined : index2.Qty, // Only set "Quantity" if condition is false
-                    "Rate": (subPageMode === url.RATE_ADJUSTMENT) ? index2.Rate : undefined,
-                    "MRP": index2.MRPID,
+                    "Rate": (isRequired(Rate) || subPageMode === url.STOCK_ADJUSTMENT) ? index2.Rate : undefined,
+                    "MRP": (isRequired(MRPValue) || subPageMode === url.STOCK_ADJUSTMENT) ? index2.MRPID : undefined,
                     "Unit": index1.UnitID,
-                    "GST": index2.GSTID,
-                    "MRPValue": index2.MRPValue,
-                    "GSTPercentage": index2.GSTPercentage,
+                    "GST": (isRequired(GSTPercentage) || subPageMode === url.STOCK_ADJUSTMENT) ? index2.GSTID : undefined,
+                    "MRPValue": (isRequired(MRPValue) || subPageMode === url.STOCK_ADJUSTMENT) ? index2.MRPValue : undefined,
+                    "GSTPercentage": (isRequired(GSTPercentage) || subPageMode === url.STOCK_ADJUSTMENT) ? index2.GSTPercentage : undefined,
                     "BatchDate": index2.BatchDate,
                     "BatchCode": index2.BatchCode,
                     "BatchCodeID": index2.id
@@ -548,13 +669,14 @@ const StockAdjustment = (props) => {
 
         try {
             const jsonBody = JSON.stringify({
-                "PartyID": commonPartyDropSelect.value,
-                "CreatedBy": _cfunc.loginUserID(),
-                "Date": currentDate_ymd,
-                "Mode": subPageMode === url.STOCK_ADJUSTMENT ? 2 : 3,
-                "StockItems": flatStockTableArr,
-                "IsStockAdjustment": true,//if stock  
-                "IsAllStockZero": false
+                PartyID: commonPartyDropSelect.value,
+                TypeID: TypeSelect.value,
+                CreatedBy: _cfunc.loginUserID(),
+                Date: currentDate_ymd,
+                Mode: subPageMode === url.STOCK_ADJUSTMENT ? 2 : 3,
+                StockItems: flatStockTableArr,
+                IsStockAdjustment: true,//if stock  
+                IsAllStockZero: false
             })
             dispatch(saveStockEntryAction({ jsonBody, subPageMode }));
         }
@@ -594,8 +716,36 @@ const StockAdjustment = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
-                                <Col sm={7} className="">
+
+
+                                {subPageMode === url.RATE_ADJUSTMENT && <Col sm={4} className="">
+                                    <FormGroup className="mb- row mt-3 mb-1 " >
+                                        <Label className="col-sm-5 p-2"
+                                            style={{ width: "130px" }}> Adjustment Type</Label>
+                                        <Col sm="7">
+                                            <C_Select
+                                                id="Type"
+                                                name="Type"
+                                                value={TypeSelect}
+                                                isSearchable={true}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 4 })
+                                                }}
+                                                options={TypeList_Options}
+                                                onChange={(e) => { setTypeSelect(e) }}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col>}
+
+                                <Col sm={3} className="">
                                 </Col>
+
+
+
+
                                 <Col sm={1} className="mt-3" style={{}}>
                                     {
                                         < Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center mt-1 p-2"
@@ -614,6 +764,9 @@ const StockAdjustment = (props) => {
                                 data={processedData}
                                 rowStyle={rowStyle}
                                 rowClasses={rowClasses}
+                                styles={{
+                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                }}
                                 columns={pagesListColumns}
                                 id="table_Arrow"
                                 noDataIndication={

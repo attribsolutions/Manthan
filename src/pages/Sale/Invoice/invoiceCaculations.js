@@ -13,7 +13,7 @@ export const invoice_discountCalculate_Func = (row, index1, IsComparGstIn) => {
 
     // Calculate the base amount
     const basicAmount = rate * quantity;
-    debugger
+
     // Calculate the discount amount based on the discount type
     const disCountAmt = discountType === 2 ? basicAmount - (basicAmount / ((100 + discount) / 100)) : quantity * discount;
 
@@ -68,7 +68,7 @@ export const invoice_discountCalculate_Func = (row, index1, IsComparGstIn) => {
 export const settingBaseRoundOffAmountFunc = (tableList = []) => {
 
     const Weight = loginUserDetails().Weight
-
+    debugger
     // Get the system settings
     const systemSetting = loginSystemSetting();
     const isGrandAmtRound = systemSetting.InvoiceAmountRoundConfiguration === '1';
@@ -119,7 +119,7 @@ export const settingBaseRoundOffAmountFunc = (tableList = []) => {
 
     return {
         sumOfGrandTotal: isGrandAmtRound ? Math.round(sumOfGrandTotal) : Number(sumOfGrandTotal).toFixed(2), // Round off or format the sumOfGrandTotal
-        RoundOffAmount: (Math.round(sumOfGrandTotal) - sumOfGrandTotal).toFixed(2),// Calculate the round-off amount
+        RoundOffAmount: isGrandAmtRound ? (Math.round(sumOfGrandTotal) - sumOfGrandTotal).toFixed(2) : 0,// Calculate the round-off amount
         TCS_Amount: isTCS_AmtRound ? Math.round(TCS_Amount) : Number(TCS_Amount).toFixed(2),// Round off or format the TCS Amount
         sumOfWeightageTotal: sumOfWeightageTotal
     };
@@ -218,7 +218,7 @@ export function orderQtyOnChange(event, index1) {
     }
 
     if (isSweetAndSnacksCompany) {
-        debugger
+
         const TotalTray = Math.ceil(getFixedNumber(inputValue, 2) / getFixedNumber(index1.ConversionUnit, 2))
         const TrayQtyElement = document.getElementById(`TrayQty-${index1.id}`);
         TrayQtyElement.value = getFixedNumber(TotalTray, 0); // Display with three decimal places

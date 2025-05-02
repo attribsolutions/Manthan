@@ -133,7 +133,7 @@ export const Rows_1 = (data) => {
 
     if (returnArr.length - 1) {
         returnArr.push([
-            `Discount Amount: ${numberWithCommas(Number(finalDiscountAmount).toFixed(2))}            Gross Amount: ${numberWithCommas(Number(finalBasicAmount).toFixed(2))}`,
+            `Discount Amount: ${numberWithCommas(Number(finalDiscountAmount).toFixed(2))}            Gross Amount: ${numberWithCommas((Number(finalTotal) - (Number(finalDiscountAmount))).toFixed(2))}`,
             ``,
             ``,
             `Span`,

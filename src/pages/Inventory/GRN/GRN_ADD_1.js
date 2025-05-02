@@ -875,7 +875,7 @@ const GRN_ADD_1 = (props) => {
                 return { width: '100px', textAlign: 'center', text: "center" };
             }
         },
-        
+
         {//------------- ItemName column ----------------------------------
             text: "Amount",
             dataField: "",
@@ -1393,12 +1393,12 @@ const GRN_ADD_1 = (props) => {
             const isvalidMsg = [];
             let sum_roundedTotalAmount = 0
             grnItemList.forEach(i => {
-
+                debugger
                 const calculated = orderCalculateFunc(i, { GSTIn_1: grnDetail?.SupplierGSTIN, GSTIn_2: grnDetail?.CustomerGSTIN })// amount calculation function 
                 sum_roundedTotalAmount = sum_roundedTotalAmount + parseFloat(calculated.roundedTotalAmount)
                 const arr = {
                     Item: i.Item,
-                    Quantity: i.Quantity,
+                    Quantity: subPageMode === url.ACCOUNTING_GRN ? i.poQuantity : i.Quantity,
                     AccountingQuantity: subPageMode === url.ACCOUNTING_GRN ? i.Quantity : 0,
                     SystemBatchCode: i.SystemBatchCode,  // only for Accounting GRN else undefined
                     SystemBatchDate: i.SystemBatchDate,  // only for Accounting GRN else undefined

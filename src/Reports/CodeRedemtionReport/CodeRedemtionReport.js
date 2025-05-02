@@ -249,6 +249,7 @@ const CodeRedemtionReport = (props) => {
                                         name="Scheme"
                                         value={Scheme}
                                         isSearchable={true}
+                                        isDisabled={true}
 
                                         // isLoading={partyDropdownLoading}
                                         className="react-dropdown"

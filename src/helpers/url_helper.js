@@ -587,7 +587,7 @@ export const FRANCHISE_STOCK_ENTRY = '/SweetPOS/StockEntry'
 export const PARTY_STOCK_ENTRY = '/PartyStockEntry'
 
 
-export const RATE_ADJUSTMENT = '/RateAdjustment'
+export const BATCH_DETAILS_ADJUSTMENT = '/BatchDetailsAdjustment'
 
 
 

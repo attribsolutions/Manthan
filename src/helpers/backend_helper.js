@@ -781,7 +781,7 @@ export const StockEntry_GO_button_api_For_Item = (ItemId) => get(`${url.STOCK_EN
 export const StockEntry_Post_API = ({ jsonBody }) => post(url.PARTY_STOCK_ENTRY, jsonBody)//post api
 export const Franchise_StockEntry_Post_API = ({ jsonBody }) => post(url.FRANCHISE_STOCK_ENTRY, jsonBody)//post api
 
-export const RateAdjustment_API = ({ jsonBody }) => post(url.RATE_ADJUSTMENT, jsonBody)//post api
+export const BatchAdjustment_API = ({ jsonBody }) => post(url.BATCH_DETAILS_ADJUSTMENT, jsonBody)//post api
 
 
 

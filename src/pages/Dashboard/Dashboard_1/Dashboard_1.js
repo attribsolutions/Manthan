@@ -74,6 +74,8 @@ const Dashboard_1 = (props) => {
         const page_Id = pageId.DASHBORD_1//changes
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
+
+        
     }, []);
 
     useEffect(() => {

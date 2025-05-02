@@ -1,7 +1,7 @@
 import { compareGSTINState } from "../../../components/Common/CommonFunction";
 
 export const orderCalculateFunc = (row, IsComparGstIn) => {
-
+  debugger
   // Retrieve values from input object
   const rate = Number(row.Rate) || 0;
   const quantity = Number(row.Quantity) || 0;
@@ -13,7 +13,14 @@ export const orderCalculateFunc = (row, IsComparGstIn) => {
   const basicAmount = rate * quantity;
   debugger
   // Calculate the discount amount based on the discount type
-  const disCountAmt = discountType === 2 ? basicAmount - (basicAmount / ((100 + discount) / 100)) : quantity * discount;
+  // const disCountAmt = discountType === 2 ? basicAmount - (basicAmount / ((100 + discount) / 100)) : quantity * discount;
+
+  const disCountAmt = discountType === 2
+    ? (basicAmount * (discount / 100)) * quantity  // % discount per unit × quantity
+    : discountType === 1
+      ? discount * quantity                 // ₹ discount per unit × quantity
+      : 0;
+
 
   // Calculate the discounted base amount
   const discountBaseAmt = basicAmount - disCountAmt;
@@ -23,6 +30,8 @@ export const orderCalculateFunc = (row, IsComparGstIn) => {
   let CGST_Amount = Number((gstAmt / 2).toFixed(2));
   let SGST_Amount = CGST_Amount;
   let IGST_Amount = 0 //initial GST Amount 
+
+
 
   // Calculate the total amount after discount and GST
   const roundedGstAmount = CGST_Amount + SGST_Amount;

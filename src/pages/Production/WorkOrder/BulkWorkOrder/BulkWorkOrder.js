@@ -128,8 +128,11 @@ const BulkWorkOrder = (props) => {
             customAlert({
                 Type: 1,
                 Message: postMsg.Message,
-                RedirectPath: url.WORK_ORDER_LIST,
+
             })
+            history.push({
+                pathname: url.WORK_ORDER_LIST,
+            });
         }
         else if (postMsg.Status === true) {
             dispatch(Save_Bulk_BOM_for_WorkOrderSuccess({ Status: false }))
