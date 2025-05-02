@@ -20,6 +20,8 @@ import { ItemSaleGoButton_API, ItemSaleGoButton_API_Success } from "../../../../
 import { allLabelWithZero } from "../../../../components/Common/CommonErrorMsg/HarderCodeData";
 import { ItemSaleReport_GoBtn_API } from "../../../../helpers/backend_helper";
 
+
+
 const PosSummarySale = (props) => {
 
     const dispatch = useDispatch();
@@ -43,17 +45,22 @@ const PosSummarySale = (props) => {
             ItemSaleReportGobtn: state.ItemSaleReportReducer.ItemSaleReportGobtn,
             partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
             Party: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
-
+            goBtnLoading: state.ItemSaleReportReducer.goBtnLoading,
             pageField: state.CommonPageFieldReducer.pageField
         })
     );
-    const { userAccess, BtnLoading, PrediocGrnData, pageField, pdfdata, ItemSaleReportGobtn, partyDropdownLoading, Party } = reducers
+   
+
+    const { userAccess, BtnLoading, PrediocGrnData, pageField, pdfdata, ItemSaleReportGobtn, partyDropdownLoading, Party , goBtnLoading } = reducers
 
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
     // Featch Modules List data  First Rendering
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+    const [localLoading, setLocalLoading] = useState(false);
+
 
     // userAccess useEffect
     useEffect(() => {
@@ -142,8 +149,11 @@ const PosSummarySale = (props) => {
 
 
 
-    async function excel_And_GoBtnHandler(e, btnMode) {
 
+
+async function excel_And_GoBtnHandler(e, btnMode) {
+    setLocalLoading(true); // Start spinner
+    try {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
@@ -152,15 +162,31 @@ const PosSummarySale = (props) => {
             Employee: _cfunc.loginEmployeeID(),
             CompanyID: _cfunc.loginCompanyID(),
             ItemID: "0"
+        });
 
-        })
-        
-        let response = await ItemSaleReport_GoBtn_API({ jsonBody })
+        const response = await ItemSaleReport_GoBtn_API({ jsonBody });
+
         if (response.Status === true) {
-            response["BtnMode"] = btnMode
+            response["BtnMode"] = btnMode;
             dispatch(ItemSaleGoButton_API_Success(response));
+        } else {
+            customAlert({
+                Type: 4,
+                Message: response.Message || "Unexpected response from server.",
+            }); setLocalLoading(false);
         }
+    } catch (error) {
+        customAlert({
+            Type: 4,
+            Message: "An error occurred while fetching the report. Please try again.",
+        }); setLocalLoading(false);
+        console.error("API Error:", error);
+    } finally {
+        setLocalLoading(false); // Stop spinner
     }
+}
+
+
 
     function fromdateOnchange(e, date) {
         let newObj = { ...headerFilters }
@@ -189,7 +215,7 @@ const PosSummarySale = (props) => {
                             <FormGroup className=" row mt-2  " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>From Date</Label>
-                                <Col sm="5">
+                                <Col sm="7">
                                     <C_DatePicker
                                         name='fromdate'
                                         value={fromdate}
@@ -203,7 +229,7 @@ const PosSummarySale = (props) => {
                             <FormGroup className=" row mt-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>To Date</Label>
-                                <Col sm="4">
+                                <Col sm="7">
                                     <C_DatePicker
                                         nane='todate'
                                         value={todate}
@@ -213,7 +239,7 @@ const PosSummarySale = (props) => {
                             </FormGroup>
                         </Col>
 
-                        {!IsFranchises && < Col sm={4} className="">
+                        {!IsFranchises && < Col sm={3} className="">
                             <FormGroup className=" row mt-2" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px", marginRight: "20px" }}>Party</Label>
@@ -239,24 +265,25 @@ const PosSummarySale = (props) => {
 
 
                         <Col sm={2} className=" d-flex justify-content-end" >
-                            <C_Button
-                                type="button"
-                                spinnerColor="white"
-                                className="btn btn-success m-3 mr"
-                                loading={ItemSaleReportGobtn.BtnMode === "print"}
-                                onClick={(e) => excel_And_GoBtnHandler(e, "print")}
-                            >
-                                Print
-                            </C_Button>
-                            {/* <C_Button
-                                type="button"
-                                spinnerColor="white"
-                                loading={PrediocGrnData.BtnMode === "excel"}
-                                className="btn btn-primary m-3 mr"
-                                onClick={(e) => excel_And_GoBtnHandler(e, "excel")}
-                            >
-                                Excel
-                            </C_Button> */}
+                        <C_Button
+    type="button"
+    spinnerColor="white"
+    className="btn btn-success m-3 mr"
+    loading={localLoading} // ← using useState instead of Redux
+    onClick={(e) => excel_And_GoBtnHandler(e, "print")}
+>
+    Print
+</C_Button>
+
+                                {/* <C_Button
+                                    type="button"
+                                    spinnerColor="white"
+                                    loading={PrediocGrnData.BtnMode === "excel"}
+                                    className="btn btn-primary m-3 mr"
+                                    onClick={(e) => excel_And_GoBtnHandler(e, "excel")}
+                                >
+                                    Excel
+                                </C_Button> */}
                         </Col>
                     </Row>
                 </div>

@@ -41,6 +41,7 @@ const DemandVsSupplyReportReducer = (state = INIT_STATE, action) => {
         default:
             return state
     }
+ 
 }
 
 export default DemandVsSupplyReportReducer;

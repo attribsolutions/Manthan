@@ -89,6 +89,7 @@ function* GoButton_MaterialIssue_listpage_GenFunc({ filters }) {                
       }
       return i
     })
+
     yield put(getMaterialIssueListPageSuccess(newList));
   } catch (error) { yield put(MaterialIssueApiErrorAction()) }
 }

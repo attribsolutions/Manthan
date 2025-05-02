@@ -1168,16 +1168,20 @@ export const fetchFiles = async (linksArray) => {
   }
 };
 
+// old code
+
 export function TotalAmount_Func(tableList) {
-
+  debugger
   let totalAmount = tableList.reduce((total, item) => {
-
-    return total + Number(item.recordsAmountTotal) || 0;
-
+    return total + (Number(item.recordsAmountTotal) || 0);
   }, 0);
+
   let commaSeparateAmount = amountCommaSeparateFunc(Number(totalAmount).toFixed(2));
-  return commaSeparateAmount
+  return commaSeparateAmount;
 }
+
+
+
 
 // month and year name return 
 export function SelectedMonthAndYearName(selectedMonth) {

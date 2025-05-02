@@ -30,6 +30,9 @@ const CashierSummary = (props) => {
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
+    const [loading, setLoading] = useState(false);
+
+
     const {
         userAccess,
         tableData,
@@ -84,6 +87,13 @@ const CashierSummary = (props) => {
         }
     }, [tableData, pageField]);
 
+    useEffect(() => {
+        if (tableData.length > 0 || (btnMode && tableData.length === 0)) {
+            setLoading(false); // Stop spinner whether data is found or not
+        }
+    }, [tableData, btnMode]);
+
+
     function goButtonHandler(goBtnMode) {
         setBtnMode(goBtnMode)
         try {
@@ -100,13 +110,29 @@ const CashierSummary = (props) => {
 
     function fromdateOnchange(e, date) {
         setFromDate(date)
-        dispatch(getClaimTrackingEntrySuccess([]));
+        dispatch(CashierSummaryReport_GoButton_API_Success([]));
     }
 
     function todateOnchange(e, date) {
         setToDate(date);
-        dispatch(getClaimTrackingEntrySuccess([]));
+        dispatch(CashierSummaryReport_GoButton_API_Success([]));
     }
+
+    function goButtonHandler(goBtnMode) {
+        setBtnMode(goBtnMode);
+        setLoading(true); // Start spinner
+
+        const jsonBody = JSON.stringify({
+            "FromDate": fromDate,
+            "ToDate": toDate,
+            "Party": _cfunc.loginPartyID(),
+        });
+
+        const config = { jsonBody };
+        dispatch(CashierSummaryReport_GoButton_API(config));
+    }
+
+
 
     return (
         <React.Fragment>
@@ -148,9 +174,8 @@ const CashierSummary = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={((GoBtnLoading) && (btnMode === "showOnTable")) && true}
+                                loading={loading && btnMode === "showOnTable"}
                                 className="btn btn-success m-3 mr"
-
                                 onClick={() => goButtonHandler("showOnTable")}
                             >
                                 Show
@@ -158,7 +183,7 @@ const CashierSummary = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={((GoBtnLoading) && (btnMode === "downloadExcel")) && true}
+                                loading={loading && btnMode === "downloadExcel"}
                                 className="btn btn-primary m-3 mr"
                                 onClick={() => goButtonHandler("downloadExcel")}
                             >
