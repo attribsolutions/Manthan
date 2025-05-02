@@ -93,6 +93,12 @@ const Order = (props) => {
     const isVisibleRateDrop = _cfunc.checkRateDropVisibility()
 
     const advanceAmountRef = useRef(0);
+    const discountTypeAllRef = useRef(null);
+    const discountAllValueRef = useRef(null);
+    const discountRefs = useRef({});
+
+
+
     const descriptionRef = useRef("");
     const ordersNotSave = _cfunc.loginSystemSetting().OrdersnotSave
 
@@ -170,10 +176,10 @@ const Order = (props) => {
 
 
     // for Order page heder dicount functionality useSate ************************************
-    const [discountValueAll, setDiscountValueAll] = useState("");
+    // const [discountValueAll, setDiscountValueAll] = useState("");
     const [discountTypeAll, setDiscountTypeAll] = useState({ value: 2, label: " % " });
     const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }])
-    const [changeAllDiscount, setChangeAllDiscount] = useState(false)
+    // const [changeAllDiscount, setChangeAllDiscount] = useState(false)
 
     // ****************************************************************************
 
@@ -650,25 +656,26 @@ const Order = (props) => {
         }
     }, [gobutton_Add_invoice]);
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        if (changeAllDiscount) {
-            const updatedOrderItemTable = orderItemTable.map((item) => ({
-                ...item,
-                Discount: discountValueAll,
-                DiscountType: discountTypeAll.value,
-            }));
+    //     if (changeAllDiscount) {
+    //         const updatedOrderItemTable = orderItemTable.map((item) => ({
+    //             ...item,
+    //             Discount: discountValueAll,
+    //             DiscountType: discountTypeAll.value,
+    //         }));
 
-            // Perform calculations based on the updated values for each item
-            updatedOrderItemTable.forEach((item) => {
-                itemWise_CalculationFunc(item, undefined, updatedOrderItemTable);
-            });
+    //         // Perform calculations based on the updated values for each item
+    //         updatedOrderItemTable.forEach((item) => {
+    //             itemWise_CalculationFunc(item, undefined, updatedOrderItemTable);
+    //         });
 
-            // Set the updated array as the new orderItemTable
+    //         // Set the updated array as the new orderItemTable
 
-            setOrderItemTable(updatedOrderItemTable);
-        }
-    }, [changeAllDiscount, discountValueAll, discountTypeAll.value]);
+    //         setOrderItemTable(updatedOrderItemTable);
+    //     }
+    // }, [changeAllDiscount, discountValueAll, discountTypeAll.value]);
+
 
 
     const supplierOptions = vendorSupplierCustomer.map((i) => ({
@@ -1049,67 +1056,103 @@ const Order = (props) => {
             },
             attrs: () => ({ 'data-label': "Discount/unit" }),
             headerStyle: () => {
-                return { width: '11%', textAlign: 'center' };
+                return { width: '20%', textAlign: 'center' };
             },
-            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER || IsFranchisesRole || isSweetAndSnacksCompany) && true,
+            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER || isSweetAndSnacksCompany) && true,
             headerFormatter: () => {
-                return (
-                    <div className="" >
-                        {orderItemTable.length <= 0 ?
-                            <div className="col col-3 mt-2">
-                                <Label>Discount/unit</Label>
-                            </div>
-                            :
-                            <div className="row">
-                                <div className=" mt-n2 mb-n2">
-                                    <Label>Discount/unit</Label>
-                                </div>
-                                <div className="col col-6" >
-                                    <Select
-                                        type="text"
-                                        defaultValue={discountTypeAll}
-                                        classNamePrefix="select2-selection"
-                                        options={discountDropOption}
-                                        isDisabled={(subPageMode === url.ORDER_2)}
-                                        style={{ textAlign: "right" }}
-                                        onChange={(e) => {
-                                            setChangeAllDiscount(true);
-                                            setDiscountTypeAll(e);
-                                            setDiscountValueAll('');
-                                        }}
-                                    />
-                                </div>
-                                <div className="col col-6" >
-                                    <CInput
-                                        type="text"
-                                        className="input"
-                                        style={{ textAlign: "right" }}
-                                        cpattern={decimalRegx}
-                                        value={discountValueAll}
-                                        disabled={(subPageMode === url.ORDER_2)}
-                                        onChange={(e) => {
-                                            e.target.value = e.target.value.replace(/^\.+/, '');
-                                            e.target.value = e.target.value.replace(/^00+/, '0');
-                                            let e_val = Number(e.target.value);
-
-                                            if (discountTypeAll.value === 2) {// Discount type 2 represents "percentage"
-                                                if (e_val > 100) { // Limit the input to the range of 0 to 100
-                                                    e.target.value = 100; // Set the input value to 100 if it exceeds 100
-                                                } else if (!(e_val >= 0 && e_val < 100)) {
-                                                    e.target.value = ""; // Clear the input value if it is less than 0
-                                                }
-                                            }
-
-                                            setChangeAllDiscount(true);
-                                            setDiscountValueAll(e.target.value);
-                                        }}
-                                    />
-                                </div>
-                            </div>
+                const handleTypeChange = (e) => {
+                    discountTypeAllRef.current = e;
+                    orderItemTable.forEach((row, key) => {
+                        if (!row.GroupRow && !row.SubGroupRow) {
+                            row.DiscountType = e.value;
+                            if (row.Quantity !== null && row.Quantity !== undefined) {
+                                itemWise_CalculationFunc(row, undefined, orderItemTable);
+                            }
                         }
-                    </div>
+                    });
+                };
+                const handleValueChange = (e) => {
+                    discountTypeAllRef.current = e;
+                    orderItemTable.forEach((row, key) => {
+                        if (!row.GroupRow && !row.SubGroupRow) {
+                            row.Discount = e;
+
+
+                            if (row.Quantity !== null && row.Quantity !== undefined) {
+                                itemWise_CalculationFunc(row, undefined, orderItemTable);
+                            }
+                        }
+                    });
+                };
+                return (
+                    // <div className="" >
+                    //     {orderItemTable.length <= 0 ?
+                    //         <div className="col col-3 mt-2">
+                    //             <Label>Discount/unit</Label>
+                    //         </div>
+                    //         :
+                    //         <div className="row">
+                    //             <div className=" mt-n2 mb-n2">
+                    //                 <Label>Discount/unit</Label>
+                    //             </div>
+                    //             <div className="col col-6" >
+                    //                 <Select
+                    //                     type="text"
+                    //                     defaultValue={discountTypeAllRef.current}
+                    //                     classNamePrefix="select2-selection"
+                    //                     options={discountDropOption}
+                    //                     isDisabled={(subPageMode === url.ORDER_2)}
+                    //                     style={{ textAlign: "right" }}
+                    //                     onChange={(e) => { handleTypeChange(e) }}
+
+                    //                 />
+                    //             </div>
+                    //             <div className="col col-6" >
+                    //                 <CInput
+                    //                     type="text"
+                    //                     className="input"
+                    //                     style={{ textAlign: "right" }}
+                    //                     cpattern={decimalRegx}
+                    //                     defaultValue={discountAllValueRef.current}
+                    //                     disabled={(subPageMode === url.ORDER_2)}
+                    //                     onChange={(e) => {
+
+                    //                         e.target.value = e.target.value.replace(/^\.+/, '');
+                    //                         e.target.value = e.target.value.replace(/^00+/, '0');
+                    //                         let e_val = Number(e.target.value);
+
+                    //                         // if (discountTypeAll.value === 2) {// Discount type 2 represents "percentage"
+                    //                         if (e_val > 100) { // Limit the input to the range of 0 to 100
+                    //                             e.target.value = 100; // Set the input value to 100 if it exceeds 100
+                    //                         } else if (!(e_val >= 0 && e_val < 100)) {
+                    //                             e.target.value = ""; // Clear the input value if it is less than 0
+                    //                         }
+                    //                         handleValueChange(e_val)
+                    //                         // setOrderItemTable(updatedItems);
+                    //                         // }
+                    //                         // setChangeAllDiscount(true);
+                    //                         // setDiscountValueAll(e.target.value);
+                    //                     }}
+                    //                 />
+                    //             </div>
+                    //         </div>
+                    //     }
+                    // </div>
+
+                    <>
+                        <Label>Discount/unit</Label>
+                    </>
                 );
             },
+
+
+
+
+
+
+
+
+
 
             classes: () => "order-discount-row",
             formatter: (cellContent, row, key, formatExtraData) => {
@@ -1117,10 +1160,14 @@ const Order = (props) => {
 
                 let { tableList } = formatExtraData;
 
-                if (!row.DiscountType) { row.DiscountType = discountTypeAll.value }
+                if (row.DiscountType === "0") { row.DiscountType = discountDropOption[1].value }
 
                 const defaultDiscountTypelabel =
                     row.DiscountType === 1 ? discountDropOption[0] : discountDropOption[1];
+
+                discountRefs.current[row.id]?.setValue(row.DiscountType);
+                debugger
+
                 return (
                     <>
                         <div className="mb-2">
@@ -1130,16 +1177,23 @@ const Order = (props) => {
                                 </div>
                                 <div className="child">
                                     <Select
-                                        id={`DicountType_${key}`}
+                                        id={`DicountType_${key}-${row.id}`}
+
                                         classNamePrefix="select2-selection"
                                         key={`DicountType_${key}-${row.id}`}
-                                        value={defaultDiscountTypelabel}
+                                        defaultValue={defaultDiscountTypelabel}
                                         isDisabled={(subPageMode === url.ORDER_2)}
                                         options={discountDropOption}
                                         onChange={(e) => {
-                                            setChangeAllDiscount(false);
+                                            debugger
+                                            // setChangeAllDiscount(false);
                                             row.DiscountType = e.value;
                                             row.Discount = '';
+                                            const elementId = `Dicount_${key}-${row.id}`;
+                                            const element = document.getElementById(elementId);
+                                            if (element) {
+                                                element.value = ""; // or any dynamic value
+                                            }
                                             itemWise_CalculationFunc(row, undefined, tableList)
                                         }}
                                     />
@@ -1152,23 +1206,23 @@ const Order = (props) => {
                                     <label className="label">Value&nbsp;</label>
                                 </div>
                                 <div className="child">
-                                    <CInput
-                                        className="input"
+                                    <Input
+                                        // className="input"
                                         id={`Dicount_${key}-${row.id}`}
                                         style={{ textAlign: "right" }}
                                         type="text"
-                                        value={row.Discount}
+                                        defaultValue={row.Discount}
                                         disabled={(subPageMode === url.ORDER_2)}
-                                        cpattern={decimalRegx}
+                                        // cpattern={decimalRegx}
                                         onChange={(e) => {
-
+                                            debugger
                                             e.target.value = e.target.value.replace(/^\.+/, '');
                                             e.target.value = e.target.value.replace(/^00+/, '0');
                                             let e_val = Number(e.target.value);
 
 
                                             if (row.DiscountType === 2) {// Discount type 2 represents "percentage"
-                                                if (e_val > 100) { // Limit the input to the range of 0 to 100
+                                                if (e_val >= 100) { // Limit the input to the range of 0 to 100
                                                     e.target.value = 100; // Set the input value to 100 if it exceeds 100
                                                 } else if (!(e_val >= 0 && e_val < 100)) {
                                                     e.target.value = ""; // Clear the input value if it is less than 0
@@ -1177,7 +1231,7 @@ const Order = (props) => {
 
 
                                             row.Discount = e.target.value;
-                                            setChangeAllDiscount(false);
+                                            // setChangeAllDiscount(false);
                                             itemWise_CalculationFunc(row, undefined, tableList)
                                         }}
 
@@ -1190,6 +1244,11 @@ const Order = (props) => {
                 );
 
             },
+
+
+
+
+
         },
 
         { //------------- Comment column ----------------------------------

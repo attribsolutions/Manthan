@@ -619,7 +619,6 @@ const StockAdjustment = (props) => {
 
                 index2.Qty = Number(_cfunc.roundToDecimalPlaces(index2.Qty, 3));
                 index2.ActualQuantity = Number(_cfunc.roundToDecimalPlaces(index2.ActualQuantity, 3));
-
                 // const hasChange = index2.Qty !== index2.ActualQuantity;
 
                 // function changebodyFunc() {
@@ -627,12 +626,12 @@ const StockAdjustment = (props) => {
                     "Item": index2.Item,
                     // "Quantity": index2.Qty,
                     "Quantity": (subPageMode === url.RATE_ADJUSTMENT) ? undefined : index2.Qty, // Only set "Quantity" if condition is false
-                    "Rate": (isRequired(Rate)) ? index2.Rate : undefined,
-                    "MRP": (isRequired(MRPValue)) ? index2.MRPID : undefined,
+                    "Rate": (isRequired(Rate) || subPageMode === url.STOCK_ADJUSTMENT) ? index2.Rate : undefined,
+                    "MRP": (isRequired(MRPValue) || subPageMode === url.STOCK_ADJUSTMENT) ? index2.MRPID : undefined,
                     "Unit": index1.UnitID,
-                    "GST": (isRequired(GSTPercentage)) ? index2.GSTID : undefined,
-                    "MRPValue": (isRequired(MRPValue)) ? index2.MRPValue : undefined,
-                    "GSTPercentage": (isRequired(GSTPercentage)) ? index2.GSTPercentage : undefined,
+                    "GST": (isRequired(GSTPercentage) || subPageMode === url.STOCK_ADJUSTMENT) ? index2.GSTID : undefined,
+                    "MRPValue": (isRequired(MRPValue) || subPageMode === url.STOCK_ADJUSTMENT) ? index2.MRPValue : undefined,
+                    "GSTPercentage": (isRequired(GSTPercentage) || subPageMode === url.STOCK_ADJUSTMENT) ? index2.GSTPercentage : undefined,
                     "BatchDate": index2.BatchDate,
                     "BatchCode": index2.BatchCode,
                     "BatchCodeID": index2.id

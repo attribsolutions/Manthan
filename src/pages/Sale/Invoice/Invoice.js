@@ -233,7 +233,7 @@ const Invoice = (props) => {
 
     useEffect(async () => {
         if (postMsg.Status === true && postMsg.StatusCode === 200) {
-            debugger
+            
             dispatch(invoiceSaveActionSuccess({ Status: false })); // Reset the status to false
             const config = {
                 editId: postMsg.TransactionID.join(', '),////for saveAndDownloadPdfMode
@@ -624,7 +624,7 @@ const Invoice = (props) => {
             headerStyle: { zIndex: "2" },
             formatExtraData: { tableList: orderItemDetails, ReloadedBatch: ReloadedBatch },
             formatter: (cellContent, index1, keys_, { tableList = [], ReloadedBatch = [] }) => {
-                debugger
+                
                 if ((ReloadedBatch.length > 0) && (index1.Item === ReloadedBatch[0].Item)) {
 
                     // index1.StockDetails = ReloadedBatch
