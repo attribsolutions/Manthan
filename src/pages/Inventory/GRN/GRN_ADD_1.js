@@ -1512,7 +1512,7 @@ const GRN_ADD_1 = (props) => {
                 "id": index.Item,
                 "Rate": index.Rate,
                 "CommonID": 0,
-                "EffectiveDate": currentDate_ymd,
+                "EffectiveDate": grnDate,
                 "Party": null,
                 "Company": _cfunc.loginCompanyID(),
                 "CreatedBy": _cfunc.loginUserID(),
