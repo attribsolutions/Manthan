@@ -36,16 +36,28 @@ const StockEntryList = () => {
 
     const action = {}
 
+
+
     useEffect(() => {
         const page_Id = pageId.STOCK_ENTRY_LIST;
         dispatch(commonPageFieldList(page_Id));
-        if (!(_cfunc.loginSelectedPartyID() === 0)) {
-            goButtonHandler()
-        }
+    
         return () => {
             dispatch(commonPageFieldListSuccess(null));
         }
     }, []);
+    
+
+    // useEffect(() => {
+    //     const page_Id = pageId.STOCK_ENTRY_LIST;
+    //     dispatch(commonPageFieldList(page_Id));
+    //     if (!(_cfunc.loginSelectedPartyID() === 0)) {
+    //         goButtonHandler()
+    //     }
+    //     return () => {
+    //         dispatch(commonPageFieldListSuccess(null));
+    //     }
+    // }, []);
 
     useEffect(() => {
         if (commonPartyDropSelect.value > 0) {
