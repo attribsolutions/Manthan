@@ -218,10 +218,11 @@ export function orderQtyOnChange(event, index1) {
     }
 
     if (isSweetAndSnacksCompany) {
-
+        debugger
         const TotalTray = Math.ceil(getFixedNumber(inputValue, 2) / getFixedNumber(index1.ConversionUnit, 2))
         const TrayQtyElement = document.getElementById(`TrayQty-${index1.id}`);
         TrayQtyElement.value = getFixedNumber(TotalTray, 0); // Display with three decimal places
+        index1.TrayQuantity = getFixedNumber(TotalTray, 0)
     }
 
     event.target.value = inputValue;

@@ -1209,8 +1209,9 @@ export function checkRateDropVisibility() {
 
 
 export function validateOrder(PageID, deliveryDate) {
+  debugger
   const restrictedOrders = (loginSystemSetting()?.OrdersnotSave || "").split(',');
-  const currentPartyKey = `${loginPartyTypeID()} -${PageID} `;
+  const currentPartyKey = `${loginPartyTypeID()}-${PageID}`;
 
   let checkValid = restrictedOrders.includes(currentPartyKey)
 

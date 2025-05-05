@@ -47,7 +47,8 @@ export const Rows_1 = (data) => {
 
     const groupedItems = data.reduce((accumulator, currentItem) => {
         const { ItemName, BaseItemUnitQuantity, Rate, GrandTotal, GSTPercentage, GSTAmount, BasicAmount, DiscountAmount, Amount, MRPValue } = currentItem;
-        const key = ItemName;
+
+        const key = ItemName + '_' + MRPValue;
         if (accumulator[key]) {
             accumulator[key].BaseItemUnitQuantity += getFixedNumber(BaseItemUnitQuantity, 3);
             accumulator[key].GrandTotal += getFixedNumber(GrandTotal, 3);
@@ -64,7 +65,7 @@ export const Rows_1 = (data) => {
         }
         return accumulator;
     }, {});
-
+    debugger
     const TotalItemlength = Object.values(groupedItems).length;
     data["TotalItemlength"] = TotalItemlength;
 

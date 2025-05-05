@@ -233,7 +233,7 @@ const Invoice = (props) => {
 
     useEffect(async () => {
         if (postMsg.Status === true && postMsg.StatusCode === 200) {
-            
+
             dispatch(invoiceSaveActionSuccess({ Status: false })); // Reset the status to false
             const config = {
                 editId: postMsg.TransactionID.join(', '),////for saveAndDownloadPdfMode
@@ -475,6 +475,25 @@ const Invoice = (props) => {
             dataField: "",
             formatExtraData: { tableList: orderItemDetails, ReloadedBatch: ReloadedBatch },
             attrs: () => ({ 'data-label': "Quantity/Unit" }),
+
+
+            headerFormatter: (column, colIndex, components) => {
+
+                return (
+                    <div className="custom-header" style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        width: '100%',
+                        paddingRight: '8px',
+                        paddingLeft: '8px'
+                    }}>
+                        <strong>{column.text}</strong>
+                        {_cfunc.strToBool(systemSetting.IsTrayEnterQuantity) && <span style={{ color: 'gray', fontWeight: 'normal' }}>Total Tray : <span id="TotalTray_ID">{orderItemDetails.reduce((sum, item) => sum + (item.TrayQuantity || 0), 0)}</span></span>}
+                    </div>
+                );
+            },
+
             formatter: (cellContent, index1, keys_, { tableList = [] }) => (
                 <>
                     {!_cfunc.strToBool(systemSetting.IsTrayEnterQuantity) && <>
@@ -494,6 +513,8 @@ const Invoice = (props) => {
                                 onChange={(event) => {
                                     orderQtyOnChange(event, index1,);
                                     totalAmountCalcuationFunc(tableList);
+                                    document.getElementById("TotalTray_ID").innerText = tableList.reduce((sum, item) => sum + (item.TrayQuantity || 0), 0);
+
                                 }}
                             />
                         </div>
@@ -538,6 +559,9 @@ const Invoice = (props) => {
                                 onChange={(event) => {
                                     orderQtyOnChange(event, index1);
                                     totalAmountCalcuationFunc(tableList);
+                                    debugger
+                                    document.getElementById("TotalTray_ID").innerText = tableList.reduce((sum, item) => sum + (item.TrayQuantity || 0), 0);
+
                                 }}
                             />
                             <Select
@@ -600,7 +624,12 @@ const Invoice = (props) => {
                                 key={`TrayQty-${index1.id}`}
                                 autoComplete="off"
                                 defaultValue={index1.TrayQuantity}
-                                onChange={(event) => { index1.TrayQuantity = _cfunc.getFixedNumber(event.target.value) }}
+                                onChange={(event) => {
+                                    index1.TrayQuantity = _cfunc.getFixedNumber(event.target.value)
+                                    debugger
+                                    document.getElementById("TotalTray_ID").innerText = tableList.reduce((sum, item) => sum + (item.TrayQuantity || 0), 0);
+
+                                }}
                             />
                         </div>
                         <div style={{ borderBottom: "1px solid #ddd", margin: "5px -11px 5px -11px", }}></div> </>}
@@ -624,7 +653,7 @@ const Invoice = (props) => {
             headerStyle: { zIndex: "2" },
             formatExtraData: { tableList: orderItemDetails, ReloadedBatch: ReloadedBatch },
             formatter: (cellContent, index1, keys_, { tableList = [], ReloadedBatch = [] }) => {
-                
+
                 if ((ReloadedBatch.length > 0) && (index1.Item === ReloadedBatch[0].Item)) {
 
                     // index1.StockDetails = ReloadedBatch
@@ -724,6 +753,7 @@ const Invoice = (props) => {
                                                 onChange={(event) => {
                                                     stockQtyOnChange(event, index1, index2);
                                                     totalAmountCalcuationFunc(tableList);
+
                                                 }}
                                             />
                                         </td>
