@@ -33,7 +33,8 @@ const SystemSettingList = () => {
     );
 
     const action = {
-        getList: getpartysetting_API,
+        // getList: getpartysetting_API,
+        getList: () => getpartysetting_API(loginPartyID(), loginCompanyID()),
         editId: editSystemSettingID,
         deleteId: delete_SystemSetting_ID,
         postSucc: saveSystemSettingMaster_Success,
@@ -45,16 +46,13 @@ const SystemSettingList = () => {
         const page_Id = pageId.SYSTEM_SETTING_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(getpartysetting_API(loginPartyID(), loginCompanyID()))
 
         return () => {
             dispatch(commonPageFieldListSuccess(null))
         }
     }, []);
 
-    useEffect(() => {
-        dispatch(getpartysetting_API(loginPartyID(), loginCompanyID()))
-    }, [reducers.deleteMsg, reducers.updateMsg, reducers.postMsg])
+
 
     const { pageField, goBtnLoading, tableList } = reducers
 
@@ -69,6 +67,9 @@ const SystemSettingList = () => {
             dispatch(BreadcrumbShowCountlabel(`Count:${UpdatedData.length}`));
         }
     }, [tableList])
+
+
+
     reducers.tableList = updateData
 
     return (
