@@ -46,6 +46,7 @@ import { Bulk_BOM_for_WorkOrder, getWorkOrderListPage, Save_Bulk_BOM_for_WorkOrd
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { AddItemInTableFunc } from "../../Inventory/StockAdjustment/StockAdjust_Func";
 
 const MaterialIssueMaster = (props) => {
 
@@ -66,6 +67,7 @@ const MaterialIssueMaster = (props) => {
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
+    const [TableArr, setTableArr] = useState([]);
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
@@ -73,6 +75,11 @@ const MaterialIssueMaster = (props) => {
     const [Itemselectonchange, setItemselectonchange] = useState("");
     const [goButtonList, setGoButtonList] = useState([]);
     const [originalQty, setOriginalQty] = useState([]);
+
+    const [StockBtnloading, setStockBtnloading] = useState(false);
+
+
+
 
     const [modal_view, setModal_view] = useState(false);
 
@@ -836,6 +843,38 @@ const MaterialIssueMaster = (props) => {
     }
 
 
+    const StockAdjustment_Handler = async () => {
+        setStockBtnloading(true)
+        let checkRows = goButtonList
+            .filter(i => i.selectCheck)
+            .map(i => ({
+                value: i.Item,
+                label: i.ItemName
+            }));
+
+        let StockDetails = [];
+
+        for (const item of checkRows) {
+            const { TableArr: updatedTableArr } = await AddItemInTableFunc({
+                itemNameSelect: item,
+                TableArr, // pass the original or current array if needed
+            });
+
+            StockDetails.push(...updatedTableArr); // flatten into one array
+        }
+        setStockBtnloading(false)
+        if (StockDetails?.length > 0) {
+            history.push({
+                pathname: url.STOCK_ADJUSTMENT,
+                StockDetails,
+            })
+        }
+
+
+
+    }
+
+
     const customOption = (props) => {
 
         const { innerProps, label, data } = props;
@@ -1070,8 +1109,9 @@ const MaterialIssueMaster = (props) => {
                             />
 
                             <SaveButton pageMode={pageMode}
-                                // loading={saveBtnloading}
-                                onClick={BulkWorkOrder_Handler}
+                                loading={StockBtnloading}
+                                loadingLable={"Stock Adjust..."}
+                                onClick={StockAdjustment_Handler}
                                 userAcc={userPageAccessState}
                                 // module={"Material Issue"}
                                 Button_Name={"Make Stock Adjust"}

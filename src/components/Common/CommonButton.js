@@ -24,7 +24,7 @@ export function SaveButton(props) {
   }
   return null
 }
-const SaveBtn = ({ onClick, type = "button", userAcc, loading, forceDisabled, Button_Name = "Save" }) => {
+const SaveBtn = ({ onClick, type = "button", userAcc, loading, forceDisabled, Button_Name = "Save", loadingLable = "Saving.." }) => {
   const { Name } = userAcc;
   const btnId = `Save-${Name.replace(/ /g, "")}`;
   return (
@@ -36,7 +36,7 @@ const SaveBtn = ({ onClick, type = "button", userAcc, loading, forceDisabled, Bu
           type={type}
           // style={{ padding: "3px", paddingInline: "5px" }}
           className="btn btn-primary w-md"
-        >  Saving.. &nbsp;
+        >  {loadingLable} &nbsp;
           <Spinner style={{ height: "13px", width: "13px" }} color="white" />
         </button>
 

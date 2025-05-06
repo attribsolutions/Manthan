@@ -114,6 +114,14 @@ const StockAdjustment = (props) => {
     }, []);
 
 
+    useEffect(() => {
+        if (location?.StockDetails?.length > 0) {
+            setTableArr(location.StockDetails)
+        }
+    }, [])
+
+
+
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -260,6 +268,10 @@ const StockAdjustment = (props) => {
 
     function BatchCode_Add_Handler(event, index1, tableList, setTableList) {
 
+        debugger
+        if ((index1.BatchCodeSelect === undefined)) {
+            return customAlert({ Type: 3, Message: alertMessages.batchCodeIsRequired })
+        }
         let isfound = index1.StockDetails.find(i => i.id === index1.BatchCodeSelect?.id);
 
         if (!(isfound === undefined)) {
