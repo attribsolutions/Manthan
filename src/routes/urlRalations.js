@@ -364,7 +364,8 @@ export const ClaimTrackingReport = url.CLAIM_TRACKING_REPORT
 
 export const TCSAmountReport = url.TCS_AMOUNT_REPORT
 
-export const CX_DD_Difference = url.CX_DD_DIFFERENCE_REPORT
+export const CX_DD_Difference = url.CX_DD_DIFFERENCE_REPORT 
+
 
 export const Sales_Order_List_2 = url.APP_ORDER_LIST
 

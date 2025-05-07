@@ -1,6 +1,7 @@
 import axios from "axios"
 import { del, get, put, post, postWithoutToken, postRefreshToken, getWithotMsg, postMethodExcel, delwithPostBody, postForFormData, putForFormData, postWithBasicAuth, } from "./api_helper"
 import * as url from "./url_helper"
+import CssItemSaleReport from "../Reports/CssItemSaleReport"
 
 // Gets the logged in user data from local session
 const getLoggedInUser = () => {
@@ -946,6 +947,14 @@ export const TCS_Amount_Report_GoButton_API = (jsonBody) => post(url.TCS_AMOUNT_
 // Cx-DD Diffrence Report
 export const Cx_DD_Diffrence_Report_GoButton_API = (jsonBody) => post(url.CX_DD_DIFFRENCE_REPORT, jsonBody)
 export const Cx_DD_Diffrence_Report_Party_Dropdown_API = () => get(url.CX_DD_DIFFRENCE_PARTY_API) // get api
+
+//CssItemSaleReport
+
+
+
+export const Css_Item_Sale_Report_GoButton_API = ({ jsonBody }) => post(url.ITEM_SALE_REPORT_GO_BUTTON, jsonBody)//Go button api
+
+
 
 //Setting api
 
