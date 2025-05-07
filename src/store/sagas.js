@@ -136,6 +136,7 @@ import CodeRedemptionReportSaga from "./Report/CodeRedemptionRedux/saga"
 
 import VoucherRedemptionClaimSaga from "./Report/VoucherRedemptionClaimRedux/saga"
 import PeriodicGRNReportSaga from "./Report/PeriodicGRNRedux/saga"
+import Css_Item_Sale_ReportSaga from "./Report/CssItemSaleReport/saga"
 
 
 
@@ -270,9 +271,9 @@ export default function* rootSaga() {
 		fork(CodeRedemptionReportSaga),
 		fork(VoucherRedemptionClaimSaga),
 		fork(PeriodicGRNReportSaga),
+		fork(Css_Item_Sale_ReportSaga)
 
 
-		
 
 
 

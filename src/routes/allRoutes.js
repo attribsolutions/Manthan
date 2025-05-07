@@ -211,6 +211,7 @@ import ItemImageUpload from "../pages/Adminisrator/ItemPages/ItemImageUpload/Ite
 import CreditNote_1 from "../pages/Accounting/CreditDebit/CreditNote1";
 import ManPowerReport from "../Reports/ManPowerReport";
 import TCSAmountReport from "../Reports/TCSAmountReport";
+import CssItemSaleReport from "../Reports/CssItemSaleReport"                      // Add 
 import CX_DD_DiffrenceReport from "../Reports/CX_DD_DiffrenceReport";
 import Bulk_Invoice from "../pages/Sale/Bulk_Invoice/index";
 import POSRoleAccess from "../pages/SweetPOS/Adminstration/RoleAccess/POSRoleAccess.js";
@@ -676,6 +677,9 @@ const userRoutes = [
 	{ path: path.TCS_AMOUNT_REPORT, component: TCSAmountReport },// use self party drop-down
 
 	{ path: path.CX_DD_DIFFERENCE_REPORT, component: CX_DD_DiffrenceReport },// use self party drop-down
+
+	{path: path.Css_Item_Sale_Report,  component: CssItemSaleReport },   
+	
 
 	{ path: path.TARGET_VS_ACHIEVEMENT, component: TargetVSAchievement, isPartyWisePage: false },
 

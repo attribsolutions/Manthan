@@ -414,6 +414,8 @@ export const TCS_AMOUNT_REPORT = 263
 
 export const CX_DD_DIFFERENCE_REPORT = 264
 
+export const  CSS_ITEM_SALE_REPORT = 341
+
 export const ORDER_ITEM_SUPPLIER_REPORT = 301
 
 // ***************** Sweet POS *******************

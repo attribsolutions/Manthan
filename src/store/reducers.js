@@ -143,6 +143,7 @@ import GRNDiscrepancyReportReducer from "./Report/GRNDiscrepancyRedux/reducer"
 import CodeRedemptionReportReducer from "./Report/CodeRedemptionRedux/reducer"
 import VoucherRedemptionClaimReducer from "./Report/VoucherRedemptionClaimRedux/reducer"
 import PeriodicGrnReportReducer from "./Report/PeriodicGRNRedux/reducer"
+import Css_Item_sale_Reducer from "./Report/CssItemSaleReport/reducer"
 
 const rootReducer = combineReducers({
 	Layout,
@@ -264,8 +265,8 @@ const rootReducer = combineReducers({
 	GRNDiscrepancyReportReducer,
 	CodeRedemptionReportReducer,
 	VoucherRedemptionClaimReducer,
-	PeriodicGrnReportReducer
-
+	PeriodicGrnReportReducer,
+	Css_Item_sale_Reducer
 
 })
 export default rootReducer
