@@ -8,8 +8,23 @@ function* Css_Item_sale_Report_GenFunc({ config }) {
 
     try {
         let response = yield call(Css_Item_Sale_Report_GoButton_API, config);
+        const groupedData = [];
+        response.Data.forEach(item => {
+          const existing = groupedData.find(g => g.itemid === item.itemid);
+          if (existing) {
+            existing.Quantity += item.Quantity;
+            existing.BasicAmount += item.BasicAmount;
+            existing.CGST += item.CGST;
+            existing.SGST += item.SGST;
+            existing.GrandTotal += item.GrandTotal;
+          } else {
+            // Clone object to avoid modifying original reference
+            groupedData.push({ ...item });
+          }
+        });
+        response["Type"] = config.btnId;
+        response["Data"] = groupedData; 
 
-        response["Type"] = config.btnId
 
         yield put(Css_Item_Sale_Gobtn_Success(response))
     } catch (error) { yield put(Css_Item_Sale_Gobtn_ReportApiErrorAction()) }
