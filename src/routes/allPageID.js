@@ -400,21 +400,32 @@ export const PERIODIC_GRN_REPORT_ = 338
 
 export const RECEIPT_DATA_EXPORT = 245
 
+
 export const PARTY_OUTSTANDING_REPORT = 246
+
 
 export const RETAILER_APPROVAL = 247
 
+
 export const MAN_POWER_REPORT = 248
+
+
 
 export const PARTY_LEDGER = 207
 
+
+
 export const CLAIM_TRACKING_REPORT = 257
+
 
 export const TCS_AMOUNT_REPORT = 263
 
+
 export const CX_DD_DIFFERENCE_REPORT = 264
 
-export const CSS_ITEM_SALE_REPORT = 343
+
+export const CSS_ITEM_SALE_REPORT = 344 
+
 
 export const ORDER_ITEM_SUPPLIER_REPORT = 301
 
