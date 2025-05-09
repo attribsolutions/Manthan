@@ -18,6 +18,7 @@ import OrderThermalPrintReport from "../pages/SweetPOS/Reports/OrderThermalPrint
 import voucherRedemptionClaimReport from "./VoucherRedemptionClaim/VoucherRedemptionClaimPDF";
 import PeriodicGRNReport from "./PeriodicGRNReport/PDFReport/Page";
 import POSSaleSummaryReport from "../pages/SweetPOS/Reports/PosSummarySaleReport/Page";
+import CSSItemSaleReport from "./CssItemSaleReport/PDFReport/Page";
 
 export const FrenchiesesOrder = "FrenchiesesOrder"
 export const order1 = "order1"
@@ -42,6 +43,9 @@ export const VoucherRedemptionClaimReport = "VoucherRedemptionClaimReport"
 export const PeriodicGRN = "PeriodicGRN"
 
 export const POSSaleSummary = "POSSaleSummary"
+
+export const CSS_ItemSaleReport = "CSS_ItemSaleReport"
+
 
 
 
@@ -111,6 +115,9 @@ const generateReport = (resp) => {
             break;
         case POSSaleSummary:
             POSSaleSummaryReport(resp.Data)
+            break;
+        case CSS_ItemSaleReport:
+            CSSItemSaleReport(resp.Data)
             break;
         default:
             break;

@@ -12,21 +12,25 @@ import { mode, pageId, url } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
+import * as report from '../../Reports/ReportIndex'
+import C_Report from "../../components/Common/C_Report";
+
+
 import { globalTableSearchProps } from "../../components/Common/SearchBox/MySearch";
-import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, GetCustomer, GetVenderSupplierCustomer } from "../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, GetCustomer, getpdfReportdataSuccess, GetVenderSupplierCustomer } from "../../store/actions";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { Cx_DD_Diffrence_Gobtn_Action, Cx_DD_Diffrence_Gobtn_Success } from "../../store/Report/CX_DD_Diffrence_Report/action";
 import { Cx_DD_Diffrence_Report_Party_Dropdown_API } from "../../helpers/backend_helper";
 import { allLabelWithBlank, allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
-import { Css_Item_Sale_Gobtn_Action } from "../../store/Report/CssItemSaleReport/action";
+import { Css_Item_Sale_Gobtn_Action, Css_Item_Sale_Gobtn_Success } from "../../store/Report/CssItemSaleReport/action";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import { customAlert } from "../../CustomAlert/ConfirmDialog";
 
 const CssItemSaleReport = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-    const isSCMParty = _cfunc.loginIsSCMParty();
 
     const fileds = {
         FromDate: currentDate_ymd,
@@ -39,8 +43,6 @@ const CssItemSaleReport = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [btnMode, setBtnMode] = useState("");
 
-    const [PartyDropdown, setPartyDropdown] = useState(allLabelWithZero);
-    const [partyDropdownOptions, setPartyDropdownOptions] = useState([]);
     const [partyDropdownLoading, setpartyDropdownLoading] = useState(false);
 
 
@@ -61,7 +63,7 @@ const CssItemSaleReport = (props) => {
         })
     );
 
-    const { userAccess, tableData, GoBtnLoading, pageField, commonPartyDropSelect, vendorSupplierCustomer, customer } = reducers;
+    const { userAccess, tableData, GoBtnLoading, pageField, vendorSupplierCustomer, customer } = reducers;
     const { Data = [], Type } = tableData
 
     useEffect(() => {
@@ -74,7 +76,9 @@ const CssItemSaleReport = (props) => {
 
         return () => {
             dispatch(commonPageFieldSuccess(null));
-            dispatch(Cx_DD_Diffrence_Gobtn_Success([]));
+            dispatch(Css_Item_Sale_Gobtn_Success([]));
+
+
         }
     }, []);
 
@@ -125,7 +129,7 @@ const CssItemSaleReport = (props) => {
     useEffect(() => {
 
         if (Type === "excel") {
-            debugger
+            
             ExcelReportComponent({
                 pageField,
                 excelTableData: Data,
@@ -133,6 +137,38 @@ const CssItemSaleReport = (props) => {
             })
         }
     }, [tableData]);
+
+
+    useEffect(() => {
+        
+        try {
+            if ((tableData.Status === true) && (tableData.StatusCode === 200)) {
+                if (Type === "Print") {
+                    let config = { rowData: { Data: [] } }
+                    config.rowData["ReportType"] = report.CSS_ItemSaleReport;
+                    config.rowData["Status"] = tableData.Status
+                    config.rowData["StatusCode"] = tableData.StatusCode
+                    config.rowData["Data"] = tableData.Data
+                    config.rowData["Data"]["Date"] = `From  ${_cfunc.date_dmy_func(values.FromDate)}  To  ${_cfunc.date_dmy_func(values.ToDate)}`
+                    dispatch(getpdfReportdataSuccess(config.rowData))
+                    dispatch(Css_Item_Sale_Gobtn_Success([]));
+                }
+            }
+            else if ((tableData.Status === true) && (tableData.StatusCode === 204)) {
+                customAlert({
+                    Type: 3,
+                    Message: tableData.Message,
+                })
+                dispatch(Css_Item_Sale_Gobtn_Success([]));
+                return
+            }
+        }
+        catch (e) { }
+
+    }, [tableData]);
+
+
+
 
 
 
@@ -143,7 +179,8 @@ const CssItemSaleReport = (props) => {
             a.hasValid.FromDate.valid = true
             return a
         })
-        dispatch(Cx_DD_Diffrence_Gobtn_Success([]));
+        dispatch(Css_Item_Sale_Gobtn_Success([]));
+
     }
 
     function todateOnchange(e, date) {
@@ -153,7 +190,8 @@ const CssItemSaleReport = (props) => {
             a.hasValid.ToDate.valid = true
             return a
         })
-        dispatch(Cx_DD_Diffrence_Gobtn_Success([]));
+        dispatch(Css_Item_Sale_Gobtn_Success([]));
+
     }
 
 
@@ -172,7 +210,8 @@ const CssItemSaleReport = (props) => {
             a.hasValid.division.valid = true
             return a
         })
-        dispatch(Cx_DD_Diffrence_Gobtn_Success([]));
+        dispatch(Css_Item_Sale_Gobtn_Success([]));
+
     }
 
 
@@ -190,11 +229,12 @@ const CssItemSaleReport = (props) => {
             a.hasValid.customer.valid = true
             return a
         })
-        dispatch(Cx_DD_Diffrence_Gobtn_Success([]));
+        dispatch(Css_Item_Sale_Gobtn_Success([]));
+
     }
 
     function goButtonHandler(BtnID) {
-        debugger
+
         try {
             const jsonBody = JSON.stringify({
                 FromDate: values.FromDate,
@@ -318,6 +358,17 @@ const CssItemSaleReport = (props) => {
                             >
                                 Excel
                             </C_Button>
+
+
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={(GoBtnLoading && btnMode === "Print") && true}
+                                className="btn btn-primary m-3 mr"
+                                onClick={() => goButtonHandler("Print")}
+                            >
+                                Print
+                            </C_Button>
                         </Col>
                     </Row>
                 </div>
@@ -327,7 +378,7 @@ const CssItemSaleReport = (props) => {
                 <div className="mt-1">
                     <ToolkitProvider
                         keyField="id"
-                        data={Data}
+                        data={Type === "show" ? Data : []}
                         columns={tableColumns}
                         search
                     >
@@ -360,6 +411,8 @@ const CssItemSaleReport = (props) => {
                 </div>
 
             </div>
+            <C_Report />
+
         </React.Fragment >
     )
 }

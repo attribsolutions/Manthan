@@ -9,21 +9,36 @@ function* Css_Item_sale_Report_GenFunc({ config }) {
     try {
         let response = yield call(Css_Item_Sale_Report_GoButton_API, config);
         const groupedData = [];
+
         response.Data.forEach(item => {
-          const existing = groupedData.find(g => g.itemid === item.itemid);
-          if (existing) {
-            existing.Quantity += item.Quantity;
-            existing.BasicAmount += item.BasicAmount;
-            existing.CGST += item.CGST;
-            existing.SGST += item.SGST;
-            existing.GrandTotal += item.GrandTotal;
-          } else {
-            // Clone object to avoid modifying original reference
-            groupedData.push({ ...item });
-          }
+            const itemid = item.ItemName;
+            const existing = groupedData.find(g => g.ItemName === itemid);
+
+            // Convert to number and round to 2 decimal places
+            const toNumber = val => Number(parseFloat(val || 0).toFixed(2));
+
+            if (existing) {
+                existing.Amount = toNumber(existing.Amount + toNumber(item.Amount));
+                existing.BaseItemUnitQuantity = toNumber(existing.BaseItemUnitQuantity + toNumber(item.BaseItemUnitQuantity));
+                existing.BasicAmount = toNumber(existing.BasicAmount + toNumber(item.BasicAmount));
+                existing.DiscountAmount = toNumber(existing.DiscountAmount + toNumber(item.DiscountAmount));
+                existing.GSTAmount = toNumber(existing.GSTAmount + toNumber(item.GSTAmount));
+                existing.GrandTotal = toNumber(existing.GrandTotal + toNumber(item.GrandTotal));
+            } else {
+                groupedData.push({
+                    ...item,
+                    Amount: toNumber(item.Amount),
+                    BaseItemUnitQuantity: toNumber(item.BaseItemUnitQuantity),
+                    BasicAmount: toNumber(item.BasicAmount),
+                    DiscountAmount: toNumber(item.DiscountAmount),
+                    GSTAmount: toNumber(item.GSTAmount),
+                    GrandTotal: toNumber(item.GrandTotal),
+                });
+            }
         });
+
         response["Type"] = config.btnId;
-        response["Data"] = groupedData; 
+        response["Data"] = groupedData;
 
 
         yield put(Css_Item_Sale_Gobtn_Success(response))
