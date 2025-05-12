@@ -952,7 +952,7 @@ export const Cx_DD_Diffrence_Report_Party_Dropdown_API = () => get(url.CX_DD_DIF
 
 
 
-export const Css_Item_Sale_Report_GoButton_API = ({ jsonBody }) => post(url.ITEM_SALE_REPORT_GO_BUTTON, jsonBody)//Go button api
+export const Css_Item_Sale_Report_GoButton_API = ({ jsonBody }) => post(url.CSS_ITEM_SALE_REPORT_GO_BUTTON, jsonBody)//Go button api
 
 
 
