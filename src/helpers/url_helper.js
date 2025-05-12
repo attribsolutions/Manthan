@@ -617,7 +617,8 @@ export const GST_R3B_REPORT = "/GSTR3BExcel"
 export const RETURN_REPORT = "/ReturnReport"
 
 //Item Sale Report Go button API
-export const ITEM_SALE_REPORT_GO_BUTTON = '/CSSItemSaleReport'
+export const CSS_ITEM_SALE_REPORT_GO_BUTTON = '/CSSItemSaleReport'
+export const ITEM_SALE_REPORT_GO_BUTTON = '/ItemSaleReport'
 export const SUPPLIER_API = '/ItemSaleSupplier'
 export const ITEM_LIST_API = '/ItemSaleItemList'
 
