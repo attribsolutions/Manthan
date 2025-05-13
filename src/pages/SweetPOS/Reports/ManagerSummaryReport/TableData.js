@@ -3,10 +3,9 @@ import { numberWithCommas } from "../../../../Reports/Report_common_function";
 
 // original
 export const columns_1 = [
-    "Invoice Date",
-    "Manager Name",
-    "Invoice Count",
-    "Amount"
+    "Invoice Number",
+    "Grand Total",
+    "Advance Amount"
 ];
 
 
@@ -32,27 +31,17 @@ export const DetailsOfTransport = [
 
 
 export const Rows_1 = (data) => {
-
     let finalAmount = 0
-
-
     const returnArr = []
     data.forEach((element, key) => {
-
         const tableitemRow = [
-            `${(element.InvoiceDate)}`,
-            `${(element.ManagerName)}`,
-            `${(getFixedNumber(element.InvoiceCount, 2)).toFixed(2)}`,
-            `${(getFixedNumber(element.Amount, 2)).toFixed(2)}`,
+            `${(element.FullInvoiceNumber)}`,
+            `${(getFixedNumber(element.GrandTotal, 2)).toFixed(2)}`,
+            `${(getFixedNumber(element.AdvanceAmount, 2)).toFixed(2)}`,
         ];
-
-        finalAmount += getFixedNumber(element.Amount, 2);
-
-
+        finalAmount += getFixedNumber(element.GrandTotal, 2);
         returnArr.push(tableitemRow);
-
     })
-
 
     if (returnArr.length > 0) {
         returnArr.push([

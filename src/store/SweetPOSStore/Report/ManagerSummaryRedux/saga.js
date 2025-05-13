@@ -7,11 +7,9 @@ import { date_dmy_func } from "../../../../components/Common/CommonFunction";
 
 function* ManagerSummaryReport_GenFunc({ config }) {
 	try {
-
 		let response = yield call(ManagerSummary_API, config);
 		const newList = yield response.Data.map((i) => {
-			i["recordsAmountTotal"] = i.Amount;  // Breadcrumb Count total
-			i.InvoiceDate = date_dmy_func(i.InvoiceDate); // Only for Dashoard 
+			i["recordsAmountTotal"] = i.GrandTotal;  // Breadcrumb Count total
 			return i
 		})
 		response["Data"] = newList
