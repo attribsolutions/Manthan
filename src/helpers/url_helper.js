@@ -560,6 +560,11 @@ export const STOCK_PROCESSING = '/StockProcessing'
 export const POS_STOCK_PROCESSING = 'SweetPOS/StockProcesSPOS'
 
 
+export const MANAGER_SUMMARY_REPORT = '/ManagerSummaryReport'
+
+
+
+
 export const GRN_PENDING_REPORT = "/PendingGRNInvoices"
 
 

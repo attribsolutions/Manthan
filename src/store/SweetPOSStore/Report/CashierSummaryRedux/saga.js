@@ -7,15 +7,16 @@ import { date_dmy_func } from "../../../../components/Common/CommonFunction";
 
 function* CashierSummaryReport_GenFunc({ config }) {
 	try {
-		
-		const response = yield call(CashierSummary_API, config);
-		const newList = yield response.Data.map((i) => {
 
+		let response = yield call(CashierSummary_API, config);
+		const newList = yield response.Data.map((i) => {
 			i["recordsAmountTotal"] = i.Amount;  // Breadcrumb Count total
 			i.InvoiceDate = date_dmy_func(i.InvoiceDate); // Only for Dashoard 
 			return i
 		})
-		yield put(CashierSummaryReport_GoButton_API_Success(newList))
+		response["Data"] = newList
+		response["goBtnMode"] = config.goBtnMode
+		yield put(CashierSummaryReport_GoButton_API_Success(response))
 	} catch (error) { yield put(CashierSummaryApiErrorAction()) }
 }
 

@@ -10,13 +10,13 @@ import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getp
 import DynamicColumnHook from "../../../../components/Common/TableCommonFunc";
 import { C_DatePicker } from "../../../../CustomValidateForm";
 import { ExcelReportComponent } from "../../../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
-import { CashierSummaryReport_GoButton_API, CashierSummaryReport_GoButton_API_Success } from "../../../../store/SweetPOSStore/Report/CashierSummaryRedux/action";
+import { ManagerSummaryReport_GoButton_API, ManagerSummaryReport_GoButton_API_Success } from "../../../../store/SweetPOSStore/Report/ManagerSummaryRedux/action";
 import GlobalCustomTable from "../../../../GlobalCustomTable";
 import C_Report from "../../../../components/Common/C_Report";
 import * as report from '../../../../Reports/ReportIndex'
 
 
-const CashierSummary = (props) => {
+const ManagerSummary = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -34,8 +34,8 @@ const CashierSummary = (props) => {
         GoBtnLoading,
         pageField
     } = useSelector((state) => ({
-        GoButtonData: state.CashierSummaryReportReducer.CashierSummary,
-        GoBtnLoading: state.CashierSummaryReportReducer.listBtnLoading,
+        GoButtonData: state.ManagerSummaryReportReducer.ManagerSummary,
+        GoBtnLoading: state.ManagerSummaryReportReducer.listBtnLoading,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
@@ -44,11 +44,11 @@ const CashierSummary = (props) => {
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(pageId.CASHIER_SUMMARY_REPORT));
+        dispatch(commonPageField(pageId.MANAGER_SUMMARY_REPORT));
 
         return () => {
             dispatch(commonPageFieldSuccess(null));
-            dispatch(CashierSummaryReport_GoButton_API_Success([]));
+            dispatch(ManagerSummaryReport_GoButton_API_Success([]));
         }
     }, []);
 
@@ -77,14 +77,14 @@ const CashierSummary = (props) => {
             ExcelReportComponent({      // Download CSV
                 pageField,
                 excelTableData: GoButtonData.Data,
-                excelFileName: "Cashier Summary Report"
+                excelFileName: "Manager Summary Report"
             })
-            dispatch(CashierSummaryReport_GoButton_API_Success([]));   // Reset Excel tableData
+            dispatch(ManagerSummaryReport_GoButton_API_Success([]));   // Reset Excel tableData
 
         } if (GoButtonData.goBtnMode === "Print") {
             const Details = _cfunc.loginUserDetails()
 
-            GoButtonData["ReportType"] = report.Cashier_Summary_Report;
+            GoButtonData["ReportType"] = report.Manager_Summary_Report;
 
             GoButtonData["Data"]["GSTIN"] = Details.GSTIN
             GoButtonData["Data"]["SupplierName"] = Details.PartyName
@@ -109,24 +109,24 @@ const CashierSummary = (props) => {
                 "Party": _cfunc.loginPartyID(),
             })
             const config = { jsonBody, goBtnMode };
-            dispatch(CashierSummaryReport_GoButton_API(config))
+            dispatch(ManagerSummaryReport_GoButton_API(config))
 
         } catch (error) { _cfunc.CommonConsole(error) }
     }
 
     function fromdateOnchange(e, date) {
         setFromDate(date)
-        dispatch(CashierSummaryReport_GoButton_API_Success([]));
+        dispatch(ManagerSummaryReport_GoButton_API_Success([]));
     }
 
     function todateOnchange(e, date) {
         setToDate(date);
-        dispatch(CashierSummaryReport_GoButton_API_Success([]));
+        dispatch(ManagerSummaryReport_GoButton_API_Success([]));
     }
 
 
 
-    // Cashier_Summary_Report
+    // Manager_Summary_Report
 
     return (
         <React.Fragment>
@@ -219,4 +219,4 @@ const CashierSummary = (props) => {
     )
 }
 
-export default CashierSummary;
+export default ManagerSummary;
