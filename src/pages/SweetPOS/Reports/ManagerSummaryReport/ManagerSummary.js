@@ -8,21 +8,26 @@ import { mode, pageId } from "../../../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getpdfReportdataSuccess } from "../../../../store/actions";
 import DynamicColumnHook from "../../../../components/Common/TableCommonFunc";
-import { C_DatePicker } from "../../../../CustomValidateForm";
+import { C_DatePicker, C_Select } from "../../../../CustomValidateForm";
 import { ExcelReportComponent } from "../../../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { ManagerSummaryReport_GoButton_API, ManagerSummaryReport_GoButton_API_Success } from "../../../../store/SweetPOSStore/Report/ManagerSummaryRedux/action";
 import GlobalCustomTable from "../../../../GlobalCustomTable";
 import C_Report from "../../../../components/Common/C_Report";
 import * as report from '../../../../Reports/ReportIndex'
+import { allLabelWithZero } from "../../../../components/Common/CommonErrorMsg/HarderCodeData";
 
 
 const ManagerSummary = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+
+    const isFrenchise = _cfunc.loginUserIsFranchisesRole()
     const currentDate_ymd = _cfunc.date_ymd_func();
     const [fromDate, setFromDate] = useState(currentDate_ymd)
     const [toDate, setToDate] = useState(currentDate_ymd)
+    const [PartyDropdown, setPartyDropdown] = useState(allLabelWithZero);
+
     const [userPageAccessState, setUserAccState] = useState('');
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -32,10 +37,14 @@ const ManagerSummary = (props) => {
         userAccess,
         GoButtonData,
         GoBtnLoading,
-        pageField
+        pageField, Party,
+        partyDropdownLoading
     } = useSelector((state) => ({
         GoButtonData: state.ManagerSummaryReportReducer.ManagerSummary,
         GoBtnLoading: state.ManagerSummaryReportReducer.listBtnLoading,
+        Party: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
+        partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
+
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
@@ -45,7 +54,9 @@ const ManagerSummary = (props) => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.MANAGER_SUMMARY_REPORT));
-
+        if (_cfunc.CommonPartyDropValue().value > 0) {
+            setPartyDropdown(_cfunc.CommonPartyDropValue());
+        }
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(ManagerSummaryReport_GoButton_API_Success([]));
@@ -99,6 +110,13 @@ const ManagerSummary = (props) => {
 
 
 
+    const Party_Option = Party.map(i => ({
+        value: i.id,
+        label: i.Name,
+        PartyType: i.PartyType
+    })).filter(index => index.PartyType === "Franchises");
+
+    Party_Option.unshift(allLabelWithZero);
 
     function goButtonHandler(goBtnMode) {
 
@@ -106,7 +124,7 @@ const ManagerSummary = (props) => {
             const jsonBody = JSON.stringify({
                 "FromDate": fromDate,
                 "ToDate": toDate,
-                "Party": _cfunc.loginPartyID(),
+                "Party": _cfunc.loginSelectedPartyID(),
             })
             const config = { jsonBody, goBtnMode };
             dispatch(ManagerSummaryReport_GoButton_API(config))
@@ -123,7 +141,9 @@ const ManagerSummary = (props) => {
         setToDate(date);
         dispatch(ManagerSummaryReport_GoButton_API_Success([]));
     }
-
+    function PartyDrodownOnChange(e) {
+        setPartyDropdown(e);
+    }
 
 
     // Manager_Summary_Report
@@ -163,8 +183,31 @@ const ManagerSummary = (props) => {
                             </FormGroup>
                         </Col>
 
+                        {!isFrenchise && < Col sm={3} className="">
+                            <FormGroup className=" row mt-2" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "65px", marginRight: "20px" }}>Party</Label>
+                                <Col sm="8">
+                                    <C_Select
+                                        name="Party"
+                                        value={PartyDropdown}
+                                        isSearchable={true}
 
-                        <Col sm={6} className=" d-flex justify-content-end" >
+                                        isLoading={partyDropdownLoading}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={Party_Option}
+                                        onChange={PartyDrodownOnChange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>}
+
+
+                        <Col sm={!isFrenchise ? 3 : 6} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
