@@ -19,6 +19,7 @@ import { C_Select } from "../../../../CustomValidateForm";
 import { allLabelWithZero } from "../../../../components/Common/CommonErrorMsg/HarderCodeData";
 import { getCommonPartyDrodownOptionAction } from "../../../../store/Utilites/PartyDrodown/action";
 
+
 const StockOutReport = (props) => {
 
     const dispatch = useDispatch();
@@ -30,6 +31,7 @@ const StockOutReport = (props) => {
     const [PartyDropdown, setPartyDropdown] = useState(allLabelWithZero);
     const [tableData, setTableData] = useState([]);
     const [btnMode, setBtnMode] = useState(0);
+
 
     const {
         goButtonData,
@@ -45,6 +47,7 @@ const StockOutReport = (props) => {
         pageField: state.CommonPageFieldReducer.pageField
     })
     );
+    const loadingBtn = useSelector(state => state.StockOutReportReducer.loadingBtn);
 
     const { date = current_Date_and_Time.Date_and_time, time = current_Date_and_Time.Time } = headerFilters;
 
@@ -147,38 +150,40 @@ const StockOutReport = (props) => {
 
 
 
-
     useEffect(() => {
-
         try {
             if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
+                debugger
+                const { Data } = goButtonData;
 
-                setBtnMode(0);
-                const { Data } = goButtonData
-                setTableData(Data);
-                if (btnMode === 2) {
-                    ExcelReportComponent({      // Download CSV
+                if (goButtonData.Btnmode === 1) {
+                    setTableData(Data);
+                } else if (goButtonData.Btnmode === 2) {
+                    ExcelReportComponent({
                         pageField,
                         excelTableData: Data,
                         excelFileName: "Stock Out Report"
-                    })
-                    dispatch(GoButton_For_StockOut_Success([]));
-                    setPartyDropdown([allLabelWithZero])
+                    });
                 }
+
+                dispatch(GoButton_For_StockOut_Success([]));
+                setPartyDropdown([allLabelWithZero]);
             }
             else if ((goButtonData.Status === true)) {
                 setTableData([]);
             }
-            setBtnMode(0);
-
-        }
-        catch (e) { }
-
+        } catch (e) { }
     }, [goButtonData]);
+
+
+
+
+
+
 
     function excel_And_GoBtnHandler(e, Btnmode) {
 
-        setBtnMode(Btnmode);
+
 
         const jsonBody = JSON.stringify({
             "Date": _cfunc.getDate_Time_ymd(date),
@@ -186,7 +191,7 @@ const StockOutReport = (props) => {
             "Party": _cfunc.loginUserIsFranchisesRole() ? _cfunc.loginPartyID().toString() : (PartyDropdown.value).toString()
         });
 
-        let config = { jsonBody }
+        let config = { jsonBody, Btnmode }
         dispatch(GoButton_For_StockOut_Action(config));
     }
 
@@ -289,7 +294,7 @@ const StockOutReport = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={btnMode === 1 && true}
+                                loading={loadingBtn === 1}
                                 className="btn btn-success m-3 mr"
                                 onClick={(e) => excel_And_GoBtnHandler(e, 1)}
                             >
@@ -298,7 +303,7 @@ const StockOutReport = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={btnMode === 2 && true}
+                                loading={loadingBtn === 2}
                                 className="btn btn-primary m-3 mr"
                                 onClick={(e) => excel_And_GoBtnHandler(e, 2)}
                             >
