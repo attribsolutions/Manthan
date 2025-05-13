@@ -38,6 +38,10 @@ const ImportFieldAddList = () => {
 
   const action = {
     getList: post_ImportFiledAdd,
+    getList: () => post_ImportFiledAdd(JSON.stringify({
+      CompanyID: loginCompanyID(),
+    })),
+
     editId: edit_ImportFiledAdd,
     deleteId: delete_ImportFiledAdd,
     postSucc: save_ImportFiledAdd_Success,
@@ -49,7 +53,7 @@ const ImportFieldAddList = () => {
     const page_Id = pageId.IMPORT_FIELD_ADD_LIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    dispatch(post_ImportFiledAdd(getlistBody()));
+    dispatch(post_ImportFiledAdd(getlistBody())) ;
   }, []);
 
   function getlistBody() {
