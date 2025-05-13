@@ -129,7 +129,7 @@ const CssItemSaleReport = (props) => {
     useEffect(() => {
 
         if (Type === "excel") {
-            
+
             ExcelReportComponent({
                 pageField,
                 excelTableData: Data,
@@ -140,7 +140,7 @@ const CssItemSaleReport = (props) => {
 
 
     useEffect(() => {
-        
+
         try {
             if ((tableData.Status === true) && (tableData.StatusCode === 200)) {
                 if (Type === "Print") {
@@ -239,11 +239,7 @@ const CssItemSaleReport = (props) => {
             const jsonBody = JSON.stringify({
                 FromDate: values.FromDate,
                 ToDate: values.ToDate,
-                PartyType: 0,
-                Party: _cfunc.loginSelectedPartyID(),
-                Employee: _cfunc.loginEmployeeID(),
-                CompanyID: _cfunc.loginCompanyID(),
-                ItemID: "0",
+
                 CustomerID: values.customer.map(row => row.value).join(','),
                 DivisionID: values.division.map(row => row.value).join(',')
 

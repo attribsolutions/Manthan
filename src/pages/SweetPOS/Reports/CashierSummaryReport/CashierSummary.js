@@ -6,44 +6,41 @@ import { C_Button } from "../../../../components/Common/CommonButton";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
 import { mode, pageId } from "../../../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getpdfReportdataSuccess } from "../../../../store/actions";
 import DynamicColumnHook from "../../../../components/Common/TableCommonFunc";
-import { getClaimTrackingEntrySuccess } from "../../../../store/Accounting/ClaimTrackingEntryRedux/action";
 import { C_DatePicker } from "../../../../CustomValidateForm";
 import { ExcelReportComponent } from "../../../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { CashierSummaryReport_GoButton_API, CashierSummaryReport_GoButton_API_Success } from "../../../../store/SweetPOSStore/Report/CashierSummaryRedux/action";
 import GlobalCustomTable from "../../../../GlobalCustomTable";
+import C_Report from "../../../../components/Common/C_Report";
+import * as report from '../../../../Reports/ReportIndex'
+
 
 const CashierSummary = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-
     const [fromDate, setFromDate] = useState(currentDate_ymd)
     const [toDate, setToDate] = useState(currentDate_ymd)
-
     const [userPageAccessState, setUserAccState] = useState('');
-
-    const [btnMode, setBtnMode] = useState("");
-
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
-
-    const [loading, setLoading] = useState(false);
 
 
     const {
         userAccess,
-        tableData,
+        GoButtonData,
         GoBtnLoading,
         pageField
     } = useSelector((state) => ({
-        tableData: state.CashierSummaryReportReducer.CashierSummary,
+        GoButtonData: state.CashierSummaryReportReducer.CashierSummary,
         GoBtnLoading: state.CashierSummaryReportReducer.listBtnLoading,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
+
+    const { Data = [] } = GoButtonData
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
@@ -75,34 +72,43 @@ const CashierSummary = (props) => {
 
 
     useEffect(() => {
-        if (btnMode === "downloadExcel") {
-            if (tableData.length > 0) {
-                ExcelReportComponent({      // Download CSV
-                    pageField,
-                    excelTableData: tableData,
-                    excelFileName: "Cashier Summary Report"
-                })
-                dispatch(CashierSummaryReport_GoButton_API_Success([]));   // Reset Excel tableData
-            }
-        }
-    }, [tableData, pageField]);
+        debugger
+        if (GoButtonData.goBtnMode === "downloadExcel") {
+            ExcelReportComponent({      // Download CSV
+                pageField,
+                excelTableData: GoButtonData.Data,
+                excelFileName: "Cashier Summary Report"
+            })
+            dispatch(CashierSummaryReport_GoButton_API_Success([]));   // Reset Excel tableData
 
-    useEffect(() => {
-        if (tableData.length > 0 || (btnMode && tableData.length === 0)) {
-            setLoading(false); // Stop spinner whether data is found or not
+        } if (GoButtonData.goBtnMode === "Print") {
+            const Details = _cfunc.loginUserDetails()
+
+            GoButtonData["ReportType"] = report.Cashier_Summary_Report;
+
+            GoButtonData["Data"]["GSTIN"] = Details.GSTIN
+            GoButtonData["Data"]["SupplierName"] = Details.PartyName
+            GoButtonData["Data"]["Date"] = `From  ${_cfunc.date_dmy_func(fromDate)}  To  ${_cfunc.date_dmy_func(toDate)}`
+
+            dispatch(getpdfReportdataSuccess(GoButtonData))
+
         }
-    }, [tableData, btnMode]);
+
+
+    }, [GoButtonData, pageField]);
+
+
 
 
     function goButtonHandler(goBtnMode) {
-        setBtnMode(goBtnMode)
+
         try {
             const jsonBody = JSON.stringify({
                 "FromDate": fromDate,
                 "ToDate": toDate,
                 "Party": _cfunc.loginPartyID(),
             })
-            const config = { jsonBody };
+            const config = { jsonBody, goBtnMode };
             dispatch(CashierSummaryReport_GoButton_API(config))
 
         } catch (error) { _cfunc.CommonConsole(error) }
@@ -118,21 +124,9 @@ const CashierSummary = (props) => {
         dispatch(CashierSummaryReport_GoButton_API_Success([]));
     }
 
-    function goButtonHandler(goBtnMode) {
-        setBtnMode(goBtnMode);
-        setLoading(true); // Start spinner
-
-        const jsonBody = JSON.stringify({
-            "FromDate": fromDate,
-            "ToDate": toDate,
-            "Party": _cfunc.loginPartyID(),
-        });
-
-        const config = { jsonBody };
-        dispatch(CashierSummaryReport_GoButton_API(config));
-    }
 
 
+    // Cashier_Summary_Report
 
     return (
         <React.Fragment>
@@ -174,7 +168,7 @@ const CashierSummary = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={loading && btnMode === "showOnTable"}
+                                loading={GoBtnLoading === "showOnTable"}
                                 className="btn btn-success m-3 mr"
                                 onClick={() => goButtonHandler("showOnTable")}
                             >
@@ -183,11 +177,20 @@ const CashierSummary = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={loading && btnMode === "downloadExcel"}
+                                loading={GoBtnLoading === "downloadExcel"}
                                 className="btn btn-primary m-3 mr"
                                 onClick={() => goButtonHandler("downloadExcel")}
                             >
                                 Excel
+                            </C_Button>
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={GoBtnLoading === "Print"}
+                                className="btn btn-primary m-3 mr"
+                                onClick={() => goButtonHandler("Print")}
+                            >
+                                Print
                             </C_Button>
                         </Col>
                     </Row>
@@ -196,7 +199,7 @@ const CashierSummary = (props) => {
                 <div className="mb-1 table-responsive table">
                     <GlobalCustomTable
                         keyField={"id"}
-                        data={tableData}
+                        data={GoButtonData.goBtnMode === "showOnTable" ? Data : []}
                         columns={tableColumns}
                         id="table_Arrow"
                         noDataIndication={
@@ -210,7 +213,9 @@ const CashierSummary = (props) => {
                     />
                 </div>
             </div>
+            <C_Report />
         </React.Fragment >
+
     )
 }
 

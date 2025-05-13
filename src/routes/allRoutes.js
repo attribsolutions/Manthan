@@ -264,6 +264,7 @@ import VoucherRedemptionClaim from "../Reports/VoucherRedemptionClaim/VoucherRed
 import PeriodicGRNReport from "../Reports/PeriodicGRNReport/PeriodicGRNReport.js";
 import DailyDispatchReport from "../Reports/DailyDispatchReport/index.js";
 import PosSummarySale from "../pages/SweetPOS/Reports/PosSummarySaleReport/PosSummarySale.js";
+import ManagerSummary from "../pages/SweetPOS/Reports/ManagerSummaryReport/ManagerSummary.js";
 
 
 const userRoutes = [
@@ -678,8 +679,11 @@ const userRoutes = [
 
 	{ path: path.CX_DD_DIFFERENCE_REPORT, component: CX_DD_DiffrenceReport },// use self party drop-down
 
-	{path: path.Css_Item_Sale_Report,  component: CssItemSaleReport },   
-	
+	{ path: path.Css_Item_Sale_Report, component: CssItemSaleReport },
+
+	{ path: path.MANAGER_SUMMARY_REPORT, component: ManagerSummary },
+
+
 
 	{ path: path.TARGET_VS_ACHIEVEMENT, component: TargetVSAchievement, isPartyWisePage: false },
 
@@ -744,7 +748,7 @@ const userRoutes = [
 
 	{ path: path.POS_SALE_SUMMARY_REPORT, component: PosSummarySale },//not party wise
 
-	
+
 
 
 

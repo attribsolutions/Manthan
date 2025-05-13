@@ -19,6 +19,8 @@ import voucherRedemptionClaimReport from "./VoucherRedemptionClaim/VoucherRedemp
 import PeriodicGRNReport from "./PeriodicGRNReport/PDFReport/Page";
 import POSSaleSummaryReport from "../pages/SweetPOS/Reports/PosSummarySaleReport/Page";
 import CSSItemSaleReport from "./CssItemSaleReport/PDFReport/Page";
+import CashierSummaryReport from "../pages/SweetPOS/Reports/CashierSummaryReport/Page";
+import ManagerSummaryReport from "../pages/SweetPOS/Reports/ManagerSummaryReport/Page";
 
 export const FrenchiesesOrder = "FrenchiesesOrder"
 export const order1 = "order1"
@@ -41,10 +43,10 @@ export const StockEntry = "StockEntry"
 export const orderThermalPrintReport = "orderThermalPrintReport"
 export const VoucherRedemptionClaimReport = "VoucherRedemptionClaimReport"
 export const PeriodicGRN = "PeriodicGRN"
-
 export const POSSaleSummary = "POSSaleSummary"
-
 export const CSS_ItemSaleReport = "CSS_ItemSaleReport"
+export const Cashier_Summary_Report = "Cashier_Summary_Report"
+export const Manager_Summary_Report = "Manager_Summary_Report"
 
 
 
@@ -119,6 +121,15 @@ const generateReport = (resp) => {
         case CSS_ItemSaleReport:
             CSSItemSaleReport(resp.Data)
             break;
+        case Cashier_Summary_Report:
+            CashierSummaryReport(resp.Data)
+            break;
+        case Manager_Summary_Report:
+            ManagerSummaryReport(resp.Data)
+            break;
+
+
+
         default:
             break;
     }

@@ -145,6 +145,8 @@ import VoucherRedemptionClaimReducer from "./Report/VoucherRedemptionClaimRedux/
 import PeriodicGrnReportReducer from "./Report/PeriodicGRNRedux/reducer"
 import Css_Item_sale_Reducer from "./Report/CssItemSaleReport/reducer"
 
+import ManagerSummaryReportReducer from "./SweetPOSStore/Report/ManagerSummaryRedux/reducer"
+
 const rootReducer = combineReducers({
 	Layout,
 	Login,
@@ -266,7 +268,8 @@ const rootReducer = combineReducers({
 	CodeRedemptionReportReducer,
 	VoucherRedemptionClaimReducer,
 	PeriodicGrnReportReducer,
-	Css_Item_sale_Reducer
+	Css_Item_sale_Reducer,
+	ManagerSummaryReportReducer
 
 })
 export default rootReducer

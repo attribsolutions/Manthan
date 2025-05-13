@@ -6,7 +6,7 @@ import {
 } from "./actionType";
 
 const INIT_STATE = {
-    CashierSummary: [],
+    CashierSummary: { Status: false },
     listBtnLoading: false,
 }
 
@@ -16,7 +16,7 @@ const CashierSummaryReportReducer = (state = INIT_STATE, action) => {
         case CASHIER_SUMMARY_REPORT_GO_BUTTON_API:
             return {
                 ...state,
-                listBtnLoading: action.config.btnId
+                listBtnLoading: action.config.goBtnMode
             }
 
         case CASHIER_SUMMARY_REPORT_GO_BUTTON_API_SUCCESS:

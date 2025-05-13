@@ -444,6 +444,11 @@ export const CX_DD_DIFFERENCE_REPORT = "/CX_DD_Difference"
 
 export const Css_Item_Sale_Report = "/CSS_Item_sale_Report"
 
+export const MANAGER_SUMMARY_REPORT = "/Manager_Summary_Report"
+
+
+
+
 export const SYSTEM_SETTING = "/System_Setting"
 
 export const SYSTEM_SETTING_LIST = "/System_Setting_List"

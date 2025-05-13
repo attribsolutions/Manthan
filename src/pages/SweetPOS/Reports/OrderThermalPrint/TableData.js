@@ -34,7 +34,7 @@ export const ItemRow = (data) => {
     OrderItem.forEach(element => {
         const tableitemRow = [
             `${element.HSNCode}\n${element.MRPValue}`,
-            `${element.ItemName}\n${element.GSTPercentage}${Number(element.Discount) > 0 ? `/${element.Discount}/${element.DiscountAmount}` : ''}\n ${element.Comment}`,
+            `${element.ItemName}\n${element.GSTPercentage}${Number(element.Discount) > 0 ? `/${element.Discount}/${element.DiscountAmount}` : ''}\n ${element.Comment === null ? "" : element.Comment}`,
             `${element.Quantity}\n${element.Amount}`,
 
         ];
