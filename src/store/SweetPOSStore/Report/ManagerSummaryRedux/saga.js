@@ -2,17 +2,49 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import { ManagerSummaryReport_GoButton_API_Success, ManagerSummaryApiErrorAction } from "./action";
 import { MANAGER_SUMMARY_REPORT_GO_BUTTON_API } from "./actionType";
 import { ManagerSummary_API } from "../../../../helpers/backend_helper";
-import { date_dmy_func } from "../../../../components/Common/CommonFunction";
+import { date_dmy_func, getFixedNumber } from "../../../../components/Common/CommonFunction";
 
 
 function* ManagerSummaryReport_GenFunc({ config }) {
 	try {
+		let OrderData = []
+		let InvoiceData = []
 		let response = yield call(ManagerSummary_API, config);
-		const newList = yield response.Data.map((i) => {
-			i["recordsAmountTotal"] = i.GrandTotal;  // Breadcrumb Count total
-			return i
+
+		let finalOrderAmount = 0
+		let finalOrderAdvanceAmount = 0
+		let finalInvoiceAdvanceAmount = 0
+		let finalInvoiceAmount = 0
+
+
+		OrderData = yield response.Data[0].OrderData.map((element) => {
+			finalOrderAmount += getFixedNumber(element.OrderAmount, 2);
+			finalOrderAdvanceAmount += getFixedNumber(element.AdvanceAmount, 2);
+			return element
 		})
-		response["Data"] = newList
+
+		InvoiceData = yield response.Data[0].InvoiceData.map((element) => {
+			finalInvoiceAmount += getFixedNumber(element.GrandTotal, 2);
+			finalInvoiceAdvanceAmount += getFixedNumber(element.AdvanceAmount, 2);
+			return element
+		})
+
+		OrderData.push({
+			id: OrderData.length - 1,
+			FullOrderNumber: "Total",
+			AdvanceAmount: (finalOrderAdvanceAmount).toFixed(2),
+			OrderAmount: (finalOrderAmount).toFixed(2)
+		})
+
+		InvoiceData.push({
+			id: InvoiceData.length - 1,
+			FullInvoiceNumber: "Total",
+			GrandTotal: (finalInvoiceAmount).toFixed(2),
+			AdvanceAmount: (finalInvoiceAdvanceAmount).toFixed(2)
+		})
+
+		response["Data"] = [{ OrderData, InvoiceData }]
+		debugger
 		response["goBtnMode"] = config.goBtnMode
 		yield put(ManagerSummaryReport_GoButton_API_Success(response))
 	} catch (error) { yield put(ManagerSummaryApiErrorAction()) }

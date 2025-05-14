@@ -19,6 +19,7 @@ const ManagerSummaryReport = (tableData) => {
 
 
     let data = [tableData]
+
     function generatePDF() {
 
         const doc = new jsPDF('p', 'pt', 'a4');
@@ -66,7 +67,7 @@ const ManagerSummaryReport = (tableData) => {
             doc.autoTable({
                 theme: 'grid',
                 head: [table.columns_1],
-                body: table.Rows_1(tableData),
+                body: table.Rows_1(tableData[0]),
                 tableWidth: sectionWidth,
                 headerStyles: {
                     cellPadding: 3,
@@ -90,21 +91,18 @@ const ManagerSummaryReport = (tableData) => {
                 columnStyles: {
                     0: {
                         valign: "top",
-                        columnWidth: 70,
+                        columnWidth: 80,
                     },
                     1: {
-                        columnWidth: 61,
+                        columnWidth: 80,
                         halign: 'right',
                     },
                     2: {
-                        columnWidth: 61,
+                        columnWidth: 80,
                         halign: 'right',
                     },
 
-                    3: {
-                        columnWidth: 61,
-                        halign: 'right',
-                    },
+
 
 
                 },
@@ -140,12 +138,50 @@ const ManagerSummaryReport = (tableData) => {
 
                 didParseCell: (data1) => {
 
-                    if (data1.row.cells[1].raw === "Total") {
-                        data1.row.cells[0].colSpan = 4;
-                        data1.row.cells[0].styles.halign = "left";
+                    if (data1.row.cells[0].raw === "Order Total") {
+
                         data1.row.cells[0].styles.fontSize = 8;
                         data1.row.cells[0].styles.fontStyle = "bold";
+
+                        data1.row.cells[1].styles.fontSize = 8;
+                        data1.row.cells[1].styles.fontStyle = "bold";
+
+                        data1.row.cells[2].styles.fontSize = 8;
+                        data1.row.cells[2].styles.fontStyle = "bold";
                     }
+
+
+                    if (data1.row.cells[0].raw === "Invoice Total") {
+
+                        data1.row.cells[0].styles.fontSize = 8;
+                        data1.row.cells[0].styles.fontStyle = "bold";
+
+                        data1.row.cells[1].styles.fontSize = 8;
+                        data1.row.cells[1].styles.fontStyle = "bold";
+
+                        data1.row.cells[2].styles.fontSize = 8;
+                        data1.row.cells[2].styles.fontStyle = "bold";
+                    }
+
+
+
+                    if (data1.row.cells[0].raw === "Order") {
+                        data1.row.cells[0].colSpan = 3;
+                        data1.row.cells[0].styles.fontSize = 8;
+                        data1.row.cells[0].styles.fontStyle = "bold";
+
+
+                    }
+
+                    if (data1.row.cells[0].raw === "Cash") {
+                        data1.row.cells[0].colSpan = 3;
+                        data1.row.cells[0].styles.fontSize = 8;
+                        data1.row.cells[0].styles.fontStyle = "bold";
+
+
+                    }
+
+
 
                 },
 

@@ -3,9 +3,9 @@ import { numberWithCommas } from "../../../../Reports/Report_common_function";
 
 // original
 export const columns_1 = [
-    "Invoice Number",
-    "Grand Total",
-    "Advance Amount"
+    "Sale Date",
+    "Advance Amount",
+    "Net Amount",
 ];
 
 
@@ -31,24 +31,71 @@ export const DetailsOfTransport = [
 
 
 export const Rows_1 = (data) => {
-    let finalAmount = 0
+    debugger
+    let finalOrderAmount = 0
+    let finalOrderAdvanceAmount = 0
+    let finalInvoiceAdvanceAmount = 0
+    let finalInvoiceAmount = 0
+
     const returnArr = []
-    data.forEach((element, key) => {
+    data.OrderData.forEach((element, key) => {
+        if (element.FullOrderNumber === "Total") {
+            return
+        }
+
+        returnArr.push([
+            `Order`,
+            ``,
+            ``,
+
+        ]);
+
         const tableitemRow = [
-            `${(element.FullInvoiceNumber)}`,
-            `${(getFixedNumber(element.GrandTotal, 2)).toFixed(2)}`,
+            `${(element.FullOrderNumber)}`,
             `${(getFixedNumber(element.AdvanceAmount, 2)).toFixed(2)}`,
+            `${(getFixedNumber(element.OrderAmount, 2)).toFixed(2)}`,
         ];
-        finalAmount += getFixedNumber(element.GrandTotal, 2);
+        finalOrderAmount += getFixedNumber(element.OrderAmount, 2);
+        finalOrderAdvanceAmount += getFixedNumber(element.AdvanceAmount, 2);
+
         returnArr.push(tableitemRow);
     })
 
     if (returnArr.length > 0) {
         returnArr.push([
-            `Total :${numberWithCommas(Number(finalAmount).toFixed(2))}`,
-            `Total`,
-            ``,
-            ``,
+            `Order Total`,
+            `${numberWithCommas(Number(finalOrderAdvanceAmount).toFixed(2))}`,
+            `${numberWithCommas(Number(finalOrderAmount).toFixed(2))}`,
+
+        ]);
+    }
+    returnArr.push([
+        `Cash`,
+        ``,
+        ``,
+
+    ]);
+    data.InvoiceData.forEach((element, key) => {
+        if (element.FullInvoiceNumber === "Total") {
+            return
+        }
+        const tableitemRow = [
+            `${(element.FullInvoiceNumber)}`,
+            `${(getFixedNumber(element.AdvanceAmount, 2)).toFixed(2)}`,
+            `${(getFixedNumber(element.GrandTotal, 2)).toFixed(2)}`,
+        ];
+        finalInvoiceAmount += getFixedNumber(element.GrandTotal, 2);
+        finalInvoiceAdvanceAmount += getFixedNumber(element.AdvanceAmount, 2);
+
+        returnArr.push(tableitemRow);
+    })
+
+    if (returnArr.length > 0) {
+        returnArr.push([
+            `Invoice Total`,
+            `${numberWithCommas(Number(finalInvoiceAdvanceAmount).toFixed(2))}`,
+            `${numberWithCommas(Number(finalInvoiceAmount).toFixed(2))}`,
+
         ]);
     }
 
