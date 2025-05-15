@@ -265,6 +265,7 @@ import PeriodicGRNReport from "../Reports/PeriodicGRNReport/PeriodicGRNReport.js
 import DailyDispatchReport from "../Reports/DailyDispatchReport/index.js";
 import PosSummarySale from "../pages/SweetPOS/Reports/PosSummarySaleReport/PosSummarySale.js";
 import ManagerSummary from "../pages/SweetPOS/Reports/ManagerSummaryReport/ManagerSummary.js";
+import BillDeleteSummaryReport from "../Reports/BillSummaryDeleteReport/index.js";
 
 
 const userRoutes = [
@@ -733,7 +734,7 @@ const userRoutes = [
 	{ path: path.GRN_PENDING_REPORT, component: GRNPendingReport },//not party wise
 
 
-
+	{path: path.Bill_Delete_Summary_Report,  component: BillDeleteSummaryReport },  
 
 	{ path: path.DATA_EXPORT_TO_SAP, component: DataExportToSAP },//not party wise
 

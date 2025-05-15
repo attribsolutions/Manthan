@@ -23,7 +23,7 @@ export const POS_SALE_SUMMARY_REPORT = 340
 export const MANAGER_SUMMARY_REPORT = 347
 
 
-
+export const BILL_DELETE_SUMMARY_REPORT = 346
 
 
 // *************************** Administration *******************************//
