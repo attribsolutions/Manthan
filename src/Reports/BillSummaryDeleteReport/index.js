@@ -154,7 +154,7 @@ const BillDeleteSummaryReport = (props) => {
             <div className="page-content">
                 <div className="px-2   c_card_filter text-black " >
                     <Row>
-                        <Col sm={2} className="ms-3">
+                        <Col sm={3} className="ms-3">
                             <FormGroup className=" row mt-2  " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
@@ -170,7 +170,7 @@ const BillDeleteSummaryReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={2} className="">
+                        <Col sm={3} className="">
                             <FormGroup className=" row mt-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
@@ -205,7 +205,7 @@ const BillDeleteSummaryReport = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>}
-                        <Col sm={4} className=" d-flex justify-content-end" >
+                        <Col className=" d-flex justify-content-end " >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
