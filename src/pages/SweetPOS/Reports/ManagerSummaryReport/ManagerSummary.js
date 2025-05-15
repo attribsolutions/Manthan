@@ -51,6 +51,8 @@ const ManagerSummary = (props) => {
 
     const { Data = [] } = GoButtonData
 
+    const { OrderData = [], InvoiceData = [] } = Data[0] || {};
+
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.MANAGER_SUMMARY_REPORT));
@@ -83,7 +85,7 @@ const ManagerSummary = (props) => {
 
 
     useEffect(() => {
-        debugger
+
         if (GoButtonData.goBtnMode === "downloadExcel") {
             ExcelReportComponent({      // Download CSV
                 pageField,
@@ -144,6 +146,27 @@ const ManagerSummary = (props) => {
     function PartyDrodownOnChange(e) {
         setPartyDropdown(e);
     }
+
+    const InvoiceColumns = [
+        {//------------- ItemName column ----------------------------------
+            text: "Invoice Number",
+            dataField: "FullInvoiceNumber",
+        },
+
+        {//------------- ItemName column ----------------------------------
+            text: "Advance Amount",
+            dataField: "AdvanceAmount",
+            align: "right",
+        },
+
+        {//------------- ItemName column ----------------------------------
+            text: "Invoice Amount",
+            dataField: "GrandTotal",
+            align: "right",
+        },
+
+
+    ];
 
 
     // Manager_Summary_Report
@@ -217,7 +240,7 @@ const ManagerSummary = (props) => {
                             >
                                 Show
                             </C_Button>
-                            <C_Button
+                            {/* <C_Button
                                 type="button"
                                 spinnerColor="white"
                                 loading={GoBtnLoading === "downloadExcel"}
@@ -225,7 +248,7 @@ const ManagerSummary = (props) => {
                                 onClick={() => goButtonHandler("downloadExcel")}
                             >
                                 Excel
-                            </C_Button>
+                            </C_Button> */}
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
@@ -242,8 +265,25 @@ const ManagerSummary = (props) => {
                 <div className="mb-1 table-responsive table">
                     <GlobalCustomTable
                         keyField={"id"}
-                        data={GoButtonData.goBtnMode === "showOnTable" ? Data : []}
+                        data={GoButtonData.goBtnMode === "showOnTable" ? OrderData : []}
                         columns={tableColumns}
+                        id="table_Arrow"
+                        noDataIndication={
+                            <div className="text-danger text-center ">
+                                Record Not available
+                            </div>
+                        }
+                        onDataSizeChange={({ dataCount, filteredData = [] }) => {
+                            dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${_cfunc.TotalAmount_Func(filteredData)}`));
+                        }}
+                    />
+                </div>
+
+                <div className="mb-1 table-responsive table">
+                    <GlobalCustomTable
+                        keyField={"id"}
+                        data={GoButtonData.goBtnMode === "showOnTable" ? InvoiceData : []}
+                        columns={InvoiceColumns}
                         id="table_Arrow"
                         noDataIndication={
                             <div className="text-danger text-center ">
