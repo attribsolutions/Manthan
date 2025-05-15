@@ -546,7 +546,7 @@ const Franchies_Invoice_Master = (props) => {
                 if (!index1.DiscountType) { index1.DiscountType = discountTypeAll.value }
 
                 const defaultDiscountTypelabel =
-                    index1.DiscountType === 1 ? discountDropOption[0] : discountDropOption[1];
+                    ((index1.DiscountType === "1") || (index1.DiscountType === 1)) ? discountDropOption[0] : discountDropOption[1];
 
                 return (
                     <>
