@@ -96,7 +96,7 @@ export const SINGLE_GET_POS_USER_REGESTRATION = "SweetPOS/SweetPOSSingleUser"
 
 export const CASHIER_SUMMARY_REPORT = "SweetPOS/CashierSummary"
 
-
+export const BILL_DELETE_SUMMARY_REPORT = "/BillDeletedSummaryReport"
 
 
 

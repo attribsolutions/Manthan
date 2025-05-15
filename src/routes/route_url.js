@@ -272,7 +272,7 @@ export const CODE_REDEMPTION_REPORT = "/Code_Redemption_Report"
 
 
 
-
+export const Bill_Delete_Summary_Report = "/Bill_Delete_Summary_Report"
 
 
 

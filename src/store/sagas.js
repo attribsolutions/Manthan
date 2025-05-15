@@ -138,6 +138,7 @@ import VoucherRedemptionClaimSaga from "./Report/VoucherRedemptionClaimRedux/sag
 import PeriodicGRNReportSaga from "./Report/PeriodicGRNRedux/saga"
 import Css_Item_Sale_ReportSaga from "./Report/CssItemSaleReport/saga"
 import ManagerSummaryReportSaga from "./SweetPOSStore/Report/ManagerSummaryRedux/saga"
+import BillDeleteSummaryReportSaga from "./SweetPOSStore/Report/BillDeleteSummaryRedux/saga"
 
 
 
@@ -274,6 +275,9 @@ export default function* rootSaga() {
 		fork(PeriodicGRNReportSaga),
 		fork(Css_Item_Sale_ReportSaga),
 		fork(ManagerSummaryReportSaga),
+		fork(BillDeleteSummaryReportSaga),
+
+
 
 
 
