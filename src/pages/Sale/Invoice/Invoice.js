@@ -559,7 +559,7 @@ const Invoice = (props) => {
                                 onChange={(event) => {
                                     orderQtyOnChange(event, index1);
                                     totalAmountCalcuationFunc(tableList);
-                                    debugger
+
                                     document.getElementById("TotalTray_ID").innerText = tableList.reduce((sum, item) => sum + (item.TrayQuantity || 0), 0);
 
                                 }}
@@ -626,7 +626,7 @@ const Invoice = (props) => {
                                 defaultValue={index1.TrayQuantity}
                                 onChange={(event) => {
                                     index1.TrayQuantity = _cfunc.getFixedNumber(event.target.value)
-                                    debugger
+
                                     document.getElementById("TotalTray_ID").innerText = tableList.reduce((sum, item) => sum + (item.TrayQuantity || 0), 0);
 
                                 }}
@@ -774,7 +774,7 @@ const Invoice = (props) => {
             dataField: "",
             attrs: () => ({ 'data-label': "Discount/unit" }),
             formatExtraData: {
-                tableList: orderItemDetails
+                tableList: orderItemDetails,
             },
             headerFormatter: () => {
                 return (
@@ -839,11 +839,11 @@ const Invoice = (props) => {
             classes: () => "invoice-discount-row",
             formatter: (cellContent, index1, key, formatExtraData) => {
                 let { tableList } = formatExtraData;
-
+                debugger
                 if (!index1.DiscountType) { index1.DiscountType = discountTypeAll.value }
 
                 const defaultDiscountTypelabel =
-                    index1.DiscountType === "1" ? discountDropOption[0] : discountDropOption[1];
+                    ((index1.DiscountType === "1") || (index1.DiscountType === 1)) ? discountDropOption[0] : discountDropOption[1];
 
                 return (
                     <>
