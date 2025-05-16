@@ -36,7 +36,7 @@ export const pageHeder = (doc, data) => {
   
 
     if (isSweetAndSnacksCompany) {
-        doc.addImage(cbm_logo, 'PNG', 33, 17, 80, 46, null, 'FAST')
+        doc.addImage(cbm_logo, 'PNG', 35, 17, 60, 46, null, 'FAST')
     } else {
 
         doc.addImage(cbm_logo, 'PNG', 33, 1, 95, 80, null, 'FAST')
