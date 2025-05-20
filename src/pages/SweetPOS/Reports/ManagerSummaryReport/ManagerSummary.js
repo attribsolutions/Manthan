@@ -148,6 +148,11 @@ const ManagerSummary = (props) => {
     }
 
     const InvoiceColumns = [
+
+
+
+
+
         {//------------- ItemName column ----------------------------------
             text: "Invoice Number",
             dataField: "FullInvoiceNumber",
@@ -160,10 +165,17 @@ const ManagerSummary = (props) => {
         },
 
         {//------------- ItemName column ----------------------------------
-            text: "Invoice Amount",
+            text: "Balance Amount",
             dataField: "GrandTotal",
             align: "right",
         },
+
+        {//------------- ItemName column ----------------------------------
+            text: "Invoice Amount",
+            dataField: "TotalAmount",
+            align: "right",
+        },
+
 
 
     ];

@@ -1163,7 +1163,7 @@ const Order = (props) => {
                 if ((row.DiscountType === "0") || (row.DiscountType === 0)) { row.DiscountType = discountDropOption[1].value }
                 debugger
                 const defaultDiscountTypelabel =
-                    ((index1.DiscountType === "1") || (index1.DiscountType === 1)) ? discountDropOption[0] : discountDropOption[1];
+                    ((row.DiscountType === "1") || (row.DiscountType === 1)) ? discountDropOption[0] : discountDropOption[1];
 
                 discountRefs.current[row.id]?.setValue(row.DiscountType);
                 debugger

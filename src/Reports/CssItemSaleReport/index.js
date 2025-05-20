@@ -20,7 +20,7 @@ import { globalTableSearchProps } from "../../components/Common/SearchBox/MySear
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, GetCustomer, getpdfReportdataSuccess, GetVenderSupplierCustomer } from "../../store/actions";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { Cx_DD_Diffrence_Gobtn_Action, Cx_DD_Diffrence_Gobtn_Success } from "../../store/Report/CX_DD_Diffrence_Report/action";
-import { Cx_DD_Diffrence_Report_Party_Dropdown_API } from "../../helpers/backend_helper";
+import { commonPartyDropdown_API, Cx_DD_Diffrence_Report_Party_Dropdown_API, divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall } from "../../helpers/backend_helper";
 import { allLabelWithBlank, allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 import { Css_Item_Sale_Gobtn_Action, Css_Item_Sale_Gobtn_Success } from "../../store/Report/CssItemSaleReport/action";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
@@ -41,9 +41,12 @@ const CssItemSaleReport = (props) => {
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [userPageAccessState, setUserAccState] = useState('');
-    const [btnMode, setBtnMode] = useState("");
 
-    const [partyDropdownLoading, setpartyDropdownLoading] = useState(false);
+    const [DivisionOptions, setDivisionOptions] = useState([]);
+
+
+
+
 
 
 
@@ -66,11 +69,25 @@ const CssItemSaleReport = (props) => {
     const { userAccess, tableData, GoBtnLoading, pageField, vendorSupplierCustomer, customer } = reducers;
     const { Data = [], Type } = tableData
 
-    useEffect(() => {
+    useEffect(async () => {
         dispatch(commonPageFieldSuccess(null));
-        dispatch(GetVenderSupplierCustomer({ subPageMode: url.IB_ORDER, RouteID: "", "PartyID": _cfunc.loginSelectedPartyID() }));
+        // dispatch(GetVenderSupplierCustomer({ subPageMode: url.IB_ORDER, RouteID: "", "PartyID": _cfunc.loginSelectedPartyID() }));
         dispatch(commonPageField(pageId.CSS_ITEM_SALE_REPORT));
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
+
+
+        const resp = await divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall(_cfunc.loginEmployeeID())
+
+
+        debugger
+        if (resp.Status === true && resp.StatusCode === 200) {
+            const data = resp.Data.map((i) => ({
+                value: i.Party_id,
+                label: i.PartyName,
+            }))
+            setDivisionOptions(data)
+        }
+
         dispatch(GetCustomer());
 
 
@@ -87,16 +104,7 @@ const CssItemSaleReport = (props) => {
     const [tableColumns] = DynamicColumnHook({ pageField })
 
 
-    const supplierOptions = vendorSupplierCustomer.map((i) => ({
-        value: i.id,
-        label: i.Name,
-        FSSAIExipry: i.FSSAIExipry,
-        GSTIN: i.GSTIN,
-        FSSAINo: i.FSSAINo,
-        IsTCSParty: i.IsTCSParty,
-        ISCustomerPAN: i.PAN,
 
-    }))
 
 
     const customerOptions = customer.map((i) => ({
@@ -197,12 +205,14 @@ const CssItemSaleReport = (props) => {
 
 
     const divisionOnchange = (e) => {
-
+        debugger
         if (e.length === 0) {
             e = [allLabelWithBlank]
         } else {
             e = e.filter(i => !(i.value === ''))
         }
+
+
 
         setState((i) => {
             const a = { ...i }
@@ -298,13 +308,12 @@ const CssItemSaleReport = (props) => {
                                         value={values.division}
                                         isSearchable={true}
                                         isMulti={true}
-                                        isLoading={partyDropdownLoading}
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
                                         styles={{
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
-                                        options={supplierOptions}
+                                        options={DivisionOptions}
                                         onChange={(e) => { divisionOnchange(e) }}
                                     />
                                 </Col>
@@ -321,7 +330,7 @@ const CssItemSaleReport = (props) => {
                                         value={values.customer}
                                         isMulti={true}
                                         isSearchable={true}
-                                        isLoading={partyDropdownLoading}
+
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
                                         styles={{
@@ -339,7 +348,7 @@ const CssItemSaleReport = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={(GoBtnLoading && btnMode === "show") && true}
+                                loading={(GoBtnLoading && Type === "show") && true}
                                 className="btn btn-success m-3 mr"
                                 onClick={() => goButtonHandler("show")}
                             >
@@ -348,7 +357,7 @@ const CssItemSaleReport = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={(GoBtnLoading && btnMode === "excel") && true}
+                                loading={(GoBtnLoading && Type === "excel") && true}
                                 className="btn btn-primary m-3 mr"
                                 onClick={() => goButtonHandler("excel")}
                             >
@@ -359,7 +368,7 @@ const CssItemSaleReport = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={(GoBtnLoading && btnMode === "Print") && true}
+                                loading={(GoBtnLoading && Type === "Print") && true}
                                 className="btn btn-primary m-3 mr"
                                 onClick={() => goButtonHandler("Print")}
                             >
