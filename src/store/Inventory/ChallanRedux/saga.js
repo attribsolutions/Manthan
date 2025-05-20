@@ -31,7 +31,7 @@ import {
   VDC_ITEM,
   VDC_ITEM_DETAILS,
 } from "./actionType";
-import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
+import { CommonConsole, date_dmy_func, convertTimefunc, listpageConcatDateAndTime } from "../../../components/Common/CommonFunction";
 import { makeGRN_Mode_1ActionSuccess } from "../GRNRedux/actions";
 
 
@@ -49,6 +49,8 @@ function* Challan_List_filterGerFunc({ filters }) {          // Challan List Fil
       var date = date_dmy_func(i.ChallanDate)
       var time = convertTimefunc(i.CreatedOn)
       i.ChallanDate = (`${date} ${time}`)
+      i["transactionDate"] = i.CreatedOn
+      i["transactionDateLabel"] = listpageConcatDateAndTime(i.ChallanDate, i.CreatedOn);
       if ((i?.inward)) {
         i.forceMakeBtnHide = true;
         i.Status = "Close"

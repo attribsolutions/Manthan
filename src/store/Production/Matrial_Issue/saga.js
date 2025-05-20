@@ -1,5 +1,5 @@
 import { call, put, takeLatest } from "redux-saga/effects";
-import { date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
+import { date_dmy_func, convertTimefunc, listpageConcatDateAndTime } from "../../../components/Common/CommonFunction";
 import { Material_Issue_Delete_API, Material_Issue_Edit_API, Material_Issue_Get_API, Material_Issue_GoButton_Post_API, Material_Issue_Post_API } from "../../../helpers/backend_helper";
 import { deleteMaterialIssueIdSuccess, editMaterialIssueIdSuccess, getMaterialIssueListPageSuccess, goButtonForMaterialIssue_Master_ActionSuccess, MaterialIssueApiErrorAction, SaveMaterialIssueSuccess } from "./action";
 import { DELETE_MATERIAL_ISSUE_LIST_PAGE, EDIT_MATERIAL_ISSUE_LIST_PAGE, GET_MATERIAL_ISSUE_LIST_PAGE, POST_GO_BUTTON_FOR_MATERIAL_ISSUE_MASTER, POST_MATERIAL_ISSUE } from "./actionType";
@@ -75,6 +75,8 @@ function* GoButton_MaterialIssue_listpage_GenFunc({ filters }) {                
       var time = convertTimefunc(i.CreatedOn)
       i.ProductionDate = i.MaterialIssueDate
       i.MaterialIssueDate = (`${date} ${time}`)
+      i["transactionDate"] = i.CreatedOn
+      i["transactionDateLabel"] = listpageConcatDateAndTime(i.MaterialIssueDate, i.CreatedOn);
       i.NumberOfLotWithPercentage = (`${i.NumberOfLot} (${i.Percentage}%)`)
 
       if (i.Status === 0) {

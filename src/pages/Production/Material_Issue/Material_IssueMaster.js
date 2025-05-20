@@ -868,6 +868,11 @@ const MaterialIssueMaster = (props) => {
                 pathname: url.STOCK_ADJUSTMENT,
                 StockDetails,
             })
+        }else {
+            customAlert({
+                Type: 4,
+                Message: alertMessages.StockNotAvaliable,
+            });
         }
 
 

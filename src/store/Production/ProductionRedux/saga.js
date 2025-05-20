@@ -29,7 +29,7 @@ import {
   EDIT_PRODUCTION_FOR_PRODUCTION_PAGE,
 } from "./actionType";
 
-import { date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
+import { date_dmy_func, convertTimefunc, listpageConcatDateAndTime } from "../../../components/Common/CommonFunction";
 
 function* SaveProductionGenFunc({ config }) {
   try {
@@ -65,6 +65,8 @@ function* get_PRODUCTION_GerFunc({ filters }) {
       var time = convertTimefunc(index.CreatedOn)
       // var batchtime = convertTimefunc(index.CreatedOn)
       index.ProductionDate = (`${date} ${time}`)
+      index["transactionDate"] = index.CreatedOn
+      index["transactionDateLabel"] = listpageConcatDateAndTime(index.ProductionDate, index.CreatedOn);
       index.BatchDate = (`${batchdate} `)
       return index;
     });

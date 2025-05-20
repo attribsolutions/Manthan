@@ -37,7 +37,7 @@ function* SalesReturn_List_GenFun({ filters }) {
             i["transactionDateLabel"] = listpageConcatDateAndTime(i.ReturnDate, i.CreatedOn);
             i["IsCreditNoteCreated"] = i.IsCreditNoteCreated === 1 ? true : false
             i["IsApproved"] = i.IsApproved === 1 ? true : false
-            i["forceDeleteHide"] = ((i.Mode === 3) && (i.IsApproved)) ? true : false
+            i["forceDeleteHide"] = ((i.IsApproved)) ? true : false
 
             return i
         })
@@ -47,7 +47,7 @@ function* SalesReturn_List_GenFun({ filters }) {
 
 // delete API
 function* delete_SalesReturn_ID_GenFunc({ config }) {
-    
+
     try {
         const SelectedPartyID = JSON.parse(localStorage.getItem("selectedParty")).value
         const jsonBodyForBackdatedTransaction = JSON.stringify({
