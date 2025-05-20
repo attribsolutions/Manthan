@@ -6,6 +6,10 @@ const atLeastOneCheckboxCheck = "Please select at least one checkbox before down
 // Image Related Error Message 
 const imageNotUploaded = "Images not uploaded"
 
+const StockNotAvaliable = "Stock not Available"
+
+
+
 // common functions alert Message
 const actionNotDefined = "Action Not defined"
 const noFieldsSelectedForDownload = "No fields selected for download"
@@ -300,7 +304,8 @@ export const alertMessages = {
     RateIsRequired,
     AllItemExist,
     AdvanceAmount,
-    selectSameCustomer
+    selectSameCustomer,
+    StockNotAvaliable
 };
 
 

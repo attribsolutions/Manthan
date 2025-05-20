@@ -91,19 +91,20 @@ const ManagerSummaryReport = (tableData) => {
                 columnStyles: {
                     0: {
                         valign: "top",
-                        columnWidth: 80,
+                        columnWidth: 65,
                     },
                     1: {
-                        columnWidth: 80,
+                        columnWidth: 65,
                         halign: 'right',
                     },
                     2: {
-                        columnWidth: 80,
+                        columnWidth: 65,
                         halign: 'right',
                     },
-
-
-
+                    3: {
+                        columnWidth: 68,
+                        halign: 'right',
+                    },
 
                 },
                 margin: {
@@ -180,6 +181,18 @@ const ManagerSummaryReport = (tableData) => {
 
 
                     }
+
+
+                    if (data1.row.cells[1].raw === "Date") {
+                        data1.row.cells[0].colSpan = 3;
+                        data1.row.cells[0].styles.fontSize = 8;
+                        data1.row.cells[0].styles.fontStyle = "bold";
+
+
+                    }
+
+
+
 
 
 

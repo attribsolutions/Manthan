@@ -33,7 +33,7 @@ export const pageBorder_A5 = (doc) => {
 
 
 export const pageHeder = (doc, data) => {
-  
+
 
     if (isSweetAndSnacksCompany) {
         doc.addImage(cbm_logo, 'PNG', 35, 17, 60, 46, null, 'FAST')
@@ -342,8 +342,14 @@ export const reportHeder3 = (doc, data) => {
     const dateOnly = data.CreatedOn.substring(0, 10);
     var Orderdate = date_dmy_func(dateOnly)
     doc.text(`Order Date: ${Orderdate}  ${time}`, 415, 40) //Invoice date
-    var DeliveryDate = date_dmy_func(data.OrderDate)                          ///   Delivery Date
-    doc.text(`Delivery Date: ${DeliveryDate}`, 415, 55) //Invoice date
+    // var DeliveryDate = date_dmy_func(data.OrderDate)  
+
+    ///   Delivery Date
+    const DeliveryDate = data?.DeliveryDate.substring(0, 10);
+    var deliveryDate = date_dmy_func(DeliveryDate)
+    var Deliverytime = convertOnlyTimefunc(data?.DeliveryDate)
+
+    doc.text(`Delivery Date: ${deliveryDate}  ${Deliverytime}`, 415, 55) //Invoice date
     doc.line(570, 63, 30, 63) //horizontal line 2 billby upper
 
 

@@ -542,7 +542,7 @@ const CurrentStockReport = (props) => {
 					accumulator[key] = {
 						ItemName,
 						MRP, PurchaseRate, SaleableStock: Number(SaleableStock),
-						UnSaleableStock: Number(UnSaleableStock), TotalStockValue: TotalStockValue,
+						UnSaleableStock: Number(UnSaleableStock), TotalStockValue: Number(TotalStockValue),
 						UnSaleableStockTaxValue: Number(UnSaleableStockTaxValue), UnSaleableStockValue: Number(UnSaleableStockValue),
 						SaleableStockTaxValue: Number(SaleableStockTaxValue), SaleableStockValue: Number(SaleableStockValue), TaxValue: Number(TaxValue), BatchCode,
 						DistributorCode, DistributorName, Item, GroupName, SubGroupName, GroupTypeName, BatchCode, Stockvaluewithtax, Unit, SubCluster, Cluster, SAPItemCode
