@@ -246,7 +246,8 @@ function* orderList_GoBtn_GenFunc({ config }) {
       var date = date_dmy_func(i.OrderDate)
       var time = convertTimefunc(i.CreatedOn)
 
-      i["transactionDate"] = (`${date} ${time}`)
+
+      i["transactionDate"] = i.CreatedOn
       i["transactionDateLabel"] = (`${date} ${time}`)
 
       i.DeliveryDate = (`${DeliveryDate}`)

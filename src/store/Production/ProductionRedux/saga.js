@@ -64,7 +64,7 @@ function* get_PRODUCTION_GerFunc({ filters }) {
       var batchdate = date_dmy_func(index.BatchDate)
       var time = convertTimefunc(index.CreatedOn)
 
-      index["transactionDate"] = (`${date} ${time}`)
+      index["transactionDate"] = index.CreatedOn
       index["transactionDateLabel"] = (`${date} ${time}`)
       index.BatchDate = (`${batchdate} `)
       return index;

@@ -21,8 +21,9 @@ function* get_BOMList_GenFunc({ filters }) {
       // use For List Page
       var date = date_dmy_func(i.BomDate)
       var time = convertTimefunc(i.CreatedOn)
-      i.transactionDateLabel = (`${date} ${time}`)
-      i.BomDate = date
+
+      i["transactionDate"] = i.CreatedOn
+      i["transactionDateLabel"] = (`${date} ${time}`)
 
       return i
     })
