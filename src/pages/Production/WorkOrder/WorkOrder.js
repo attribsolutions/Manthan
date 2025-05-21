@@ -71,7 +71,7 @@ const WorkOrder = (props) => {
 
     const fileds = {
         id: "",
-        WorkOrderDate: currentDate_ymd,
+        transactionDate: currentDate_ymd,
         ItemName: [],
         NumberOfLot: "",
         Quantity: "",
@@ -120,7 +120,7 @@ const WorkOrder = (props) => {
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-
+debugger
     useEffect(() => {
         const page_Id = pageId.WORK_ORDER
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
@@ -183,14 +183,14 @@ const WorkOrder = (props) => {
                     , Quantity, EstimatedOutputQty, Bom, Party, WorkOrderItems, Unit, UnitName } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError, FullWorkOrderNumber, WorkOrderNumber, } = { ...state }
                 hasValid.id.valid = true;
-                hasValid.WorkOrderDate.valid = true;
+                hasValid.transactionDate.valid = true;
                 hasValid.EstimatedOutputQty.valid = true;
                 hasValid.Quantity.valid = true;
                 hasValid.NumberOfLot.valid = true;
                 hasValid.ItemName.valid = true;
 
                 values.id = id
-                values.WorkOrderDate = WorkOrderDate;
+                values.transactionDate = WorkOrderDate;
                 values.EstimatedOutputQty = EstimatedOutputQty;
                 values.Quantity = Quantity;
                 values.NumberOfLot = NumberOfLot;
@@ -290,7 +290,7 @@ const WorkOrder = (props) => {
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            // FromDate: "2022-12-01",
+            FromDate: "2022-12-01",
             // ToDate: currentDate_ymd,
             Category: 0,
             Company: loginCompanyID(),
@@ -484,7 +484,7 @@ const WorkOrder = (props) => {
                 }))
 
                 const jsonBody = JSON.stringify([{
-                    WorkOrderDate: values.WorkOrderDate,
+                    WorkOrderDate: values.transactionDate,
                     // Item: (pageMode === mode.edit ? Item : values.ItemName.ItemID),
                     // Unit: (pageMode === mode.edit ? Unit : values.ItemName.Unit),
                     // Bom: values.ItemName.value,
@@ -542,19 +542,19 @@ const WorkOrder = (props) => {
                                         <div className="col col-6">
                                             <FormGroup className=" row  mt-2" >
                                                 <Label className="mt-1"
-                                                    style={{ width: "130px" }}>{fieldLabel.WorkOrderDate}</Label>
+                                                    style={{ width: "130px" }}>{fieldLabel.transactionDate}</Label>
                                                 <div className="col-6">
                                                     <C_DatePicker
                                                         style={{ userselect: "all" }}
-                                                        name="WorkOrderDate"
-                                                        value={values.WorkOrderDate}
+                                                        name="transactionDate"
+                                                        value={values.transactionDate}
                                                         disabled={(tableData.length > 0) || (pageMode === mode.edit) ? true : false}
                                                         onChange={(y, v, e) => {
                                                             onChangeDate({ e, v, state, setState })
                                                         }}
                                                     />
-                                                    {isError.WorkOrderDate.length > 0 && (
-                                                        <span className="invalid-feedback">{isError.WorkOrderDate}</span>
+                                                    {isError.transactionDate.length > 0 && (
+                                                        <span className="invalid-feedback">{isError.transactionDate}</span>
                                                     )}
                                                 </div>
                                             </FormGroup>

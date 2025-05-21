@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from 'react'
 import { Col, FormGroup, Row, Label } from 'reactstrap'
 import { C_DatePicker, C_Select } from '../../CustomValidateForm'
-import ToolkitProvider from 'react-bootstrap-table2-toolkit'
-import BootstrapTable from 'react-bootstrap-table-next'
+// import ToolkitProvider from 'react-bootstrap-table2-toolkit'
+// import BootstrapTable from 'react-bootstrap-table-next'
 import { C_Button } from '../../components/Common/CommonButton'
 import GlobalCustomTable from '../../GlobalCustomTable'
 import { MetaTags } from 'react-meta-tags'
@@ -12,7 +12,7 @@ import * as _cfunc from "../../components/Common/CommonFunction";
 import DynamicColumnHook from '../../components/Common/TableCommonFunc'
 import { useSelector, useDispatch } from 'react-redux'
 import { BillDeleteSummaryReport_GoButton_API, BillDeleteSummaryReport_GoButton_API_Success } from '../../store/SweetPOSStore/Report/BillDeleteSummaryRedux/action'
-import { BILL_DELETE_SUMMARY_REPORT_GO_BUTTON_API } from '../../store/SweetPOSStore/Report/BillDeleteSummaryRedux/actionType'
+// import { BILL_DELETE_SUMMARY_REPORT_GO_BUTTON_API } from '../../store/SweetPOSStore/Report/BillDeleteSummaryRedux/actionType'
 import { ExcelReportComponent } from '../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS'
 import { useLocation } from 'react-router-dom';
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldList, commonPageFieldListSuccess, commonPageFieldSuccess, } from '../../store/actions'
@@ -154,7 +154,7 @@ const BillDeleteSummaryReport = (props) => {
             <div className="page-content">
                 <div className="px-2   c_card_filter text-black " >
                     <Row>
-                        <Col sm={2} className="ms-3">
+                        <Col sm={3} className="ms-3">
                             <FormGroup className=" row mt-2  " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
@@ -170,7 +170,7 @@ const BillDeleteSummaryReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={2} className="">
+                        <Col sm={3} className="">
                             <FormGroup className=" row mt-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
@@ -205,7 +205,7 @@ const BillDeleteSummaryReport = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>}
-                        <Col sm={4} className=" d-flex justify-content-end" >
+                        <Col className=" d-flex justify-content-end " >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
