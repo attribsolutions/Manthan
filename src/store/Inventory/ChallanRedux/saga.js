@@ -48,9 +48,8 @@ function* Challan_List_filterGerFunc({ filters }) {          // Challan List Fil
     const newList = yield response.Data.map((i) => {
       var date = date_dmy_func(i.ChallanDate)
       var time = convertTimefunc(i.CreatedOn)
-      i.ChallanDate = (`${date} ${time}`)
-      i["transactionDate"] = i.CreatedOn
-      i["transactionDateLabel"] = listpageConcatDateAndTime(i.ChallanDate, i.CreatedOn);
+      i["transactionDate"] = (`${date} ${time}`)
+      i["transactionDateLabel"] = (`${date} ${time}`)
       if ((i?.inward)) {
         i.forceMakeBtnHide = true;
         i.Status = "Close"

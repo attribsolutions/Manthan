@@ -148,8 +148,13 @@ function* GRNListfilterGerFunc({ config }) {          // Grn_List filter  genrat
       i["recordsAmountTotal"] = i.GrandTotal;  // Breadcrumb Count total
       i.GrandTotal = _cfunc.amountCommaSeparateFunc(i.GrandTotal) //  GrandTotal show with commas
       i.InvoiceDate = _cfunc.date_dmy_func(i.InvoiceDate);
-      i["transactionDate"] = i.CreatedOn;
-      i["transactionDateLabel"] = _cfunc.listpageConcatDateAndTime(i.GRNDate, i.CreatedOn);
+
+      var date = _cfunc.date_dmy_func(i.GRNDate)
+      var time = _cfunc.convertTimefunc(i.CreatedOn)
+      i["transactionDate"] = (`${date} ${time}`)
+      i["transactionDateLabel"] = (`${date} ${time}`)
+
+
       return i
     })
     yield put(getGRNListPageSuccess(newList))
