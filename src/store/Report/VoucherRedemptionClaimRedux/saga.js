@@ -33,6 +33,7 @@ function* VoucherRedemptionClaim_GenFunc({ config }) {
 
 function* VoucherRedemptionClaimSaga() {
 	yield takeLatest(VOUCHER_REDEMPTION_CLAIM_ACTION, VoucherRedemptionClaim_GenFunc)
+	
 }
 
 export default VoucherRedemptionClaimSaga;

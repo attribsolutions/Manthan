@@ -70,13 +70,12 @@ function* save_Material_Issue_Genfun({ config }) {                              
 function* GoButton_MaterialIssue_listpage_GenFunc({ filters }) {                           // get Work Order List API Using post method
   try {
     const response = yield call(Material_Issue_Get_API, filters);
+    debugger
     const newList = yield response.Data.map((i) => {
       var date = date_dmy_func(i.MaterialIssueDate)
       var time = convertTimefunc(i.CreatedOn)
-      i.ProductionDate = i.MaterialIssueDate
-      i.MaterialIssueDate = (`${date} ${time}`)
-      i["transactionDate"] = i.CreatedOn
-      i["transactionDateLabel"] = listpageConcatDateAndTime(i.MaterialIssueDate, i.CreatedOn);
+      i["transactionDate"] = (`${date} ${time}`)
+      i["transactionDateLabel"] = (`${date} ${time}`)
       i.NumberOfLotWithPercentage = (`${i.NumberOfLot} (${i.Percentage}%)`)
 
       if (i.Status === 0) {
