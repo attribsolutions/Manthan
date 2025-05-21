@@ -108,6 +108,7 @@ const StockOutReport = (props) => {
         return '';
     };
 
+
     const processedData = useMemo(() => ModifyTableData_func(tableData), [tableData]);
 
     const modifiedTableColumns = useMemo(() => {
@@ -183,15 +184,13 @@ const StockOutReport = (props) => {
 
     function excel_And_GoBtnHandler(e, Btnmode) {
 
-
-
         const jsonBody = JSON.stringify({
             "Date": _cfunc.getDate_Time_ymd(date),
             "Time": time,
-            "Party": _cfunc.loginUserIsFranchisesRole() ? _cfunc.loginPartyID().toString() : (PartyDropdown.value).toString()
+            "Party": String(_cfunc.loginUserIsFranchisesRole() ? _cfunc.loginSelectedPartyID() : PartyDropdown.value)
         });
-
-        let config = { jsonBody, Btnmode }
+    
+        let config = { jsonBody, Btnmode };
         dispatch(GoButton_For_StockOut_Action(config));
     }
 
@@ -220,6 +219,8 @@ const StockOutReport = (props) => {
         label: i.Name,
         PartyType: i.PartyType
     })).filter(index => index.PartyType === "Franchises");
+
+    Party_Option.unshift(allLabelWithZero);
 
     let elements = document?.getElementsByClassName('numInput flatpickr-minute');
     if (elements.length > 0) {

@@ -752,15 +752,15 @@ const StockAdjustment = (props) => {
                                     </FormGroup>
                                 </Col>}
 
-                                <Col sm={3} className="">
+                                <Col className="">
                                 </Col>
 
 
 
 
-                                <Col sm={1} className="mt-3" style={{}}>
+                                <Col sm={3} className="m-2 d-flex justify-content-end me-5" style={{}}>
                                     {
-                                        < Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center mt-1 p-2"
+                                        < Button type="button" color="btn btn-outline-primary  border-1 font-size-11 text-center m-2 p-2"
                                             onClick={(e,) => ItemAddButtonHandler(e)}
                                         > Add</Button>
                                     }
