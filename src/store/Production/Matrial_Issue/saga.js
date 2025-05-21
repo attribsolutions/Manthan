@@ -74,7 +74,7 @@ function* GoButton_MaterialIssue_listpage_GenFunc({ filters }) {                
     const newList = yield response.Data.map((i) => {
       var date = date_dmy_func(i.MaterialIssueDate)
       var time = convertTimefunc(i.CreatedOn)
-      i["transactionDate"] = (`${date} ${time}`)
+      i["transactionDate"] = i.CreatedOn
       i["transactionDateLabel"] = (`${date} ${time}`)
       i.NumberOfLotWithPercentage = (`${i.NumberOfLot} (${i.Percentage}%)`)
 

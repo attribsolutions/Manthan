@@ -1,6 +1,13 @@
 import { allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
+import { date_dmy_func } from "../../components/Common/CommonFunction";
 
 export const DEFAULT_TABLE_COLUMNS = [
+    {
+        text: 'CreatedOn',
+        dataField: 'CreatedOn',
+        formatter: (cell) => <>{date_dmy_func(cell)}</>
+    },
+
     {
         text: "Product",
         dataField: "GroupName",
@@ -78,6 +85,12 @@ export const ALL_TABLE_COLUMNS = [
         text: "	FullGRNNumber",
         dataField: "FullGRNNumber",
     },
+    {
+        text: 'CreatedOn',
+        dataField: 'CreatedOn',
+
+    },
+
 ];
 
 export const INITIAL_ZERO = allLabelWithZero;

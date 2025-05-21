@@ -1,10 +1,7 @@
 
-import { date_dmy_func, loginJsonBody } from "../../components/Common/CommonFunction";
+import { date_dmy_func, DateTime, loginJsonBody } from "../../components/Common/CommonFunction";
 import * as initail from "./hardcodeDetails";
-import Papa from 'papaparse';
 import { get_PartyType_List_Api } from "../../helpers/backend_helper";
-import * as ExcelJS from 'exceljs';
-import { autoFitColumnWidths, freezeHeaderRow, saveWorkbookAsExcel, setDateValue, setNumberValue, setTextValue, styleHeaderRow } from "../../components/Common/ReportCommonFunc/ExcelFunctions";
 import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 
 export const SortButtonFunc = (props) => {
@@ -31,6 +28,19 @@ export const SortButtonFunc = (props) => {
     } = props
 
     const buttonStateArray = [
+
+
+        {
+            text: "CreatedOn",
+            dataField: "CreatedOn",
+            selectValue: [allLabelWithBlank],
+            checkboxState: true,
+            sequence: 1,
+            controlTypeName: "Date",
+
+
+        },
+
         {
             text: 'FromDate',
             dataField: 'InvoiceDate',
@@ -394,6 +404,7 @@ export const SortButtonFunc = (props) => {
     let totalAmount = 0
     manupulatedData = manupulatedData.map((item, key) => {
         totalAmount += parseFloat(item.Amount);
+        item.CreatedOn = DateTime(item.CreatedOn)
         item.id = key + 1
         return item
     });

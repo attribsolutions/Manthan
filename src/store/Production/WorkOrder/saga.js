@@ -90,7 +90,7 @@ function* GetWorkOrderGenFunc({ filters }) {
     newList = yield response.Data.map((i) => {
       var date = date_dmy_func(i.WorkOrderDate)
       var time = convertTimefunc(i.CreatedOn)
-      i["transactionDate"] = (`${date} ${time}`)
+      i["transactionDate"] = i.CreatedOn
       i["transactionDateLabel"] = (`${date} ${time}`)
       if (i.Status === 0) {
         i.Status = "Open";
