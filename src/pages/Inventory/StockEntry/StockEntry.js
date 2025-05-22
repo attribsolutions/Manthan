@@ -141,8 +141,8 @@ const StockEntry = (props) => {
     }, []);
 
     useEffect(() => {
-
-        if (!StockEnteryForFirstYear.Data) {
+        debugger
+        if ((StockEnteryForFirstYear?.Data) && (!StockEnteryForFirstYear.Data)) {
             const today = new Date();
             let financialYearStart = new Date(today.getFullYear(), 3, 1); // April 1 of this year
             const lastDayPreviousYear = new Date(financialYearStart.getFullYear(), 2, 31); // March 31 of the previous year
