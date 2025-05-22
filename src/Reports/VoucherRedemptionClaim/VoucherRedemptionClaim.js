@@ -21,6 +21,7 @@ import { VoucherRedemptionClaim_Action, VoucherRedemptionClaim_Action_Success } 
 import C_Report from "../../components/Common/C_Report";
 import { C_Select } from "../../CustomValidateForm";
 import { allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
+import { Get_Scheme_List } from "../../helpers/backend_helper";
 
 const SelectedMonth = () => _cfunc.getPreviousMonthAndYear({ date: new Date(), Privious: 1 })
 const FirstAndLastDate = () => _cfunc.getFirstAndLastDateOfMonth(SelectedMonth());
@@ -35,13 +36,15 @@ const VoucherRedemptionClaim = () => {
     const dispatch = useDispatch();
     const isSCMParty = !_cfunc.loginUserIsFranchisesRole();
     const [state, setState] = useState(() => initialFiledFunc(fileds()))
-
+    const [Scheme_Option, setSchemeOption] = useState([]);
 
     const [pageMode] = useState(mode.defaultList);
 
     const currentDate = new Date(); // Current date
     const currentMonth = _cfunc.getPreviousMonthAndYear({ date: currentDate, Privious: 1 });
-    const [PartyDropdown, setPartyDropdown] = useState(allLabelWithZero);
+    const [PartyDropdown, setPartyDropdown] = useState([allLabelWithZero]);
+    const [Scheme, setSchemeTypeSelect] = useState([allLabelWithZero]);
+
 
     const reducers = useSelector(
         (state) => ({
@@ -56,7 +59,7 @@ const VoucherRedemptionClaim = () => {
         })
     );
 
-    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
 
     const { pageField, Party, partyDropdownLoading, listBtnLoading } = reducers;
     const values = { ...state.values }
@@ -77,16 +80,7 @@ const VoucherRedemptionClaim = () => {
         }
     }, []);
 
-    // Common Party select Dropdown useEffect
-    // useEffect(() => {
 
-    //     if (commonPartyDropSelect.value > 0) {
-    //         MonthAndYearOnchange(values.SelectedMonth, "InitialDate")
-    //     }
-
-    // }, [commonPartyDropSelect]);
-
-    // sideBar Page Filters Information
     useEffect(() => {
         const { monthName, year } = _cfunc.SelectedMonthAndYearName(values.SelectedMonth);
         dispatch(sideBarPageFiltersInfoAction([
@@ -101,7 +95,7 @@ const VoucherRedemptionClaim = () => {
         label: i.Name,
         PartyType: i.PartyType
     }));
-    Party_Option.unshift(allLabelWithZero);
+
 
     function downClaimBtnFunc(config) {
         config.rowData["Month"] = values.SelectedMonth
@@ -114,6 +108,11 @@ const VoucherRedemptionClaim = () => {
 
     }
     function PartyDrodownOnChange(e) {
+        if (e.length === 0) {
+            e = [allLabelWithZero]
+        } else {
+            e = e.filter(i => !(i.value === 0))
+        }
         setPartyDropdown(e);
 
     }
@@ -135,13 +134,44 @@ const VoucherRedemptionClaim = () => {
     }
 
 
+    useEffect(() => {
+        const fetchSchemeList = async () => {
+            const resp = await Get_Scheme_List();
+            debugger;
+            if (resp.StatusCode === 200) {
+                const option = resp.Data.map((index) => ({
+                    value: index.id,
+                    label: index.SchemeName,
+                }));
+
+                setSchemeOption(option);
+
+            }
+        };
+
+        fetchSchemeList();
+    }, []);
+
+
+    const SchemeOnchange = (e) => {
+        if (e.length === 0) {
+            e = [allLabelWithZero]
+        } else {
+            e = e.filter(i => !(i.value === 0))
+        }
+        setSchemeTypeSelect(e)
+    }
+
+
+
+
     const GoBtnHandler = () => {
 
-        const finalPartyId = ((isSCMParty) && (PartyDropdown.value === 0)) ? Party_Option?.filter(obj => obj.value !== 0).map(obj => obj.value).join(',') : isSCMParty ? (PartyDropdown.value).toString() : (_cfunc.loginPartyID()).toString()
         const jsonBody = JSON.stringify({
             "FromDate": state.values.FromDate,
             "ToDate": state.values.ToDate,
-            "Party": finalPartyId,
+            "Party": isSCMParty ? PartyDropdown.map(row => row.value).join(',') : _cfunc.loginSelectedPartyID(),
+            "SchemeID": Scheme.map(row => row.value).join(','),
         });
         dispatch(VoucherRedemptionClaim_Action({ jsonBody }))
     }
@@ -204,6 +234,7 @@ const VoucherRedemptionClaim = () => {
                                         name="Party"
                                         value={PartyDropdown}
                                         isSearchable={true}
+                                        isMulti={true}
                                         isLoading={partyDropdownLoading}
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
@@ -217,7 +248,29 @@ const VoucherRedemptionClaim = () => {
                             </FormGroup>
                         </Col>}
 
-                        <Col sm={isSCMParty ? 6 : 9} className=" d-flex justify-content-end" >
+                        {< Col sm={3} className="">
+                            <FormGroup className=" row mt-2" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "65px", marginRight: "20px" }}>Scheme </Label>
+                                <Col sm="8">
+                                    <C_Select
+                                        name="Scheme"
+                                        value={Scheme}
+                                        isSearchable={true}
+                                        isMulti={true}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={Scheme_Option}
+                                        onChange={(e) => { SchemeOnchange(e) }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>}
+
+                        <Col sm={isSCMParty ? 3 : 6} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
