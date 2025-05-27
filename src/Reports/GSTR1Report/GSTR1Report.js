@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc, } from "../../components/Common/validationFunction";
 import { C_Button } from "../../components/Common/CommonButton";
-import { C_DatePicker } from "../../CustomValidateForm";
+import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, url, } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
@@ -12,8 +12,10 @@ import C_Report from "../../components/Common/C_Report";
 import { GST_R1_Report_API, GST_R1_Report_API_Success, GST_R3B_Report_API, GST_R3B_Report_API_Success } from "../../store/Report/GSTR1ReportRedux/action";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
-import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
+import { allLabelWithBlank, allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 import GST_ExcelDownloadFun from "./GST_ExcelDownloadFun";
+import { divisionDropdownSelectAction, divisionDropdownSelectSuccess, RoleAccessUpdateSuccess, roleAceessActionSuccess } from "../../store/actions";
+import { afterloginOneTimeAPI } from "../../components/Common/AfterLoginApiFunc";
 
 
 
@@ -34,12 +36,20 @@ const GSTR1Report = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [userPageAccessState, setUserAccState] = useState('');
 
-    const reducers = useSelector(
+    const [divisionDropdowSelect, setDivisionDropdowSelect] = useState([allLabelWithZero]);
+
+
+
+
+
+    const { userAccess, GstR3BReportData = [], GstR1ReportData = [], GstR1BtnLoading, GstR3BBtnLoading, divisionDropdown_redux, divisionOptionLoading } = useSelector(
         (state) => ({
             GstR3BReportData: state.GSTR1ReportReducer.GstR3BReportData,
             GstR1ReportData: state.GSTR1ReportReducer.GstR1ReportData,
             GstR3BBtnLoading: state.GSTR1ReportReducer.GstR3BBtnLoading,
             GstR1BtnLoading: state.GSTR1ReportReducer.GstR1BtnLoading,
+            divisionDropdown_redux: state.Login.divisionDropdown,
+            divisionOptionLoading: state.Login.divisionOptionLoading,
 
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             userAccess: state.Login.RoleAccessUpdateData,
@@ -48,7 +58,6 @@ const GSTR1Report = (props) => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, GstR3BReportData = [], GstR1ReportData = [], GstR1BtnLoading, GstR3BBtnLoading, } = reducers;
 
     const values = { ...state.values }
 
@@ -57,6 +66,23 @@ const GSTR1Report = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue);
 
     const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+
+
+    useLayoutEffect(() => {
+        const employeeId = localStorage.getItem("EmployeeID");
+        if (!divisionDropdown_redux.length && employeeId) {
+            dispatch(divisionDropdownSelectAction(employeeId));
+        }
+
+    }, []);
+
+
+    const divisionDropdown_DropdownOption = divisionDropdown_redux.map((d, key) => ({
+        value: d.Party_id,
+        label: d.PartyName,
+    }))
+
 
     // Common Party select Dropdown useEffect
     useEffect(() => {
@@ -96,7 +122,7 @@ const GSTR1Report = (props) => {
 
     useEffect(() => {
         if ((GstR1ReportData.StatusCode === 200 && GstR1ReportData.Status)) {
-            
+
             GST_ExcelDownloadFun({      // Download multi tab excel
                 excelTableData: GstR1ReportData.Data,
                 excelFileName: `GST-R1 Report (${values.FromDate}) To (${values.ToDate})`,
@@ -125,7 +151,7 @@ const GSTR1Report = (props) => {
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
-            "Party": commonPartyDropSelect.value
+            "Party": divisionDropdowSelect.map(row => row.value).join(',')
         });
 
         let config = { jsonBody }
@@ -154,10 +180,24 @@ const GSTR1Report = (props) => {
         })
     }
 
+
     function partySelectOnChangeHandler() {
         dispatch(GST_R3B_Report_API_Success([]))
         dispatch(GST_R1_Report_API_Success([]))
     }
+
+    function DivisionOnChange(e = []) {
+        debugger
+        if (e.length === 0) {
+            e = [allLabelWithZero]
+        } else {
+            e = e.filter(i => !(i.value === 0))
+        }
+
+        setDivisionDropdowSelect(e);
+    }
+
+
 
     return (
         <React.Fragment>
@@ -192,9 +232,34 @@ const GSTR1Report = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
+                        {_cfunc.IsSweetAndSnacksCompany() && (
+                            <Col sm={3} className="">
+                                <FormGroup className=" row mt-2">
+                                    <Label className="col-sm-4 p-2"
+                                        style={{ width: "65px", marginRight: "20px" }}>Division</Label>
+                                    <Col sm="8">
+                                        <C_Select
+                                            name="Division"
 
+                                            value={divisionDropdowSelect}
+                                            options={divisionDropdown_DropdownOption}
+                                            isLoading={divisionOptionLoading}
+                                            isMulti={true}
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
+                                            onChange={(e) => {
+                                                DivisionOnChange(e);
+                                            }}
+                                            className="react-dropdown"
+                                            classNamePrefix="dropdown"
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+                        )}
 
-                        <Col sm={6} className=" d-flex justify-content-end" >
+                        <Col sm={3} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 // style={{ width: "90px" }}
