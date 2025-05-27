@@ -63,8 +63,11 @@ function* get_LoadingSheet_List_GenFun({ filters }) {
             i["recordsAmountTotal"] = i.TotalAmount;  // Breadcrumb Count total
             i.TotalAmount = amountCommaSeparateFunc(i.TotalAmount)
             //tranzaction date is only for fiterand page field but UI show transactionDateLabel
-            i["transactionDate"] = i.CreatedOn;
-            i["transactionDateLabel"] = listpageConcatDateAndTime(i.Date, i.CreatedOn);
+            const DateAndTimeLable = listpageConcatDateAndTime(i.Date, i.CreatedOn);
+            i["transactionDate"] = `${i.CreatedOn}${DateAndTimeLable}`; // transactionDate for sorting and filtering data 
+            i["transactionDateLabel"] = DateAndTimeLable;
+
+    
             return i
         })
         yield put(LoadingSheetListActionSuccess(newList));

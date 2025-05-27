@@ -59,13 +59,14 @@ function* get_PRODUCTION_GerFunc({ filters }) {
     const response = yield call(production_get_API, filters);
     const newList = response.Data.map((index) => {
       // index.Item = index.Item;
-
-      var date = date_dmy_func(index.ProductionDate)
       var batchdate = date_dmy_func(index.BatchDate)
-      var time = convertTimefunc(index.CreatedOn)
 
-      index["transactionDate"] = index.CreatedOn
-      index["transactionDateLabel"] = (`${date} ${time}`)
+      const DateAndTimeLable = listpageConcatDateAndTime(index.ProductionDate, index.CreatedOn);
+      index["transactionDate"] = `${index.CreatedOn}${DateAndTimeLable}`; // transactionDate for sorting and filtering data 
+      index["transactionDateLabel"] = DateAndTimeLable;
+
+
+
       index.BatchDate = (`${batchdate} `)
       return index;
     });

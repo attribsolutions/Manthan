@@ -33,8 +33,9 @@ function* SalesReturn_List_GenFun({ filters }) {
             i.GrandTotal = amountCommaSeparateFunc(i.GrandTotal)
             //tranzaction date is only for fiterand page field but UI show transactionDateLabel
             i.dashboardReturnDate = date_dmy_func(i.ReturnDate);
-            i["transactionDate"] = i.CreatedOn;
-            i["transactionDateLabel"] = listpageConcatDateAndTime(i.ReturnDate, i.CreatedOn);
+            const DateAndTimeLable = listpageConcatDateAndTime(i.ReturnDate, i.CreatedOn);
+            i["transactionDate"] = `${i.CreatedOn}${DateAndTimeLable}`; // transactionDate for sorting and filtering data 
+            i["transactionDateLabel"] = DateAndTimeLable;
             i["IsCreditNoteCreated"] = i.IsCreditNoteCreated === 1 ? true : false
             i["IsApproved"] = i.IsApproved === 1 ? true : false
             i["forceDeleteHide"] = ((i.IsApproved)) ? true : false

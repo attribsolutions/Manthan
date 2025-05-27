@@ -72,10 +72,9 @@ function* GoButton_MaterialIssue_listpage_GenFunc({ filters }) {                
     const response = yield call(Material_Issue_Get_API, filters);
     debugger
     const newList = yield response.Data.map((i) => {
-      var date = date_dmy_func(i.MaterialIssueDate)
-      var time = convertTimefunc(i.CreatedOn)
-      i["transactionDate"] = i.CreatedOn
-      i["transactionDateLabel"] = (`${date} ${time}`)
+      const DateAndTimeLable = listpageConcatDateAndTime(i.MaterialIssueDate, i.CreatedOn);
+      i["transactionDate"] = `${i.CreatedOn}${DateAndTimeLable}`; // transactionDate for sorting and filtering data 
+      i["transactionDateLabel"] = DateAndTimeLable;
       i.NumberOfLotWithPercentage = (`${i.NumberOfLot} (${i.Percentage}%)`)
 
       if (i.Status === 0) {

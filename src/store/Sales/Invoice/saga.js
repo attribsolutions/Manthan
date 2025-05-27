@@ -153,11 +153,10 @@ function* InvoiceListGenFunc({ config }) {
           i["isSend"] = true
         }
       }
-
+      const DateAndTimeLable = listpageConcatDateAndTime(i.InvoiceDate, i.CreatedOn);
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
-      i["transactionDate"] = i.CreatedOn;
-
-      i["transactionDateLabel"] = listpageConcatDateAndTime(i.InvoiceDate, i.CreatedOn);
+      i["transactionDate"] = `${i.CreatedOn}${DateAndTimeLable}`;
+      i["transactionDateLabel"] = DateAndTimeLable;
 
       // if InvoiceUploads array length is greater than 0 then delete button disabled
       if (i.InvoiceUploads?.length > 0) {

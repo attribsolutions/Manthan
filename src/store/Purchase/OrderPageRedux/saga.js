@@ -243,12 +243,11 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.dashboardOrderDate = date_dmy_func(i.OrderDate); // Only for Dashoard 
       // //tranzaction date is only for fiterand page field but UI show transactionDateLabel
 
-      var date = date_dmy_func(i.OrderDate)
-      var time = convertTimefunc(i.CreatedOn)
 
+      const DateAndTimeLable = listpageConcatDateAndTime(i.OrderDate, i.CreatedOn);
+      i["transactionDate"] = `${i.CreatedOn}${DateAndTimeLable}`; // transactionDate for sorting and filtering data 
+      i["transactionDateLabel"] = DateAndTimeLable;
 
-      i["transactionDate"] = i.CreatedOn
-      i["transactionDateLabel"] = (`${date} ${time}`)
 
       i.DeliveryDate = (`${DeliveryDate}`)
 

@@ -88,10 +88,15 @@ function* GetWorkOrderGenFunc({ filters }) {
     const response = yield call(WorkOrder_Get_API, jsonBody);
 
     newList = yield response.Data.map((i) => {
-      var date = date_dmy_func(i.WorkOrderDate)
-      var time = convertTimefunc(i.CreatedOn)
-      i["transactionDate"] = i.CreatedOn
-      i["transactionDateLabel"] = (`${date} ${time}`)
+
+
+      const DateAndTimeLable = listpageConcatDateAndTime(i.WorkOrderDate, i.CreatedOn);
+      i["transactionDate"] = `${i.CreatedOn}${DateAndTimeLable}`; // transactionDate for sorting and filtering data 
+      i["transactionDateLabel"] = DateAndTimeLable;
+
+
+
+
       if (i.Status === 0) {
         i.Status = "Open";
       }
