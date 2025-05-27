@@ -1,5 +1,5 @@
 import { call, put, takeLatest } from "redux-saga/effects";
-import { date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
+import { date_dmy_func, convertTimefunc, listpageConcatDateAndTime } from "../../../components/Common/CommonFunction";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { BOM_Delete_API, BOM_ListPage_API, BOM_Post_API, BOM_Update_API, GetItemUnits_For_Dropdown, BOM_Edit_API } from "../../../helpers/backend_helper";
 import { BOMApiErrorAction, deleteBOMIdSuccess, editBOMListSuccess, getBOMListPageSuccess, GetItemUnitsDrodownAPISuccess, saveBOMMasterSuccess, updateBOMListSuccess } from "./action";
@@ -18,13 +18,9 @@ function* get_BOMList_GenFunc({ filters }) {
   try {
     const response = yield call(BOM_ListPage_API, filters);
     let data = response.Data.map((i) => {
-      // use For List Page
-      var date = date_dmy_func(i.BomDate)
-      var time = convertTimefunc(i.CreatedOn)
-
-      i["transactionDate"] = i.CreatedOn
-      i["transactionDateLabel"] = (`${date} ${time}`)
-
+      const DateAndTimeLable = listpageConcatDateAndTime(i.BomDate, i.CreatedOn);
+      i["transactionDate"] = `${i.CreatedOn}${DateAndTimeLable}`; // transactionDate for sorting and filtering data 
+      i["transactionDateLabel"] = DateAndTimeLable;
       return i
     })
     yield put(getBOMListPageSuccess(data))

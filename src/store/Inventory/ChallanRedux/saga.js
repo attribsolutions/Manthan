@@ -46,10 +46,12 @@ function* Challan_List_filterGerFunc({ filters }) {          // Challan List Fil
   try {
     const response = yield call(Challan_get_API, filters);
     const newList = yield response.Data.map((i) => {
-      var date = date_dmy_func(i.ChallanDate)
-      var time = convertTimefunc(i.CreatedOn)
-      i["transactionDate"] = (`${date} ${time}`)
-      i["transactionDateLabel"] = (`${date} ${time}`)
+     
+      const DateAndTimeLable = listpageConcatDateAndTime(i.ChallanDate, i.CreatedOn);
+      i["transactionDate"] = `${i.CreatedOn}${DateAndTimeLable}`; // transactionDate for sorting and filtering data 
+      i["transactionDateLabel"] = DateAndTimeLable;
+
+
       if ((i?.inward)) {
         i.forceMakeBtnHide = true;
         i.Status = "Close"

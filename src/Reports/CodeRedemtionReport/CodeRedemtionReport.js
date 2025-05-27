@@ -249,8 +249,6 @@ const CodeRedemtionReport = (props) => {
                                         name="Scheme"
                                         value={Scheme}
                                         isSearchable={true}
-                                        isDisabled={true}
-
                                         // isLoading={partyDropdownLoading}
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
@@ -258,7 +256,10 @@ const CodeRedemtionReport = (props) => {
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
                                         options={Scheme_Option}
-                                        onChange={(e) => { setSchemeTypeSelect(e) }}
+                                        onChange={(e) => {
+                                            setSchemeTypeSelect(e)
+                                            setTableData([]);
+                                        }}
                                     />
                                 </Col>
                             </FormGroup>
