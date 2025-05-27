@@ -142,16 +142,18 @@ const StockEntry = (props) => {
 
     useEffect(() => {
         debugger
-        if ((StockEnteryForFirstYear?.Data) && (!StockEnteryForFirstYear.Data)) {
-            const today = new Date();
-            let financialYearStart = new Date(today.getFullYear(), 3, 1); // April 1 of this year
-            const lastDayPreviousYear = new Date(financialYearStart.getFullYear(), 2, 31); // March 31 of the previous year
-            setState((i) => {
-                const a = { ...i }
-                a.hasValid.Date.valid = true
-                a.values.Date = _cfunc.date_ymd_func(lastDayPreviousYear);
-                return a
-            })
+        if ((StockEnteryForFirstYear?.Status === true) && (StockEnteryForFirstYear?.StatusCode === 400)) {
+            if (!StockEnteryForFirstYear.Data) {
+                const today = new Date();
+                let financialYearStart = new Date(today.getFullYear(), 3, 1); // April 1 of this year
+                const lastDayPreviousYear = new Date(financialYearStart.getFullYear(), 2, 31); // March 31 of the previous year
+                setState((i) => {
+                    const a = { ...i }
+                    a.hasValid.Date.valid = true
+                    a.values.Date = _cfunc.date_ymd_func(lastDayPreviousYear);
+                    return a
+                })
+            }
         }
     }, [StockEnteryForFirstYear])
 

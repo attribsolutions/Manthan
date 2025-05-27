@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label, Row, } from "reactstrap";
 import { useHistory } from "react-router-dom";
@@ -6,14 +6,16 @@ import { C_Button } from "../../../../components/Common/CommonButton";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
 import { mode, pageId } from "../../../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getpdfReportdataSuccess } from "../../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getpdfReportdataSuccess, getUserList } from "../../../../store/actions";
 import DynamicColumnHook from "../../../../components/Common/TableCommonFunc";
-import { C_DatePicker } from "../../../../CustomValidateForm";
+import { C_DatePicker, C_Select } from "../../../../CustomValidateForm";
 import { ExcelReportComponent } from "../../../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { CashierSummaryReport_GoButton_API, CashierSummaryReport_GoButton_API_Success } from "../../../../store/SweetPOSStore/Report/CashierSummaryRedux/action";
 import GlobalCustomTable from "../../../../GlobalCustomTable";
 import C_Report from "../../../../components/Common/C_Report";
 import * as report from '../../../../Reports/ReportIndex'
+import { allLabelWithBlank, allLabelWithZero } from "../../../../components/Common/CommonErrorMsg/HarderCodeData";
+import { CashierName_Api } from "../../../../helpers/backend_helper";
 
 
 const CashierSummary = (props) => {
@@ -23,21 +25,31 @@ const CashierSummary = (props) => {
     const currentDate_ymd = _cfunc.date_ymd_func();
     const [fromDate, setFromDate] = useState(currentDate_ymd)
     const [toDate, setToDate] = useState(currentDate_ymd)
+    const [Cashier, setCashier] = useState([allLabelWithBlank])
+    const [PartyDropdown, setPartyDropdown] = useState(allLabelWithZero)
+    const [CashierOption, setCashierOption] = useState([])
+
     const [userPageAccessState, setUserAccState] = useState('');
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
+    const IsMannagementParty = !_cfunc.loginUserIsFranchisesRole() && _cfunc.loginIsSCMParty();
 
 
     const {
         userAccess,
         GoButtonData,
         GoBtnLoading,
-        pageField
+        pageField,
+
+        Party
     } = useSelector((state) => ({
         GoButtonData: state.CashierSummaryReportReducer.CashierSummary,
         GoBtnLoading: state.CashierSummaryReportReducer.listBtnLoading,
+
+        Party: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
+
     }));
 
     const { Data = [] } = GoButtonData
@@ -45,7 +57,7 @@ const CashierSummary = (props) => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.CASHIER_SUMMARY_REPORT));
-
+        dispatch(getUserList());
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(CashierSummaryReport_GoButton_API_Success([]));
@@ -72,7 +84,7 @@ const CashierSummary = (props) => {
 
 
     useEffect(() => {
-        debugger
+
         if (GoButtonData.goBtnMode === "downloadExcel") {
             ExcelReportComponent({      // Download CSV
                 pageField,
@@ -98,15 +110,41 @@ const CashierSummary = (props) => {
     }, [GoButtonData, pageField]);
 
 
+    useEffect(async () => {
+        if (((IsMannagementParty) && (PartyDropdown.value !== "")) || (!IsMannagementParty)) {
+            const Resp = await CashierName_Api({
+                jsonBody: JSON.stringify({
+                    Party: IsMannagementParty ? PartyDropdown.value : _cfunc.loginSelectedPartyID(),
+                })
+            })
+
+            setCashierOption(Resp?.Data)
+        }
+    }, [PartyDropdown.value])
+
+
+
+    const Party_Option = useMemo(() => {
+        let options = [];
+
+        options = Party.map((i) => ({
+            value: i.id,
+            label: i.Name,
+            GSTIN: i.GSTIN,
+        }));
+        options.unshift(allLabelWithZero);
+        return options;
+    }, [Party]);
 
 
     function goButtonHandler(goBtnMode) {
-
+        debugger
         try {
             const jsonBody = JSON.stringify({
-                "FromDate": fromDate,
-                "ToDate": toDate,
-                "Party": _cfunc.loginPartyID(),
+                FromDate: fromDate,
+                ToDate: toDate,
+                Party: IsMannagementParty ? PartyDropdown.value : _cfunc.loginSelectedPartyID(),
+                Cashier: Cashier.map(row => row.value).join(',')
             })
             const config = { jsonBody, goBtnMode };
             dispatch(CashierSummaryReport_GoButton_API(config))
@@ -123,6 +161,19 @@ const CashierSummary = (props) => {
         setToDate(date);
         dispatch(CashierSummaryReport_GoButton_API_Success([]));
     }
+    const CashierOnchange = (e) => {
+        if (e.length === 0) {
+            e = [allLabelWithBlank]
+        } else {
+            e = e.filter(i => !(i.value === ''))
+        }
+        setCashier(e)
+    }
+
+    const PartyOnchange = (e) => {
+        setPartyDropdown(e)
+        setCashier([allLabelWithBlank]);
+    }
 
 
 
@@ -135,7 +186,7 @@ const CashierSummary = (props) => {
 
                 <div className="px-2   c_card_filter text-black " >
                     <Row>
-                        <Col sm={3} className="">
+                        <Col sm={2} className="">
                             <FormGroup className=" row mt-2  " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
@@ -149,7 +200,7 @@ const CashierSummary = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={3} className="">
+                        <Col sm={2} className="">
                             <FormGroup className=" row mt-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
@@ -163,8 +214,55 @@ const CashierSummary = (props) => {
                             </FormGroup>
                         </Col>
 
+                        {IsMannagementParty &&
+                            <Col sm={3} className="">
+                                <FormGroup className=" row mt-2" >
+                                    <Label className="col-sm-4 p-2"
+                                        style={{ width: "65px", marginRight: "20px" }}>Party</Label>
+                                    <Col sm="8">
+                                        <C_Select
+                                            name="Party"
+                                            value={PartyDropdown}
+                                            isSearchable={true}
+                                            // isLoading={partyDropdownLoading}
+                                            className="react-dropdown"
+                                            classNamePrefix="dropdown"
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
+                                            options={Party_Option}
+                                            onChange={(e) => { PartyOnchange(e) }}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+                        }
 
-                        <Col sm={6} className=" d-flex justify-content-end" >
+                        <Col sm={3} className="">
+                            <FormGroup className=" row mt-2" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "65px", marginRight: "20px" }}>Cashier</Label>
+                                <Col sm="8">
+                                    <C_Select
+                                        name="Cashier"
+                                        value={Cashier}
+                                        isSearchable={true}
+                                        isMulti={true}
+                                        // isLoading={partyDropdownLoading}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={CashierOption}
+                                        onChange={(e) => { CashierOnchange(e) }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+
+                        <Col sm={2} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"

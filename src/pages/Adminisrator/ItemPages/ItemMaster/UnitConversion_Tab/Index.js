@@ -138,7 +138,14 @@ export default function UnitConverstion(props) {
 
             if (formValue.values.BaseUnitName.value === index.Unit.value) {
                 index.IsShowUnit = true
+                index["isDisabled"] = true;
             }
+            if (index.POUnit || index.SOUnit) {
+                index["isDisabled"] = true;
+            } else {
+                index["isDisabled"] = false;
+            }
+            debugger;
             const isRestrictedUnit = ["No", "Kg", "Box"].includes(index.Unit.label);
             return (
                 <tr key={index.id}>
@@ -198,7 +205,7 @@ export default function UnitConverstion(props) {
                             type="checkbox"
                             key={`ShowUnit-${index.id}`}
                             id={`ShowUnit-${index.id}`}
-                            disabled={formValue.values.BaseUnitName.value === index.Unit.value}
+                            disabled={index.isDisabled}
                             // defaultChecked={formValue.values.BaseUnitName.value === index.Unit.value}
                             defaultChecked={index.IsShowUnit}
                             onChange={(e) => ShowUnit_onChange(e.target.checked, "ShowUnit", index.Unit.value)}
