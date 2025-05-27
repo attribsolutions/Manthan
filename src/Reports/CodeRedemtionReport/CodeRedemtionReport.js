@@ -256,7 +256,10 @@ const CodeRedemtionReport = (props) => {
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
                                         options={Scheme_Option}
-                                        onChange={(e) => { setSchemeTypeSelect(e) }}
+                                        onChange={(e) => {
+                                            setSchemeTypeSelect(e)
+                                            setTableData([]);
+                                        }}
                                     />
                                 </Col>
                             </FormGroup>

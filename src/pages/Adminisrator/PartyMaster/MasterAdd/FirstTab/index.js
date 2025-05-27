@@ -176,7 +176,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
 
 
-            debugger
+            
             return a
         })
 
@@ -201,7 +201,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
     useEffect(() => {
         if (PartyTypes.length === 1) {
-            debugger
+            
             setState((i) => {
                 let a = { ...i }
                 a.values.PartyType = {
@@ -217,7 +217,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
     }, [PartyTypes])
 
     useEffect(() => {
-        debugger
+        
         const PartyTypeID = getSettingBasedPartyTypeID(loginSystemSetting().PriceListSetting, loginRoleID())
         let PartyType = null
         if (PartyTypeID !== null) {
@@ -253,7 +253,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
     useEffect(() => {
 
         if (loginPartyType && subPageMode === url.FRANCHISE_CUSTOMER_MASTER) {
-            debugger
+            
             setState((i) => {
                 const a = { ...i }
                 a.values.PartyType = { value: 31, label: "Franchise Customer" };
