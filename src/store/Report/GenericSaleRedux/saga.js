@@ -2,7 +2,7 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import { GO_BUTTON_FOR_GENERIC_SALE_ACTION } from "./actionType";
 import { GoButton_For_GenericSale_Success } from "./action";
 import { GenericSale_GoBtn_API } from "../../../helpers/backend_helper";
-import { CommonConsole, date_dmy_func, trailingZeros } from "../../../components/Common/CommonFunction";
+import { CommonConsole, date_dmy_func, DateTime, trailingZeros } from "../../../components/Common/CommonFunction";
 
 function* GenericSaleReport_GenFunc({ config }) {
 
@@ -14,6 +14,7 @@ function* GenericSaleReport_GenFunc({ config }) {
             i["OrderDate"] = date_dmy_func(i.OrderDate);
             i["recordsAmountTotal"] = i.GrandTotal;  // Breadcrumb Count total
             i.DiscountType = i.DiscountType === 1 ? "Rs" : "%"
+            i["CreatedOn"] = DateTime(i.CreatedOn);
             return i;
         });
         response.Data = newResponse;

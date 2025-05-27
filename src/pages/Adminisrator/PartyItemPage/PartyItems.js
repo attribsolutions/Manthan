@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Card, CardBody, CardHeader, Col, Container, FormGroup, Input, Label } from "reactstrap";
+import { Card, CardBody, CardHeader, Col, Container, FormGroup, Input, Label, Spinner } from "reactstrap";
 
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
@@ -61,7 +61,8 @@ const PartyItems = (props) => {
 		GoBtnlistloading,
 		userAccess,
 		PartyTypes,
-		viewBtnLoading
+		viewBtnLoading,
+		partyItemListLoading
 	} = useSelector((state) => ({
 		saveBtnloading: state.PartyItemsReducer.saveBtnloading,
 		GoBtnlistloading: state.PartyItemsReducer.partyItemListLoading,
@@ -71,6 +72,8 @@ const PartyItems = (props) => {
 		pageField: state.CommonPageFieldReducer.pageField,
 		PartyTypes: state.PartyTypeReducer.ListData,
 		viewBtnLoading: state.PartyItemsReducer.channeItemViewBtnLoading,
+		partyItemListLoading: state.PartyItemsReducer.partyItemListLoading,
+
 	}));
 
 	const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
@@ -549,9 +552,13 @@ const PartyItems = (props) => {
 							</CardHeader>
 
 							<CardBody style={{ backgroundColor: "#whitesmoke" }}>
-
+							{partyItemListLoading ? 
+									<div className="text-center my-4">
+										<Spinner color="primary" />
+										<div>Loading Items...</div>
+									</div>:
+									<>
 								<ChannelTypeDropdown />
-
 								{filterdItemWise_tableData.length > 0 ? (
 									<>
 										{filterdItemWise_tableData.map((i, key) => (
@@ -610,7 +617,8 @@ const PartyItems = (props) => {
 										/>
 									</>
 								)}
-
+								</>
+							}
 								<SaveButtonDraggable>
 									<SaveButton
 										loading={saveBtnloading}
