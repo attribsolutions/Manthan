@@ -125,6 +125,13 @@ const Order = (props) => {
         Total_weigtage: "0.00",
     }
 
+    const allowedRoles = _cfunc.loginSystemSetting()?.IsShowRouteDropdwon?.split(",") || [];
+
+
+
+
+
+
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
@@ -139,7 +146,6 @@ const Order = (props) => {
     const [description, setDescription] = useState('')
 
     // const [processedData, setprocessedData] = useState([])
-
 
 
 
@@ -1149,9 +1155,9 @@ const Order = (props) => {
 
 
 
+     
 
-
-
+       
 
 
             classes: () => "order-discount-row",
@@ -1885,31 +1891,38 @@ const Order = (props) => {
                                             </FormGroup>
                                         </Col>
 
-                                        {(subPageMode === ORDER_4) ?
-                                            <Col sm="3">
-                                                <FormGroup className=" row mt-2 " >
-                                                    <Label className="col-sm-5 p-2"
-                                                        style={{ width: "130px" }}>{fieldLabel.Route}</Label>
-                                                    <Col sm="7">
+                                        {(subPageMode === ORDER_4 &&
 
+                                            allowedRoles.includes(_cfunc.loginRoleID().toString()) )? (
+
+                                            <Col sm="3">
+                                                <FormGroup className="row mt-2">
+                                                    <Label className="col-sm-5 p-2" style={{ width: "130px" }}>
+                                                        {fieldLabel.Route}
+                                                    </Label>
+                                                    <Col sm="7">
                                                         <C_Select
                                                             classNamePrefix="react-select"
                                                             value={routeSelect}
                                                             options={RouteOptions}
-                                                            isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading) ? true : false}
-                                                            // onChange={(e) => { setRouteSelect(e) }}
+                                                            isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading)}
                                                             onChange={(e) => { RouteOnChange(e) }}
                                                             isLoading={routesDropLoading}
                                                             styles={{
                                                                 menu: provided => ({ ...provided, zIndex: 2 })
                                                             }}
                                                         />
-
                                                     </Col>
                                                 </FormGroup>
-                                            </Col >
-                                            : <Col sm='3' />
-                                        }
+                                            </Col>
+                                        ) : (
+                                            <Col sm="3" /> // Empty space if dropdown not shown
+                                        )}
+
+
+
+
+
 
                                         <Col sm="4" className="">
 
