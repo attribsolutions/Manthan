@@ -333,7 +333,7 @@ const SystemSetting = (props) => {
                                                     <div className="form-check form-switch form-switch-md  " dir="ltr">
                                                         <Input type="checkbox" className="form-check-input mt-2  "
                                                             checked={values.IsPartyRelatedSetting}
-                                                            disabled={pageMode === mode.edit}
+                                                            // disabled={pageMode === mode.edit}
                                                             name="IsActive"
                                                             onChange={(event) => {
                                                                 setState((i) => {

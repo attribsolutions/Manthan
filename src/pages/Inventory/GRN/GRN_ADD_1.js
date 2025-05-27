@@ -81,6 +81,7 @@ const GRN_ADD_1 = (props) => {
 
     const [ledgerDetailList, setledgerDetailList] = useState([]);
 
+    const [comment, setComment] = useState('');
 
 
     const [userPageAccessState, setUserAccState] = useState('');
@@ -113,7 +114,8 @@ const GRN_ADD_1 = (props) => {
         pageField,
         saveBtnloading,
         RateMasterGoButton,
-        AccontingGRN
+        AccontingGRN,
+        genralMaster_type69
     } = useSelector((state) => ({
         saveBtnloading: state.GRNReducer.saveBtnloading,
         items: state.GRNReducer.GRNitem,
@@ -122,7 +124,9 @@ const GRN_ADD_1 = (props) => {
         AccontingGRN: state.GRNReducer.AccontingGRNpayload,
         RateMasterGoButton: state.RateMasterReducer.RateMasterGoButton,
         userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageField
+        pageField: state.CommonPageFieldReducer.pageField,
+        genralMaster_type69: state.PartyMasterBulkUpdateReducer.SelectField,
+
     }));
 
     useEffect(() => {
@@ -137,6 +141,11 @@ const GRN_ADD_1 = (props) => {
         if (subPageMode === url.ACCOUNTING_GRN) {
             dispatch(goButtonForRate_Master({ jsonBody }));
         }
+        const jsonBody_1 = JSON.stringify({
+            Company: _cfunc.loginCompanyID(),
+            TypeID: 69
+        });
+        dispatch(_act.postSelect_Field_for_dropdown(jsonBody_1));
 
         return () => {
             dispatch(_act.Update_accounting_GRN_Success({ Status: false }))
@@ -179,7 +188,10 @@ const GRN_ADD_1 = (props) => {
         }
     }, [postMsg])
 
-
+    const discrepancyOptions = genralMaster_type69.map(index => ({
+        value: index.id,
+        label: index.Name,
+    }));
     useEffect(() => {
         if (ratePostJsonBody.length > 0 && subPageMode === url.ACCOUNTING_GRN) {
             dispatch(saveRateMaster(JSON.stringify(ratePostJsonBody)));
@@ -952,6 +964,8 @@ const GRN_ADD_1 = (props) => {
             }
         },
 
+
+
         {//------------- Batch Date column ----------------------------------
             text: "Batch Date",
             dataField: "",
@@ -974,6 +988,42 @@ const GRN_ADD_1 = (props) => {
             },
             headerStyle: (colum, colIndex) => {
                 return { width: '130px', textAlign: 'center', text: "center" };
+            }
+        },
+
+        {//------------- Batch Date column ----------------------------------
+            text: "Discrepancy",
+            dataField: "",
+            formatExtraData: { discrepancyOptions },
+            hidden: (subPageMode === url.ACCOUNTING_GRN),
+            formatter: (cellContent, index1) => {
+
+                return (
+                    <>
+                        <div className="div-1 mb-1" style={{ minWidth: "150px" }}>
+                            <div>
+                                <Select
+                                    classNamePrefix="select2-selection"
+                                    placeholder="Select..."
+                                    defaultValue={index1.defaultDiscrepancy}
+                                    options={discrepancyOptions}
+                                    onChange={event => index1.defaultDiscrepancy = event}
+
+                                ></Select>
+                            </div>
+                        </div>
+                        <div className="div-1" style={{ minWidth: "150px" }}>
+                            <Input
+                                type="text"
+                                className="input"
+                                autoComplete="off"
+                                placeholder="Enter Item Related Quary"
+                                defaultValue={index1.DiscrepancyComment}
+                                onChange={event => index1.DiscrepancyComment = event.target.value}
+                            />
+                        </div>
+                    </>
+                )
             }
         },
 
@@ -1427,6 +1477,8 @@ const GRN_ADD_1 = (props) => {
                     DiscountType: 1,
                     Discount: Number(i.Discount) || 0,
                     DiscountAmount: Number(calculated.disCountAmt).toFixed(2),
+                    DiscrepancyReason: i?.defaultDiscrepancy?.value,
+                    DiscrepancyComment: i.DiscrepancyComment || ""
 
 
                 }
@@ -1582,6 +1634,7 @@ const GRN_ADD_1 = (props) => {
 
             const jsonBody = JSON.stringify({
                 RoundOffAmount: roundoffAmount,
+                Comment: comment,
                 GRNDate: grnDate,
                 FullGRNNumber: grnDetail?.FullGRNNumber,  //Only for Accounting GRN Mode
                 IsSave: (subPageMode === url.ACCOUNTING_GRN) ? 0 : 1,
@@ -1810,7 +1863,7 @@ const GRN_ADD_1 = (props) => {
                             </Col>
 
 
-                            {subPageMode === url.ACCOUNTING_GRN && <Col sm={4}>
+                            {subPageMode === url.ACCOUNTING_GRN ? <Col sm={4}>
 
                                 <FormGroup className="row mt-2 " >
                                     <Label className="col-md-4 p-2"
@@ -1847,7 +1900,24 @@ const GRN_ADD_1 = (props) => {
                                     </Col>
                                 </FormGroup>
 
-                            </Col>}
+                            </Col> :
+                                <Col sm={4}>
+                                    <FormGroup className=" row mt-2" >
+                                        <Label className="col-md-4 p-2"
+                                            style={{ width: "100px" }}>Comment</Label>
+                                        <Col md="7">
+                                            <Input
+                                                type="text"
+                                                value={comment}
+                                                placeholder="Enter Comment"
+                                                onChange={(e) => setComment(e.target.value)}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+
+
+                            }
 
 
 
