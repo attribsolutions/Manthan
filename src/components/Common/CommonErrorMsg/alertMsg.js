@@ -1,6 +1,11 @@
 
 // Common Error Messages
 const commonPartySelectionIsRequired = "Please Select Party"
+
+const divisionSelectionIsRequired = "Please Select division"
+
+
+
 const atLeastOneCheckboxCheck = "Please select at least one checkbox before downloading."
 
 // Image Related Error Message 
@@ -305,7 +310,8 @@ export const alertMessages = {
     AllItemExist,
     AdvanceAmount,
     selectSameCustomer,
-    StockNotAvaliable
+    StockNotAvaliable,
+    divisionSelectionIsRequired
 };
 
 
