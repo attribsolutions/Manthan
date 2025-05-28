@@ -377,12 +377,14 @@ export const SortButtonFunc = (props) => {
                     QtyInBox: 0,
                     DiscountAmount: 0,
                     RoundOffAmount: 0,
+                    BaseItemUnitQuantity: 0,
                     TCSAmount: 0
                 };
             }
 
             buttonStateArray.forEach(field => {
                 if (field.isSum === true) {
+                    debugger
                     groupedData[groupKey][field.dataField] += parseFloat(item[field.dataField]);
                     const value = Number(groupedData[groupKey][field.dataField]) || 0;
                     groupedData[groupKey][field.dataField] = parseFloat(value.toFixed(field.toFixed));

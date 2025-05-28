@@ -513,7 +513,11 @@ const Invoice = (props) => {
                                 onChange={(event) => {
                                     orderQtyOnChange(event, index1,);
                                     totalAmountCalcuationFunc(tableList);
-                                    document.getElementById("TotalTray_ID").innerText = tableList.reduce((sum, item) => sum + (item.TrayQuantity || 0), 0);
+                                    const el = document.getElementById("TotalTray_ID");
+                                    if (el) {
+                                        el.innerText = tableList.reduce((sum, item) => sum + (item.TrayQuantity || 0), 0);
+                                    }
+
 
                                 }}
                             />
@@ -559,9 +563,10 @@ const Invoice = (props) => {
                                 onChange={(event) => {
                                     orderQtyOnChange(event, index1);
                                     totalAmountCalcuationFunc(tableList);
-
-                                    document.getElementById("TotalTray_ID").innerText = tableList.reduce((sum, item) => sum + (item.TrayQuantity || 0), 0);
-
+                                    const el = document.getElementById("TotalTray_ID");
+                                    if (el) {
+                                        el.innerText = tableList.reduce((sum, item) => sum + (item.TrayQuantity || 0), 0);
+                                    }
                                 }}
                             />
                             <Select
@@ -626,9 +631,10 @@ const Invoice = (props) => {
                                 defaultValue={index1.TrayQuantity}
                                 onChange={(event) => {
                                     index1.TrayQuantity = _cfunc.getFixedNumber(event.target.value)
-
-                                    document.getElementById("TotalTray_ID").innerText = tableList.reduce((sum, item) => sum + (item.TrayQuantity || 0), 0);
-
+                                    const el = document.getElementById("TotalTray_ID");
+                                    if (el) {
+                                        el.innerText = tableList.reduce((sum, item) => sum + (item.TrayQuantity || 0), 0);
+                                    }
                                 }}
                             />
                         </div>
