@@ -36,7 +36,7 @@ const GSTR1Report = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [userPageAccessState, setUserAccState] = useState('');
 
-    const [divisionDropdowSelect, setDivisionDropdowSelect] = useState([allLabelWithZero]);
+    const [divisionDropdowSelect, setDivisionDropdowSelect] = useState();
 
 
 
@@ -142,16 +142,20 @@ const GSTR1Report = (props) => {
     }, [])
 
     function goButtonHandler(Type) {
-
+        debugger
         if (commonPartyDropSelect.value === 0) {
             customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
             return;
         };
 
+        if (_cfunc.IsSweetAndSnacksCompany() && !divisionDropdowSelect) {
+            customAlert({ Type: 3, Message: alertMessages.divisionSelectionIsRequired });
+            return;
+        }
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
-            "Party": divisionDropdowSelect.map(row => row.value).join(',')
+            "Party": _cfunc.IsSweetAndSnacksCompany() ? divisionDropdowSelect.map(row => row.value).join(',') : String(commonPartyDropSelect.value),
         });
 
         let config = { jsonBody }
@@ -187,13 +191,6 @@ const GSTR1Report = (props) => {
     }
 
     function DivisionOnChange(e = []) {
-        debugger
-        if (e.length === 0) {
-            e = [allLabelWithZero]
-        } else {
-            e = e.filter(i => !(i.value === 0))
-        }
-
         setDivisionDropdowSelect(e);
     }
 

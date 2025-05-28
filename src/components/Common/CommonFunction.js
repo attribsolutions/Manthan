@@ -1208,32 +1208,63 @@ export function checkRateDropVisibility() {
 }
 
 
+
+function convertTo24Hour(timeStr) {
+  const [time, modifier] = timeStr.split(/(AM|PM)/); // split at AM/PM
+  const [hours, minutes] = time.trim().split(":").map(Number);
+
+  let h = hours;
+  if (modifier === "PM" && hours !== 12) h += 12;
+  if (modifier === "AM" && hours === 12) h = 0;
+
+  return [h, minutes, 0, 0]; // Format: HH, MM, 0, 0
+}
+
+function getStartAndEndTime(data, key) {
+  const entry = data.find(str => str.startsWith(key));
+  if (!entry) return null;
+
+  const match = entry.match(/\((.*?)\)/);
+  if (!match) return null;
+
+  const [startStr, endStr] = match[1].split("-");
+  const startTime = convertTo24Hour(startStr);
+  const endTime = convertTo24Hour(endStr);
+
+  return { startTime, endTime, startStr, endStr };
+}
+
+
 export function validateOrder(PageID, deliveryDate) {
   debugger
   const restrictedOrders = (loginSystemSetting()?.OrdersnotSave || "").split(',');
   const currentPartyKey = `${loginPartyTypeID()}-${PageID}`;
 
-  let checkValid = restrictedOrders.includes(currentPartyKey)
+  const checkValid = getStartAndEndTime(restrictedOrders, currentPartyKey);
+  // let checkValid = restrictedOrders.includes(currentPartyKey)
 
   if (!checkValid) {
     return ''
   }
   const now = new Date();
   const selectedDate = new Date(deliveryDate);
+  const StartTime = checkValid.startTime
+  const EndTime = checkValid.endTime
+
 
   // Get today's date and time boundaries
   const today = new Date();
   today.setHours(0, 0, 0, 0);  // Midnight today
   const todayStartTime = new Date();
-  todayStartTime.setHours(10, 30, 0, 0);  // 10:30 AM today
+  todayStartTime.setHours(StartTime[0], StartTime[1], StartTime[2], StartTime[3]);
   const todayEndTime = new Date();
-  todayEndTime.setHours(22, 30, 0, 0);  // 10:30 PM today
+  todayEndTime.setHours(EndTime[0], EndTime[1], EndTime[2], EndTime[3]);
 
   // Get tomorrow's date and time boundaries
   const tomorrow = new Date(today);
   tomorrow.setDate(today.getDate() + 1);  // Midnight tomorrow
   const tomorrowEndTime = new Date(tomorrow);
-  tomorrowEndTime.setHours(22, 30, 0, 0);  // 10:30 PM tomorrow
+  tomorrowEndTime.setHours(EndTime[0], EndTime[1], EndTime[2], EndTime[3]);  // 10:30 PM tomorrow
 
   // Rounding the times to seconds for easier comparison
   const now_time = Math.floor(now.getTime() / 1000) * 1000;  // Round down to the nearest second
@@ -1249,13 +1280,13 @@ export function validateOrder(PageID, deliveryDate) {
     // Orders can only be placed after 10:30 AM today
     if (now_time < todayStartTime.getTime()) {
       console.log("Before 10:30 AM today");
-      return "Orders can only be placed after 10:30 AM today.";
+      return `Orders can only be placed after ${checkValid.startStr} today.`;
     }
 
     // Orders can only be placed before 10:30 PM today
     if (now_time >= todayEndTime.getTime()) {  // Changed `> ` to ` >= ` to allow exactly 10:30 PM
       console.log("After or exactly 10:30 PM today");
-      return "Orders can only be placed before 10:30 PM today.";
+      return `Orders can only be placed before ${checkValid.endStr} today.`;
     }
   }
   // Check if the selected date is tomorrow
@@ -1265,13 +1296,13 @@ export function validateOrder(PageID, deliveryDate) {
     // Check if it's past 10:30 PM today
     if (now_time >= todayEndTime.getTime()) {
       console.log("After 10:30 PM today, orders for tomorrow not allowed");
-      return "Orders for tomorrow can only be placed before 10:30 PM today.";
+      return `Orders for tomorrow can only be placed before ${checkValid.endStr}today.`;
     }
 
     // Orders can only be placed before 10:30 PM tomorrow
     if (now_time >= tomorrowEndTime.getTime()) {  // Changed `> ` to ` >= ` to allow exactly 10:30 PM
       console.log("After or exactly 10:30 PM tomorrow");
-      return "Orders can only be placed before 10:30 PM tomorrow.";
+      return `Orders can only be placed before ${checkValid.endStr} tomorrow.`;
     }
   }
 
