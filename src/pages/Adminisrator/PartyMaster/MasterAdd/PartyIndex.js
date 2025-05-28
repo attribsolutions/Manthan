@@ -52,7 +52,7 @@ import { getClusterlist } from "../../../../store/Administrator/ClusterRedux/act
 import { getCountryList_Action, getCountryList_Success } from "../../../../store/Administrator/CountryRedux/action";
 
 function initialState(props) {
-	debugger
+
 	let page_Id = '';
 	let listPath = ''
 	let sub_Mode = props.location.pathname;
@@ -104,7 +104,7 @@ const PartyMaster = (props) => {
 	const [activeTab1, setactiveTab1] = useState("1")
 	const [modalCss, setModalCss] = useState(false);
 	const [isMobileRetailer, setIsMobileRetailer] = useState(false);
-
+	debugger
 	const [editCreatedBy, seteditCreatedBy] = useState("");
 
 	const {
@@ -354,7 +354,7 @@ const PartyMaster = (props) => {
 
 		if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
 			dispatch(postPartyDataSuccess({ Status: false }));
-			debugger
+
 			//***************mobail app api*********************** */
 
 			//************************************** */
@@ -376,7 +376,7 @@ const PartyMaster = (props) => {
 					});
 				}
 			}
-			debugger
+
 			if (subPageMode === url.RETAILER_MASTER) {
 				const jsonBody = JSON.stringify({ RetailerID: postMsg.TransactionID.toString(), DistributorID: commonPartyDropSelect.value });
 				const mobilApiResp = await mobileApp_Send_Retailer_Api({ jsonBody });
@@ -439,7 +439,7 @@ const PartyMaster = (props) => {
 	}
 
 	const SaveHandler = (event) => {
-		debugger
+
 		event.preventDefault();
 		const btnId = event.target.id;
 

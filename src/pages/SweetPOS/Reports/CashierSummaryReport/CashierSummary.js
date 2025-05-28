@@ -168,11 +168,15 @@ const CashierSummary = (props) => {
             e = e.filter(i => !(i.value === ''))
         }
         setCashier(e)
+        dispatch(CashierSummaryReport_GoButton_API_Success([]));
+
     }
 
     const PartyOnchange = (e) => {
         setPartyDropdown(e)
         setCashier([allLabelWithBlank]);
+        dispatch(CashierSummaryReport_GoButton_API_Success([]));
+
     }
 
 
