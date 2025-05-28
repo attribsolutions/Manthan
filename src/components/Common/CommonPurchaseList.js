@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import {
+  BreadcrumbRadioButtonView,
   BreadcrumbShowCountlabel,
   CommonBreadcrumbDetails,
   getpdfReportdata,
@@ -39,13 +40,6 @@ const CommonPurchaseList = (props) => {
 
   const [userAccState, setUserAccState] = useState("");
   const [modal_edit, setmodal_edit] = useState(false);
-
-  const [cellReferesh, setcellReferesh] = useState(false)
-
-
-
-
-
 
 
   const {
@@ -137,6 +131,10 @@ const CommonPurchaseList = (props) => {
       })
     );
 
+    const hasRole = (role) => userAccState[role];
+    if (hasRole("RoleAccess_DeletedNonDeletedRecords")) {
+      dispatch(BreadcrumbRadioButtonView(true));
+    }
   }, [tableList, pageField, userAccState]);
 
   useEffect(() => {
