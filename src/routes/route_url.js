@@ -29,6 +29,7 @@ export const COPY_ROLEACCESS = "/RoleAccessCopyFunctionality"
 
 // *************************** Master Module **********************************//
 
+
 export const ITEM = "/ItemMaster"
 export const ITEM_lIST = "/ItemList"
 
@@ -187,7 +188,9 @@ export const VOUCHER = "/Voucher"
 export const VOUCHER_LIST = "/Voucher_List"
 
 
+export const SCHEME_TYPE ="/Scheme_Type"
 
+export const  SCHEME_TYPE_LIST = "/Scheme_Type_List"
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"

@@ -233,6 +233,13 @@ export const VOUCHER_LIST_API = '/GiftVoucherList'
 export const VOUCHER_API = '/giftvouchervalidityCheck'
 
 
+// SCHEME API
+
+export const SCHEME_TYPE_LIST_API = "/SchemeType"  //--Get
+
+export const SCHEME_TYPE_API = "/SchemeType"     //-- 
+export const Scheme_Type__Delete_API ="/SchemeType/id"  // --Delete
+export const Scheme_Type_Update_API = "/SchemeType/id "  // --put
 
 
 // Group Api

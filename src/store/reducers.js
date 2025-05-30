@@ -148,6 +148,8 @@ import Css_Item_sale_Reducer from "./Report/CssItemSaleReport/reducer"
 import ManagerSummaryReportReducer from "./SweetPOSStore/Report/ManagerSummaryRedux/reducer"
 import BillDeleteSummaryReportReducer from "./SweetPOSStore/Report/BillDeleteSummaryRedux/reducer"
 
+import SchemeTypeReducer from "./Administrator/SchemeRedux/reducer"
+
 const rootReducer = combineReducers({
 	Layout,
 	Login,
@@ -271,7 +273,7 @@ const rootReducer = combineReducers({
 	PeriodicGrnReportReducer,
 	Css_Item_sale_Reducer,
 	ManagerSummaryReportReducer,
-	BillDeleteSummaryReportReducer
-
+	BillDeleteSummaryReportReducer,
+	SchemeTypeReducer
 })
 export default rootReducer

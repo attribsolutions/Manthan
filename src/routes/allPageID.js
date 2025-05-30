@@ -475,7 +475,9 @@ export const CODE_REDEMPTION_REPORT = 327
 export const VOUCHER_REDEMPTION_CLAIM = 328
 
 
+export const SCHEME_TYPE_LIST = 346
 
+export const SCHEME_TYPE = 345
 
 
 
