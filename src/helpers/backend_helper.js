@@ -95,6 +95,7 @@ export const getUserDetails_afterLogin_ApiCall = data => post(url.FOOD_ERP_POST_
 export const divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall = (employeeID) => getWithotMsg(`${url.DIVIDION_DROPDOWN_FOR_LOGIN_CHANGE_DIVSION_PAGE}/${employeeID}`)
 export const ChangePassword_API = ({ jsonBody }) => post(url.CHANGEPASSWORD_API, jsonBody)// post api
 
+export const StockEntry_Delete_API = ({ jsonBody }) => post(url.DELETE_STOCK_ENTRY_API, jsonBody)//post api
 // postForgetPwd
 export const Python_FoodERP_postJwtForgetPwd_Verify_OTP = data => postWithoutToken(url.FOOD_ERP_POST_JWT_PASSWORD_FORGET_VERIFY_OTP, data)
 export const Python_FoodERP_postJwtForgetPwd_SendOTP = data => postWithoutToken(url.FOOD_ERP_POST_JWT_PASSWORD_FORGET_SEND_OTP, data)
@@ -320,6 +321,17 @@ export const Voucher__Delete_API = ({ deleteId }) => del(`${url.VOUCHER_API}/${d
 export const Voucher_Edit_API = ({ editId }) => get(`${url.VOUCHER_API}/${editId}`)// edit api
 export const Voucher__Update_API = ({ jsonBody, updateId }) => put(`${url.VOUCHER_API}/${updateId}`, jsonBody)// update api
 export const Voucher_Validity_Check_API = ({ Voucher_Code }) => get(`${url.VOUCHER_API}/${Voucher_Code}`)// delete api
+
+//SCHEME API
+
+
+
+export const Scheme_Type_API = ({ jsonBody }) => post(url.SCHEME_TYPE_LIST_API, jsonBody)
+export const Scheme_Type_Post_API = ({ jsonBody }) => post(url.SCHEME_TYPE_API, jsonBody)// post api
+export const Scheme_Type__Delete_API = ({ deleteId }) => del(`${url.SCHEME_TYPE_API}/${deleteId}`)// delete api
+export const Scheme_Type_Edit_API = ({ editId }) => get(`${url.SCHEME_TYPE_API}/${editId}`)// edit api
+export const Scheme_Type_Update_API = ({ jsonBody, updateId }) => put(`${url.SCHEME_TYPE_API}/${updateId}`, jsonBody)// update api
+
 
 
 
@@ -997,7 +1009,7 @@ export const POS_USER_Get_Roles = () => get(`${url.POS_USER_RLOE}`)// edit api
 
 export const CashierSummary_API = ({ jsonBody }) => post(url.CASHIER_SUMMARY_REPORT, jsonBody)// post api
 
-export const BillDelete_API = ({jsonBody}) => post(url.BILL_DELETE_SUMMARY_REPORT, jsonBody ) // post api
+export const BillDelete_API = ({ jsonBody }) => post(url.BILL_DELETE_SUMMARY_REPORT, jsonBody) // post api
 // TargetVSAchievement 
 export const Target_Vs_Achievement_Gobtn_API = ({ jsonBody }) => post(url.TARGET_VS_ACHIEVEMENT_API, jsonBody)// post api
 export const Target_Vs_AchievementGroupWise_Gobtn_API = ({ jsonBody }) => post(url.TARGET_VS_ACHIEVEMENT_GROUP_API, jsonBody)// post api

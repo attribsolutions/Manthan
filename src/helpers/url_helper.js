@@ -19,6 +19,8 @@ export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_VERIFY_OTP = "/VerifyOTP"
 export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_SEND_OTP = "/SendMail"
 export const CHANGEPASSWORD_API = "/ChangePassword"
 
+export const DELETE_STOCK_ENTRY_API = '/DeleteStockEntry'
+
 export const SUPER_ADMIN_API = '/SuperAdmin'
 
 export const TOKEN_REFRESH_API = '/api/token/refresh/'
@@ -233,6 +235,13 @@ export const VOUCHER_LIST_API = '/GiftVoucherList'
 export const VOUCHER_API = '/giftvouchervalidityCheck'
 
 
+// SCHEME API
+
+export const SCHEME_TYPE_LIST_API = "/SchemeType"  //--Get
+
+export const SCHEME_TYPE_API = "/SchemeType"     //-- 
+export const Scheme_Type__Delete_API ="/SchemeType/id"  // --Delete
+export const Scheme_Type_Update_API = "/SchemeType/id "  // --put
 
 
 // Group Api

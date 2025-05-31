@@ -3,6 +3,8 @@ import {
     CHECK_STOCK_ENTERY_FOR_BACKDATED_TRANSACTION_SUCCESS,
     CHECK_STOCK_ENTERY_FOR_FIRST_TRANSACTION,
     CHECK_STOCK_ENTERY_FOR_FIRST_TRANSACTION_SUCCESS,
+    DELETE_STOCK_ENTRY,
+    DELETE_STOCK_ENTRY_SUCCESS,
     GET_ITEM_DROPDOWM_ACTION,
     GET_ITEM_DROPDOWM_ACTION_SUCCESS,
     GET_LAST_STOCK_ENTRY_SUCCESS,
@@ -90,6 +92,18 @@ export const GetStockEntryView_Success = (resp) => ({
 export const StockEntryApiErrorAction = () => ({
     type: STOCK_ENTRY_API_ERROR_ACTION,
 })
+
+
+export const deleteStockEntry = (config = {}) => ({                                 //Delete Material issue Action
+    type: DELETE_STOCK_ENTRY,
+    config,
+});
+
+export const deleteStockEntry_Success = (data) => ({                        //Delete Material issue Action Success
+    type: DELETE_STOCK_ENTRY_SUCCESS,
+    payload: data,
+});
+
 
 
 

@@ -14,13 +14,13 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import * as report from '../../Reports/ReportIndex'
 import C_Report from "../../components/Common/C_Report";
-
+import Select, { components } from 'react-select';
 
 import { globalTableSearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, GetCustomer, getpdfReportdataSuccess, GetVenderSupplierCustomer } from "../../store/actions";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { Cx_DD_Diffrence_Gobtn_Action, Cx_DD_Diffrence_Gobtn_Success } from "../../store/Report/CX_DD_Diffrence_Report/action";
-import { commonPartyDropdown_API, Cx_DD_Diffrence_Report_Party_Dropdown_API, divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall } from "../../helpers/backend_helper";
+import { commonPartyDropdown_API, Cx_DD_Diffrence_Report_Party_Dropdown_API, divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall, VendorSupplierCustomer } from "../../helpers/backend_helper";
 import { allLabelWithBlank, allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 import { Css_Item_Sale_Gobtn_Action, Css_Item_Sale_Gobtn_Success } from "../../store/Report/CssItemSaleReport/action";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
@@ -44,7 +44,10 @@ const CssItemSaleReport = (props) => {
 
     const [DivisionOptions, setDivisionOptions] = useState([]);
 
+    const [Customer, setCustomer] = useState([]);
 
+
+    debugger
 
 
 
@@ -79,7 +82,7 @@ const CssItemSaleReport = (props) => {
         const resp = await divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall(_cfunc.loginEmployeeID())
 
 
-        debugger
+
         if (resp.Status === true && resp.StatusCode === 200) {
             const data = resp.Data.map((i) => ({
                 value: i.Party_id,
@@ -88,7 +91,7 @@ const CssItemSaleReport = (props) => {
             setDivisionOptions(data)
         }
 
-        dispatch(GetCustomer());
+        // dispatch(GetCustomer());
 
 
         return () => {
@@ -145,6 +148,17 @@ const CssItemSaleReport = (props) => {
             })
         }
     }, [tableData]);
+
+    // useEffect(async () => {
+    //     const jsonBody = {
+    //         "PartyID": PartyID,
+    //         "Company": _cfunc.loginCompanyID(),
+    //         "Route": ""
+    //     }
+
+    //     const Resp = await VendorSupplierCustomer({ ...jsonBody, "Type": 3, })
+    // }, [])
+
 
 
     useEffect(() => {
@@ -204,15 +218,65 @@ const CssItemSaleReport = (props) => {
 
 
 
-    const divisionOnchange = (e) => {
-        debugger
+    const divisionOnchange = async (e) => {
+
         if (e.length === 0) {
             e = [allLabelWithBlank]
+            setCustomer([]);
         } else {
             e = e.filter(i => !(i.value === ''))
         }
 
+        const prev = values.division || [];
+        const current = e || [];
 
+        const added = current.filter(opt => !prev.some(p => p.value === opt.value));
+        const removed = prev.filter(opt => !current.some(c => c.value === opt.value));
+
+        // When something is added
+        if (added.length > 0) {
+            const PartyID = added[0].value;
+
+            const jsonBody = {
+                PartyID,
+                Company: _cfunc.loginCompanyID(),
+                Route: "",
+                Type: 3
+            };
+            const Resp = await VendorSupplierCustomer(jsonBody);
+            if (Resp && Resp.Status === true) {
+
+                setCustomer(prevData => [...prevData, ...Resp.Data]);
+            }
+        }
+
+        // When something is removed
+        if (removed.length > 0) {
+            const PartyID = removed[0].value;
+
+            const jsonBody = {
+                PartyID,
+                Company: _cfunc.loginCompanyID(),
+                Route: "",
+                Type: 3
+            };
+            const Resp = await VendorSupplierCustomer(jsonBody);
+            if (Resp && Resp.Status === true) {
+                // Remove matching data based on unique key, assume `id` is unique
+                setCustomer(prevData => {
+                    const updatedData = [...prevData]; // make a copy
+
+                    Resp.Data.forEach(toRemove => {
+                        const index = updatedData.findIndex(item => item.id === toRemove.id);
+                        if (index !== -1) {
+                            updatedData.splice(index, 1); // remove only one matching item
+                        }
+                    });
+
+                    return updatedData;
+                });
+            }
+        }
 
         setState((i) => {
             const a = { ...i }
@@ -223,6 +287,8 @@ const CssItemSaleReport = (props) => {
         dispatch(Css_Item_Sale_Gobtn_Success([]));
 
     }
+
+
 
 
     const customerOnchange = (e) => {
@@ -262,7 +328,15 @@ const CssItemSaleReport = (props) => {
     }
 
 
-
+    const CustomMultiValueLabel = props => {
+        return (
+            <components.MultiValueLabel {...props}>
+                <div title={props.data.label}>
+                    {props.data.label}
+                </div>
+            </components.MultiValueLabel>
+        );
+    };
 
     return (
         <React.Fragment>
@@ -303,11 +377,12 @@ const CssItemSaleReport = (props) => {
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px", marginRight: "20px" }}>Division</Label>
                                 <Col sm="8">
-                                    <C_Select
+                                    <Select
                                         name="division"
                                         value={values.division}
                                         isSearchable={true}
                                         isMulti={true}
+                                        components={{ MultiValueLabel: CustomMultiValueLabel }}
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
                                         styles={{
@@ -325,18 +400,25 @@ const CssItemSaleReport = (props) => {
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px", marginRight: "20px" }}>Customer</Label>
                                 <Col sm="8">
-                                    <C_Select
+                                    <Select
                                         name="customer"
                                         value={values.customer}
                                         isMulti={true}
                                         isSearchable={true}
+                                        components={{ MultiValueLabel: CustomMultiValueLabel }}
 
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
                                         styles={{
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
-                                        options={customerOptions}
+                                        options={Customer.filter(
+                                            (item, index, self) =>
+                                                index === self.findIndex(t => t.id === item.id)
+                                        ).map(i => ({
+                                            value: i.id,
+                                            label: i.Name,
+                                        }))}
                                         onChange={(e) => { customerOnchange(e) }}
                                     />
                                 </Col>

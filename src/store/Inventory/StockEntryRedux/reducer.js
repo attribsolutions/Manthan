@@ -3,6 +3,8 @@ import {
     CHECK_STOCK_ENTERY_FOR_BACKDATED_TRANSACTION_SUCCESS,
     CHECK_STOCK_ENTERY_FOR_FIRST_TRANSACTION,
     CHECK_STOCK_ENTERY_FOR_FIRST_TRANSACTION_SUCCESS,
+    DELETE_STOCK_ENTRY,
+    DELETE_STOCK_ENTRY_SUCCESS,
     GET_ITEM_DROPDOWM_ACTION,
     GET_ITEM_DROPDOWM_ACTION_SUCCESS,
     GET_LAST_STOCK_ENTRY_SUCCESS,
@@ -28,6 +30,7 @@ const INIT_STATE = {
     lastStockEntryDate: "",
     saveBtnloading: false,
     loading: false,
+    deleteMsg: { Status: false },
     ItemDropDownloading: false,
     listGoBtnloading: false
 
@@ -110,6 +113,19 @@ const StockEntryReducer = (state = INIT_STATE, action) => {
                 ...state,
                 StockEntryList: action.payload,
                 listGoBtnloading: false
+            }
+
+
+        case DELETE_STOCK_ENTRY:
+            return {
+                ...state,
+                listBtnLoading: action.config.btnId,
+            }
+        case DELETE_STOCK_ENTRY_SUCCESS:
+            return {
+                ...state,
+                deleteMsg: action.payload,
+                listBtnLoading: false,
             }
 
         // view button functionality

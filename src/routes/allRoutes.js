@@ -266,6 +266,8 @@ import DailyDispatchReport from "../Reports/DailyDispatchReport/index.js";
 import PosSummarySale from "../pages/SweetPOS/Reports/PosSummarySaleReport/PosSummarySale.js";
 import ManagerSummary from "../pages/SweetPOS/Reports/ManagerSummaryReport/ManagerSummary.js";
 import BillDeleteSummaryReport from "../Reports/BillSummaryDeleteReport/index.js";
+import SchemeType from "../pages/Adminisrator/SchemeType/SchemeType.js";
+import SchemeTypeList from "../pages/Adminisrator/SchemeType/ScemeTypeList.js";
 
 
 const userRoutes = [
@@ -463,6 +465,9 @@ const userRoutes = [
 
 	{ path: path.VOUCHER, component: Voucher },//not party wise
 	{ path: path.VOUCHER_LIST, component: VoucherList },//not party wise
+	
+    {path: path.SCHEME_TYPE, component: SchemeType   },
+	{path: path.SCHEME_TYPE_LIST, component: SchemeTypeList},
 
 	//******************************* Inventory Module ************************************//
 	{ path: path.IB_INVOICE_LIST, component: IBInvoiceList },

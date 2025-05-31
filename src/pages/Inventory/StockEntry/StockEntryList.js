@@ -26,6 +26,7 @@ const StockEntryList = () => {
             listBtnLoading: state.StockEntryReducer.listBtnLoading,
             tableList: state.StockEntryReducer.StockEntryList,
             goBtnLoading: state.StockEntryReducer.listGoBtnloading,
+            deleteMsg: state.StockEntryReducer.deleteMsg,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
@@ -34,30 +35,27 @@ const StockEntryList = () => {
     const { pageField, goBtnLoading } = reducers
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
-    const action = {}
+    const action = {
+        deleteId: (inx) => {
+            debugger
+            const detail = inx.rowData
+            const jsonBody = JSON.stringify({
+                PartyID: detail.Party_id,
+                StockDate: detail.PriviousStockDate
+            });
+            return _act.deleteStockEntry({ jsonBody });
+        },
+        deleteSucc: _act.deleteStockEntry_Success,
 
-
+    };
 
     useEffect(() => {
         const page_Id = pageId.STOCK_ENTRY_LIST;
         dispatch(commonPageFieldList(page_Id));
-    
         return () => {
             dispatch(commonPageFieldListSuccess(null));
         }
     }, []);
-    
-
-    // useEffect(() => {
-    //     const page_Id = pageId.STOCK_ENTRY_LIST;
-    //     dispatch(commonPageFieldList(page_Id));
-    //     if (!(_cfunc.loginSelectedPartyID() === 0)) {
-    //         goButtonHandler()
-    //     }
-    //     return () => {
-    //         dispatch(commonPageFieldListSuccess(null));
-    //     }
-    // }, []);
 
     useEffect(() => {
         if (commonPartyDropSelect.value > 0) {
@@ -173,6 +171,7 @@ const StockEntryList = () => {
                             masterPath={url.STOCK_ENTRY}
                             newBtnPath={url.STOCK_ENTRY}
                             ButtonMsgLable={"StockEntry"}
+                            deleteName={"StockDate"}
                             goButnFunc={goButtonHandler}
                             viewApprovalBtnFunc={viewApprovalBtnFunc}
 

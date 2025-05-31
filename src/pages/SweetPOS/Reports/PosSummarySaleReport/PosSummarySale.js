@@ -49,9 +49,9 @@ const PosSummarySale = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         })
     );
-   
 
-    const { userAccess, BtnLoading, PrediocGrnData, pageField, pdfdata, ItemSaleReportGobtn, partyDropdownLoading, Party , goBtnLoading } = reducers
+
+    const { userAccess, BtnLoading, PrediocGrnData, pageField, pdfdata, ItemSaleReportGobtn, partyDropdownLoading, Party, goBtnLoading } = reducers
 
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
@@ -151,40 +151,40 @@ const PosSummarySale = (props) => {
 
 
 
-async function excel_And_GoBtnHandler(e, btnMode) {
-    setLocalLoading(true); // Start spinner
-    try {
-        const jsonBody = JSON.stringify({
-            FromDate: fromdate,
-            ToDate: todate,
-            PartyType: 0,
-            Party: !isSCMParty ? _cfunc.loginPartyID() : PartyDropdown.value,
-            Employee: _cfunc.loginEmployeeID(),
-            CompanyID: _cfunc.loginCompanyID(),
-            ItemID: "0"
-        });
+    async function excel_And_GoBtnHandler(e, btnMode) {
+        setLocalLoading(true); // Start spinner
+        try {
+            const jsonBody = JSON.stringify({
+                FromDate: fromdate,
+                ToDate: todate,
+                PartyType: 0,
+                Party: !isSCMParty ? _cfunc.loginPartyID() : PartyDropdown.value,
+                Employee: _cfunc.loginEmployeeID(),
+                CompanyID: _cfunc.loginCompanyID(),
+                ItemID: "0"
+            });
 
-        const response = await ItemSaleReport_GoBtn_API({ jsonBody });
+            const response = await ItemSaleReport_GoBtn_API({ jsonBody });
 
-        if (response.Status === true) {
-            response["BtnMode"] = btnMode;
-            dispatch(ItemSaleGoButton_API_Success(response));
-        } else {
+            if (response.Status === true) {
+                response["BtnMode"] = btnMode;
+                dispatch(ItemSaleGoButton_API_Success(response));
+            } else {
+                customAlert({
+                    Type: 4,
+                    Message: response.Message || "Unexpected response from server.",
+                }); setLocalLoading(false);
+            }
+        } catch (error) {
             customAlert({
                 Type: 4,
-                Message: response.Message || "Unexpected response from server.",
+                Message: "An error occurred while fetching the report. Please try again.",
             }); setLocalLoading(false);
+            console.error("API Error:", error);
+        } finally {
+            setLocalLoading(false); // Stop spinner
         }
-    } catch (error) {
-        customAlert({
-            Type: 4,
-            Message: "An error occurred while fetching the report. Please try again.",
-        }); setLocalLoading(false);
-        console.error("API Error:", error);
-    } finally {
-        setLocalLoading(false); // Stop spinner
     }
-}
 
 
 
@@ -225,7 +225,7 @@ async function excel_And_GoBtnHandler(e, btnMode) {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={!IsFranchises ? 3 : 7} className="">
+                        <Col sm={!IsFranchises ? 3 : 3} className="">
                             <FormGroup className=" row mt-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>To Date</Label>
@@ -264,18 +264,18 @@ async function excel_And_GoBtnHandler(e, btnMode) {
                         </Col>}
 
 
-                        <Col sm={2} className=" d-flex justify-content-end" >
-                        <C_Button
-    type="button"
-    spinnerColor="white"
-    className="btn btn-success m-3 mr"
-    loading={localLoading} // ← using useState instead of Redux
-    onClick={(e) => excel_And_GoBtnHandler(e, "print")}
->
-    Print
-</C_Button>
+                        <Col sm={!IsFranchises ? 3 : 6}  className=" d-flex justify-content-end  " >
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                className="btn btn-success m-3 mr"
+                                loading={localLoading} // ← using useState instead of Redux
+                                onClick={(e) => excel_And_GoBtnHandler(e, "print")}
+                            >
+                                Print
+                            </C_Button>
 
-                                {/* <C_Button
+                            <C_Button
                                     type="button"
                                     spinnerColor="white"
                                     loading={PrediocGrnData.BtnMode === "excel"}
@@ -283,7 +283,7 @@ async function excel_And_GoBtnHandler(e, btnMode) {
                                     onClick={(e) => excel_And_GoBtnHandler(e, "excel")}
                                 >
                                     Excel
-                                </C_Button> */}
+                                </C_Button>
                         </Col>
                     </Row>
                 </div>
