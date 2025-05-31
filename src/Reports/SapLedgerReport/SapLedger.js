@@ -103,7 +103,7 @@ const SapLedger = (props) => {
 
     const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
-    const { tableData = [], OpeingBal, ClosingBal } = gobuttonReduxData
+    const { tableData = [], OpeningBal, ClosingBal } = gobuttonReduxData
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
     useEffect(() => {
@@ -303,7 +303,7 @@ const SapLedger = (props) => {
                                 <Row>
                                     <Col sm={9}>
                                         <Label className="col-sm-6 mt-1 p-1 text-black"
-                                            style={{ width: "270px", background: "#efefef", borderRadius: "5px" }}>Opening Balance:  {OpeingBal}
+                                            style={{ width: "270px", background: "#efefef", borderRadius: "5px" }}>Opening Balance:  {OpeningBal}
                                         </Label>
                                     </Col>
                                     <Col sm={3}>
