@@ -19,6 +19,8 @@ export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_VERIFY_OTP = "/VerifyOTP"
 export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_SEND_OTP = "/SendMail"
 export const CHANGEPASSWORD_API = "/ChangePassword"
 
+export const DELETE_STOCK_ENTRY_API = '/DeleteStockEntry'
+
 export const SUPER_ADMIN_API = '/SuperAdmin'
 
 export const TOKEN_REFRESH_API = '/api/token/refresh/'

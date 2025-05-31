@@ -206,7 +206,7 @@ const PartyMaster = (props) => {
 			try {
 
 				if ((hasShowloction || hasShowModal) || (subPageMode === url.PARTY_SELF_EDIT)) {
-
+					debugger
 					let hasEditVal = null
 					if (hasShowloction) {
 						setPageMode(location.pageMode)
@@ -293,7 +293,7 @@ const PartyMaster = (props) => {
 								value: hasEditVal.PartySubParty[0]?.Route === null ? "" : hasEditVal.PartySubParty[0]?.Route,
 							},
 							GSTIN: hasEditVal.GSTIN,
-							isActive: hasEditVal.isActive,
+							isActive: location.IsMobileRetailer ? true : hasEditVal.isActive,
 
 						};
 

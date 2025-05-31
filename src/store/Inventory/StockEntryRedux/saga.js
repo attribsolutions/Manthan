@@ -78,17 +78,23 @@ function* StockEntryItemView_API_GenFunc({ config }) { // Save GRN  genrator fun
     } catch (error) { yield put(action.StockEntryApiErrorAction()) }
 }
 
-function* StockEntrySaga() {
+function* Delete_StockEntry_GenFunc({ config }) {
+    debugger
+    try {
+        const response = yield call(apiCall.StockEntry_Delete_API, config);
+        yield put(action.deleteStockEntry_Success(response));
+    } catch (error) { yield put(action.StockEntryApiErrorAction()) }
+}
 
+function* StockEntrySaga() {
     yield takeLatest(actionType.GET_ITEM_DROPDOWM_ACTION, ItemDropDown_API_GenFunc)
     yield takeLatest(actionType.SAVE_STOCK_ENTRY_ACTION, StockEntry_API_GenFunc)
     yield takeLatest(actionType.GET_STOCK_COUNT_ACTION, StockCount_API_GenFunc)
-
     yield takeLatest(actionType.CHECK_STOCK_ENTERY_FOR_FIRST_TRANSACTION, StockEnteryForFirstTransaction_API_GenFunc)
     yield takeLatest(actionType.CHECK_STOCK_ENTERY_FOR_BACKDATED_TRANSACTION, StockenteryForBackDatedTransaction_API_GenFunc)
     yield takeLatest(actionType.GET_STOCK_ENTRY_LIST_ACTION, StockEntryList_API_GenFunc)
     yield takeLatest(actionType.GET_STOCK_ENTRY_VIEW_ACTION, StockEntryItemView_API_GenFunc)
-
+    yield takeLatest(actionType.DELETE_STOCK_ENTRY, Delete_StockEntry_GenFunc)
 
 }
 export default StockEntrySaga;  

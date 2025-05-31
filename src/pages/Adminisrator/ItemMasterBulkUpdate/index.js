@@ -129,7 +129,7 @@ const ItemMasterBulkUpdate = (props) => {
                 } else if (["BarCode", "Length", "Breadth", "ShelfLife", "SAPItemCode", "Sequence", "Height"].includes(item.Name)) {
                     return { ...item, DataType: "number" };
                 }
-                else if (["IsCBMItem", "IsMixItem"].includes(item.Name)) {
+                else if (["IsCBMItem", "IsMixItem", "IsStockProcessItem", "IsThirdPartyItem"].includes(item.Name)) {
                     return { ...item, DataType: "boolean" };
                 } else {
                     return { ...item, DataType: "string" };
@@ -171,10 +171,11 @@ const ItemMasterBulkUpdate = (props) => {
 
                 // If a match is found, update i.SAPUnitID with index.Name
                 if (matchingBaseUnit) {
+                    debugger
                     return {
                         ...i,
                         SAPUnit: matchingBaseUnit.Name,
-                        booleanValue: i.IsMixItem ? i.IsMixItem : i.IsCBMItem
+                        booleanValue: i.IsMixItem || i.IsCBMItem || i.IsStockProcessItem || i.IsThirdPartyItem
                     };
                 }
                 return i;
@@ -182,10 +183,10 @@ const ItemMasterBulkUpdate = (props) => {
             setTableData(updatedGoButtonData);
         } else {
             const updatedGoButtonData = goButtonData.map((i) => {
-
+                debugger
                 return {
                     ...i,
-                    booleanValue: i.IsMixItem ? i.IsMixItem : i.IsCBMItem
+                    booleanValue: i.IsMixItem || i.IsCBMItem || i.IsStockProcessItem || i.IsThirdPartyItem
                 };
 
             });
@@ -417,7 +418,7 @@ const ItemMasterBulkUpdate = (props) => {
             formatter: (value, row, k) => {
                 if (row.SubGroupRow) {
                     const [Group, SubGroup] = row.Group_Subgroup.split(/-(.+)/);
-                    
+
                     return (
                         <GroupSubgroupDisplay group={Group} subgroup={SubGroup} />
                     );
@@ -511,7 +512,7 @@ const ItemMasterBulkUpdate = (props) => {
     };
 
     const processedData = useMemo(() => ModifyTableData_func(tableData), [tableData]);
-    
+
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>

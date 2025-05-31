@@ -49,6 +49,7 @@ import PartyMaster from "../../Adminisrator/PartyMaster/MasterAdd/PartyIndex";
 import paginationFactory from "react-bootstrap-table2-paginator";
 
 
+
 let editVal = {}
 let initial_BredcrumbMsg = `Count:0 currency_symbol 0.00 weight 0.00 kg`
 function initialState(history) {
@@ -165,11 +166,9 @@ const Order = (props) => {
     const [itemSelectDropOptions, setitemSelectOptions] = useState([]);
 
     const [selecedItemWiseOrder, setSelecedItemWiseOrder] = useState(true)
-    const [goBtnDissable, setGoBtnDissable] = useState(false)
 
 
-
-
+    const [newRowId, setNewRowId] = useState(null);
 
     const [termsAndConTable, setTermsAndConTable] = useState([]);
     const [orderTypeSelect, setorderTypeSelect] = useState([]);
@@ -336,7 +335,7 @@ const Order = (props) => {
             dispatch(getPartyListAPISuccess([]));
             dispatch(GetRoutesListSuccess([]));
             dispatch(_act.GetVenderSupplierCustomerSuccess([]));
-            setGoBtnDissable(false)
+
             setSelecedItemWiseOrder(true)
             setOrderItemTable([])
             dispatch(_act.GoButton_For_Order_AddSuccess(null))
@@ -351,7 +350,6 @@ const Order = (props) => {
     // }, [orderItemTable])
 
     const processedData = useMemo(() => ModifyTableData_func(orderItemTable), [orderItemTable]);
-
 
     useEffect(() => { // hasEditVal useEffect
 
@@ -377,7 +375,7 @@ const Order = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-                debugger
+
                 setorderdate(hasEditVal.OrderDate)
 
                 if (subPageMode === url.ORDER_4) {
@@ -432,7 +430,7 @@ const Order = (props) => {
                 // });
 
 
-                debugger
+
                 let orderItems = hasEditVal.OrderItems.map((ele, k) => {
                     // Calculate weightage and total weightage
                     const weightage = Number(ele["Weightage"]) || 0.00;
@@ -520,7 +518,7 @@ const Order = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(_act.saveOrderActionSuccess({ Status: false }))
             setSelecedItemWiseOrder(true)
-            setGoBtnDissable(false)
+
             // setOrderAmount(0);
             setTermsAndConTable([]);
             // setorderTypeSelect('');
@@ -661,6 +659,21 @@ const Order = (props) => {
             })
         }
     }, [gobutton_Add_invoice]);
+
+
+
+    useEffect(() => {
+
+        if (newRowId !== null) {
+            const inputEl = document.getElementById(`Quantity-${newRowId}`);
+            if (inputEl) {
+                inputEl.focus();
+            }
+        }
+    }, [orderItemTable]);
+
+
+
 
     // useEffect(() => {
 
@@ -830,7 +843,7 @@ const Order = (props) => {
                     return (
                         <CInput
                             key={`Quantity-${k}`}
-                            id={`Quantity-${k}`}
+                            id={`Quantity-${row.Item_id}`}
                             cpattern={(subPageMode === url.ORDER_1 || subPageMode === url.ORDER_4 || subPageMode === url.ORDER_2) ? decimalRegx_3dit : onlyNumberRegx}
                             defaultValue={(row.Quantity)}
                             className=" text-end"
@@ -847,7 +860,7 @@ const Order = (props) => {
                     <>
                         <CInput
                             key={`Quantity-${k}`}
-                            id={`Quantity-${k}`}
+                            id={`Quantity-${row.Item_id}`}
                             cpattern={(subPageMode === url.ORDER_1 || subPageMode === url.ORDER_4 || subPageMode === url.ORDER_2 || subPageMode === url.IB_SALES_ORDER || subPageMode === url.IB_ORDER) ? decimalRegx_3dit : onlyNumberRegx}
                             defaultValue={(row.Quantity)}
                             className=" text-end"
@@ -1062,34 +1075,34 @@ const Order = (props) => {
             },
             attrs: () => ({ 'data-label': "Discount/unit" }),
             headerStyle: () => {
-                return { width: '20%', textAlign: 'center' };
+                return { width: '12%', textAlign: 'center' };
             },
             hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER || isSweetAndSnacksCompany) && true,
             headerFormatter: () => {
-                const handleTypeChange = (e) => {
-                    discountTypeAllRef.current = e;
-                    orderItemTable.forEach((row, key) => {
-                        if (!row.GroupRow && !row.SubGroupRow) {
-                            row.DiscountType = e.value;
-                            if (row.Quantity !== null && row.Quantity !== undefined) {
-                                itemWise_CalculationFunc(row, undefined, orderItemTable);
-                            }
-                        }
-                    });
-                };
-                const handleValueChange = (e) => {
-                    discountTypeAllRef.current = e;
-                    orderItemTable.forEach((row, key) => {
-                        if (!row.GroupRow && !row.SubGroupRow) {
-                            row.Discount = e;
+                // const handleTypeChange = (e) => {
+                //     discountTypeAllRef.current = e;
+                //     orderItemTable.forEach((row, key) => {
+                //         if (!row.GroupRow && !row.SubGroupRow) {
+                //             row.DiscountType = e.value;
+                //             if (row.Quantity !== null && row.Quantity !== undefined) {
+                //                 itemWise_CalculationFunc(row, undefined, orderItemTable);
+                //             }
+                //         }
+                //     });
+                // };
+                // const handleValueChange = (e) => {
+                //     discountTypeAllRef.current = e;
+                //     orderItemTable.forEach((row, key) => {
+                //         if (!row.GroupRow && !row.SubGroupRow) {
+                //             row.Discount = e;
 
 
-                            if (row.Quantity !== null && row.Quantity !== undefined) {
-                                itemWise_CalculationFunc(row, undefined, orderItemTable);
-                            }
-                        }
-                    });
-                };
+                //             if (row.Quantity !== null && row.Quantity !== undefined) {
+                //                 itemWise_CalculationFunc(row, undefined, orderItemTable);
+                //             }
+                //         }
+                //     });
+                // };
                 return (
                     // <div className="" >
                     //     {orderItemTable.length <= 0 ?
@@ -1155,9 +1168,9 @@ const Order = (props) => {
 
 
 
-     
 
-       
+
+
 
 
             classes: () => "order-discount-row",
@@ -1167,94 +1180,171 @@ const Order = (props) => {
                 let { tableList } = formatExtraData;
 
                 if ((row.DiscountType === "0") || (row.DiscountType === 0)) { row.DiscountType = discountDropOption[1].value }
-                debugger
+
                 const defaultDiscountTypelabel =
                     ((row.DiscountType === "1") || (row.DiscountType === 1)) ? discountDropOption[0] : discountDropOption[1];
 
                 discountRefs.current[row.id]?.setValue(row.DiscountType);
-                debugger
+
 
                 return (
+                    // <>
+                    //     <div className="mb-2">
+                    //         <div className="parent">
+                    //             {/* <div className="child">
+                    //                 <label className="label">Type&nbsp;&nbsp;&nbsp;</label>
+                    //             </div> */}
+                    //             <div className="child">
+                    //                 <Select
+                    //                     id={`DicountType_${key}-${row.id}`}
+
+                    //                     classNamePrefix="select2-selection"
+                    //                     key={`DicountType_${key}-${row.id}`}
+                    //                     defaultValue={defaultDiscountTypelabel}
+                    //                     isDisabled={(subPageMode === url.ORDER_2)}
+                    //                     options={discountDropOption}
+                    //                     onChange={(e) => {
+                    //                         
+                    //                         // setChangeAllDiscount(false);
+                    //                         row.DiscountType = e.value;
+                    //                         row.Discount = '';
+                    //                         const elementId = `Dicount_${key}-${row.id}`;
+                    //                         const element = document.getElementById(elementId);
+                    //                         if (element) {
+                    //                             element.value = ""; // or any dynamic value
+                    //                         }
+                    //                         itemWise_CalculationFunc(row, undefined, tableList)
+                    //                     }}
+                    //                 />
+                    //             </div>
+                    //         </div>
+                    //     </div>
+                    //     <div>
+                    //         <div className="parent">
+                    //             {/* <div className="child">
+                    //                 <label className="label">Value&nbsp;</label>
+                    //             </div> */}
+                    //             <div className="child">
+                    //                 <Input
+                    //                     // className="input"
+                    //                     id={`Dicount_${key}-${row.id}`}
+                    //                     style={{ textAlign: "right" }}
+                    //                     type="text"
+                    //                     defaultValue={row.Discount}
+                    //                     disabled={(subPageMode === url.ORDER_2)}
+                    //                     // cpattern={decimalRegx}
+                    //                     onChange={(e) => {
+                    //                         
+                    //                         e.target.value = e.target.value.replace(/^\.+/, '');
+                    //                         e.target.value = e.target.value.replace(/^00+/, '0');
+                    //                         let e_val = Number(e.target.value);
+
+
+                    //                         if (row.DiscountType === 2) {// Discount type 2 represents "percentage"
+                    //                             if (e_val >= 100) { // Limit the input to the range of 0 to 100
+                    //                                 e.target.value = 100; // Set the input value to 100 if it exceeds 100
+                    //                             } else if (!(e_val >= 0 && e_val < 100)) {
+                    //                                 e.target.value = ""; // Clear the input value if it is less than 0
+                    //                             }
+                    //                         }
+
+
+                    //                         row.Discount = e.target.value;
+                    //                         // setChangeAllDiscount(false);
+                    //                         itemWise_CalculationFunc(row, undefined, tableList)
+                    //                     }}
+
+                    //                 />
+                    //             </div>
+                    //         </div>
+                    //     </div>
+
+                    // </>
                     <>
-                        <div className="mb-2">
-                            <div className="parent">
-                                <div className="child">
-                                    <label className="label">Type&nbsp;&nbsp;&nbsp;</label>
-                                </div>
-                                <div className="child">
-                                    <Select
-                                        id={`DicountType_${key}-${row.id}`}
+                        <div className="d-flex align-items-center gap-2 ">
 
-                                        classNamePrefix="select2-selection"
-                                        key={`DicountType_${key}-${row.id}`}
-                                        defaultValue={defaultDiscountTypelabel}
-                                        isDisabled={(subPageMode === url.ORDER_2)}
-                                        options={discountDropOption}
-                                        onChange={(e) => {
-                                            debugger
-                                            // setChangeAllDiscount(false);
-                                            row.DiscountType = e.value;
-                                            row.Discount = '';
-                                            const elementId = `Dicount_${key}-${row.id}`;
-                                            const element = document.getElementById(elementId);
-                                            if (element) {
-                                                element.value = ""; // or any dynamic value
-                                            }
-                                            itemWise_CalculationFunc(row, undefined, tableList)
-                                        }}
-                                    />
-                                </div>
-                            </div>
+
+                            <Input
+                                id={`Dicount_${key}-${row.id}`}
+                                style={{ textAlign: "right", width: "100px" }}
+                                type="text"
+                                defaultValue={row.Discount}
+                                disabled={(subPageMode === url.ORDER_2)}
+                                onChange={(e) => {
+                                    e.target.value = e.target.value.replace(/^\.+/, '');
+                                    e.target.value = e.target.value.replace(/^00+/, '0');
+                                    let e_val = Number(e.target.value);
+
+                                    if (row.DiscountType === 2) {
+                                        if (e_val >= 100) {
+                                            e.target.value = 100;
+                                        } else if (!(e_val >= 0 && e_val < 100)) {
+                                            e.target.value = "";
+                                        }
+                                    }
+
+                                    row.Discount = e.target.value;
+                                    itemWise_CalculationFunc(row, undefined, tableList);
+                                }}
+
+                            />
+
+                            <Select
+                                id={`DicountType_${key}-${row.id}`}
+                                classNamePrefix="select2-selection"
+                                key={`DicountType_${key}-${row.id}`}
+                                defaultValue={defaultDiscountTypelabel}
+                                isDisabled={(subPageMode === url.ORDER_2)}
+                                options={discountDropOption}
+                                styles={{
+                                    container: (provided) => ({
+                                        ...provided,
+                                        width: 70,
+                                        height: 38,
+                                    }),
+                                }}
+                                onChange={(e) => {
+                                    row.DiscountType = e.value;
+                                    row.Discount = '';
+                                    const elementId = `Dicount_${key}-${row.id}`;
+                                    const element = document.getElementById(elementId);
+                                    if (element) {
+                                        element.value = "";
+                                    }
+                                    itemWise_CalculationFunc(row, undefined, tableList);
+                                }}
+                            />
                         </div>
-                        <div>
-                            <div className="parent">
-                                <div className="child">
-                                    <label className="label">Value&nbsp;</label>
-                                </div>
-                                <div className="child">
-                                    <Input
-                                        // className="input"
-                                        id={`Dicount_${key}-${row.id}`}
-                                        style={{ textAlign: "right" }}
-                                        type="text"
-                                        defaultValue={row.Discount}
-                                        disabled={(subPageMode === url.ORDER_2)}
-                                        // cpattern={decimalRegx}
-                                        onChange={(e) => {
-                                            debugger
-                                            e.target.value = e.target.value.replace(/^\.+/, '');
-                                            e.target.value = e.target.value.replace(/^00+/, '0');
-                                            let e_val = Number(e.target.value);
 
-
-                                            if (row.DiscountType === 2) {// Discount type 2 represents "percentage"
-                                                if (e_val >= 100) { // Limit the input to the range of 0 to 100
-                                                    e.target.value = 100; // Set the input value to 100 if it exceeds 100
-                                                } else if (!(e_val >= 0 && e_val < 100)) {
-                                                    e.target.value = ""; // Clear the input value if it is less than 0
-                                                }
-                                            }
-
-
-                                            row.Discount = e.target.value;
-                                            // setChangeAllDiscount(false);
-                                            itemWise_CalculationFunc(row, undefined, tableList)
-                                        }}
-
-                                    />
-                                </div>
-                            </div>
-                        </div>
 
                     </>
+
                 );
 
             },
 
+        },
 
+        { //------------- Comment column ----------------------------------
+            text: "Amount",
+            classes: 'table-cursor-pointer',
+            headerStyle: () => {
+                return { width: '8%', textAlign: 'right' };
+            },
+            dataField: "",
+            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER) && true,
+            attrs: () => ({
+                style: { textAlign: 'right' }  // Align body cells to the right
+            }),
+            formatter: (value, row, k) => {
+                if (row.GroupRow || row.SubGroupRow) { return }
+                return (
+                    <span   >
+                        <span id={`Item-Amount-${row.Item_id}`}>0.00</span>
+                    </span>
+                )
 
-
-
+            },
         },
 
         { //------------- Comment column ----------------------------------
@@ -1309,14 +1399,16 @@ const Order = (props) => {
 
         if (subPageMode === url.ORDER_4) {
             dispatch(_act.getSupplierAddress(e.value));
-            let Date = currentDate_ymd;
+            if (!_cfunc.loginUserIsFranchisesRole()) {
 
-            if ((e.FSSAIExipry === "") || (e.FSSAIExipry === null)) {
-                setFSSAI_Date_Is_Expired("There is No FSSAI Expiry Date Please Insert FSSAI Date!");
-            } else if (e.FSSAIExipry < Date) {
-                setFSSAI_Date_Is_Expired("FSSAI Expired");
-            } else {
-                setFSSAI_Date_Is_Expired("");
+                let Date = currentDate_ymd;
+                if ((e.FSSAIExipry === "") || (e.FSSAIExipry === null)) {
+                    setFSSAI_Date_Is_Expired("There is No FSSAI Expiry Date Please Insert FSSAI Date!");
+                } else if (e.FSSAIExipry < Date) {
+                    setFSSAI_Date_Is_Expired("FSSAI Expired");
+                } else {
+                    setFSSAI_Date_Is_Expired("");
+                }
             }
         }
         setSelecedItemWiseOrder(true)
@@ -1416,9 +1508,11 @@ const Order = (props) => {
             totals.weightageSum = totals.weightageSum + Overweight
         }
 
-
+        const Item_Amount_Element = document.getElementById(`Item-Amount-${row.Item_id}`)
+        if (Item_Amount_Element) {
+            Item_Amount_Element.innerText = _cfunc.amountCommaSeparateFunc(Number(row.Amount).toFixed(2));
+        }
         const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(totals.amountSum.toFixed(2))
-
 
         const elements = document.querySelectorAll('.amount-countable-Calulation');
 
@@ -1434,7 +1528,7 @@ const Order = (props) => {
     const item_AddButtonHandler = () => {
 
 
-        setGoBtnDissable(true)
+
         let isfound = orderItemTable.find(i => i.value === itemSelect.value);
 
         if (!itemSelect) {
@@ -1450,7 +1544,7 @@ const Order = (props) => {
 
 
         dispatch(_act.BreadcrumbShowCountlabel(`Count:${[itemSelect].concat(orderItemTable).length} currency_symbol ${state.values.OrderAmount} weight ${state.values.Total_weigtage} kg`))
-
+        setNewRowId(itemSelect.Item_id)
         setItemSelect('')
     }
 
@@ -1536,7 +1630,7 @@ const Order = (props) => {
 
         setOrderItemTable(itemSelectDropOptions)
         setItemSelect(allLabelWithBlank)
-        setGoBtnDissable(true)
+
     };
 
 
@@ -1893,7 +1987,7 @@ const Order = (props) => {
 
                                         {(subPageMode === ORDER_4 &&
 
-                                            allowedRoles.includes(_cfunc.loginRoleID().toString()) )? (
+                                            allowedRoles.includes(_cfunc.loginRoleID().toString())) ? (
 
                                             <Col sm="3">
                                                 <FormGroup className="row mt-2">
@@ -2082,7 +2176,7 @@ const Order = (props) => {
                                                             disabled={goBtnloading}
                                                             onClick={() => {
                                                                 // setSupplierSelect('')
-                                                                setGoBtnDissable(false)
+
                                                                 setItemSelect('')
                                                                 setSelecedItemWiseOrder(true)
                                                                 if (pageMode === mode.edit) {
