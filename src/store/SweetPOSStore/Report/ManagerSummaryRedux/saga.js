@@ -21,7 +21,7 @@ function* ManagerSummaryReport_GenFunc({ config }) {
 		OrderData = yield response.Data[0].OrderData.map((element) => {
 			finalOrderAmount += getFixedNumber(element.OrderAmount, 2);
 			finalOrderAdvanceAmount += getFixedNumber(element.AdvanceAmount, 2);
-			element["TotalAmount"] = getFixedNumber(element.OrderAmount, 2) + getFixedNumber(element.AdvanceAmount, 2);
+			element["TotalAmount"] = "Blank";
 			GrandOrderTotal += getFixedNumber(element.TotalAmount, 2)
 			return element
 		})
@@ -39,7 +39,7 @@ function* ManagerSummaryReport_GenFunc({ config }) {
 			FullOrderNumber: "Total",
 			AdvanceAmount: (finalOrderAdvanceAmount).toFixed(2),
 			OrderAmount: (finalOrderAmount).toFixed(2),
-			TotalAmount: (GrandOrderTotal).toFixed(2)
+			TotalAmount: "Blank"
 		})
 
 		InvoiceData.push({
@@ -47,7 +47,7 @@ function* ManagerSummaryReport_GenFunc({ config }) {
 			FullInvoiceNumber: "Total",
 			GrandTotal: (finalInvoiceAmount).toFixed(2),
 			AdvanceAmount: (finalInvoiceAdvanceAmount).toFixed(2),
-			TotalAmount:	(GrandInvoiceTotal).toFixed(2)
+			TotalAmount: (GrandInvoiceTotal).toFixed(2)
 		})
 
 		response["Data"] = [{ OrderData, InvoiceData }]
