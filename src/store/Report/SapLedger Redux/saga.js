@@ -42,7 +42,7 @@ function* SapLedger_GoBtn_GenFuc({ filters }) {
 				Status: true,
 				StatusCode: 200,
 				count: response.Data.count,
-				OpeingBal: response.Data.OpeingBal,
+				OpeningBal: response.Data.OpeningBal,
 				ClosingBal: response.Data.ClosingBal,
 				tableData: newresponse
 			};

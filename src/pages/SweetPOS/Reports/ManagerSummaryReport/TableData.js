@@ -57,7 +57,7 @@ export const Rows_1 = (data) => {
             `${element.FullOrderNumber}`,
             `${getFixedNumber(element.AdvanceAmount, 2).toFixed(2)}`,
             `${getFixedNumber(element.OrderAmount, 2).toFixed(2)}`,
-            `${getFixedNumber(element.TotalAmount, 2).toFixed(2)}`,
+            `Blank`,
 
         ];
 
@@ -79,14 +79,15 @@ export const Rows_1 = (data) => {
             `Order Total`,
             `${numberWithCommas(Number(finalOrderAdvanceAmount).toFixed(2))}`,
             `${numberWithCommas(Number(finalOrderAmount).toFixed(2))}`,
-            `${numberWithCommas(Number(finalOrderAdvanceAmount + finalOrderAmount).toFixed(2))}`,
+            `Blank`,
 
         ]);
     }
     returnArr.push([
         `Cash`,
-        ``,
-        ``,
+        `Advance Amount`,
+        `Net Amount`,
+        `Total`,
 
     ]);
     data.InvoiceData.forEach((element, key) => {

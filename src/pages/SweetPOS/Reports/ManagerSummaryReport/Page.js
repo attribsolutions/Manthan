@@ -166,8 +166,17 @@ const ManagerSummaryReport = (tableData) => {
 
 
 
+
+
+                    if (data1.row.cells[3].raw === "Blank") {
+                        data1.row.cells[2].colSpan = 2;
+                        data1.row.cells[0].styles.fontSize = 8;
+                        data1.row.cells[0].styles.fontStyle = "bold";
+                    }
+
+
                     if (data1.row.cells[0].raw === "Order") {
-                        data1.row.cells[0].colSpan = 3;
+                        data1.row.cells[0].colSpan = 4;
                         data1.row.cells[0].styles.fontSize = 8;
                         data1.row.cells[0].styles.fontStyle = "bold";
 
@@ -175,10 +184,30 @@ const ManagerSummaryReport = (tableData) => {
                     }
 
                     if (data1.row.cells[0].raw === "Cash") {
-                        data1.row.cells[0].colSpan = 3;
-                        data1.row.cells[0].styles.fontSize = 8;
+                        debugger
+                        data1.row.cells[0].styles.fontSize = 7;
                         data1.row.cells[0].styles.fontStyle = "bold";
 
+                        data1.row.cells[1].styles.fontSize = 7;
+                        data1.row.cells[1].styles.fontStyle = "bold";
+                        data1.row.cells[1].styles.halign = "center";
+
+
+                        data1.row.cells[2].styles.fontSize = 7;
+                        data1.row.cells[2].styles.fontStyle = "bold";
+                        data1.row.cells[2].styles.halign = "center";
+
+
+                        data1.row.cells[3].styles.fontSize = 7;
+                        data1.row.cells[3].styles.fontStyle = "bold";
+                        data1.row.cells[3].styles.halign = "center";
+
+                    }
+
+
+
+                    if (data1.row.cells[3].raw === "Total Amount") {
+                        data1.row.cells[2].colSpan = 2;
 
                     }
 
