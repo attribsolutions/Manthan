@@ -1,3 +1,4 @@
+
 import {
 
     DELETE_SCHEME_TYPE_ID,
@@ -15,14 +16,13 @@ import {
     UPDATE_SCHEME_TYPE_ID,
     UPDATE_SCHEME_TYPE_ID_SUCCESS,
 
-    VALIDE_SCHEME_TYPE_ID,
-    VALIDE_SCHEME_TYPE_ID_SUCCESS,
+
 
     SCHEME_TYPE_ERROR_ACTION
 } from "./actionType"
 
 const INIT_STATE = {
-    GroupType: [],
+    SchemeTypeList: [],
     PostData: { Status: false },
     deleteMessage: { Status: false },
     editData: { Status: false },
@@ -30,11 +30,12 @@ const INIT_STATE = {
     saveBtnloading: false,
     listBtnLoading: false,
     goBtnLoading: false,
-    VoucherValidityData: { Status: false },
-    VoucherLoading: false,
+
+
 }
 
 const SchemeTypeReducer = (state = INIT_STATE, action) => {
+
     switch (action.type) {
 
         case GET_SCHEME_TYPE_LIST:
@@ -44,15 +45,15 @@ const SchemeTypeReducer = (state = INIT_STATE, action) => {
 
             }
 
-        case   GET_SCHEME_TYPE_LIST_SUCCESS:
+        case GET_SCHEME_TYPE_LIST_SUCCESS:
             return {
                 ...state,
-                GroupType: action.payload,
+                SchemeTypeList: action.payload,
                 goBtnLoading: false,
 
             }
 
-        case  SAVE_SCHEME_TYPE_MASTER:
+        case SAVE_SCHEME_TYPE_MASTER:
             return {
                 ...state,
                 saveBtnloading: true
@@ -84,20 +85,7 @@ const SchemeTypeReducer = (state = INIT_STATE, action) => {
             }
 
 
-        case  VALIDE_SCHEME_TYPE_ID:
-            return {
-                ...state,
-                VoucherLoading: true,
-            }
 
-
-
-        case VALIDE_SCHEME_TYPE_ID_SUCCESS:
-            return {
-                ...state,
-                VoucherLoading: false,
-                VoucherValidityData: action.payload,
-            }
 
         case UPDATE_SCHEME_TYPE_ID:
             return {

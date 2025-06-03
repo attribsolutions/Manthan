@@ -237,11 +237,10 @@ export const VOUCHER_API = '/giftvouchervalidityCheck'
 
 // SCHEME API
 
-export const SCHEME_TYPE_LIST_API = "/SchemeType"  //--Get
+export const SCHEME_TYPE_SINGLE_GET_API = "SchemeTypeSingleGet"  //--Get
 
-export const SCHEME_TYPE_API = "/SchemeType"     //-- 
-export const Scheme_Type__Delete_API ="/SchemeType/id"  // --Delete
-export const Scheme_Type_Update_API = "/SchemeType/id "  // --put
+export const SCHEME_TYPE = "/SchemeType"     //-- 
+  // --put
 
 
 // Group Api

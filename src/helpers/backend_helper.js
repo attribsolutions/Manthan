@@ -326,11 +326,11 @@ export const Voucher_Validity_Check_API = ({ Voucher_Code }) => get(`${url.VOUCH
 
 
 
-export const Scheme_Type_API = ({ jsonBody }) => post(url.SCHEME_TYPE_LIST_API, jsonBody)
-export const Scheme_Type_Post_API = ({ jsonBody }) => post(url.SCHEME_TYPE_API, jsonBody)// post api
-export const Scheme_Type__Delete_API = ({ deleteId }) => del(`${url.SCHEME_TYPE_API}/${deleteId}`)// delete api
-export const Scheme_Type_Edit_API = ({ editId }) => get(`${url.SCHEME_TYPE_API}/${editId}`)// edit api
-export const Scheme_Type_Update_API = ({ jsonBody, updateId }) => put(`${url.SCHEME_TYPE_API}/${updateId}`, jsonBody)// update api
+export const get_Scheme_Type_API = () => get(url. SCHEME_TYPE)
+export const Scheme_Type_Post_API = ({ jsonBody }) => post(url. SCHEME_TYPE, jsonBody)// post api
+export const Scheme_Type__Delete_API = ({ deleteId }) => del(`${url. SCHEME_TYPE}/${deleteId}`)// delete api
+export const Scheme_Type_Edit_API = ({ editId }) => get(`${url.SCHEME_TYPE_SINGLE_GET_API}/${editId}`)// edit api
+export const Scheme_Type_Update_API = ({ jsonBody, updateId }) => put(`${url. SCHEME_TYPE}/${updateId}`, jsonBody)// update api
 
 
 

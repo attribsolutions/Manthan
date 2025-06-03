@@ -24,28 +24,21 @@ import {
     resetFunction,
 
 } from "../../../components/Common/validationFunction";
-import {
-    editGroupTypeIDSuccess,
-    saveGroupTypeMasterSuccess,
-} from "../../../store/Administrator/GroupTypeRedux/action";
+
 import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     btnIsDissablefunc,
     metaTagLabel,
     loginPartyID,
-    currentDate_ymd
+
 } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { saveSchemeType, saveSchemeTypeSuccess, updateSchemeTypeID, updateSchemeTypeIDSuccess, ValideSchemeTypeID, ValideSchemeTypeIDSuccess } from "../../../store/Administrator/SchemeRedux/action";
-import { C_DatePicker } from "../../../CustomValidateForm";
-import { hideBtnCss } from "../../../components/Common/ListActionsButtons";
-import { SchemeType_Validity_Check_API } from "../../../helpers/backend_helper";
-import { SAVE_SCHEME_TYPE_SUCCESS, UPDATE_SCHEME_TYPE_ID, VALIDE_SCHEME_TYPE_ID, VALIDE_SCHEME_TYPE_ID_SUCCESS } from "../../../store/Administrator/SchemeRedux/actionType";
-import { EDIT_GROUP_TYPE_ID_SUCCESS } from "../../../store/Administrator/GroupTypeRedux/actionType";
+import { editSchemeTypeIDSuccess, saveSchemeType, saveSchemeTypeSuccess, updateSchemeTypeID, updateSchemeTypeIDSuccess,  } from "../../../store/Administrator/SchemeRedux/action";
+
 
 const SchemeType = (props) => {
 
@@ -57,7 +50,7 @@ const SchemeType = (props) => {
         UsageTime: "",
         UsageType: "",
         BillEffect: false, // This tracks the checkbox
-        IsQRApplicable: ""
+        IsQRApplicable:false,
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
@@ -113,7 +106,7 @@ const SchemeType = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const [UsageTime, setUsageTime] = useState(""); // "multiple" | "single"
-const [UsageType, setUsageType] = useState(""); // "online" | "offline"
+    const [UsageType, setUsageType] = useState(""); // "online" | "offline"
 
 
     const values = { ...state.values }
@@ -183,20 +176,25 @@ const [UsageType, setUsageType] = useState(""); // "online" | "offline"
 
             if (hasEditVal) {
                 setEditData(hasEditVal);
-                const { id, Name, IsReserved, Sequence } = hasEditVal
+                const {id, SchemeTypeName, UsageTime, UsageType, BillEffect,IsQRApplicable } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
-                hasValid.Name.valid = true;
-                hasValid.IsReserved.valid = true;
-                hasValid.Sequence.valid = true;
+            
+                hasValid.SchemeTypeName.valid = true;
+                hasValid.UsageTime.valid = true;
+                hasValid.UsageType.valid = true;
+                hasValid.BillEffect.valid = true;
+                hasValid.IsQRApplicable.valid = true;
 
-                values.id = id
-                values.Name = Name;
-                values.IsReserved = IsReserved;
-                values.Sequence = Sequence;
+                values.id = id;
+                values.SchemeTypeName = SchemeTypeName;
+                values.UsageTime = UsageTime;
+                values.UsageType = UsageType;
+                values.BillEffect = BillEffect;
+                values.IsQRApplicable = IsQRApplicable;
 
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(editGroupTypeIDSuccess({ Status: false }))
+                dispatch(editSchemeTypeIDSuccess({ Status: false }))
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
@@ -221,7 +219,7 @@ const [UsageType, setUsageType] = useState(""); // "online" | "offline"
                     Type: 1,
                     Message: postMsg.Message,
                 })
-                history.push({ pathname: url.SCHEME_TYPE })
+                history.push({ pathname: url.SCHEME_TYPE_LIST })
             }
             else {
                 dispatch(Breadcrumb_inputName(''))
@@ -229,7 +227,7 @@ const [UsageType, setUsageType] = useState(""); // "online" | "offline"
                     Type: 1,
                     Message: postMsg.Message,
                 })
-                if (promise) { history.push({ pathname: url.SCHEME_TYPE }) }
+                if (promise) { history.push({ pathname: url.SCHEME_TYPE_LIST }) }
             }
 
         } else if
@@ -274,20 +272,23 @@ const [UsageType, setUsageType] = useState(""); // "online" | "offline"
         const btnId = event.target.id
         try {
             if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
 
                 const jsonBody = JSON.stringify({
                     SchemeTypeName: values.SchemeTypeName,
                     UsageTime: values.UsageTime,
                     UsageType: values.UsageType,
                     BillEffect: values.BillEffect,
-                    IsQRApplication: values.IsQRApplication,
+                    IsQRApplicable: values.IsQRApplicable,
                     Party: loginPartyID(),
 
                 });
 
                 if (pageMode === mode.edit) {
+
                     dispatch(updateSchemeTypeID({ jsonBody, updateId: values.id, btnId }));
                 }
+               
                 else {
                     dispatch(saveSchemeType({ jsonBody, btnId }));
                 }
@@ -298,7 +299,7 @@ const [UsageType, setUsageType] = useState(""); // "online" | "offline"
 
 
     // Group 1: Online / Offline
-  
+
 
     const handleChangeOnOf = (value) => {
         setUsageType(prev => (prev === value ? "" : value));
@@ -310,6 +311,16 @@ const [UsageType, setUsageType] = useState(""); // "online" | "offline"
     const handleModeChange = (value) => {
         setUsageTime(prev => (prev === value ? "" : value));
     };
+
+    // const handleUsageTypeChange = (type) => {
+    //     setState(prev => ({
+    //         ...prev,
+    //         values: {
+    //             ...prev.values,
+    //             UsageType: type
+    //         }
+    //     }));
+    // };
 
 
 
@@ -333,13 +344,16 @@ const [UsageType, setUsageType] = useState(""); // "online" | "offline"
                             <CardBody className=" vh-10 0 text-black"  >
                                 <form noValidate>
                                     <Card>
-                                        <CardBody className="c_card_body">
+                                        <CardBody className="c_card_body ">
                                             <Row>
-                                                <Col sm={6}>
-                                                    <Label htmlFor="validationCustom01" className="me-2">{fieldLabel.SchemeTypeName}</Label>
+                                                <Col sm={12} >
+                                                   
                                                     <FormGroup className="mb-2 ">
                                                         <Row>
-                                                            <Col sm={8}>
+                                                            <Col sm={2}>
+                                                            <Label htmlFor="validationCustom01" className="me-2">{fieldLabel.SchemeTypeName}</Label>
+                                                            </Col>
+                                                            <Col sm={6}>
                                                                 <Input
                                                                     name="SchemeTypeName"
                                                                     type="text"
@@ -366,35 +380,62 @@ const [UsageType, setUsageType] = useState(""); // "online" | "offline"
                                                         <Col sm={4}>
                                                             <FormGroup className="mb-3 me-3">
                                                                 <Row>
-                                                                    <Col sm={5} >
-                                                                        <Label htmlFor="validationCustom01" className="mt-3  me-3"> {fieldLabel.UsageTime} </Label>
+                                                                    <Col sm={6}>
+                                                                        <Label htmlFor="validationCustom01" className="mt-4 me-2">{fieldLabel.UsageTime}</Label>
                                                                     </Col>
-                                                                    <Col sm={7}>
-                                                                        <div className="btn-group mt-2" role="group" aria-label="Basic checkbox toggle button group">
+                                                                    <Col className="mt-3 ms-2" sm={5}>
+                                                                        <div className="btn-group mt-1" role="group" aria-label="Basic checkbox toggle button group">
 
                                                                             <input
                                                                                 type="checkbox"
                                                                                 id="btncheckMultiple"
                                                                                 className="btn-check"
                                                                                 autoComplete="off"
-                                                                                checked={UsageTime === "multiple"}
-                                                                                onChange={() => handleModeChange("multiple")}
+                                                                                checked={values.UsageTime === "multiple"}
+                                                                                onChange={() =>
+                                                                                    setState(prev => ({
+                                                                                        ...prev,
+                                                                                        values: {
+                                                                                            ...prev.values,
+                                                                                            UsageTime: "multiple"
+                                                                                        }
+                                                                                    }))
+                                                                                }
                                                                             />
-                                                                            <label className="btn btn-outline-secondary" htmlFor="btncheckMultiple">Multiple</label>
+                                                                            <label
+                                                                                className={`btn btn-outline-secondary ${values.UsageTime === "multiple" ? "active" : ""}`}
+                                                                                htmlFor="btncheckMultiple"
+                                                                            >
+                                                                                Multiple
+                                                                            </label>
 
                                                                             <input
                                                                                 type="checkbox"
                                                                                 id="btncheckSingle"
                                                                                 className="btn-check"
                                                                                 autoComplete="off"
-                                                                                checked={UsageTime === "single"}
-                                                                                onChange={() => handleModeChange("single")}
+                                                                                checked={values.UsageTime === "single"}
+                                                                                onChange={() =>
+                                                                                    setState(prev => ({
+                                                                                        ...prev,
+                                                                                        values: {
+                                                                                            ...prev.values,
+                                                                                            UsageTime: "single"
+                                                                                        }
+                                                                                    }))
+                                                                                }
                                                                             />
-                                                                            <label className="btn btn-outline-secondary" htmlFor="btncheckSingle">Single</label>
+                                                                            <label
+                                                                                className={`btn btn-outline-secondary ${values.UsageTime === "single" ? "active" : ""}`}
+                                                                                htmlFor="btncheckSingle"
+                                                                            >
+                                                                                Single
+                                                                            </label>
 
                                                                         </div>
                                                                     </Col>
                                                                 </Row>
+
                                                             </FormGroup>
                                                         </Col>
                                                         {/* </Row> */}
@@ -402,35 +443,62 @@ const [UsageType, setUsageType] = useState(""); // "online" | "offline"
                                                         <Col sm={8}>
                                                             <FormGroup className=" ">
                                                                 <Row>
-                                                                    <Col sm={3} >
-                                                                        <Label htmlFor="validationCustom01" className="mt-3">  {fieldLabel.UsageType} </Label>
+                                                                    <Col sm={4}>
+                                                                        <Label htmlFor="validationCustom01" className="mt-4 ms-5">{fieldLabel.UsageType}</Label>
                                                                     </Col>
-                                                                    <Col sm={9}>
-                                                                        <div className="btn-group mt-2" role="group" aria-label="Basic checkbox toggle button group">
+                                                                    <Col sm={8}>
+                                                                        <div className="btn-group mt-3 ms-2 " role="group" aria-label="Basic checkbox toggle button group">
 
                                                                             <input
                                                                                 type="checkbox"
                                                                                 id="btncheckOnline"
                                                                                 className="btn-check"
                                                                                 autoComplete="off"
-                                                                                checked={UsageType === "online"}
-                                                                                onChange={() => handleChangeOnOf("online")}
+                                                                                checked={values.UsageType === "online"}
+                                                                                onChange={() =>
+                                                                                    setState(prev => ({
+                                                                                        ...prev,
+                                                                                        values: {
+                                                                                            ...prev.values,
+                                                                                            UsageType: "online"
+                                                                                        }
+                                                                                    }))
+                                                                                }
                                                                             />
-                                                                            <label className="btn btn-outline-secondary" htmlFor="btncheckOnline">Online</label>
+                                                                            <label
+                                                                                className={`btn btn-outline-secondary ${values.UsageType === "online" ? "active" : ""}`}
+                                                                                htmlFor="btncheckOnline"
+                                                                            >
+                                                                                Online
+                                                                            </label>
 
                                                                             <input
                                                                                 type="checkbox"
                                                                                 id="btncheckOffline"
                                                                                 className="btn-check"
                                                                                 autoComplete="off"
-                                                                                checked={UsageType === "offline"}
-                                                                                onChange={() => handleChangeOnOf("offline")}
+                                                                                checked={values.UsageType === "offline"}
+                                                                                onChange={() =>
+                                                                                    setState(prev => ({
+                                                                                        ...prev,
+                                                                                        values: {
+                                                                                            ...prev.values,
+                                                                                            UsageType: "offline"
+                                                                                        }
+                                                                                    }))
+                                                                                }
                                                                             />
-                                                                            <label className="btn btn-outline-secondary" htmlFor="btncheckOffline">Offline</label>
+                                                                            <label
+                                                                                className={`btn btn-outline-secondary ${values.UsageType === "offline" ? "active" : ""}`}
+                                                                                htmlFor="btncheckOffline"
+                                                                            >
+                                                                                Offline
+                                                                            </label>
 
                                                                         </div>
                                                                     </Col>
                                                                 </Row>
+
                                                             </FormGroup>
                                                         </Col>
 
@@ -469,21 +537,27 @@ const [UsageType, setUsageType] = useState(""); // "online" | "offline"
                                                         {/* </Row> */}
 
                                                         <Col sm={8}>
-                                                            <FormGroup className="mb-3 ms-3">
+                                                            <FormGroup className="mb-3 ms-5">
                                                                 <Row>
-                                                                    <Col sm={3} >
-                                                                        <Label htmlFor="validationCustom01">{fieldLabel.IsQRApplicable}  </Label>
+                                                                    <Col sm={3}>
+                                                                        <Label htmlFor="validationCustom01">{fieldLabel.IsQRApplicable}</Label>
                                                                     </Col>
-                                                                    <Col sm={9} >
+                                                                    <Col sm={9}>
                                                                         <Input
                                                                             style={{ marginLeft: "53px" }}
                                                                             type="checkbox"
                                                                             className="p-2"
-
-
-                                                                        >
-                                                                        </Input>
-
+                                                                            checked={values.IsQRApplicable} // Bind to state
+                                                                            onChange={(e) => {
+                                                                                setState(prev => ({
+                                                                                    ...prev,
+                                                                                    values: {
+                                                                                        ...prev.values,
+                                                                                        IsQRApplicable: e.target.checked // Update state with true/false
+                                                                                    }
+                                                                                }));
+                                                                            }}
+                                                                        />
                                                                     </Col>
                                                                 </Row>
                                                             </FormGroup>
@@ -502,9 +576,10 @@ const [UsageType, setUsageType] = useState(""); // "online" | "offline"
                                             <FormGroup>
                                                 <Row>
                                                     <Col sm={2}>
-                                                        <SaveButton pageMode={pageMode}
+                                                        <SaveButton 
+                                                        pageMode={pageMode}
                                                             loading={saveBtnloading}
-
+                        
                                                             onClick={SaveHandler}
                                                             userAcc={userPageAccessState}
                                                             editCreatedBy={editCreatedBy}
