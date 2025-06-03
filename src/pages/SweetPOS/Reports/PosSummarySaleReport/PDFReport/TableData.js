@@ -1,5 +1,5 @@
-import { getFixedNumber, groupBy } from "../../../../components/Common/CommonFunction";
-import { numberWithCommas } from "../../../../Reports/Report_common_function";
+import { getFixedNumber, groupBy } from "../../../../../components/Common/CommonFunction";
+import { numberWithCommas } from "../../../../../Reports/Report_common_function";
 
 // original
 export const columns_1 = [

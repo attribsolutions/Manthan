@@ -23,6 +23,9 @@ export const UserList = url.USER
 export const RoleMaster = url.ROLE_lIST
 export const RoleList = url.ROLE
 
+export const Scheme_Master = url.SCHEME_MASTER_LIST
+export const Scheme_Master_List = url.SCHEME_MASTER
+
 export const RoleAccess = url.ROLEACCESS_lIST
 export const RoleAccessList = url.ROLEACCESS
 
@@ -364,7 +367,7 @@ export const ClaimTrackingReport = url.CLAIM_TRACKING_REPORT
 
 export const TCSAmountReport = url.TCS_AMOUNT_REPORT
 
-export const CX_DD_Difference = url.CX_DD_DIFFERENCE_REPORT 
+export const CX_DD_Difference = url.CX_DD_DIFFERENCE_REPORT
 
 
 export const Sales_Order_List_2 = url.APP_ORDER_LIST

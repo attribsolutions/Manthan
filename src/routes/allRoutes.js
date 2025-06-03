@@ -268,6 +268,8 @@ import ManagerSummary from "../pages/SweetPOS/Reports/ManagerSummaryReport/Manag
 import BillDeleteSummaryReport from "../Reports/BillSummaryDeleteReport/index.js";
 import SchemeType from "../pages/Adminisrator/SchemeType/SchemeType.js";
 import SchemeTypeList from "../pages/Adminisrator/SchemeType/ScemeTypeList.js";
+import SchemeMaster from "../pages/Adminisrator/SchemeMaster/SchemeMaster.js";
+import SchemeMasterList from "../pages/Adminisrator/SchemeMaster/SchemeMasterList.js";
 
 
 const userRoutes = [
@@ -375,7 +377,8 @@ const userRoutes = [
 
 	{ path: path.GROUP_SUBGROUP, component: GroupSubGroup },//not party wise
 
-
+	{ path: path.SCHEME_MASTER, component: SchemeMaster },//not party wise
+	{ path: path.SCHEME_MASTER_LIST, component: SchemeMasterList },//not party wise
 
 
 	{ path: path.GST, component: GSTMaster },//not party wise
@@ -465,9 +468,9 @@ const userRoutes = [
 
 	{ path: path.VOUCHER, component: Voucher },//not party wise
 	{ path: path.VOUCHER_LIST, component: VoucherList },//not party wise
-	
-    {path: path.SCHEME_TYPE, component: SchemeType   },
-	{path: path.SCHEME_TYPE_LIST, component: SchemeTypeList},
+
+	{ path: path.SCHEME_TYPE, component: SchemeType },
+	{ path: path.SCHEME_TYPE_LIST, component: SchemeTypeList },
 
 	//******************************* Inventory Module ************************************//
 	{ path: path.IB_INVOICE_LIST, component: IBInvoiceList },
@@ -739,7 +742,7 @@ const userRoutes = [
 	{ path: path.GRN_PENDING_REPORT, component: GRNPendingReport },//not party wise
 
 
-	{path: path.Bill_Delete_Summary_Report,  component: BillDeleteSummaryReport },  
+	{ path: path.Bill_Delete_Summary_Report, component: BillDeleteSummaryReport },
 
 	{ path: path.DATA_EXPORT_TO_SAP, component: DataExportToSAP },//not party wise
 
