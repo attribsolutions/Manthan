@@ -15,9 +15,9 @@ import {
     VALIDE_SCHEME_TYPE_ID_SUCCESS
 } from "./actionType";
 
-export const getSchemeTypelist = (config = {}) => ({// get List Action
+export const getSchemeTypelist = () => ({// get List Action
     type: GET_SCHEME_TYPE_LIST,
-    config
+
 });
 
 export const getSchemeTypelistSuccess = (pages) => ({// get List success

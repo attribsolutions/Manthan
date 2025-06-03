@@ -57,7 +57,8 @@ function* Update_Voucher_ID_GenFun({ config }) {
     } catch (error) { yield put(VoucherErrorAction()) }
 }
 
-function* Delete_Voucher_ID_GenFun({ config }) {                     // delete API
+function* Delete_Voucher_ID_GenFun({ config }) {  
+    debugger                                           // delete API
     try {
         const response = yield call(Voucher__Delete_API, config);
         yield put(deleteVoucherIDSuccess(response))
