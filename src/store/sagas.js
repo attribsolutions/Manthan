@@ -277,7 +277,7 @@ export default function* rootSaga() {
 		fork(Css_Item_Sale_ReportSaga),
 		fork(ManagerSummaryReportSaga),
 		fork(BillDeleteSummaryReportSaga),
-     fork(SchemeTypeSaga)
+        fork(SchemeTypeSaga)
 
 
 
