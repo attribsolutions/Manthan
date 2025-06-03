@@ -17,10 +17,11 @@ import StockEntryReport from "./StockEntry/Page";
 import OrderThermalPrintReport from "../pages/SweetPOS/Reports/OrderThermalPrint/Page";
 import voucherRedemptionClaimReport from "./VoucherRedemptionClaim/VoucherRedemptionClaimPDF";
 import PeriodicGRNReport from "./PeriodicGRNReport/PDFReport/Page";
-import POSSaleSummaryReport from "../pages/SweetPOS/Reports/PosSummarySaleReport/Page";
 import CSSItemSaleReport from "./CssItemSaleReport/PDFReport/Page";
 import CashierSummaryReport from "../pages/SweetPOS/Reports/CashierSummaryReport/Page";
 import ManagerSummaryReport from "../pages/SweetPOS/Reports/ManagerSummaryReport/Page";
+import POSSaleSummaryReport from "../pages/SweetPOS/Reports/PosSummarySaleReport/PDFReport/Page";
+import SaleSummaryThermalPrintReport from "../pages/SweetPOS/Reports/PosSummarySaleReport/ThermalPrintReport/Report";
 
 export const FrenchiesesOrder = "FrenchiesesOrder"
 export const order1 = "order1"
@@ -47,9 +48,7 @@ export const POSSaleSummary = "POSSaleSummary"
 export const CSS_ItemSaleReport = "CSS_ItemSaleReport"
 export const Cashier_Summary_Report = "Cashier_Summary_Report"
 export const Manager_Summary_Report = "Manager_Summary_Report"
-
-
-
+export const Sale_Summary_Thermal_Print_Report = "Sale_Summary_Thermal_Print_Report"
 
 
 const generateReport = (resp) => {
@@ -127,7 +126,9 @@ const generateReport = (resp) => {
         case Manager_Summary_Report:
             ManagerSummaryReport(resp.Data)
             break;
-
+        case Sale_Summary_Thermal_Print_Report:
+            SaleSummaryThermalPrintReport(resp.Data)
+            break;
 
 
         default:

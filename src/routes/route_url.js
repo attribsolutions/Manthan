@@ -36,6 +36,14 @@ export const ITEM_lIST = "/ItemList"
 export const GST = "/GSTMaster"
 export const GST_LIST = "/GSTList"
 
+
+export const SCHEME_MASTER = "/Scheme_Master"
+export const SCHEME_MASTER_LIST = "/Scheme_Master_List"
+
+
+
+
+
 export const COMPANYGROUP = "/CompanyGroupMaster"
 export const COMPANYGROUP_lIST = "/CompanyGroupList"
 
@@ -188,9 +196,9 @@ export const VOUCHER = "/Voucher"
 export const VOUCHER_LIST = "/Voucher_List"
 
 
-export const SCHEME_TYPE ="/Scheme_Type"
+export const SCHEME_TYPE = "/Scheme_Type"
 
-export const  SCHEME_TYPE_LIST = "/Scheme_Type_List"
+export const SCHEME_TYPE_LIST = "/Scheme_Type_List"
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"

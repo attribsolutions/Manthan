@@ -25,6 +25,14 @@ export const MANAGER_SUMMARY_REPORT = 347
 
 export const BILL_DELETE_SUMMARY_REPORT = 346
 
+export const SCHEME_MASTER_lIST = 351
+
+export const SCHEME_MASTER = 350
+
+
+
+
+
 
 // *************************** Administration *******************************//
 

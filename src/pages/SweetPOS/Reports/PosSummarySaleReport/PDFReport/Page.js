@@ -2,7 +2,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
 import * as table from './TableData'
-import { currentDate_dmy, CurrentTime } from "../../../../components/Common/CommonFunction";
+import { currentDate_dmy, CurrentTime } from "../../../../../components/Common/CommonFunction";
 
 
 

@@ -5,18 +5,14 @@ import { useHistory } from "react-router-dom";
 import { C_Button } from "../../../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../../../CustomValidateForm";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
-import { mode, pageId, url } from "../../../../routes/index"
+import { mode, pageId } from "../../../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import C_Report from "../../../../components/Common/C_Report";
-import { stockReport_1_GoButton_API_Success } from "../../../../store/Report/StockReport/action";
-import { commonPageField, commonPageFieldSuccess, getpdfReportdata, getpdfReportdataSuccess, GetVenderSupplierCustomer } from "../../../../store/actions";
+import { commonPageField, commonPageFieldSuccess, getpdfReportdataSuccess } from "../../../../store/actions";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import * as report from '../../../../Reports/ReportIndex'
 import { ExcelReportComponent } from "../../../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
-import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
-
-import { Periodic_GRN_Report, Periodic_GRN_Report_Success } from "../../../../store/Report/PeriodicGRNRedux/action";
-import { ItemSaleGoButton_API, ItemSaleGoButton_API_Success } from "../../../../store/Report/ItemSaleReport/action";
+import { ItemSaleGoButton_API_Success } from "../../../../store/Report/ItemSaleReport/action";
 import { allLabelWithZero } from "../../../../components/Common/CommonErrorMsg/HarderCodeData";
 import { ItemSaleReport_GoBtn_API } from "../../../../helpers/backend_helper";
 
@@ -39,7 +35,7 @@ const PosSummarySale = (props) => {
     const reducers = useSelector(
         (state) => ({
             BtnLoading: state.PdfReportReducers.BtnLoading,
-            PrediocGrnData: state.PeriodicGrnReportReducer.PrediocGrnData,
+
             pdfdata: state.PdfReportReducers.pdfdata,
             userAccess: state.Login.RoleAccessUpdateData,
             ItemSaleReportGobtn: state.ItemSaleReportReducer.ItemSaleReportGobtn,
@@ -51,7 +47,7 @@ const PosSummarySale = (props) => {
     );
 
 
-    const { userAccess, BtnLoading, PrediocGrnData, pageField, pdfdata, ItemSaleReportGobtn, partyDropdownLoading, Party, goBtnLoading } = reducers
+    const { userAccess, pageField, ItemSaleReportGobtn, partyDropdownLoading, Party } = reducers
 
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
@@ -103,9 +99,9 @@ const PosSummarySale = (props) => {
                         excelFileName: "Periodic GRN Report"
                     })
                     dispatch(ItemSaleGoButton_API_Success([]));
-                } else if (ItemSaleReportGobtn.BtnMode === "print") {
+                } else if (ItemSaleReportGobtn.BtnMode === "print" || ItemSaleReportGobtn.BtnMode === "Thermalprint") {
                     let config = { rowData: { Data: [] } }
-                    config.rowData["ReportType"] = report.POSSaleSummary;
+                    config.rowData["ReportType"] = (ItemSaleReportGobtn.BtnMode === "print") ? report.POSSaleSummary : report.Sale_Summary_Thermal_Print_Report;
                     config.rowData["Status"] = ItemSaleReportGobtn.Status
                     config.rowData["StatusCode"] = ItemSaleReportGobtn.StatusCode
                     config.rowData["Data"] = ItemSaleReportGobtn.Data
@@ -152,7 +148,7 @@ const PosSummarySale = (props) => {
 
 
     async function excel_And_GoBtnHandler(e, btnMode) {
-        setLocalLoading(true); // Start spinner
+        setLocalLoading(btnMode); // Start spinner
         try {
             const jsonBody = JSON.stringify({
                 FromDate: fromdate,
@@ -264,26 +260,36 @@ const PosSummarySale = (props) => {
                         </Col>}
 
 
-                        <Col sm={!IsFranchises ? 3 : 6}  className=" d-flex justify-content-end  " >
+                        <Col sm={!IsFranchises ? 3 : 6} className=" d-flex justify-content-end  " >
+
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
                                 className="btn btn-success m-3 mr"
-                                loading={localLoading} // ← using useState instead of Redux
+                                loading={localLoading === "Thermalprint"} // ← using useState instead of Redux
+                                onClick={(e) => excel_And_GoBtnHandler(e, "Thermalprint")}
+                            >
+                                Thermal Print
+                            </C_Button>
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                className="btn btn-success m-3 mr"
+                                loading={localLoading === "print"}
                                 onClick={(e) => excel_And_GoBtnHandler(e, "print")}
                             >
                                 Print
                             </C_Button>
 
                             <C_Button
-                                    type="button"
-                                    spinnerColor="white"
-                                    loading={PrediocGrnData.BtnMode === "excel"}
-                                    className="btn btn-primary m-3 mr"
-                                    onClick={(e) => excel_And_GoBtnHandler(e, "excel")}
-                                >
-                                    Excel
-                                </C_Button>
+                                type="button"
+                                spinnerColor="white"
+                                loading={localLoading === "excel"}
+                                className="btn btn-primary m-3 mr"
+                                onClick={(e) => excel_And_GoBtnHandler(e, "excel")}
+                            >
+                                Excel
+                            </C_Button>
                         </Col>
                     </Row>
                 </div>
