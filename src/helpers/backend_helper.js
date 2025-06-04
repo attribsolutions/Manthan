@@ -573,11 +573,11 @@ export const Get_ledger = () => get(url.LEDGER) // get api
 
 
 
-export const update_Scheme_List_Api = (data) => post(url.LOADING_SHEET_GO_BUTTON_API, data)//Loading Sheet go button API For Master Page
-export const save_Scheme_API = ({ jsonBody }) => post(url.LOADING_SHEET, jsonBody)// Loading Sheet Post API For Master Page
+export const update_Scheme_List_Api = (data) => post(url.SCHEME, data)//Loading Sheet go button API For Master Page
+export const save_Scheme_API = ({ jsonBody }) => post(url.SCHEME, jsonBody)// Loading Sheet Post API For Master Page
 export const Get_Scheme_List = () => get(url.SCHEME_LIST) // get api
-export const del_Scheme_List_API = ({ deleteId }) => del(`${url.LOADING_SHEET}/${deleteId}`)// Loading Sheet Post API For Master Page
-export const edit_Scheme_List_Api = ({ RowId }) => get(`${url.LOADING_SHEET}/${RowId}`)// Loading Sheet Post API For Master Page
+export const del_Scheme_List_API = ({ deleteId }) => del(`${url.SCHEME}/${deleteId}`)// Loading Sheet Post API For Master Page
+export const edit_Scheme_List_Api = ({ RowId }) => get(`${url.SCHEME}/${RowId}`)// Loading Sheet Post API For Master Page
 
 
 

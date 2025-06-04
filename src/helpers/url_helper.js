@@ -312,6 +312,12 @@ export const LOADING_SHEET_GO_BUTTON_API = '/LoadingSheetInvoices'
 export const LOADING_SHEET = '/LoadingSheet'
 export const LOADING_SHEET_LIST = '/LoadingSheetList'
 
+export const SCHEME = '/Scheme'
+
+
+
+
+
 //PartyMasterBulkUpdate
 export const GO_BUTTON_POST_API_FOR_PARTY_MASTER_BULK_UPDATE = '/PartyWiseUpdate' // for go button
 export const PARTY_MASTER_BULK_UPDATE = '/PartyWiseSave'
