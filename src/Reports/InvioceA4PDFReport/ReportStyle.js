@@ -444,17 +444,17 @@ export const reportFooter = (doc, data) => {
     const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN)
     if ((isIGST || data.isAmerica)) {
 
-        doc.text(`Total Basic:`, 440, 735,)
-        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 567, 735, 'right')
+        doc.text(`Total Basic:`, 440, 730,)
+        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 567, 730, 'right')
 
-        doc.text(`Total Disc:`, 440, 745,)
-        doc.text(` ${numberWithCommas(Number(TotalDiscount).toFixed(2))}`, 567, 745, 'right')
+        doc.text(`Total Disc:`, 440, 740,)
+        doc.text(` ${numberWithCommas(Number(TotalDiscount).toFixed(2))}`, 567, 740, 'right')
 
-        doc.text(`Total IGST:`, 440, 755,)
-        doc.text(`${numberWithCommas(Number(totalICGST).toFixed(2))}`, 567, 755, 'right')
+        doc.text(`Total IGST:`, 440, 750,)
+        doc.text(`${numberWithCommas(Number(totalICGST).toFixed(2))}`, 567, 750, 'right')
 
-        doc.text(`Total GST:`, 440, 765,)
-        doc.text(` ${numberWithCommas(Number(TotalGST).toFixed(2))}`, 567, 765, 'right')
+        doc.text(`Total GST:`, 440, 760,)
+        doc.text(` ${numberWithCommas(Number(totalICGST).toFixed(2))}`, 567, 760, 'right')
 
         // doc.text(`Round Off:`, 440, 788,)
         // doc.text(` ${numberWithCommas(Number(data.RoundOffAmount).toFixed(2))}`, 567, 788, 'right')

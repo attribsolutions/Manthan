@@ -66,7 +66,7 @@ const SchemeMasterList = () => {
           masterPath={url.SCHEME_MASTER}
           newBtnPath={url.SCHEME_MASTER}
           ButtonMsgLable={"Scheme"}
-          deleteName={"Name"}
+          deleteName={"SchemeName"}
         />
 
       }
