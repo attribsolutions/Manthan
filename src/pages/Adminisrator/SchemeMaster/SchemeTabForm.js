@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useRef, useState, } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState, } from "react";
 import {
     Card,
     CardBody,
@@ -111,12 +111,18 @@ const SchemeMaster = forwardRef((props, ref) => {
         }
     }, []);
 
+    useImperativeHandle(ref, () => ({
+        getValue: () => state,
+        updateValue: (newVal) => setState(newVal)
+    }));
+
     const hasShowloction = location.hasOwnProperty("rowData")
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const values = { ...state.values }
 
     const { isError } = state;
+    debugger
     const { fieldLabel } = state;
 
     // userAccess useEffect
@@ -147,10 +153,7 @@ const SchemeMaster = forwardRef((props, ref) => {
         };
     }, [userAccess])
 
-    const ItemList_Options = ItemDropDown.map((index) => ({
-        value: index.id,
-        label: index.Name,
-    }));
+ 
 
     const SchemeType_Options = SchemeType.map((index) => ({
         value: index.id,
@@ -281,47 +284,7 @@ const SchemeMaster = forwardRef((props, ref) => {
         }
     }, [pageField])
 
-    const SaveHandler = async (event) => {
-        event.preventDefault();
-        const btnId = event.target.id
 
-        try {
-            if (formValid(state, setState)) {
-                btnIsDissablefunc({ btnId, state: true })
-                const jsonBody = JSON.stringify({
-                    SchemeName: values.SchemeName,
-                    SchemeValue: values.SchemeValue,
-                    ValueIn: values.ValueIn,
-                    FromPeriod: values.FromPeriod,
-                    ToPeriod: values.ToPeriod,
-                    FreeItemID: null,
-                    VoucherLimit: values.VoucherLimit,
-                    SchemeValueUpto: values.SchemeValueUpto,
-                    BillAbove: values.BillAbove,
-                    QrPrefix: values.QrPrefix,
-                    IsActive: values.IsActive,
-                    SchemeTypeID: values.SchemeTypeID.value,
-                    BillEffect: 1,
-                    ItemDetails: values.Item,
-                    PartyDetails: values.Party,
-                    PartyDetails: values.Party.map(i => ({
-                        PartyID: i.value,
-                        TypeForItem: i.PartyID,
-                        DiscountType: i.DiscountType
-
-                    })),
-                    ItemDetails: values.Item.map(i => ({
-                        ItemID: i.value,    // ItemID           
-                        ItemName: i.label, // ItemName
-                    })),
-
-
-                    // PartyID
-                });
-                dispatch(saveSchemeMaster({ jsonBody }));
-            }
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
-    };
 
     if (!(userPageAccessState === '')) {
         return (
@@ -503,7 +466,8 @@ const SchemeMaster = forwardRef((props, ref) => {
                                                             name="SchemeTypeID"
                                                             value={values.SchemeTypeID}
                                                             isSearchable={true}
-                                                            className="react-dropdown"
+                                                            // className="react-dropdown"
+                                                            className={isError.SchemeDetails.length > 0 ? "is-invalid" : "react-dropdown"}
                                                             classNamePrefix="dropdown"
                                                             styles={{
                                                                 menu: provided => ({ ...provided, zIndex: 2 })
@@ -720,9 +684,8 @@ const SchemeMaster = forwardRef((props, ref) => {
                                                     name="Party"
                                                     value={values.Party}
                                                     isMulti={true}
-
+                                                    className={isError.Party.length > 0 ? "is-invalid" : "react-dropdown"}
                                                     isSearchable={true}
-                                                    className="react-dropdown"
                                                     classNamePrefix="dropdown"
                                                     options={Party_Option}
                                                     onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
@@ -735,13 +698,7 @@ const SchemeMaster = forwardRef((props, ref) => {
                                         </CardBody>
                                     </div>
 
-                                    <SaveButtonDraggable>
-                                        <SaveButton pageMode={pageMode}
-                                            loading={saveBtnloading}
-                                            onClick={SaveHandler}
-                                            userAcc={userPageAccessState}
-                                        />
-                                    </SaveButtonDraggable>
+
                                 </form>
                             </CardBody>
                         </Card>

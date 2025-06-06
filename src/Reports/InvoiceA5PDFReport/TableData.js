@@ -400,7 +400,7 @@ export const RowsWithIGST = (data) => {
         ]
 
         if (Gst === 0) { Gst = element.GSTPercentage };
-        let aa = { TotalCGst: 0, totalSGst: 0 }
+        let aa = { TotalCGst: 0, totalSGst: 0, totalIGst: 0 }
         if (data["tableTot"] === undefined) { data["tableTot"] = aa }
 
         if ((Gst === element.GSTPercentage)) {
@@ -415,7 +415,7 @@ export const RowsWithIGST = (data) => {
             totalBasicAmount = 0
             totalAmount = 0
             totalQuantity = 0
-
+            totalIGst = 0
             data["tableTot"] = totalLots()
             Gst = element.GSTPercentage;
         }
@@ -569,7 +569,7 @@ export const RowsForAmericaInvoice = (data) => {
         ]
 
         if (Gst === 0) { Gst = element.GSTPercentage };
-        let aa = { TotalCGst: 0, totalSGst: 0 }
+        let aa = { TotalCGst: 0, totalSGst: 0, totalIGst: 0 }
         if (data["tableTot"] === undefined) { data["tableTot"] = aa }
 
         if ((Gst === element.GSTPercentage)) {
@@ -584,7 +584,7 @@ export const RowsForAmericaInvoice = (data) => {
             totalBasicAmount = 0
             totalAmount = 0
             totalQuantity = 0
-
+            totalIGst = 0
             data["tableTot"] = totalLots()
             Gst = element.GSTPercentage;
         }

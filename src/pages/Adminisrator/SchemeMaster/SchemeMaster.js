@@ -48,7 +48,7 @@ import { C_DatePicker } from "../../../CustomValidateForm";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { getCommonPartyDrodownOptionAction } from "../../../store/Utilites/PartyDrodown/action";
-import { getSchemeListSuccess, saveSchemeMaster } from "../../../store/Administrator/SchemeMasterRedux/action";
+import { getSchemeListSuccess, saveSchemeMaster, saveSchemeMaster_Success } from "../../../store/Administrator/SchemeMasterRedux/action";
 import { getSchemeTypelist } from "../../../store/Administrator/SchemeRedux/action";
 import classnames from "classnames"
 import SchemeTabForm from "./SchemeTabForm";
@@ -92,8 +92,10 @@ const SchemeMaster = (props) => {
         postMsg,
         pageField,
         saveBtnloading,
+        updateMsg,
         userAccess } = useSelector((state) => ({
-            postMsg: state.SPos_MachineType_Reducer.postMsg,
+            postMsg: state.SchemeReducer.postMsg,
+            updateMsg: state.SchemeReducer.updateMsg,
             saveBtnloading: state.SPos_MachineType_Reducer.saveBtnloading,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField,
@@ -107,7 +109,7 @@ const SchemeMaster = (props) => {
         dispatch(getSchemeTypelist());
         dispatch(getCommonPartyDrodownOptionAction())
         return () => {
-            dispatch(getSchemeListSuccess({ Status: false }));
+            dispatch(saveSchemeMaster_Success({ Status: false }));
         }
     }, []);
 
@@ -150,6 +152,9 @@ const SchemeMaster = (props) => {
     const getItemData = () => {
         return SchemeItemTabRef.current.getValue();
     }
+    const getSchemeData = () => {
+        return SchemeTabRef.current.getValue();
+    }
     const toggle1 = tab => {
         if (activeTab !== tab) {
             setactiveTab(tab)
@@ -170,7 +175,7 @@ const SchemeMaster = (props) => {
                 hasEditVal = props.editValue
                 setPageMode(props.pageMode)
             }
-
+            debugger
             if (hasEditVal) {
                 const { SchemeName, SchemeValue, ValueIn, FromPeriod,
                     ToPeriod, ItemDetails, VoucherLimit, QRPrefix, IsActive,
@@ -228,7 +233,7 @@ const SchemeMaster = (props) => {
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(getSchemeListSuccess({ Status: false }));
+            dispatch(saveSchemeMaster_Success({ Status: false }));
             setState(() => resetFunction(fileds, state)) // Clear form values 
 
             if (pageMode === "other") {
@@ -244,12 +249,12 @@ const SchemeMaster = (props) => {
                     Message: postMsg.Message,
                 })
                 if (isPermission) {
-                    history.push({ pathname: url.SWEET_POS_MACHINE_LIST })
+                    history.push({ pathname: url.SCHEME_MASTER_LIST })
                 }
             }
         }
         else if (postMsg.Status === true) {
-            dispatch(getSchemeListSuccess({ Status: false }))
+            dispatch(saveSchemeMaster_Success({ Status: false }))
             customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMsg.Message),
@@ -268,41 +273,45 @@ const SchemeMaster = (props) => {
     const SaveHandler = async (event) => {
         event.preventDefault();
         const btnId = event.target.id
+        const SchemeData = getSchemeData()
+        const setSchemeData = SchemeTabRef.current.updateValue;
+
+        const ItemData = getItemData()
+        // const setItemData = SchemeItemTabRef.current.updateValue;
+
+
 
         try {
-            if (formValid(state, setState)) {
+            if (formValid(SchemeData, setSchemeData)) {
                 btnIsDissablefunc({ btnId, state: true })
-                const ItemData = getItemData();
                 debugger
                 const jsonBody = JSON.stringify({
-                    SchemeName: values.SchemeName,
-                    SchemeValue: values.SchemeValue,
-                    ValueIn: values.ValueIn,
-                    FromPeriod: values.FromPeriod,
-                    ToPeriod: values.ToPeriod,
+                    SchemeName: SchemeData.values.SchemeName,
+                    SchemeValue: SchemeData.values.SchemeValue,
+                    ValueIn: SchemeData.values.ValueIn,
+                    FromPeriod: SchemeData.values.FromPeriod,
+                    ToPeriod: SchemeData.values.ToPeriod,
                     FreeItemID: null,
-                    VoucherLimit: values.VoucherLimit,
-                    SchemeValueUpto: values.SchemeValueUpto,
-                    BillAbove: values.BillAbove,
-                    QrPrefix: values.QrPrefix,
-                    IsActive: values.IsActive,
-                    SchemeTypeID: values.SchemeTypeID.value,
+                    VoucherLimit: SchemeData.values.VoucherLimit,
+                    SchemeValueUpto: SchemeData.values.SchemeValueUpto,
+                    BillAbove: SchemeData.values.BillAbove,
+                    QRPrefix: SchemeData.values.QRPrefix,
+                    IsActive: SchemeData.values.IsActive,
+                    SchemeTypeID: SchemeData.values.SchemeTypeID.value,
                     BillEffect: 1,
-                    ItemDetails: values.Item,
-                    PartyDetails: values.Party,
-                    PartyDetails: values.Party.map(i => ({
+                    PartyDetails: SchemeData.values.Party.map(i => ({
                         PartyID: i.value,
                         TypeForItem: i.PartyID,
                         DiscountType: i.DiscountType
 
                     })),
-                    ItemDetails: values.Item.map(i => ({
-                        ItemID: i.value,    // ItemID           
+                    ItemDetails: ItemData.map(i => ({
+                        Item: i.value,    // ItemID           
                         ItemName: i.label, // ItemName
+                        DiscountType: i.DiscountType, // DiscountType
+                        TypeForItem: i.ItemType.value, // ItemType
+                        DiscountValue: i.DiscountValue, // DiscountValue
                     })),
-
-
-                    // PartyID
                 });
                 dispatch(saveSchemeMaster({ jsonBody }));
             }
