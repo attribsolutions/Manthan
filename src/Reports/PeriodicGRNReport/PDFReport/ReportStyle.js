@@ -117,6 +117,17 @@ export const tableBody = (doc, data) => {
             columnWidth: 'wrap',
             lineColor: [0, 0, 0],
         },
+        didParseCell: (data1) => {
+            if (data1.row.cells[5].raw === "Total") {
+                data1.row.cells[5].styles.fontStyle = "bold"
+                data1.row.cells[6].styles.fontStyle = "bold"
+                data1.row.cells[5].styles.fontSize = 7
+                data1.row.cells[6].styles.fontSize = 7
+
+
+
+            }
+        },
         columnStyles: {
             0: {
                 valign: "top",

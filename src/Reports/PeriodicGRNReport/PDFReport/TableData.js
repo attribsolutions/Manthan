@@ -20,9 +20,14 @@ export const PageHedercolumns = [
 ]
 
 export const Rows = (data) => {
-    debugger
+    debugger;
     const returnArr = [];
-    data.forEach((element, key) => {
+    let totalQuantity = 0;
+
+    data.forEach((element) => {
+        const quantity = Number(element.Quantity) || 0;
+        totalQuantity += quantity;
+
         const tableitemRow = [
             `${date_dmy_func(element.GRNDate)}`,
             `${element.GRNNo}`,
@@ -30,14 +35,23 @@ export const Rows = (data) => {
             `${element.Supplier}`,
             `${element.ChallanNo}`,
             `${element.ItemName}`,
-            `${(Number(element.Quantity).toFixed(2))}`,
-            `${(Number(element.Rate).toFixed(2))}`,
+            `${quantity.toFixed(2)}`,
+            `${Number(element.Rate).toFixed(2)}`,
             `${element.Unit}`,
         ];
         returnArr.push(tableitemRow);
-    })
+    });
+
+    // Push total row
+    const totalRow = [
+        "", "", "", "", "", "Total",
+        `${totalQuantity.toFixed(2)}`, "", ""
+    ];
+    returnArr.push(totalRow);
+
     return returnArr;
-}
+};
+
 
 export const ReportHederRows = (data) => {
     var reportArray = [

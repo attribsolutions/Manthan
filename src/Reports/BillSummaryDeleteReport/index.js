@@ -17,7 +17,8 @@ import { ExcelReportComponent } from '../../components/Common/ReportCommonFunc/E
 import { useLocation } from 'react-router-dom';
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldList, commonPageFieldListSuccess, commonPageFieldSuccess, } from '../../store/actions'
 import { pageId } from '../../routes'
-import { allLabelWithZero } from '../../components/Common/CommonErrorMsg/HarderCodeData'
+import { allLabelWithBlank, allLabelWithZero } from '../../components/Common/CommonErrorMsg/HarderCodeData'
+import { CashierName_Api } from '../../helpers/backend_helper'
 
 
 
@@ -28,13 +29,15 @@ const BillDeleteSummaryReport = (props) => {
 
     const location = useLocation();
     const [PartyDropdown, setPartyDropdown] = useState(allLabelWithZero);
-    const [mode, setMode] = useState("default"); // or whatever initial value you expect
+    const [mode] = useState("default"); // or whatever initial value you expect
+    const IsMannagementParty = !_cfunc.loginUserIsFranchisesRole() && _cfunc.loginIsSCMParty();
 
     const currentDate_ymd = _cfunc.date_ymd_func();
     const [fromDate, setFromDate] = useState(currentDate_ymd)
     const [toDate, setToDate] = useState(currentDate_ymd)
-
+    const [CashierOption, setCashierOption] = useState([])
     const [userPageAccessState, setUserAccState] = useState('');
+    const [Cashier, setCashier] = useState([allLabelWithBlank])
 
 
     // const location = { ...history.location }
@@ -64,6 +67,7 @@ const BillDeleteSummaryReport = (props) => {
 
     const PartyDrodownOnChange = (e) => {
         setPartyDropdown(e);
+        setCashier([allLabelWithBlank]);
     };
 
     const { Data = [] } = BillDeleteSummaryData
@@ -111,6 +115,20 @@ const BillDeleteSummaryReport = (props) => {
         }
         dispatch(BreadcrumbShowCountlabel(`Count:${Data.length} currency_symbol ${_cfunc.TotalAmount_Func(Data)}`));
     }, [BillDeleteSummaryData]);
+
+
+
+    useEffect(async () => {
+        if (((IsMannagementParty) && (PartyDropdown.value !== "")) || (!IsMannagementParty)) {
+            const Resp = await CashierName_Api({
+                jsonBody: JSON.stringify({
+                    Party: IsMannagementParty ? PartyDropdown.value : _cfunc.loginSelectedPartyID(),
+                })
+            })
+
+            setCashierOption(Resp?.Data)
+        }
+    }, [PartyDropdown.value])
     const Party_Option = Party
         .filter(i => i.PartyTypeID === 19) // filter before map for better performance
         .map(i => ({
@@ -120,13 +138,24 @@ const BillDeleteSummaryReport = (props) => {
         }));
     Party_Option.unshift(allLabelWithZero);
 
+
+    const CashierOnchange = (e) => {
+        if (e.length === 0) {
+            e = [allLabelWithBlank]
+        } else {
+            e = e.filter(i => !(i.value === ''))
+        }
+        setCashier(e)
+    }
+
     function goButtonHandler(goBtnMode) {
 
         try {
             const jsonBody = JSON.stringify({
-                "FromDate": fromDate,
-                "ToDate": toDate,
-                "Party": _cfunc.loginUserIsFranchisesRole() ? _cfunc.loginSelectedPartyID() : PartyDropdown.value,
+                FromDate: fromDate,
+                ToDate: toDate,
+                Cashier: Cashier.map(row => row.value).join(','),
+                Party: IsMannagementParty ? _cfunc.loginSelectedPartyID() : PartyDropdown.value,
             })
             const config = { jsonBody, goBtnMode };
             dispatch(BillDeleteSummaryReport_GoButton_API(config))
@@ -154,7 +183,7 @@ const BillDeleteSummaryReport = (props) => {
             <div className="page-content">
                 <div className="px-2   c_card_filter text-black " >
                     <Row>
-                        <Col sm={3} className="ms-3">
+                        <Col sm={2} className="ms-3">
                             <FormGroup className=" row mt-2  " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
@@ -170,7 +199,7 @@ const BillDeleteSummaryReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={3} className="">
+                        <Col sm={2} className="">
                             <FormGroup className=" row mt-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
@@ -183,7 +212,8 @@ const BillDeleteSummaryReport = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
-                        {!_cfunc.loginUserIsFranchisesRole() && < Col sm={3} className="">
+
+                        {IsMannagementParty && < Col sm={3} className="">
                             <FormGroup className=" row mt-2" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px", marginRight: "20px" }}>Party</Label>
@@ -192,7 +222,6 @@ const BillDeleteSummaryReport = (props) => {
                                         name="Party"
                                         value={PartyDropdown}
                                         isSearchable={true}
-
                                         isLoading={partyDropdownLoading}
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
@@ -205,6 +234,30 @@ const BillDeleteSummaryReport = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>}
+                        <Col sm={3} className="">
+                            <FormGroup className=" row mt-2" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "65px", marginRight: "20px" }}>Cashier</Label>
+                                <Col sm="8">
+                                    <C_Select
+                                        name="Cashier"
+                                        value={Cashier}
+                                        isSearchable={true}
+                                        isMulti={true}
+                                        // isLoading={partyDropdownLoading}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={CashierOption}
+                                        onChange={(e) => { CashierOnchange(e) }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+
                         <Col className=" d-flex justify-content-end " >
                             <C_Button
                                 type="button"
