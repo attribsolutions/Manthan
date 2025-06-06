@@ -1,4 +1,4 @@
-import React, { useEffect, useState, } from "react";
+import React, { useEffect, useRef, useState, } from "react";
 import {
     Card,
     CardBody,
@@ -9,6 +9,11 @@ import {
     Label,
     Row,
     Input,
+    Nav,
+    NavItem,
+    NavLink,
+    TabContent,
+    TabPane,
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
@@ -44,28 +49,33 @@ import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable"
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { getCommonPartyDrodownOptionAction } from "../../../store/Utilites/PartyDrodown/action";
 import { getSchemeListSuccess, saveSchemeMaster } from "../../../store/Administrator/SchemeMasterRedux/action";
-
+import { getSchemeTypelist } from "../../../store/Administrator/SchemeRedux/action";
+import classnames from "classnames"
+import SchemeTabForm from "./SchemeTabForm";
+import SchemeItemTabForm from "./SchemeItemTabForm";
 
 const SchemeMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const { location } = history
+    const SchemeTabRef = useRef(null);
+    const SchemeItemTabRef = useRef(null);
 
     const fileds = {
         SchemeName: "",
         SchemeValue: "",
         ValueIn: "",
-        FromPeriod: false,
-        ToPeriod: "",
+        FromPeriod: _cfunc.currentDate_ymd,
+        ToPeriod: _cfunc.currentDate_ymd,
         Item: "",
-        VoucherLimit: false,
-        QRPrefix: false,
-        IsActive: false,
+        VoucherLimit: "",
+        QRPrefix: "",
+        IsActive: null,
         SchemeTypeID: "",
         BillAbove: "",
         Message: "",
-        OverLappingScheme: "",
+        OverLappingScheme: null,
         SchemeDetails: "",
         SchemeValueUpto: "",
         Party: ""
@@ -74,6 +84,7 @@ const SchemeMaster = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
+    const [activeTab, setactiveTab] = useState("1")
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -81,14 +92,10 @@ const SchemeMaster = (props) => {
         postMsg,
         pageField,
         saveBtnloading,
-        ItemDropDown,
-        Party,
         userAccess } = useSelector((state) => ({
             postMsg: state.SPos_MachineType_Reducer.postMsg,
             saveBtnloading: state.SPos_MachineType_Reducer.saveBtnloading,
             userAccess: state.Login.RoleAccessUpdateData,
-            ItemDropDown: state.ItemMastersReducer.ItemList,
-            Party: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
             pageField: state.CommonPageFieldReducer.pageField,
         }));
 
@@ -97,6 +104,7 @@ const SchemeMaster = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getItemList());
+        dispatch(getSchemeTypelist());
         dispatch(getCommonPartyDrodownOptionAction())
         return () => {
             dispatch(getSchemeListSuccess({ Status: false }));
@@ -107,6 +115,7 @@ const SchemeMaster = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const values = { ...state.values }
+
     const { isError } = state;
     const { fieldLabel } = state;
 
@@ -138,18 +147,14 @@ const SchemeMaster = (props) => {
         };
     }, [userAccess])
 
-    const ItemList_Options = ItemDropDown.map((index) => ({
-        value: index.id,
-        label: index.Name,
-    }));
-
-    const Party_Option = Party.map(i => ({
-        value: i.id,
-        label: i.Name,
-        PartyType: i.PartyType
-    })).filter(index => index.PartyType === "Franchises");
-
-
+    const getItemData = () => {
+        return SchemeItemTabRef.current.getValue();
+    }
+    const toggle1 = tab => {
+        if (activeTab !== tab) {
+            setactiveTab(tab)
+        }
+    }
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time
     useEffect(() => {
@@ -169,7 +174,7 @@ const SchemeMaster = (props) => {
             if (hasEditVal) {
                 const { SchemeName, SchemeValue, ValueIn, FromPeriod,
                     ToPeriod, ItemDetails, VoucherLimit, QRPrefix, IsActive,
-                    SchemeTypeID, BillAbove, Message, OverLappingScheme,SchemeTypeName,
+                    SchemeTypeID, BillAbove, Message, OverLappingScheme, SchemeTypeName,
                     SchemeDetails, SchemeValueUpto, PartyDetails
                 } = hasEditVal
 
@@ -188,7 +193,6 @@ const SchemeMaster = (props) => {
                 hasValid.SchemeValueUpto.valid = true;
                 hasValid.OverLappingScheme.valid = true;
                 hasValid.SchemeDetails.valid = true;
-                values.id = id
                 values.ToPeriod = ToPeriod
                 values.IsActive = IsActive
                 values.Item = ItemDetails.map(i => ({
@@ -211,7 +215,7 @@ const SchemeMaster = (props) => {
                 values.SchemeTypeID = {
                     label: SchemeTypeName,
                     value: SchemeTypeID
-                },
+                }
                 values.SchemeValueUpto = SchemeValueUpto
                 values.OverLappingScheme = OverLappingScheme
                 values.SchemeDetails = SchemeDetails
@@ -268,6 +272,8 @@ const SchemeMaster = (props) => {
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
+                const ItemData = getItemData();
+                debugger
                 const jsonBody = JSON.stringify({
                     SchemeName: values.SchemeName,
                     SchemeValue: values.SchemeValue,
@@ -284,6 +290,19 @@ const SchemeMaster = (props) => {
                     BillEffect: 1,
                     ItemDetails: values.Item,
                     PartyDetails: values.Party,
+                    PartyDetails: values.Party.map(i => ({
+                        PartyID: i.value,
+                        TypeForItem: i.PartyID,
+                        DiscountType: i.DiscountType
+
+                    })),
+                    ItemDetails: values.Item.map(i => ({
+                        ItemID: i.value,    // ItemID           
+                        ItemName: i.label, // ItemName
+                    })),
+
+
+                    // PartyID
                 });
                 dispatch(saveSchemeMaster({ jsonBody }));
             }
@@ -305,432 +324,57 @@ const SchemeMaster = (props) => {
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
                                 <form noValidate>
+                                    <Nav tabs className="nav-tabs-custom nav-justified">
+                                        <NavItem>
+                                            <NavLink
+                                                id="nave-link-1"
+                                                style={{ cursor: "pointer" }}
+                                                className={classnames({
+                                                    active: activeTab === "1",
+                                                })}
+                                                onClick={() => {
+                                                    toggle1("1")
+                                                }}
+                                            >
+                                                <span className="d-block d-sm-none">
+                                                    <i className="fas fa-home"></i>
+                                                </span>
+                                                <span className="d-none d-sm-block">Scheme</span>
+                                            </NavLink>
+                                        </NavItem>
 
-                                    <Col md={12}>
-                                        <Card>
-                                            <CardBody className="c_card_body">
-                                                <Row>
-                                                    <FormGroup className="mb-2 col col-sm-2 ">
-                                                        <Label htmlFor="validationCustom01">{fieldLabel.SchemeName} </Label>
-                                                        <Input
-                                                            name="SchemeName"
-                                                            id="SchemeName"
-                                                            value={values.SchemeName}
-                                                            type="text"
-                                                            className={isError.SchemeName.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Scheme Name"
-                                                            autoComplete='off'
-                                                            onChange={(event) => {
-                                                                onChangeText({ event, state, setState })
+                                        <NavItem>
+                                            <NavLink
+                                                id="nave-link-2"
+                                                style={{ cursor: "pointer" }}
+                                                className={classnames({
+                                                    active: activeTab === "2",
+                                                })}
+                                                onClick={() => {
+                                                    toggle1("2")
+                                                }}
+                                            >
+                                                <span className="d-block d-sm-none">
+                                                    <i className="fas fa-home"></i>
+                                                </span>
+                                                <span className="d-none d-sm-block">Scheme Item</span>
+                                            </NavLink>
+                                        </NavItem>
+                                    </Nav>
 
-                                                            }}
-                                                        />
-                                                        {isError.SchemeName.length > 0 && (
-                                                            <span className="text-danger f-8"><small>{isError.SchemeName}</small></span>
-                                                        )}
-                                                    </FormGroup>
+                                    <TabContent activeTab={activeTab} className="p-3 text-muted">
+                                        <TabPane tabId="1">
+                                            <SchemeTabForm ref={SchemeTabRef} />
+                                        </TabPane>
 
-                                                    <Col md="1">  </Col>
-
-                                                    <FormGroup className="mb-2 col col-sm-2 ">
-                                                        <Label htmlFor="validationCustom01">{fieldLabel.FromPeriod} </Label>
-                                                        <C_DatePicker
-                                                            name="FromPeriod"
-                                                            value={values.FromPeriod}
-                                                            options={{
-                                                                altInput: true,
-                                                                altFormat: "d-m-Y",
-                                                                dateFormat: "Y-m-d",
-                                                            }}
-                                                            placeholder={"DD/MM/YYYY"}
-                                                            onChange={(y, v, e) => {
-                                                                onChangeDate({ e, v, state, setState })
-                                                            }}
-                                                        />
-
-                                                    </FormGroup>
-
-                                                    <Col md="1">  </Col>
-
-                                                    <FormGroup className="mb-2 col col-sm-2 ">
-                                                        <Label htmlFor="validationCustom01">{fieldLabel.ToPeriod} </Label>
-                                                        <C_DatePicker
-                                                            name="ToPeriod"
-                                                            value={values.ToPeriod}
-                                                            options={{
-                                                                altInput: true,
-                                                                altFormat: "d-m-Y",
-                                                                dateFormat: "Y-m-d",
-                                                            }}
-                                                            placeholder={"DD/MM/YYYY"}
-                                                            onChange={(y, v, e) => {
-                                                                onChangeDate({ e, v, state, setState })
-                                                            }}
-                                                        />
-
-                                                    </FormGroup>
-
-                                                    <Col md="1">  </Col>
-
-                                                    <FormGroup className="mb-2  col-sm-2  align-items-start">
-                                                        <Label htmlFor="ValueIn" style={{ width: "90px", paddingTop: "0.35rem" }}>
-                                                            {fieldLabel.ValueIn}
-                                                        </Label>
-                                                        <div className="btn-group  col-xxl-12" role="group" aria-label="Value type">
-                                                            <input
-                                                                type="checkbox"
-                                                                id="btncheckRS"
-                                                                className="btn-check"
-                                                                autoComplete="off"
-                                                                checked={values.ValueIn === "RS"}
-                                                                onChange={() =>
-                                                                    setState(prev => ({
-                                                                        ...prev,
-                                                                        values: {
-                                                                            ...prev.values,
-                                                                            ValueIn: "RS",
-                                                                        },
-                                                                    }))
-                                                                }
-                                                            />
-                                                            <label className="btn btn-outline-secondary" htmlFor="btncheckRS">
-                                                                ₹
-                                                            </label>
-
-                                                            <input
-                                                                type="checkbox"
-                                                                id="btncheckPercent"
-                                                                className="btn-check"
-                                                                autoComplete="off"
-                                                                checked={values.ValueIn === "%"}
-                                                                onChange={() =>
-                                                                    setState(prev => ({
-                                                                        ...prev,
-                                                                        values: {
-                                                                            ...prev.values,
-                                                                            ValueIn: "%",
-                                                                        },
-                                                                    }))
-                                                                }
-                                                            />
-                                                            <label className="btn btn-outline-secondary" htmlFor="btncheckPercent">
-                                                                %
-                                                            </label>
-                                                        </div>
-                                                    </FormGroup>
-
-                                                </Row>
-
-                                                <Row className="mt-1">
-                                                    <FormGroup className="mb-1 col col-sm-2 ">
-                                                        <Label htmlFor="validationCustom01">{fieldLabel.SchemeValue} </Label>
-                                                        <Input
-                                                            name="SchemeValue"
-                                                            id="SchemeValue"
-                                                            value={values.SchemeValue}
-                                                            type="text"
-                                                            className={isError.SchemeValue.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Upload Sale Record Count"
-                                                            autoComplete='off'
-                                                            onChange={(event) => {
-                                                                onChangeText({ event, state, setState })
-
-                                                            }}
-                                                        />
-                                                        {isError.SchemeValue.length > 0 && (
-                                                            <span className="text-danger f-8"><small>{isError.SchemeValue}</small></span>
-                                                        )}
-                                                    </FormGroup>
-
-                                                    <Col md="1">  </Col>
-
-                                                    <FormGroup className="mb-2 col col-sm-2 ">
-                                                        <Label htmlFor="validationCustom01">{fieldLabel.BillAbove} </Label>
-                                                        <Input
-                                                            name="BillAbove"
-                                                            id="BillAbove"
-                                                            value={values.BillAbove}
-                                                            type="text"
-                                                            className={isError.BillAbove.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Server Sequence"
-                                                            autoComplete='off'
-                                                            onChange={(event) => {
-                                                                onChangeText({ event, state, setState })
-
-                                                            }}
-                                                        />
-                                                        {isError.BillAbove.length > 0 && (
-                                                            <span className="invalid-feedback">{isError.BillAbove}</span>
-                                                        )}
-                                                    </FormGroup>
-
-                                                    <Col md="1">  </Col>
-
-                                                    <FormGroup className="mb-2 col col-sm-2 ">
-                                                        <Label htmlFor="validationCustom01">{fieldLabel.SchemeTypeID} </Label>
-                                                        <Select
-                                                            id="SchemeTypeID"
-                                                            name="SchemeTypeID"
-                                                            // value={Item}
-                                                            isSearchable={true}
-
-                                                            className="react-dropdown"
-                                                            classNamePrefix="dropdown"
-                                                            styles={{
-                                                                menu: provided => ({ ...provided, zIndex: 2 })
-                                                            }}
-                                                            options={ItemList_Options}
-                                                        // onChange={(e) => { setItem(e) }}
-                                                        />
-                                                        {isError.SchemeTypeID.length > 0 && (
-                                                            <span className="invalid-feedback">{isError.SchemeTypeID}</span>
-                                                        )}
-                                                    </FormGroup>
-
-                                                    <Col md="1">  </Col>
-
-                                                    <FormGroup className="mb-2  col-sm-2 align-items-start">
-                                                        <Label htmlFor="ValueIn" style={{ width: "140px", paddingTop: "0.35rem" }}>
-                                                            {fieldLabel.OverLappingScheme}
-                                                        </Label>
-                                                        <div className="btn-group col-xxl-12" role="group" aria-label="Value type">
-                                                            <input
-                                                                type="checkbox"
-                                                                id="btncheckRS"
-                                                                className="btn-check"
-                                                                autoComplete="off"
-                                                                checked={values.OverLappingScheme}
-                                                                onChange={() =>
-                                                                    setState(prev => ({
-                                                                        ...prev,
-                                                                        values: {
-                                                                            ...prev.values,
-                                                                            OverLappingScheme: true,
-                                                                        },
-                                                                    }))
-                                                                }
-                                                            />
-                                                            <label className="btn btn-outline-secondary" htmlFor="btncheckRS">
-                                                                Yes
-                                                            </label>
-
-                                                            <input
-                                                                type="checkbox"
-                                                                id="btncheckPercent"
-                                                                className="btn-check"
-                                                                autoComplete="off"
-                                                                checked={!values.OverLappingScheme}
-                                                                onChange={() =>
-                                                                    setState(prev => ({
-                                                                        ...prev,
-                                                                        values: {
-                                                                            ...prev.values,
-                                                                            OverLappingScheme: false,
-                                                                        },
-                                                                    }))
-                                                                }
-                                                            />
-                                                            <label className="btn btn-outline-secondary" htmlFor="btncheckPercent">
-                                                                No
-                                                            </label>
-                                                        </div>
-                                                    </FormGroup>
-                                                </Row>
+                                        <TabPane tabId="2">
+                                            <SchemeItemTabForm ref={SchemeItemTabRef} />
+                                        </TabPane>
 
 
-                                                <Row className="mt-1">
-                                                    <FormGroup className="mb-2 col col-sm-2 ">
-                                                        <Label htmlFor="validationCustom01">{fieldLabel.VoucherLimit} </Label>
-                                                        <Input
-                                                            name="VoucherLimit"
-                                                            id="VoucherLimit"
-                                                            value={values.VoucherLimit}
-                                                            className={isError.VoucherLimit.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Voucher Limit"
-                                                            autoComplete='off'
-                                                            onChange={(event) => {
-                                                                onChangeText({ event, state, setState })
-
-                                                            }}
-                                                        />
-                                                        {isError.VoucherLimit.length > 0 && (
-                                                            <span className="invalid-feedback">{isError.VoucherLimit}</span>
-                                                        )}
-                                                    </FormGroup>
-
-                                                    <Col md="1">  </Col>
-
-                                                    <FormGroup className="mb-2 col col-sm-2">
-                                                        <Label htmlFor="validationCustom01">{fieldLabel.QRPrefix} </Label>
-                                                        <Input
-                                                            name="QRPrefix"
-                                                            id="QRPrefix"
-                                                            value={values.QRPrefix}
-                                                            type="text"
-                                                            className={isError.QRPrefix.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter QR Prefix"
-                                                            autoComplete='off'
-                                                            onChange={(event) => {
-                                                                onChangeText({ event, state, setState })
-
-                                                            }}
-                                                        />
-                                                        {isError.QRPrefix.length > 0 && (
-                                                            <span className="invalid-feedback">{isError.QRPrefix}</span>
-                                                        )}
-                                                    </FormGroup>
-
-                                                    <Col md="1">  </Col>
-
-                                                    <FormGroup className="mb-2 col col-sm-2">
-                                                        <Label htmlFor="validationCustom01">{fieldLabel.SchemeValueUpto} </Label>
-                                                        <Input
-                                                            name="SchemeValueUpto"
-                                                            id="SchemeValueUpto"
-                                                            value={values.SchemeValueUpto}
-                                                            type="text"
-                                                            className={isError.SchemeValueUpto.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Scheme Value Upto"
-                                                            autoComplete='off'
-                                                            onChange={(event) => {
-                                                                onChangeText({ event, state, setState })
-
-                                                            }}
-                                                        />
-                                                        {isError.SchemeValueUpto.length > 0 && (
-                                                            <span className="invalid-feedback">{isError.SchemeValueUpto}</span>
-                                                        )}
-                                                    </FormGroup>
-
-                                                    <Col md="1">  </Col>
-                                                    <FormGroup className="mb-2  col-sm-2  align-items-start">
-                                                        <Label htmlFor="ValueIn" style={{ width: "140px", paddingTop: "0.35rem" }}>
-                                                            {fieldLabel.IsActive}
-                                                        </Label>
-                                                        <div className="btn-group  col-xxl-12" role="group" aria-label="Value type">
-                                                            <input
-                                                                type="checkbox"
-                                                                id="btncheckRS"
-                                                                className="btn-check"
-                                                                autoComplete="off"
-                                                                checked={values.IsActive}
-                                                                onChange={() =>
-                                                                    setState(prev => ({
-                                                                        ...prev,
-                                                                        values: {
-                                                                            ...prev.values,
-                                                                            IsActive: true,
-                                                                        },
-                                                                    }))
-                                                                }
-                                                            />
-                                                            <label className="btn btn-outline-secondary" htmlFor="btncheckRS">
-                                                                Yes
-                                                            </label>
-                                                            <input
-                                                                type="checkbox"
-                                                                id="btncheckPercent"
-                                                                className="btn-check"
-                                                                autoComplete="off"
-                                                                checked={!values.IsActive}
-                                                                onChange={() =>
-                                                                    setState(prev => ({
-                                                                        ...prev,
-                                                                        values: {
-                                                                            ...prev.values,
-                                                                            IsActive: false,
-                                                                        },
-                                                                    }))
-                                                                }
-                                                            />
-                                                            <label className="btn btn-outline-secondary" htmlFor="btncheckPercent">
-                                                                No
-                                                            </label>
-                                                        </div>
-                                                    </FormGroup>
-                                                </Row>
+                                    </TabContent>
 
 
-                                                <Row className="mt-1">
-                                                    <FormGroup className="mb-2 col col-11 ">
-                                                        <Label htmlFor="validationCustom01">{fieldLabel.SchemeDetails} </Label>
-                                                        <Input
-                                                            name="SchemeDetails"
-                                                            id="SchemeDetails"
-                                                            value={values.SchemeDetails}
-                                                            type="text"
-                                                            className={isError.SchemeDetails.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Scheme Details"
-                                                            autoComplete='off'
-                                                            onChange={(event) => {
-                                                                onChangeText({ event, state, setState })
-
-                                                            }}
-                                                        />
-                                                        {isError.SchemeDetails.length > 0 && (
-                                                            <span className="invalid-feedback">{isError.SchemeDetails}</span>
-                                                        )}
-                                                    </FormGroup>
-                                                </Row>
-                                            </CardBody>
-                                        </Card>
-                                    </Col>
-
-
-                                    <div className="row ">
-
-                                        <CardBody className="c_card_body">
-                                            <Col md={11}>
-
-                                                <Label htmlFor="validationCustom01">{fieldLabel.Item} </Label>
-                                                <Select
-                                                    id="Item"
-                                                    name="Item"
-                                                    value={values.Item}
-                                                    isSearchable={true}
-                                                    isMulti={true}
-                                                    className="react-dropdown"
-                                                    classNamePrefix="dropdown"
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                                    }}
-                                                    options={ItemList_Options}
-                                                    onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-                                                />
-                                                {isError.Item.length > 0 && (
-                                                    <span className="invalid-feedback">{isError.Item}</span>
-                                                )}
-
-
-                                            </Col>
-                                        </CardBody>
-                                    </div>
-
-                                    <div className="row ">
-
-                                        <CardBody className="c_card_body">
-                                            <Col md={11}>
-                                                {/* <FormGroup className="mb-2 col col-sm-3 "> */}
-                                                <Label htmlFor="validationCustom01">{fieldLabel.Party} </Label>
-                                                <Select
-                                                    id="Party"
-                                                    name="Party"
-                                                    value={values.Party}
-                                                    isMulti={true}
-
-                                                    isSearchable={true}
-                                                    className="react-dropdown"
-                                                    classNamePrefix="dropdown"
-                                                    options={Party_Option}
-                                                    onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-                                                />
-                                                {isError.Party.length > 0 && (
-                                                    <span className="invalid-feedback">{isError.Party}</span>
-                                                )}
-                                                {/* </FormGroup> */}
-                                            </Col>
-                                        </CardBody>
-                                    </div>
 
                                     <SaveButtonDraggable>
                                         <SaveButton pageMode={pageMode}

@@ -49,9 +49,7 @@ const SchemeMasterList = () => {
     const page_Id = pageId.SCHEME_MASTER_lIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-
-    // dispatch(getSchemeList())
-
+    dispatch(getSchemeList())
   }, []);
 
   const { pageField, goBtnLoading } = reducers

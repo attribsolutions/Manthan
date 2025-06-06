@@ -29,6 +29,11 @@ const DemandVSSupply = (props) => {
     const [PartyDropdown, setPartyDropdown] = useState(allLabelWithZero);
 
 
+    const [state, setState] = useState({
+        OrderType: "",
+    });
+    debugger
+
     const {
         goButtonData,
         pageField,
@@ -115,9 +120,11 @@ const DemandVSSupply = (props) => {
     function excel_And_GoBtnHandler(e, mode) {
 
         const jsonBody = JSON.stringify({
-            "FromDate": fromdate,
-            "ToDate": todate,
-            "Party": !IsMannagementParty ? _cfunc.loginPartyID() : PartyDropdown.value,
+            FromDate: fromdate,
+            ToDate: todate,
+            Party: !IsMannagementParty ? _cfunc.loginPartyID() : PartyDropdown.value,
+            OrderType: state.OrderType,
+            EmployeeID: _cfunc.loginEmployeeID()
         });
         let config = { jsonBody, Mode: mode }
         dispatch(DemandVSSupply_Report_Action(config));
@@ -208,8 +215,52 @@ const DemandVSSupply = (props) => {
                             </FormGroup>
                         </Col>}
 
+                        <Col sm={3} className="">
+                            <FormGroup className=" row mt-2" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "95px" }}>Order Type</Label>
+                                <Col sm="8">
+                                    <div className="btn-group  col-xxl-12" role="group" aria-label="Value type">
+                                        <input
+                                            type="checkbox"
+                                            id="btncheckRS"
+                                            className="btn-check"
+                                            autoComplete="off"
+                                            checked={state.OrderType === "Purchase"}
+                                            onChange={() =>
+                                                setState(prev => ({
+                                                    ...prev,
 
-                        <Col sm={IsMannagementParty ? 3 : 6} className=" d-flex justify-content-end" >
+                                                    OrderType: "Purchase",
+
+                                                }))
+                                            }
+                                        />
+                                        <label className="btn btn-outline-secondary" htmlFor="btncheckRS">
+                                            Purchase
+                                        </label>
+                                        <input
+                                            type="checkbox"
+                                            id="btncheckPercent"
+                                            className="btn-check"
+                                            autoComplete="off"
+                                            checked={state.OrderType === "Sales"}
+                                            onChange={() =>
+                                                setState(prev => ({
+                                                    ...prev,
+                                                    OrderType: "Sales",
+                                                }))
+                                            }
+                                        />
+                                        <label className="btn btn-outline-secondary" htmlFor="btncheckPercent">
+                                            Sales
+                                        </label>
+                                    </div>
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+                        <Col sm={IsMannagementParty ? 0 : 3} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"

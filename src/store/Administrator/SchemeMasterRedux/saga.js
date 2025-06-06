@@ -44,9 +44,10 @@ function* Delete_SchemeList_ID_GenFunc({ config }) {                    // delet
   } catch (error) { yield put(SchemeApiErrorAction()) }
 }
 
-function* Edit_Schemelist_ID_GenFunc({ config }) {                      // edit API 
+function* Edit_Schemelist_ID_GenFunc({ config }) {
   const { btnmode } = config;
   try {
+    debugger                  // edit API 
     const response = yield call(edit_Scheme_List_Api, config);
     response.pageMode = btnmode;
     yield put(editSchemeIDSuccess(response));
