@@ -22,6 +22,7 @@ import CashierSummaryReport from "../pages/SweetPOS/Reports/CashierSummaryReport
 import ManagerSummaryReport from "../pages/SweetPOS/Reports/ManagerSummaryReport/Page";
 import POSSaleSummaryReport from "../pages/SweetPOS/Reports/PosSummarySaleReport/PDFReport/Page";
 import SaleSummaryThermalPrintReport from "../pages/SweetPOS/Reports/PosSummarySaleReport/ThermalPrintReport/Report";
+import BillDeleteSummaryReport from "./BillSummaryDeleteReport/PDFReport/Page";
 
 export const FrenchiesesOrder = "FrenchiesesOrder"
 export const order1 = "order1"
@@ -49,6 +50,10 @@ export const CSS_ItemSaleReport = "CSS_ItemSaleReport"
 export const Cashier_Summary_Report = "Cashier_Summary_Report"
 export const Manager_Summary_Report = "Manager_Summary_Report"
 export const Sale_Summary_Thermal_Print_Report = "Sale_Summary_Thermal_Print_Report"
+
+export const billDeleteSummaryReport = "billDeleteSummaryReport"
+
+
 
 
 const generateReport = (resp) => {
@@ -129,7 +134,9 @@ const generateReport = (resp) => {
         case Sale_Summary_Thermal_Print_Report:
             SaleSummaryThermalPrintReport(resp.Data)
             break;
-
+        case billDeleteSummaryReport:
+            BillDeleteSummaryReport(resp.Data)
+            break;
 
         default:
             break;

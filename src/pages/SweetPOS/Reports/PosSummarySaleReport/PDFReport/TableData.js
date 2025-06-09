@@ -34,6 +34,11 @@ export const DetailsOfTransport = [
 export const Rows_1 = (data) => {
     data.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
 
+    // const RoundOffAmount = data.reduce((sum, row) => sum + row.RoundOffAmount, 0);
+    debugger
+
+    const uniqueMap = new Map();
+
     const returnArr = [];
     let Gst = 0
     let totalGst = 0
@@ -44,9 +49,10 @@ export const Rows_1 = (data) => {
     let finalTotalGST = 0
     let finalBasicAmount = 0
     let finalDiscountAmount = 0
+    let finalRoundOffAmount = 0;
 
     const groupedItems = data.reduce((accumulator, currentItem) => {
-        const { ItemName, BaseItemUnitQuantity, Rate, GrandTotal, GSTPercentage, GSTAmount, BasicAmount, DiscountAmount, Amount, MRPValue } = currentItem;
+        const { id, ItemName, BaseItemUnitQuantity, Rate, GrandTotal, GSTPercentage, GSTAmount, BasicAmount, DiscountAmount, Amount, MRPValue, RoundOffAmount } = currentItem;
 
         const key = ItemName + '_' + MRPValue;
         if (accumulator[key]) {
@@ -56,25 +62,36 @@ export const Rows_1 = (data) => {
             accumulator[key].BasicAmount += getFixedNumber(BasicAmount, 3);
             accumulator[key].DiscountAmount += getFixedNumber(DiscountAmount, 3);
             accumulator[key].Amount += getFixedNumber(Amount, 3);
+            accumulator[key].RoundOffAmount += RoundOffAmount;
+
+
 
         } else {
             accumulator[key] = {
                 Rate, ItemName, GrandTotal: getFixedNumber(GrandTotal, 3), MRPValue,
-                BaseItemUnitQuantity: getFixedNumber(BaseItemUnitQuantity, 3), GSTPercentage: GSTPercentage, GSTAmount: getFixedNumber(GSTAmount, 3), BasicAmount: getFixedNumber(BasicAmount, 3), DiscountAmount: getFixedNumber(DiscountAmount, 3), Amount: getFixedNumber(Amount, 3)
+                BaseItemUnitQuantity: getFixedNumber(BaseItemUnitQuantity, 3), GSTPercentage: GSTPercentage,
+                GSTAmount: getFixedNumber(GSTAmount, 3), BasicAmount: getFixedNumber(BasicAmount, 3),
+                DiscountAmount: getFixedNumber(DiscountAmount, 3), Amount: getFixedNumber(Amount, 3),
+                RoundOffAmount: RoundOffAmount, id: id
             };
         }
         return accumulator;
     }, {});
-    debugger
+
     const TotalItemlength = Object.values(groupedItems).length;
     data["TotalItemlength"] = TotalItemlength;
 
     Object.values(groupedItems).forEach((element, key) => {
 
+        if (!uniqueMap.has(element.id)) {
+            uniqueMap.set(element.id, element.RoundOffAmount);
+        }
+
         finalTotal += element.Amount;
         finalTotalGST += element.GSTAmount;
         finalBasicAmount += element.BasicAmount;
         finalDiscountAmount += element.DiscountAmount;
+        finalRoundOffAmount += element.RoundOffAmount;
 
         const tableitemRow = [
             `${element.ItemName}`,
@@ -86,9 +103,9 @@ export const Rows_1 = (data) => {
 
         function totalrow() {
             return [
-                `GST ${(parseFloat(GSTPercentage))}%             Total GST: ${numberWithCommas(Number(totalGst).toFixed(2))}                Total:${numberWithCommas(Number(totalAmount).toFixed(2))} `,
+                `GST ${(parseFloat(GSTPercentage))}%             Total GST: ${numberWithCommas(Number(totalGst).toFixed(2))}`,
                 ``,
-                ``,
+                `${numberWithCommas(Number(totalAmount).toFixed(2))}`,
                 `Span`,
             ];
         };
@@ -107,7 +124,6 @@ export const Rows_1 = (data) => {
             totalLots()
         }
         else {
-            debugger
             returnArr.push(totalrow());
             returnArr.push(tableitemRow);
             totalGst = 0;
@@ -125,21 +141,47 @@ export const Rows_1 = (data) => {
 
     if (returnArr.length - 1) {
         returnArr.push([
-            `GST Total: ${numberWithCommas(Number(finalTotalGST).toFixed(2))}            Amount: ${numberWithCommas(Number(finalTotal).toFixed(2))}`,
             ``,
             ``,
+            ``,
+            `SpanAll`,
+        ]);
+    }
+
+    if (returnArr.length - 1) {
+        returnArr.push([
+            `GST Total:`,
+            ``,
+            `${numberWithCommas(Number(finalTotalGST).toFixed(2))}`,
             `Span`,
         ]);
     }
 
     if (returnArr.length - 1) {
         returnArr.push([
-            `Discount Amount: ${numberWithCommas(Number(finalDiscountAmount).toFixed(2))}           `,
+            `Discount Amount:`,
             ``,
-            ``,
+            `${numberWithCommas(Number(finalDiscountAmount).toFixed(2))}`,
             `Span`,
         ]);
     }
+    if (returnArr.length - 1) {
+        returnArr.push([
+            `Round Off:`,
+            ``,
+            `${([...uniqueMap.values()].reduce((sum, amt) => sum + amt, 0)).toFixed(2)}`,
+            `Span`,
+        ]);
+    }
+    if (returnArr.length - 1) {
+        returnArr.push([
+            `Amount:`,
+            ``,
+            ` ${numberWithCommas(getFixedNumber(finalTotal, 2))}`,
+            `Span`,
+        ]);
+    }
+
 
     return returnArr;
 }

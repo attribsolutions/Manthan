@@ -15,10 +15,13 @@ import { BillDeleteSummaryReport_GoButton_API, BillDeleteSummaryReport_GoButton_
 // import { BILL_DELETE_SUMMARY_REPORT_GO_BUTTON_API } from '../../store/SweetPOSStore/Report/BillDeleteSummaryRedux/actionType'
 import { ExcelReportComponent } from '../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS'
 import { useLocation } from 'react-router-dom';
-import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldList, commonPageFieldListSuccess, commonPageFieldSuccess, } from '../../store/actions'
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldList, commonPageFieldListSuccess, commonPageFieldSuccess, getpdfReportdataSuccess, } from '../../store/actions'
 import { pageId } from '../../routes'
+import * as report from '../../Reports/ReportIndex'
+
 import { allLabelWithBlank, allLabelWithZero } from '../../components/Common/CommonErrorMsg/HarderCodeData'
 import { CashierName_Api } from '../../helpers/backend_helper'
+import C_Report from '../../components/Common/C_Report'
 
 
 
@@ -103,6 +106,28 @@ const BillDeleteSummaryReport = (props) => {
 
     useEffect(() => {
 
+        if (BillDeleteSummaryData.goBtnMode === "Print") {
+
+            const Details = _cfunc.loginUserDetails()
+            let config = { rowData: { Data: [] } }
+            config.rowData["ReportType"] = report.billDeleteSummaryReport
+            config.rowData["Status"] = BillDeleteSummaryData.Status
+            config.rowData["StatusCode"] = BillDeleteSummaryData.StatusCode
+            config.rowData["Data"] = BillDeleteSummaryData.Data
+            config.rowData["Data"]["SupplierName"] = IsMannagementParty ? PartyDropdown.label : Details.PartyName
+
+            config.rowData["Data"]["Date"] = `From  ${_cfunc.date_dmy_func(fromDate)}  To  ${_cfunc.date_dmy_func(toDate)}`
+
+
+
+
+            dispatch(getpdfReportdataSuccess(config.rowData))
+
+            dispatch(BillDeleteSummaryReport_GoButton_API_Success([]));   // Reset Excel tableData
+
+        }
+
+
         if (BillDeleteSummaryData.goBtnMode === "downloadExcel") {
 
             ExcelReportComponent({      // Download CSV
@@ -116,7 +141,7 @@ const BillDeleteSummaryReport = (props) => {
         dispatch(BreadcrumbShowCountlabel(`Count:${Data.length} currency_symbol ${_cfunc.TotalAmount_Func(Data)}`));
     }, [BillDeleteSummaryData]);
 
-
+    // billDeleteSummaryReport
 
     useEffect(async () => {
         if (((IsMannagementParty) && (PartyDropdown.value !== "")) || (!IsMannagementParty)) {
@@ -183,7 +208,7 @@ const BillDeleteSummaryReport = (props) => {
             <div className="page-content">
                 <div className="px-2   c_card_filter text-black " >
                     <Row>
-                        <Col sm={2} className="ms-3">
+                        <Col sm={2} className="">
                             <FormGroup className=" row mt-2  " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
@@ -192,8 +217,6 @@ const BillDeleteSummaryReport = (props) => {
                                         name='FromDate'
                                         value={fromDate}
                                         onChange={fromdateOnchange}
-
-
                                     />
                                 </Col>
                             </FormGroup>
@@ -213,7 +236,7 @@ const BillDeleteSummaryReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        {IsMannagementParty && < Col sm={3} className="">
+                        {IsMannagementParty && < Col className="">
                             <FormGroup className=" row mt-2" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px", marginRight: "20px" }}>Party</Label>
@@ -271,6 +294,16 @@ const BillDeleteSummaryReport = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
+                                loading={listBtnLoading === "Print"}
+                                className="btn btn-primary m-3 mr "
+                                onClick={() => goButtonHandler("Print")}
+                            >
+                                Print
+                            </C_Button>
+
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
                                 loading={listBtnLoading === "downloadExcel"}
                                 className="btn btn-primary m-3 mr "
                                 onClick={() => goButtonHandler("downloadExcel")}
@@ -299,7 +332,7 @@ const BillDeleteSummaryReport = (props) => {
                 </div>
 
             </div>
-
+            <C_Report />
         </React.Fragment >
     )
 }
