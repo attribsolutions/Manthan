@@ -18,8 +18,16 @@ const Rows = (Data) => {
 
     function Header() {
         return [
-            "MATA Voucher Redeemption Claim",
+            "Voucher Redeemption Claim",
             "",
+            "",
+            ""
+        ];
+    };
+    function ShortName() {
+        return [
+            `${Data.SchemeShortName}`,
+            "ShortName",
             "",
             ""
         ];
@@ -93,6 +101,7 @@ const Rows = (Data) => {
 
     let returnArr = []
     returnArr.push(Header());
+    returnArr.push(ShortName());
     returnArr.push(PartyName());
     returnArr.push(ClaimDetails());
     returnArr.push(Empty());
@@ -113,13 +122,23 @@ const tableBody = (doc, data) => {
     var options = {
         didParseCell: (Data) => {
 
-            if (Data.row.cells[0].raw === "MATA Voucher Redeemption Claim") {
+            if (Data.row.cells[0].raw === "Voucher Redeemption Claim") {
                 Data.row.cells[0].colSpan = 4
                 Data.row.cells[0].styles.halign = "center"
                 Data.row.cells[0].styles.fontSize = 15
                 Data.row.cells[0].styles.fontStyle = "bold"
 
             }
+
+            if (Data.row.cells[1].raw === "ShortName") {
+                Data.row.cells[0].colSpan = 4
+                Data.row.cells[0].styles.halign = "center"
+                Data.row.cells[0].styles.fontSize = 12
+                Data.row.cells[0].styles.fontStyle = "bold"
+
+            }
+
+
             if (Data.row.cells[1].raw === data.FranchiseName) {
                 Data.row.cells[1].colSpan = 3
                 Data.row.cells[1].styles.halign = "center"
@@ -185,12 +204,12 @@ const tableBody = (doc, data) => {
                 Data.row.cells[1].colSpan = 3
             }
             if (Data.row.cells[0].raw === "Franchise Stamp And Signature") {
-                Data.row.cells[1].styles.cellPadding = 23
+                Data.row.cells[1].styles.cellPadding = 14
                 Data.row.cells[0].styles.fontStyle = "bold"
 
             }
             if (Data.row.cells[0].raw === "ASM Signature") {
-                Data.row.cells[1].styles.cellPadding = 23
+                Data.row.cells[1].styles.cellPadding = 15
                 Data.row.cells[0].styles.fontStyle = "bold"
 
             }
