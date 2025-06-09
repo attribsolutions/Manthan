@@ -6,7 +6,7 @@ import { C_Button } from "../../components/Common/CommonButton";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown } from "../../store/actions";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { Return_Report_Action_Success } from "../../store/Report/ReturnReportRedux/action";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
@@ -27,12 +27,12 @@ const DemandVSSupply = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [tableData, setTableData] = useState([]);
     const [PartyDropdown, setPartyDropdown] = useState(allLabelWithZero);
-
+    const [unitDropdown, setUnitDropdown] = useState({ value: 0, label: "BaseUnit" });
 
     const [state, setState] = useState({
-        OrderType: "",
+        OrderType: "Purchase",
     });
-    debugger
+
 
     const {
         goButtonData,
@@ -40,8 +40,10 @@ const DemandVSSupply = (props) => {
         userAccess,
         listBtnLoading,
         Party,
-        partyDropdownLoadings
+        partyDropdownLoadings,
+        BaseUnit
     } = useSelector((state) => ({
+        BaseUnit: state.ItemMastersReducer.BaseUnit,
         goButtonData: state.DemandVsSupplyReportReducer.DemandVsSupplyReportData,
         listBtnLoading: state.DemandVsSupplyReportReducer.listBtnLoading,
         partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
@@ -61,9 +63,8 @@ const DemandVSSupply = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.DEMAND_VS_SUPPLY));
         dispatch(getCommonPartyDrodownOptionAction())
-
+        dispatch(getBaseUnit_ForDropDown());
         dispatch(BreadcrumbShowCountlabel(`Count:${0} currency_symbol ${0.00}`));
-
 
         return () => {
             dispatch(DemandVSSupply_Report_Action_Success([]));
@@ -124,7 +125,8 @@ const DemandVSSupply = (props) => {
             ToDate: todate,
             Party: !IsMannagementParty ? _cfunc.loginPartyID() : PartyDropdown.value,
             OrderType: state.OrderType,
-            EmployeeID: _cfunc.loginEmployeeID()
+            EmployeeID: _cfunc.loginEmployeeID(),
+            Unit: unitDropdown.value,
         });
         let config = { jsonBody, Mode: mode }
         dispatch(DemandVSSupply_Report_Action(config));
@@ -157,6 +159,13 @@ const DemandVSSupply = (props) => {
         setTableData([]);
     }
 
+    const BaseUnit_DropdownOptions = BaseUnit.filter(index => index.Name === "No" || index.Name === "Kg" || index.Name === "Box")
+        .map(data => ({
+            value: data.id,
+            label: data.Name
+        }));
+    BaseUnit_DropdownOptions.unshift({ value: 0, label: "BaseUnit" })
+
 
 
     return (
@@ -165,7 +174,7 @@ const DemandVSSupply = (props) => {
             <div className="page-content">
                 <div className="px-2   c_card_filter text-black " >
                     <Row>
-                        <Col sm={3} className="">
+                        <Col sm={2} className="">
                             <FormGroup className=" row mt-2  " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
@@ -179,7 +188,7 @@ const DemandVSSupply = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={3} className="">
+                        <Col sm={2} className="">
                             <FormGroup className=" row mt-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
@@ -193,10 +202,10 @@ const DemandVSSupply = (props) => {
                             </FormGroup>
                         </Col>
 
-                        {IsMannagementParty && < Col sm={3} className="">
+                        {IsMannagementParty && < Col sm={2} className="">
                             <FormGroup className=" row mt-2" >
                                 <Label className="col-sm-4 p-2"
-                                    style={{ width: "65px", marginRight: "20px" }}>Party</Label>
+                                    style={{ width: "49px", marginRight: "20px" }}>Party</Label>
                                 <Col sm="8">
                                     <C_Select
                                         name="Party"
@@ -215,11 +224,32 @@ const DemandVSSupply = (props) => {
                             </FormGroup>
                         </Col>}
 
-                        <Col sm={3} className="">
+                        <Col sm={2}>
                             <FormGroup className=" row mt-2" >
                                 <Label className="col-sm-4 p-2"
-                                    style={{ width: "95px" }}>Order Type</Label>
+                                    style={{ width: "65px" }}>Unit</Label>
                                 <Col sm="8">
+                                    <C_Select
+                                        name="Unit"
+                                        value={unitDropdown}
+                                        isSearchable={true}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={BaseUnit_DropdownOptions}
+                                        onChange={(e) => { setUnitDropdown(e) }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+                        <Col sm={2} className="">
+                            <FormGroup className=" row mt-2" >
+                                <Label className=" p-2"
+                                    style={{ width: "95px" }}>Order Type</Label>
+                                <Col >
                                     <div className="btn-group  col-xxl-12" role="group" aria-label="Value type">
                                         <input
                                             type="checkbox"

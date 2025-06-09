@@ -16,7 +16,7 @@ var pageHeder = function (doc, data) {
 
 
 const POSSaleSummaryReport = (tableData) => {
-    
+
 
     let data = [tableData]
     let previousPageCount = 0;
@@ -140,13 +140,25 @@ const POSSaleSummaryReport = (tableData) => {
 
 
                 didParseCell: (data1) => {
-                    
+
                     if (data1.row.cells[3].raw === "Span") {
-                        data1.row.cells[0].colSpan = 4;
+                        data1.row.cells[0].colSpan = 2;
+                        data1.row.cells[2].colSpan = 2;
+
                         data1.row.cells[0].styles.halign = "left";
-                        data1.row.cells[0].styles.fontSize = 8;
+                        data1.row.cells[0].styles.fontSize = 9;
                         data1.row.cells[0].styles.fontStyle = "bold";
+
+                        data1.row.cells[2].styles.fontSize = 9;
+                        data1.row.cells[2].styles.fontStyle = "bold";
                     }
+
+                    if (data1.row.cells[3].raw === "SpanAll") {
+                        data1.row.cells[0].colSpan = 4;
+                    }
+
+
+
                     if (data1.row?.raw[3]?.IsHighlightItemInPrint) {
 
                         data1.row.cells[0].styles.fillColor = [211, 211, 211]
