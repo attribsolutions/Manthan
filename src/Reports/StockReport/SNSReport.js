@@ -92,7 +92,7 @@ const SNSReport = (props) => {
 
     useEffect(() => {
         try {
-
+            debugger
             if ((StockReport_1_Gobtb.Status === true) && (StockReport_1_Gobtb.StatusCode === 200)) {
 
                 const StockDetails = StockReport_1_Gobtb.Data.flatMap(entry =>
@@ -114,7 +114,7 @@ const SNSReport = (props) => {
             else if ((StockReport_1_Gobtb.Status === true) && (StockReport_1_Gobtb.StatusCode === 204)) {
                 customAlert({
                     Type: 3,
-                    Message: StockReport_1_Gobtb.recordNotAvailable,
+                    Message: StockReport_1_Gobtb.Message,
                 })
                 dispatch(stockReport_1_GoButton_API_Success([]));
                 return
