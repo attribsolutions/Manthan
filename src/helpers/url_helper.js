@@ -111,6 +111,10 @@ export const ITEMS_GROUP_API = "/ItemGroups"
 // Party Master 
 export const PARTY_MASTER_API = "/Parties"
 export const PARTY_MASTER_FILTER_API = "/PartiesFilter"
+
+export const PARTY_MASTER_OPTIMIZE_FILTER_API = "/Party_List"
+
+
 export const GetDistrictOnState = "/GetDistrictOnState"
 export const ADDRESSTYPES = "/AddressTypes"
 export const PARTYTYPES = "/PartyTypes"
@@ -240,7 +244,7 @@ export const VOUCHER_API = '/giftvouchervalidityCheck'
 export const SCHEME_TYPE_SINGLE_GET_API = "SchemeTypeSingleGet"  //--Get
 
 export const SCHEME_TYPE = "/SchemeType"     //-- 
-  // --put
+// --put
 
 
 // Group Api

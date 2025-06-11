@@ -122,9 +122,10 @@ const PartyList = () => {
             const jsonBody = {
                 ..._cfunc.loginJsonBody(),
                 PartyID: _cfunc.loginSelectedPartyID() === 0 ? _cfunc.loginPartyID() : _cfunc.loginSelectedPartyID(),
-                IsRetailer: (subPageMode === url.RETAILER_LIST) || (subPageMode === url.RETAILER_MASTER_LIST_1) ? 1 : 0
+                IsRetailer: (subPageMode === url.RETAILER_LIST) || (subPageMode === url.RETAILER_MASTER_LIST_1) ? 1 : 0,
+                EmployeeID: _cfunc.loginEmployeeID()
             }
-            dispatch(getPartyListAPI(jsonBody));
+            dispatch(getPartyListAPI(jsonBody, subPageMode));
         }
         catch (error) { }
         return
