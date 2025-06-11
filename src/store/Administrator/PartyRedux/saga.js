@@ -1,5 +1,5 @@
 import { call, put, takeLatest } from "redux-saga/effects";
-import { CommonConsole, loginJsonBody, loginPartyID } from "../../../components/Common/CommonFunction";
+import { CommonConsole, loginEmployeeID, loginJsonBody, loginPartyID } from "../../../components/Common/CommonFunction";
 import {
   GetCompanyByDivisionTypeID_For_Dropdown,
   GetDistrictOnState_For_Dropdown,
@@ -13,6 +13,7 @@ import {
   Party_Address_Delete_API,
   RetailerListForApproval,
   RetailerListForApproval_ID,
+  Party_Master_Optimize_Get_API,
 } from "../../../helpers/backend_helper";
 import {
   deletePartyIDSuccess,
@@ -42,15 +43,17 @@ import {
   PARTY_LIST_FOR_APPROVAL_ACTION,
   GET_PARTY_LIST_FOR_APPROVAL_ACTION,
 } from "./actionTypes";
+import { url } from "../../../routes";
 
-function* Get_Party_GenFun({ jsonBody }) {   // Only CompanyID is Required
-
-  var JsonBody = !(jsonBody) ? { ...loginJsonBody(), PartyID: loginPartyID(), IsRetailer: 0 } : jsonBody
+function* Get_Party_GenFun({ jsonBody, subPageMode }) {   // Only CompanyID is Required
+  var JsonBody = !(jsonBody) ? { ...loginJsonBody(), PartyID: loginPartyID(), IsRetailer: 0, EmployeeID: loginEmployeeID() } : jsonBody
 
   try {
 
-    const response = yield call(Party_Master_Get_API, JSON.stringify(JsonBody));
+    let response = {};
+    let newArray = [];
 
+    debugger
     function address(arr) {
       let result = ''
       const ind = arr.PartyAddress.find((index) => {
@@ -59,24 +62,30 @@ function* Get_Party_GenFun({ jsonBody }) {   // Only CompanyID is Required
       if (ind) { result = ind.Address }
       return result
     }
-    const newArray = response.Data.map((index) => {
-      index["CountryName"] = index.Country?.Country;
-      index["State"] = index.State.Name;
-      index["District"] = index.District.Name;
-      index['Company'] = index.Company.Name;
-      index['PartyType'] = index.PartyType.Name;
-      index['PartyTypeID'] = index.PartyType.id;
-      const filterArry = index.MCSubParty
-        .filter(i => i.Route !== null)
-        .map(i => i.Route.Name);
-      index['Route'] = filterArry.length > 0 ? filterArry.join(', ') : '';
+    if (subPageMode === url.PARTY_lIST) {
+      response = yield call(Party_Master_Optimize_Get_API, JSON.stringify(JsonBody));
+      newArray = response.Data
+    } else {
+      response = yield call(Party_Master_Get_API, JSON.stringify(JsonBody));
+      newArray = response.Data.map((index) => {
+        index["CountryName"] = index.Country?.Country;
+        index["State"] = index.State.Name;
+        index["District"] = index.District.Name;
+        index['Company'] = index.Company.Name;
+        index['PartyType'] = index.PartyType.Name;
+        index['PartyTypeID'] = index.PartyType.id;
+        const filterArry = index.MCSubParty
+          .filter(i => i.Route !== null)
+          .map(i => i.Route.Name);
+        index['Route'] = filterArry.length > 0 ? filterArry.join(', ') : '';
 
-      if (!index.PriceList) { index.PriceList = '' }
-      else { index["PriceList"] = index.PriceList.Name; }
-      index["PartyAddress"] = address(index);
-      index["Check"] = false
-      return index;
-    });
+        if (!index.PriceList) { index.PriceList = '' }
+        else { index["PriceList"] = index.PriceList.Name; }
+        index["PartyAddress"] = address(index);
+        index["Check"] = false
+        return index;
+      });
+    }
 
     yield put(getPartyListAPISuccess(newArray))
   } catch (error) {
