@@ -124,7 +124,7 @@ const ItemsMaster = (props) => {
         ShortName: "",
         ShelfLife: "",
         BaseUnitName: "",
-        SAPItemCode: "",
+        SAPItemCode: null,
         BarCode: '',
         Category: [],
         CategoryType: "",
