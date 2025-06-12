@@ -153,7 +153,7 @@ const VoucherRedemptionClaim = () => {
         };
 
         fetchSchemeList();
-    }, []);
+    }, [Scheme]);
 
 
     const SchemeOnchange = (e) => {
