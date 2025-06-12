@@ -133,7 +133,7 @@ const tableBody = (doc, data) => {
             if (Data.row.cells[1].raw === "ShortName") {
                 Data.row.cells[0].colSpan = 4
                 Data.row.cells[0].styles.halign = "center"
-                Data.row.cells[0].styles.fontSize = 12
+                Data.row.cells[0].styles.fontSize = 10
                 Data.row.cells[0].styles.fontStyle = "bold"
 
             }

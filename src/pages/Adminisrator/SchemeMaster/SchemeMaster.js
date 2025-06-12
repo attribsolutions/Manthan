@@ -44,11 +44,10 @@ import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { C_DatePicker } from "../../../CustomValidateForm";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { getCommonPartyDrodownOptionAction } from "../../../store/Utilites/PartyDrodown/action";
-import { getSchemeListSuccess, saveSchemeMaster, saveSchemeMaster_Success } from "../../../store/Administrator/SchemeMasterRedux/action";
+import { saveSchemeMaster, saveSchemeMaster_Success } from "../../../store/Administrator/SchemeMasterRedux/action";
 import { getSchemeTypelist } from "../../../store/Administrator/SchemeRedux/action";
 import classnames from "classnames"
 import SchemeTabForm from "./SchemeTabForm";
@@ -181,8 +180,8 @@ const SchemeMaster = (props) => {
                     ToPeriod, ItemDetails, VoucherLimit, QRPrefix, IsActive,
                     SchemeTypeID, BillAbove, Message, OverLappingScheme, SchemeTypeName,
                     SchemeDetails, SchemeValueUpto, PartyDetails
-                } = hasEditVal
-
+                } = hasEditVal[0]
+                debugger
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.ToPeriod.valid = true;
@@ -317,6 +316,9 @@ const SchemeMaster = (props) => {
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
+
+
+
 
     if (!(userPageAccessState === '')) {
         return (

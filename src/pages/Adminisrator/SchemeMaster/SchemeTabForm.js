@@ -44,7 +44,6 @@ import { C_DatePicker } from "../../../CustomValidateForm";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { getCommonPartyDrodownOptionAction } from "../../../store/Utilites/PartyDrodown/action";
-import { getSchemeListSuccess, saveSchemeMaster } from "../../../store/Administrator/SchemeMasterRedux/action";
 import { getSchemeTypelist } from "../../../store/Administrator/SchemeRedux/action";
 
 
@@ -106,9 +105,7 @@ const SchemeMaster = forwardRef((props, ref) => {
         dispatch(getItemList());
         dispatch(getSchemeTypelist());
         dispatch(getCommonPartyDrodownOptionAction())
-        return () => {
-            dispatch(getSchemeListSuccess({ Status: false }));
-        }
+
     }, []);
 
     useImperativeHandle(ref, () => ({
@@ -153,7 +150,7 @@ const SchemeMaster = forwardRef((props, ref) => {
         };
     }, [userAccess])
 
- 
+
 
     const SchemeType_Options = SchemeType.map((index) => ({
         value: index.id,
@@ -247,7 +244,7 @@ const SchemeMaster = forwardRef((props, ref) => {
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(getSchemeListSuccess({ Status: false }));
+
             setState(() => resetFunction(fileds, state)) // Clear form values 
 
             if (pageMode === "other") {
@@ -268,7 +265,6 @@ const SchemeMaster = forwardRef((props, ref) => {
             }
         }
         else if (postMsg.Status === true) {
-            dispatch(getSchemeListSuccess({ Status: false }))
             customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMsg.Message),

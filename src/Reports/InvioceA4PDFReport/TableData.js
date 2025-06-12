@@ -3,32 +3,32 @@ import { convertAmericanDollars, numberWithCommas, toWords } from "../Report_com
 
 
 export const columns = [
-    "SN",
-    "HSN Item Name",
-    "Quantity (UOM)",
-    "MRP",
-    "Rate",
-    "Discount",
-    "Discount Amount ",
-    "Taxable Amount",
-    "          CGST           %        Amount",
-    "CGST Amount",
-    "          SGST           %        Amount",
-    "SGST Amount",
-    "Amount",
+    "SN",   //0
+    "HSN Item Name",  //1
+    "Quantity (UOM)",  //2
+    "MRP",  //3
+    "Rate",  //4
+    "Discount",  //5
+    "Discount Amount ", //6
+    "Taxable Amount",  //7
+    "          CGST           %        Amount",  //8
+    "CGST Amount",  //9
+    "          SGST           %        Amount",  //10
+    "SGST Amount",  //11
+    "Amount",  //12
 ];
 export const columnsWithIGST = [
-    "SN",
-    "HSN Item Name",
-    "Quantity (UOM)",
-    "MRP",
-    "Rate",
-    "Discount",
-    "Discount Amount ",
-    "Taxable Amount",
-    "          IGST           %        Amount",
-    "IGST Amount",
-    "Amount",
+    "SN", //0
+    "HSN Item Name", //1
+    "Quantity (UOM)", //2
+    "MRP", //3
+    "Rate", //4
+    "Discount", //5
+    "Discount Amount ", //6
+    "Taxable Amount", //7
+    "          IGST           %        Amount", //8
+    "IGST Amount", //9
+    "Amount", //10
 ];
 
 
@@ -159,7 +159,7 @@ export const Rows = (data) => {
         const tableitemRow = [
             SrNO++,
             `${HSNcodes} ${element.ItemName}`,
-            element.UnitName === "" ? `${parseFloat(element.Quantity)} ${element.PrimaryUnitName}   ${element.UnitName}` : `${parseFloat(element.Quantity)} ${element.PrimaryUnitName}(${element.PcsinNumber} ${element.PcsinNumberUnit})`,
+            element.UnitName === "" ? `${parseFloat(element.Quantity)} ${element.PrimaryUnitName}   ${element.UnitName} ${isTrayEnterQuantity && "(" + ((Number(element.TrayQuantity)).toFixed(1) + ' Tray)')}` : `${parseFloat(element.Quantity)} ${element.PrimaryUnitName}(${element.PcsinNumber} ${element.PcsinNumberUnit})`,
             `${numberWithCommas(Number(element.MRPValue).toFixed(2))}`,
             `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
             `${parseFloat(element.Discount)} ${element.DiscountType === "1" ? "Rs" : "%"}`,
@@ -252,12 +252,15 @@ export const Rows = (data) => {
             returnArr.push(totalrow());
         }
     })
+
+
+
     return returnArr;
 }
 
 export const RowsWithIGST = (data) => {
     const isTrayEnterQuantity = strToBool(loginSystemSetting().IsTrayEnterQuantity)
-    debugger
+
     const { InvoiceItems = [] } = data
     InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
@@ -336,7 +339,7 @@ export const RowsWithIGST = (data) => {
         const tableitemRow = [
             SrNO++,
             `${HSNcodes} ${element.ItemName}`,
-            element.UnitName === "" ? `${parseFloat(element.Quantity)} ${element.PrimaryUnitName}   ${element.UnitName}` : `${parseFloat(element.Quantity)} ${element.PrimaryUnitName}(${element.PcsinNumber} ${element.PcsinNumberUnit})`,
+            element.UnitName === "" ? `${parseFloat(element.Quantity)} ${element.PrimaryUnitName}   ${element.UnitName} ${isTrayEnterQuantity && "(" + ((Number(element.TrayQuantity)).toFixed(1) + ' Tray)')}` : `${parseFloat(element.Quantity)} ${element.PrimaryUnitName}(${element.PcsinNumber} ${element.PcsinNumberUnit})`,
             `${numberWithCommas(Number(element.MRPValue).toFixed(2))}`,
             `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
             `${element.Discount} ${element.DiscountType === "1" ? "Rs" : "%"}`,
@@ -348,7 +351,7 @@ export const RowsWithIGST = (data) => {
         ];
 
         function totalLots() {
-            debugger
+
             totalQuantity = Number(totalQuantity) + Number(element.Quantity)
             totalIGst = Number(totalIGst) + Number(element.IGST)
             totalAmount = Number(totalAmount) + Number(element.Amount)
@@ -420,9 +423,11 @@ export const RowsWithIGST = (data) => {
             returnArr.push(totalrow());
         }
     })
+
+
+
     return returnArr;
 }
-
 
 export const RowsForAmericaInvoice = (data) => {
     const isTrayEnterQuantity = strToBool(loginSystemSetting().IsTrayEnterQuantity)
@@ -572,7 +577,6 @@ export const RowsForAmericaInvoice = (data) => {
     })
     return returnArr;
 }
-
 
 export const BilledByRow = (data) => {
 
