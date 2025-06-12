@@ -290,6 +290,8 @@ function* orderList_GoBtn_GenFunc({ config }) {
       if (i.InvoiceCreated === true) {
         i.Status = "Invoice Created"
         if ((subPageMode === url.ORDER_LIST_4) && (isSweetAndSnacksCompany)) {
+          i.forceMakeBtnHide = false
+
           i.forceExtraSelectDissabled = true;
         }
       }
