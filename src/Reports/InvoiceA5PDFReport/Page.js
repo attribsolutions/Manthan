@@ -24,13 +24,25 @@ var pageHeder = function (doc, data) {
 
 function reportBody(doc, data) {
     const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN)
+    const isSweetAndSnacksCompany = IsSweetAndSnacksCompany()
+
+
     if (isIGST) {
-        style.tableBodyWithIGST(doc, data);                 //table Body
+        if (isSweetAndSnacksCompany) {
+            style.tableBodyWith_IGST_forSweetAndSnacks(doc, data); //table Body for Sweet and Snacks Company
+        } else {
+            style.tableBodyWithIGST(doc, data); //table Body
+        }
     } else if (data.isAmerica) {
-        style.tableBodyForAmericanInvoice(doc, data);
+        style.tableBodyForAmericanInvoice(doc, data)
     } else {
-        style.tableBody(doc, data);
+        if (isSweetAndSnacksCompany) {
+            style.tableBodyWith_CGST_SGST_forSweetAndSnacks(doc, data);
+        } else {
+            style.tableBody(doc, data);
+        }
     }
+
 
 }
 

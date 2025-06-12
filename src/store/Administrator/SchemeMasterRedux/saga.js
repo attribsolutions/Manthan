@@ -21,6 +21,7 @@ import {
   SAVE_SCHEME_MASTER,
   UPDATE_SCHEMEMASTER_ID
 } from "./actionType";
+import { loginPartyTypeID } from "../../../components/Common/CommonFunction";
 
 function* Save_Method_ForSchemeMaster_GenFun({ config }) {              // Save API
   try {
@@ -29,11 +30,18 @@ function* Save_Method_ForSchemeMaster_GenFun({ config }) {              // Save 
   } catch (error) { yield put(SchemeApiErrorAction()) }
 }
 
-function* Get_Scheme_List_GenFunc() {                                   // getList API
+function* Get_Scheme_List_GenFunc() {
+  const PartyTypeID = loginPartyTypeID()                                 // getList API
   try {
     const response = yield call(Get_Scheme_List);
-    debugger
-    yield put(getSchemeListSuccess(response.Data));
+    const List = response.Data.map((item) => {
+      return {
+        ...item,
+        PartyTypeID: PartyTypeID,
+      }
+    })
+
+    yield put(getSchemeListSuccess(List));
   } catch (error) { yield put(SchemeApiErrorAction()) }
 }
 

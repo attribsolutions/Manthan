@@ -930,6 +930,348 @@ export const tableBodyWithIGST = (doc, data) => {
 }
 
 
+
+export const tableBodyWith_CGST_SGST_forSweetAndSnacks = (doc, data) => {
+    var options = {
+        didParseCell: (data1) => {
+            if (data1.row.cells[6].raw === "isaddition") {
+                data1.row.cells[1].colSpan = 4
+                // data1.row.cells[3].colSpan = 5
+                data1.row.cells[5].colSpan = 2
+                data1.row.cells[7].colSpan = 2
+
+                data1.row.cells[1].styles.fontSize = 7
+                data1.row.cells[1].styles.halign = "right"    // Alignment for  cgst and Total in spanrow
+
+                data1.row.cells[8].styles.fontSize = 7
+                data1.row.cells[7].styles.fontSize = 7
+                data1.row.cells[9].styles.fontSize = 7
+                data1.row.cells[9].styles.fontSize = 7
+                data1.row.cells[1].styles.fontStyle = "bold"
+                data1.row.cells[8].styles.fontStyle = "bold"
+                data1.row.cells[7].styles.fontStyle = "bold"
+                data1.row.cells[9].styles.fontStyle = "bold"
+                data1.row.cells[9].styles.fontStyle = "bold"
+            }
+
+
+            if (data1.row.cells[1].raw === "HSN Item Name") {
+
+                let TotalBox = 0;
+                const unit = isSweetAndSnacksCompany ? "Tray" : "Box"
+                data.InvoiceItems.forEach((element, key) => {
+                    if (element.PrimaryUnitName === unit) {
+                        TotalBox = Number(TotalBox) + Number(element.Quantity)
+                    }
+                })
+                if (TotalBox === 0) {
+                    data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})`
+                } else {
+                    data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})  (${TotalBox} ${unit})`
+                }
+
+                data1.row.cells[5].colSpan = 2
+                data1.row.cells[7].colSpan = 2
+            }
+            if (data1.row.cells[1].raw === "Batch") {
+                data1.row.cells[0].colSpan = 9
+
+            }
+        },
+
+        didDrawCell: (data1) => {
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 5) {
+                if (data1.row.cells[5].raw === "          CGST           %        Amount") {
+
+                    const cellWidth = data1.cell.width;
+                    const cellHeight = data1.cell.height;
+                    const startX = data1.cell.x;
+                    const startY = data1.cell.y + cellHeight / 2;
+                    const endX = startX + cellWidth;
+                    const endY = startY;
+
+                    const startXVertical = data1.cell.x + cellWidth / 2;  // X-coordinate at the middle of the cell
+                    const startY1vertical = data1.cell.y + 9;
+                    const endYvertical = startY + cellHeight;
+
+                    doc.line(startXVertical - 5, startY1vertical + 1, startXVertical - 5, endYvertical + 1);  // Draw a vertical line
+                    doc.line(startX, startY, endX, endY);
+                }
+            }
+            if (rowIdx === 0 && colIdx === 7) {
+                if (data1.row.cells[7].raw === "          SGST           %        Amount") {
+
+                    const cellWidth = data1.cell.width;
+                    const cellHeight = data1.cell.height;
+                    const startX = data1.cell.x;
+                    const startY = data1.cell.y + cellHeight / 2;
+                    const endX = startX + cellWidth;
+                    const endY = startY;
+
+                    const startXVertical = data1.cell.x + cellWidth / 2;  // X-coordinate at the middle of the cell
+                    const startY1vertical = data1.cell.y + 9;
+                    const endYvertical = startY + cellHeight;
+
+                    doc.line(startXVertical - 5, startY1vertical + 1, startXVertical - 5, endYvertical + 1); // Draw a vertical line
+                    doc.line(startX, startY, endX, endY);
+                }
+            }
+
+        },
+        margin: {
+            left: 30, right: 25, top: 63,
+        },
+        theme: 'grid',
+        headerStyles: {
+            cellPadding: 2,
+            lineWidth: 0.3,
+            valign: 'top',
+            fontStyle: 'bold',
+            halign: 'center',    //'center' or 'right'
+            fillColor: "white",
+            textColor: "black", //Black     
+            fontSize: 7,
+            rowHeight: 10,
+            lineColor: "black"
+        },
+        bodyStyles: {
+            textColor: [30, 30, 30],
+            cellPadding: 3,
+            fontSize: 7,
+            columnWidth: 'wrap',
+            lineColor: [0, 0, 0],
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                fontSize: 6,
+                columnWidth: 15,
+            },
+            1: {
+                valign: "top",
+                columnWidth: 170,
+            },
+            2: {
+                columnWidth: 70,
+                halign: 'right',
+            },
+            3: {
+                columnWidth: 50,
+                halign: 'right',
+            },
+            4: {
+                columnWidth: 50,
+                halign: 'right',
+            },
+            5: {
+                columnWidth: 24,
+                halign: 'right',
+            },
+            6: {
+                columnWidth: 34,
+                halign: 'right',
+            },
+            7: {
+                columnWidth: 24,
+                halign: 'right',
+            },
+            8: {
+                columnWidth: 34,
+                halign: 'right',
+            },
+            9: {
+                columnWidth: 69,
+                halign: 'right',
+            },
+
+        },
+        tableLineColor: "black",
+        startY: initial_y,
+    };
+
+    doc.line(408, data.isQR ? initial_y : initial_y, 408, 16);//vertical line header section billby 
+    doc.line(220, data.isQR ? initial_y : initial_y, 220, data.isQR ? 103 : 63);//vertical  line header section billto
+
+
+    const indicesToRemove = [3, 5, 6]; // the column indices to remove
+
+    const Rows = table.RowsWithCGST_SGST(data).map(row =>
+        row.filter((_, index) => !indicesToRemove.includes(index))
+    );
+
+
+    const columns = table.columnsWithCGST_SGST.filter((_, index) => !indicesToRemove.includes(index))
+
+    debugger
+    doc.autoTable(columns, Rows, options,);
+    const optionsTable4 = {
+        margin: {
+            left: 30, right: 30, bottom: 140
+        },
+    };
+    doc.autoTable(optionsTable4);
+
+}
+
+export const tableBodyWith_IGST_forSweetAndSnacks = (doc, data) => {
+    var options = {
+
+        didParseCell: (data1) => {
+
+            if (data1.row.cells[6].raw === "isaddition") {
+                data1.row.cells[1].colSpan = 4
+                // data1.row.cells[3].colSpan = 5
+                data1.row.cells[5].colSpan = 2
+                // data1.row.cells[10].colSpan = 2
+
+                data1.row.cells[1].styles.fontSize = 7
+                data1.row.cells[1].styles.halign = "right"    // Alignment for  cgst and Total in spanrow
+
+                data1.row.cells[5].styles.fontSize = 7
+                data1.row.cells[7].styles.fontSize = 7
+
+                // data1.row.cells[12].styles.fontSize = 7
+                data1.row.cells[1].styles.fontStyle = "bold"
+                data1.row.cells[5].styles.fontStyle = "bold"
+                data1.row.cells[7].styles.fontStyle = "bold"
+
+                // data1.row.cells[12].styles.fontStyle = "bold"
+            }
+
+            if (data1.row.cells[1].raw === "HSN Item Name") {
+                let TotalBox = 0;
+                const unit = isSweetAndSnacksCompany ? "Tray" : "Box"
+
+                data.InvoiceItems.forEach((element, key) => {
+                    if (element.PrimaryUnitName === unit) {
+                        TotalBox = Number(TotalBox) + Number(element.Quantity)
+                    }
+                })
+
+                data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})  (${TotalBox} ${unit})`
+                data1.row.cells[5].colSpan = 2
+            }
+
+            if (data1.row.cells[1].raw === "Batch") {
+                data1.row.cells[0].colSpan = 7
+
+            }
+        },
+
+
+        didDrawCell: (data1) => {
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 5) {
+                if (data1.row.cells[5].raw === "          IGST           %        Amount") {
+
+                    const cellWidth = data1.cell.width;
+                    const cellHeight = data1.cell.height;
+                    const startX = data1.cell.x;
+                    const startY = data1.cell.y + cellHeight / 2;
+                    const endX = startX + cellWidth;
+                    const endY = startY;
+
+                    const startXVertical = data1.cell.x + cellWidth / 2;  // X-coordinate at the middle of the cell
+                    const startY1vertical = data1.cell.y + 9;
+                    const endYvertical = startY + cellHeight;
+
+                    doc.line(startXVertical - 3, startY1vertical, startXVertical - 3, endYvertical);  // Draw a vertical line
+                    doc.line(startX, startY, endX, endY);
+                }
+            }
+        },
+
+
+        margin: {
+            left: 30, right: 25, top: 55
+        },
+        theme: 'grid',
+        headerStyles: {
+            cellPadding: 1,
+            lineWidth: 0.3,
+            valign: 'top',
+            fontStyle: 'bold',
+            halign: 'center',    //'center' or 'right'
+            fillColor: "white",
+            textColor: [0, 0, 0], //Black     
+            fontSize: 7,
+            rowHeight: 10,
+            lineColor: [0, 0, 0]
+        },
+        bodyStyles: {
+            textColor: [30, 30, 30],
+            cellPadding: 3,
+            fontSize: 7,
+            columnWidth: 'wrap',
+            lineColor: [0, 0, 0],
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                fontSize: 6,
+                columnWidth: 15,
+            },
+            1: {
+                valign: "top",
+                columnWidth: 175,
+            },
+            2: {
+                columnWidth: 80,
+                halign: 'right',
+            },
+            3: {
+                columnWidth: 48,
+                halign: 'right',
+            },
+            4: {
+                columnWidth: 60,
+                halign: 'right',
+            },
+            5: {
+                columnWidth: 28,
+                halign: 'right',
+            },
+            6: {
+                columnWidth: 34,
+                halign: 'right',
+            },
+
+            7: {
+                columnWidth: 100,
+                halign: 'right',
+            },
+
+
+        },
+        tableLineColor: "black",
+        startY: initial_y,
+    };
+    doc.line(408, data.isQR ? initial_y : initial_y, 408, 16);//vertical line header section billby 
+    doc.line(220, data.isQR ? initial_y : initial_y, 220, data.isQR ? 103 : 63);//vertical  line header section billto
+
+    // doc.autoTable(table.columnsWithIGST, table.RowsWithIGST(data), options,);
+    const indicesToRemove = [3, 5, 6]; // the column indices to remove
+
+    const Rows = table.RowsWithIGST(data).map(row =>
+        row.filter((_, index) => !indicesToRemove.includes(index))
+    );
+    const columns = table.columnsWithIGST.filter((_, index) => !indicesToRemove.includes(index))
+    doc.autoTable(columns, Rows, options,);
+
+
+    const optionsTable4 = {
+        margin: {
+            left: 30, right: 30, bottom: 110
+        },
+    };
+
+    doc.autoTable(optionsTable4);
+}
+
+
 export const tableBodyForAmericanInvoice = (doc, data) => {
 
     var options = {
