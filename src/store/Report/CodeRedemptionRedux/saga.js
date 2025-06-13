@@ -7,13 +7,26 @@ import { date_dmy_func } from "../../../components/Common/CommonFunction";
 
 function* CodeRedemptionReport_GenFunc({ config }) {
 
+	function formatDateRange(dateRange) {
+		if (!dateRange) return "";
+
+		return dateRange
+			.split(" - ")
+			.map(date => {
+				const [year, month, day] = date.split("-");
+				return `${day}-${month}-${year}`;
+			})
+			.join(" - ");
+	}
 	try {
 		let response = yield call(CodeRedemptionReport_API, config);
 		response["Mode"] = config.Mode
+		debugger
 		response.Data = response.Data.map(item => ({
 			...item,
 			InvoiceDate: date_dmy_func(item.InvoiceDate),
-			recordsAmountTotal: item.InvoiceAmount  // You can set the flag value as needed
+			recordsAmountTotal: item.InvoiceAmount, // You can set the flag value as needed
+			SchemePeriod: formatDateRange(item.SchemePeriod), // Format the date range
 		}));
 		yield put(CodeRedemption_Report_Action_Success(response))
 	} catch (error) { yield put(CodeRedemption_Report_ErrorAction()) }

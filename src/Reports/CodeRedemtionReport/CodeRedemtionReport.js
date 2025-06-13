@@ -14,7 +14,7 @@ import GlobalCustomTable from "../../GlobalCustomTable";
 import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
 import { allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 import { CodeRedemption_Report_Action, CodeRedemption_Report_Action_Success } from "../../store/Report/CodeRedemptionRedux/action";
-import { GenralMasterSubType, Get_Scheme_List } from "../../helpers/backend_helper";
+import { GenralMasterSubType, Get_Scheme_List, Scheme_List_Per_Month_API } from "../../helpers/backend_helper";
 
 const CodeRedemtionReport = (props) => {
 
@@ -102,22 +102,27 @@ const CodeRedemtionReport = (props) => {
 
 
     useEffect(() => {
+        debugger
         const fetchSchemeList = async () => {
-            const resp = await Get_Scheme_List();
-            debugger;
+            const jsonBody = JSON.stringify({
+                FromDate: fromdate,
+                ToDate: todate,
+            });
+            const resp = await Scheme_List_Per_Month_API({ jsonBody });
             if (resp.StatusCode === 200) {
                 const option = resp.Data.map((index) => ({
                     value: index.id,
                     label: index.SchemeName,
                 }));
-                option.unshift(allLabelWithZero);
+
                 setSchemeOption(option);
 
             }
         };
 
         fetchSchemeList();
-    }, []);
+    }, [headerFilters]);
+
 
     useEffect(() => {
 

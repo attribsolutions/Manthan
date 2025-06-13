@@ -135,6 +135,7 @@ const VoucherRedemptionClaim = () => {
 
 
     useEffect(() => {
+        debugger
         const fetchSchemeList = async () => {
             const jsonBody = JSON.stringify({
                 FromDate: state.values.FromDate,
@@ -153,7 +154,7 @@ const VoucherRedemptionClaim = () => {
         };
 
         fetchSchemeList();
-    }, [Scheme]);
+    }, [state]);
 
 
     const SchemeOnchange = (e) => {
