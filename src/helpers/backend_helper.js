@@ -853,6 +853,12 @@ export const InvoiceDataExport_GoBtn_API = ({ jsonBody }) => post(url.INVOICE_DA
 export const PurchaseGSTReportSaga_GoBtn_API = ({ jsonBody }) => post(url.PURCHASE_GST_REPORT, jsonBody)//Go button api
 
 
+export const ItemConsumption_API = ({ jsonBody }) => post(url.ITEM_CONSUMPTION_REPORT, jsonBody)//Go button api
+
+
+
+
+
 export const Gst_R1_Report_API = ({ jsonBody }) => post(url.GST_R1_REPORT, jsonBody)//Go button api
 export const Gst_R3B_Report_API = ({ jsonBody }) => post(url.GST_R3B_REPORT, jsonBody)//Go button api
 

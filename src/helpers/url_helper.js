@@ -607,6 +607,12 @@ export const GENERIC_SALE_REPORT = '/GenericSaleReport'
 // Retailer Data Report
 export const RETAILER_DATA_REPORT = '/RetailerDataReport'
 
+export const ITEM_CONSUMPTION_REPORT = '/ItemConsumptionReport'
+
+
+
+
+
 // partySetting
 export const PARTY_SETTING = '/PartySettings'
 

@@ -270,6 +270,7 @@ import SchemeType from "../pages/Adminisrator/SchemeType/SchemeType.js";
 import SchemeTypeList from "../pages/Adminisrator/SchemeType/ScemeTypeList.js";
 import SchemeMaster from "../pages/Adminisrator/SchemeMaster/SchemeMaster.js";
 import SchemeMasterList from "../pages/Adminisrator/SchemeMaster/SchemeMasterList.js";
+import ItemConsumption from "../Reports/ItemConsumptionReport/ItemConsumption.js";
 
 
 const userRoutes = [
@@ -708,6 +709,13 @@ const userRoutes = [
 	{ path: path.POS_ROLE_ACCESS, component: POSRoleAccess },//not party wise
 
 	{ path: path.CASHIER_SUMMARY_REPORT, component: CashierSummary },//not party wise
+
+	{ path: path.ITEM_CONSUMPTION_REPORT, component: ItemConsumption },//not party wise
+
+
+
+
+	
 
 	{ path: path.SWEET_POS_RATE_MASTER, component: SweetPOSRateMaster },//not party wise
 

@@ -457,6 +457,9 @@ export const Css_Item_Sale_Report = "/CSS_Item_sale_Report"
 
 export const MANAGER_SUMMARY_REPORT = "/Manager_Summary_Report"
 
+export const ITEM_CONSUMPTION_REPORT = "/Item_Consumption_Report"
+
+
 
 
 

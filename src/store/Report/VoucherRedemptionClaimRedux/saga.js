@@ -10,15 +10,14 @@ import { numberWithCommas } from "../../../Reports/Report_common_function";
 function* VoucherRedemptionClaim_GenFunc({ config }) {
 
 	function formatDateRange(dateRange) {
-		if (!dateRange) return "";
+		const [start, end] = dateRange.split(" To ");
 
-		return dateRange
-			.split(" - ")
-			.map(date => {
-				const [year, month, day] = date.split("-");
-				return `${day}-${month}-${year}`;
-			})
-			.join(" - ");
+		const formatDate = (dateStr) => {
+			const [year, month, day] = dateStr.split("-");
+			return `${day}-${month}-${year}`;
+		};
+
+		return `${formatDate(start)} To ${formatDate(end)}`;
 	}
 	try {
 		const response = yield call(VoucherRedemption_Aip, config);

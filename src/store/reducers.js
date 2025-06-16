@@ -150,6 +150,7 @@ import BillDeleteSummaryReportReducer from "./SweetPOSStore/Report/BillDeleteSum
 
 import SchemeTypeReducer from "./Administrator/SchemeRedux/reducer"
 import SchemeReducer from "./Administrator/SchemeMasterRedux/reducer"
+import ItemConsumptionReportReducer from "./Report/ItemConsumptionReportRedux/reducer"
 
 const rootReducer = combineReducers({
 	Layout,
@@ -276,6 +277,8 @@ const rootReducer = combineReducers({
 	ManagerSummaryReportReducer,
 	BillDeleteSummaryReportReducer,
 	SchemeTypeReducer,
-	SchemeReducer
+	SchemeReducer,
+	ItemConsumptionReportReducer,
+
 })
 export default rootReducer

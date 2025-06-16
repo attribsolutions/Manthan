@@ -8,15 +8,14 @@ import { date_dmy_func } from "../../../components/Common/CommonFunction";
 function* CodeRedemptionReport_GenFunc({ config }) {
 
 	function formatDateRange(dateRange) {
-		if (!dateRange) return "";
+		const [start, end] = dateRange.split(" To ");
 
-		return dateRange
-			.split(" - ")
-			.map(date => {
-				const [year, month, day] = date.split("-");
-				return `${day}-${month}-${year}`;
-			})
-			.join(" - ");
+		const formatDate = (dateStr) => {
+			const [year, month, day] = dateStr.split("-");
+			return `${day}-${month}-${year}`;
+		};
+
+		return `${formatDate(start)} To ${formatDate(end)}`;
 	}
 	try {
 		let response = yield call(CodeRedemptionReport_API, config);
