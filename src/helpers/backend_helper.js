@@ -582,6 +582,7 @@ export const del_Scheme_List_API = ({ deleteId }) => del(`${url.SCHEME}/${delete
 export const edit_Scheme_List_Api = ({ editId }) => get(`${url.SCHEME}/${editId}`)// Loading Sheet Post API For Master Page
 
 
+export const Scheme_List_Per_Month_API = ({ jsonBody }) => post(url.SCHEME_LIST_PER_MONTH, jsonBody)// Loading Sheet Post API For Master Page
 
 
 
@@ -850,6 +851,12 @@ export const GenericSale_GoBtn_API = ({ jsonBody }) => post(url.GENERIC_SALE_REP
 export const RetailerData_GoBtn_API = ({ jsonBody }) => post(url.RETAILER_DATA_REPORT, jsonBody)//Go button api
 export const InvoiceDataExport_GoBtn_API = ({ jsonBody }) => post(url.INVOICE_DATA_EXPORT, jsonBody)//Go button api
 export const PurchaseGSTReportSaga_GoBtn_API = ({ jsonBody }) => post(url.PURCHASE_GST_REPORT, jsonBody)//Go button api
+
+
+export const ItemConsumption_API = ({ jsonBody }) => post(url.ITEM_CONSUMPTION_REPORT, jsonBody)//Go button api
+
+
+
 
 
 export const Gst_R1_Report_API = ({ jsonBody }) => post(url.GST_R1_REPORT, jsonBody)//Go button api

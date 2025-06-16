@@ -9,6 +9,16 @@ import { numberWithCommas } from "../../../Reports/Report_common_function";
 
 function* VoucherRedemptionClaim_GenFunc({ config }) {
 
+	function formatDateRange(dateRange) {
+		const [start, end] = dateRange.split(" To ");
+
+		const formatDate = (dateStr) => {
+			const [year, month, day] = dateStr.split("-");
+			return `${day}-${month}-${year}`;
+		};
+
+		return `${formatDate(start)} To ${formatDate(end)}`;
+	}
 	try {
 		const response = yield call(VoucherRedemption_Aip, config);
 
@@ -25,6 +35,7 @@ function* VoucherRedemptionClaim_GenFunc({ config }) {
 			...item,
 			TotalClaimAmount: numberWithCommas(Number(item.TotalClaimAmount).toFixed(2)),
 			recordsAmountTotal: item.TotalClaimAmount,
+			SchemePeriod: formatDateRange(item.SchemePeriod),
 		}));
 
 		yield put(VoucherRedemptionClaim_Action_Success(transformedData))
@@ -33,7 +44,7 @@ function* VoucherRedemptionClaim_GenFunc({ config }) {
 
 function* VoucherRedemptionClaimSaga() {
 	yield takeLatest(VOUCHER_REDEMPTION_CLAIM_ACTION, VoucherRedemptionClaim_GenFunc)
-	
+
 }
 
 export default VoucherRedemptionClaimSaga;

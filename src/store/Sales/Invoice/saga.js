@@ -380,8 +380,8 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
       if (index1.ItemTotalStock < index1.Quantity) {
         index1.StockInValid = true;
         const diffrence = Math.abs(index1.ItemTotalStock - index1.Quantity);
-        const msg1 = `Short Stock Quantity ${index1.Quantity}`;
-        const msg2 = `Short Stock Quantity ${diffrence}`;
+        const msg1 = `Short Stock Quantity ${(Number(index1.Quantity)).toFixed(3)}`;
+        const msg2 = `Short Stock Quantity ${(Number(diffrence)).toFixed(3)}`;
         index1.StockInvalidMsg = index1.ItemTotalStock === 0 ? msg1 : msg2;
       }
 

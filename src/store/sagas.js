@@ -141,6 +141,7 @@ import ManagerSummaryReportSaga from "./SweetPOSStore/Report/ManagerSummaryRedux
 import BillDeleteSummaryReportSaga from "./SweetPOSStore/Report/BillDeleteSummaryRedux/saga"
 import SchemeTypeSaga from "./Administrator/SchemeRedux/saga"
 import SchemeSaga from "./Administrator/SchemeMasterRedux/saga"
+import ItemConsumptionReportSaga from "./Report/ItemConsumptionReportRedux/saga"
 
 
 
@@ -278,8 +279,13 @@ export default function* rootSaga() {
 		fork(Css_Item_Sale_ReportSaga),
 		fork(ManagerSummaryReportSaga),
 		fork(BillDeleteSummaryReportSaga),
-        fork(SchemeTypeSaga),
-		fork(SchemeSaga)
+
+
+		fork(SchemeTypeSaga),
+		fork(SchemeSaga),
+		fork(ItemConsumptionReportSaga)
+
+
 
 
 

@@ -21,7 +21,7 @@ import { VoucherRedemptionClaim_Action, VoucherRedemptionClaim_Action_Success } 
 import C_Report from "../../components/Common/C_Report";
 import { C_Select } from "../../CustomValidateForm";
 import { allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
-import { Get_Scheme_List } from "../../helpers/backend_helper";
+import { Get_Scheme_List, Scheme_List_Per_Month_API } from "../../helpers/backend_helper";
 
 const SelectedMonth = () => _cfunc.getPreviousMonthAndYear({ date: new Date(), Privious: 1 })
 const FirstAndLastDate = () => _cfunc.getFirstAndLastDateOfMonth(SelectedMonth());
@@ -135,9 +135,13 @@ const VoucherRedemptionClaim = () => {
 
 
     useEffect(() => {
+        debugger
         const fetchSchemeList = async () => {
-            const resp = await Get_Scheme_List();
-            debugger;
+            const jsonBody = JSON.stringify({
+                FromDate: state.values.FromDate,
+                ToDate: state.values.ToDate,
+            });
+            const resp = await Scheme_List_Per_Month_API({ jsonBody });
             if (resp.StatusCode === 200) {
                 const option = resp.Data.map((index) => ({
                     value: index.id,
@@ -150,7 +154,7 @@ const VoucherRedemptionClaim = () => {
         };
 
         fetchSchemeList();
-    }, []);
+    }, [state]);
 
 
     const SchemeOnchange = (e) => {

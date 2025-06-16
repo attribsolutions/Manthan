@@ -318,6 +318,12 @@ export const LOADING_SHEET_LIST = '/LoadingSheetList'
 
 export const SCHEME = '/Scheme'
 
+export const SCHEME_LIST_PER_MONTH = '/SchemeListperMonth'
+
+
+
+
+
 
 
 
@@ -600,6 +606,12 @@ export const GENERIC_SALE_REPORT = '/GenericSaleReport'
 
 // Retailer Data Report
 export const RETAILER_DATA_REPORT = '/RetailerDataReport'
+
+export const ITEM_CONSUMPTION_REPORT = '/ItemConsumptionReport'
+
+
+
+
 
 // partySetting
 export const PARTY_SETTING = '/PartySettings'

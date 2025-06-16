@@ -349,7 +349,17 @@ const Order = (props) => {
     //     setprocessedData(ModifyTableData_func(orderItemTable));
     // }, [orderItemTable])
 
-    const processedData = useMemo(() => ModifyTableData_func(orderItemTable), [orderItemTable]);
+    // const processedData = useMemo(() => ModifyTableData_func(orderItemTable), [orderItemTable]);
+
+    const processedData = useMemo(() => {
+        console.log("itemSelect", itemSelect)
+        debugger
+        if (itemSelect?.value === "") {
+            return ModifyTableData_func(orderItemTable);
+        } else {
+            return orderItemTable;
+        }
+    }, [itemSelect, orderItemTable]);
 
     useEffect(() => { // hasEditVal useEffect
 

@@ -40,7 +40,7 @@ const BillDeleteSummaryReport = (props) => {
     const [toDate, setToDate] = useState(currentDate_ymd)
     const [CashierOption, setCashierOption] = useState([])
     const [userPageAccessState, setUserAccState] = useState('');
-    const [Cashier, setCashier] = useState([allLabelWithBlank])
+    const [Cashier, setCashier] = useState([allLabelWithZero])
 
 
     // const location = { ...history.location }
@@ -70,7 +70,7 @@ const BillDeleteSummaryReport = (props) => {
 
     const PartyDrodownOnChange = (e) => {
         setPartyDropdown(e);
-        setCashier([allLabelWithBlank]);
+        setCashier([allLabelWithZero]);
     };
 
     const { Data = [] } = BillDeleteSummaryData
@@ -166,7 +166,7 @@ const BillDeleteSummaryReport = (props) => {
 
     const CashierOnchange = (e) => {
         if (e.length === 0) {
-            e = [allLabelWithBlank]
+            e = [allLabelWithZero]
         } else {
             e = e.filter(i => !(i.value === ''))
         }
@@ -174,13 +174,13 @@ const BillDeleteSummaryReport = (props) => {
     }
 
     function goButtonHandler(goBtnMode) {
-
+        debugger
         try {
             const jsonBody = JSON.stringify({
                 FromDate: fromDate,
                 ToDate: toDate,
                 Cashier: Cashier.map(row => row.value).join(','),
-                Party: IsMannagementParty ? _cfunc.loginSelectedPartyID() : PartyDropdown.value,
+                Party: IsMannagementParty ? PartyDropdown.value : _cfunc.loginSelectedPartyID(),
             })
             const config = { jsonBody, goBtnMode };
             dispatch(BillDeleteSummaryReport_GoButton_API(config))
