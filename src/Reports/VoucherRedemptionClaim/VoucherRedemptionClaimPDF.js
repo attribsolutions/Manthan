@@ -26,7 +26,7 @@ const Rows = (Data) => {
     };
     function ShortName() {
         return [
-            `${Data.SchemeShortName}`,
+            `${Data.SchemeShortName}  (${Data.SchemePeriod})`,
             "ShortName",
             "",
             ""
@@ -42,7 +42,7 @@ const Rows = (Data) => {
     }; function ClaimDetails() {
         return [
             "Month",
-            `${new Date(Data.Month + "-01").toLocaleString('en-US', { year: 'numeric', month: 'long' })}`,
+            `${new Date(Data.Month + "-01").toLocaleString('en-US', { year: 'numeric', month: 'long' })} `,
             "",
             "",
         ];
