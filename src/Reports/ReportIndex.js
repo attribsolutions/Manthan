@@ -24,6 +24,7 @@ import POSSaleSummaryReport from "../pages/SweetPOS/Reports/PosSummarySaleReport
 import SaleSummaryThermalPrintReport from "../pages/SweetPOS/Reports/PosSummarySaleReport/ThermalPrintReport/Report";
 import BillDeleteSummaryReport from "./BillSummaryDeleteReport/PDFReport/Page";
 import ItemConsumptionReport from "./ItemConsumptionReport/Page";
+import BatchTraceabilityReport from "./BatchTracebilityReport/Page";
 
 export const FrenchiesesOrder = "FrenchiesesOrder"
 export const order1 = "order1"
@@ -145,6 +146,12 @@ const generateReport = (resp) => {
         case Item_Consumption_Report:
             ItemConsumptionReport(resp.Data)
             break;
+
+        case Item_Consumption_Report:
+            BatchTraceabilityReport(resp.Data)
+            break;
+
+
 
 
 
