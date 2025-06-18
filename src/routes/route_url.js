@@ -200,6 +200,8 @@ export const SCHEME_TYPE = "/Scheme_Type"
 
 export const SCHEME_TYPE_LIST = "/Scheme_Type_List"
 
+export const FRANCHISE_PARTY_MASTER = "/Franchise_Party_Master"
+
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"
 export const ORDER_LIST_1 = "/OrderList_1"
