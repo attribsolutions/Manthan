@@ -271,6 +271,8 @@ import SchemeTypeList from "../pages/Adminisrator/SchemeType/ScemeTypeList.js";
 import SchemeMaster from "../pages/Adminisrator/SchemeMaster/SchemeMaster.js";
 import SchemeMasterList from "../pages/Adminisrator/SchemeMaster/SchemeMasterList.js";
 import ItemConsumption from "../Reports/ItemConsumptionReport/ItemConsumption.js";
+import FranchisePartyMaster from "../pages/Adminisrator/PartyMaster/FranchisePartyMaster.js";
+
 
 
 const userRoutes = [
@@ -473,6 +475,7 @@ const userRoutes = [
 	{ path: path.SCHEME_TYPE, component: SchemeType },
 	{ path: path.SCHEME_TYPE_LIST, component: SchemeTypeList },
 
+	{ path: path.FRANCHISE_PARTY_MASTER, component: FranchisePartyMaster },
 	//******************************* Inventory Module ************************************//
 	{ path: path.IB_INVOICE_LIST, component: IBInvoiceList },
 	{ path: path.IB_INVOICE, component: IBInvoice },
