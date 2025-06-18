@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import { commonPageFieldList, commonPageFieldListSuccess, getpdfReportdata, } from "../../../store/actions";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
@@ -20,6 +20,10 @@ import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import useCheckStockEntry from "../../../components/Common/commonComponent/CheckStockEntry";
+import BatchTraceabilityReport from "../../../Reports/BatchTracebilityReport/Page";
+import { BatchTraceabilityReport_API } from "../../../helpers/backend_helper";
+
+import * as report from '../../../Reports/ReportIndex'
 
 const WorkOrderList = () => {
 
@@ -35,7 +39,7 @@ const WorkOrderList = () => {
     const reducers = useSelector(
         (state) => ({
             goBtnLoading: state.WorkOrderReducer.loading,
-            listBtnLoading: (state.MaterialIssueReducer.listBtnLoading || state.WorkOrderReducer.listBtnLoading),
+            listBtnLoading: (state.MaterialIssueReducer.listBtnLoading || state.WorkOrderReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading),
             tableList: state.WorkOrderReducer.WorkOrderList,
             deleteMsg: state.WorkOrderReducer.deleteMsg,
             updateMsg: state.WorkOrderReducer.updateMsg,
@@ -107,9 +111,21 @@ const WorkOrderList = () => {
         newObj.todate = date
         setHederFilters(newObj)
     }
+    function downBtnFunc(config) {
+        
+        const { rowData } = config;
+        const newConfig = {
+            ...config,
+            ReportType: report.Batch_Traceability_Report,
+            jsonBody: { WorkOrderID: rowData.id }
+        };
+
+        dispatch(getpdfReportdata(BatchTraceabilityReport_API, newConfig));
+    }
+
 
     const makeBtnFunc = (list = [], btnId) => {
-        debugger
+
         try {
             if (list.length > 0) {
                 const jsonData = list[0];
@@ -212,6 +228,7 @@ const WorkOrderList = () => {
                             MasterModal={WorkOrder}
                             masterPath={url.WORK_ORDER}
                             newBtnPath={url.WORK_ORDER}
+                            downBtnFunc={downBtnFunc}
                             ButtonMsgLable={""}
                             deleteName={"ItemName"}
                             pageMode={pageMode}

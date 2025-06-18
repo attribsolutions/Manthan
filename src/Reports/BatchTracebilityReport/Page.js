@@ -3,6 +3,7 @@ import "jspdf-autotable";
 import * as style from './ReportStyle'
 import { CommonConsole, date_dmy_func } from "../../components/Common/CommonFunction";
 
+
 var pageHeder = function (doc, data) {
     style.pageBorder(doc, data);
     style.pageHeder(doc, data);
@@ -15,7 +16,7 @@ function pageFooter(doc, data) {
 }
 
 const BatchTraceabilityReport = (data) => {
-
+    
     var doc = new jsPDF('p', 'pt', 'a4');
     try {
         pageHeder(doc, data);

@@ -23,7 +23,7 @@ import { C_Select } from "../../CustomValidateForm";
 import { allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 import { Get_Scheme_List, Scheme_List_Per_Month_API } from "../../helpers/backend_helper";
 
-const SelectedMonth = () => _cfunc.getPreviousMonthAndYear({ date: new Date(), Privious: 1 })
+const SelectedMonth = () => _cfunc.getPreviousMonthAndYear({ date: new Date(), Privious: 0 })
 const FirstAndLastDate = () => _cfunc.getFirstAndLastDateOfMonth(SelectedMonth());
 const fileds = () => ({
     FromDate: FirstAndLastDate().firstDate,
@@ -40,8 +40,8 @@ const VoucherRedemptionClaim = () => {
 
     const [pageMode] = useState(mode.defaultList);
 
-    const currentDate = new Date(); // Current date
-    const currentMonth = _cfunc.getPreviousMonthAndYear({ date: currentDate, Privious: 1 });
+
+
     const [PartyDropdown, setPartyDropdown] = useState([allLabelWithZero]);
     const [Scheme, setSchemeTypeSelect] = useState([allLabelWithZero]);
 
@@ -181,6 +181,8 @@ const VoucherRedemptionClaim = () => {
     }
 
     const PrintAlldownBtnFunc = (row = []) => {
+
+        debugger
         let config = { rowData: {} };
         let ischeck = row.filter(i => (i.selectCheck && !i.forceSelectDissabled))
         if (!ischeck.length > 0) {
@@ -222,7 +224,7 @@ const VoucherRedemptionClaim = () => {
                                         defaultValue={values.SelectedMonth}
                                         id="example-month-input"
                                         onChange={MonthAndYearOnchange}
-                                        max={currentMonth}
+                                    // max={currentMonth}
                                     />
                                 </Col>
                             </FormGroup>
