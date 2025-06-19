@@ -23,7 +23,7 @@ import { C_Select } from "../../CustomValidateForm";
 import { allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 import { Get_Scheme_List, Scheme_List_Per_Month_API } from "../../helpers/backend_helper";
 
-const SelectedMonth = () => _cfunc.getPreviousMonthAndYear({ date: new Date(), Privious: 0 })
+const SelectedMonth = () => _cfunc.getPreviousMonthAndYear({ date: new Date(), Privious: 1 })
 const FirstAndLastDate = () => _cfunc.getFirstAndLastDateOfMonth(SelectedMonth());
 const fileds = () => ({
     FromDate: FirstAndLastDate().firstDate,
@@ -174,7 +174,7 @@ const VoucherRedemptionClaim = () => {
         const jsonBody = JSON.stringify({
             "FromDate": state.values.FromDate,
             "ToDate": state.values.ToDate,
-            "Party": isSCMParty ? PartyDropdown.map(row => row.value).join(',') : _cfunc.loginSelectedPartyID(),
+            "Party": isSCMParty ? PartyDropdown.map(row => row.value).join(',') : String(_cfunc.loginSelectedPartyID()),
             "SchemeID": Scheme.map(row => row.value).join(','),
         });
         dispatch(VoucherRedemptionClaim_Action({ jsonBody }))
