@@ -1361,7 +1361,7 @@ const Order = (props) => {
             text: "Comment",
             classes: 'table-cursor-pointer',
             dataField: "",
-            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER) && true,
+            hidden: (subPageMode === url.IB_ORDER) && true,
             attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Comment" }),
             formatter: (value, row, k) => {
                 if (row.GroupRow || row.SubGroupRow) { return }
