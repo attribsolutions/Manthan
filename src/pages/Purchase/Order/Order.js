@@ -1889,7 +1889,7 @@ const Order = (props) => {
             debugger
             const comm_jsonBody = {
                 OrderDate: OrderDate,// only date 
-                DeliveryDate: IsFranchisesRole ? deliverydate : (pageMode === mode.edit) ? deliverydate : `${deliverydate}  ${_cfunc.getCurrenthours_min_sec()}`,  //date with time  as develiery date
+                DeliveryDate: IsFranchisesRole ? deliverydate : (pageMode === mode.edit) ? deliverydate : `${deliverydate} ${_cfunc.getCurrenthours_min_sec()}`,  //date with time  as develiery date
                 OrderAmount: sumOfOrderAmount,
                 OrderItem: orderItems,
                 Description: descriptionRef.current.value,
