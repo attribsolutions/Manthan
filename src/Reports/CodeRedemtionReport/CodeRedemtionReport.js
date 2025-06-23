@@ -301,6 +301,7 @@ const CodeRedemtionReport = (props) => {
                         data={tableData}
                         columns={tableColumns}
                         id="table_Arrow"
+                        paginationEnabled={50}
                         noDataIndication={
                             <div className="text-danger text-center ">
                                 Items Not available
