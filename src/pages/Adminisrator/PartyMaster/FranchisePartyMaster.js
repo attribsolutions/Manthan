@@ -8,7 +8,7 @@ import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess, SSDD_Lis
 import { breadcrumbReturnFunc, btnIsDissablefunc, getSettingBasedPartyTypeID, loginCompanyID, loginJsonBody, loginPartyID, loginPartyName, loginPartyTypeName, loginRoleID, loginSystemSetting, loginUserDetails, loginUserID, metaTagLabel } from '../../../components/Common/CommonFunction';
 import { GetRoutesList, GetRoutesListSuccess } from '../../../store/Administrator/RoutesRedux/actions';
 import { priceListByPartyAction } from '../../../store/Administrator/PriceList/action';
-import { editPartyIDSuccess, getDistrictOnState, getDistrictOnStateSuccess, postPartyData, postPartyDataSuccess, updatePartyID } from '../../../store/Administrator/PartyRedux/action';
+import { editPartyIDSuccess, getDistrictOnState, getDistrictOnStateSuccess, postPartyData, postPartyDataSuccess, updatePartyID, updatePartyIDSuccess } from '../../../store/Administrator/PartyRedux/action';
 import { getCityOnDistrict, getCityOnDistrictSuccess, getState, updateEmployeeIDSuccess } from '../../../store/Administrator/EmployeeRedux/action';
 import AddMaster from '../EmployeePages/Drodown';
 import PartyType from '../PartyTypes/PartyType';
@@ -75,7 +75,7 @@ const FranchisePartyMaster = (props) => {
   const hasShowloction = location.hasOwnProperty(mode.editValue)
   const [modalCss, setModalCss] = useState(false);
 
-  const [EditAddressDetails, setEditAddressDetails] = useState({ RowId: 0, IsEdit: false });
+  const [EditAddressDetails, setEditAddressDetails] = useState({ RowId: 0, IsEdit: false, id: "" });
 
 
 
@@ -107,7 +107,7 @@ const FranchisePartyMaster = (props) => {
     countryList: state.CountryReducer.CountryList,
     countryListloading: state.CountryReducer.loading,
     clusterDropdown: state.ClusterReducer.ClusterListData,
-    updateMsg: state.PartyTypeReducer.updateMessage,
+    updateMsg: state.PartyMasterReducer.updateMsg,
     postMsg: state.PartyMasterReducer.postMsg,
 
     stateRedux: state.EmployeesReducer.State,
@@ -171,6 +171,7 @@ const FranchisePartyMaster = (props) => {
       dispatch(getCountryList_Success());
       dispatch(getCityOnDistrictSuccess([]))//clear City privious options
       dispatch(getDistrictOnStateSuccess([]))//clear district privious options
+      dispatch(editPartyIDSuccess({ Status: false }));
     }
   }, [])
 
@@ -221,9 +222,9 @@ const FranchisePartyMaster = (props) => {
       setIsMobileRetailer(location.IsMobileRetailer)
       if (hasEditVal) {
 
-        const { id, Name, MobileNo, isActive, Email, PartyType, PriceList, Supplier, PAN, State, District, PartyAddress, PIN, CityName } = hasEditVal
+        const { id, Name, MobileNo, PartySubParty, isActive, Email, PartyType, PriceList, Supplier, PAN, State, District, PartyAddress, PIN, CityName } = hasEditVal
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
-
+        debugger
 
         hasValid.Name.valid = true;
         hasValid.MobileNo.valid = true;
@@ -245,7 +246,7 @@ const FranchisePartyMaster = (props) => {
         values.MobileNo = MobileNo;
         values.Email = Email;
         values.PartyType = { value: PartyType?.id, label: PartyType?.Name };
-        values.Supplier = Supplier;
+        values.Supplier = PartySubParty.map((r, i) => ({ ...r, label: r.PartyName, value: r.Party }))
         values.PriceList = { value: PriceList?.id, label: PriceList?.Name };
         values.isActive = location.IsMobileRetailer ? true : isActive
         values.PAN = PAN;
@@ -272,19 +273,26 @@ const FranchisePartyMaster = (props) => {
   useEffect(() => {
 
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+      dispatch(updatePartyIDSuccess({ Status: false }));
       setState(() => resetFunction(fileds, state))//Clear form values
+
+      customAlert({
+        Type: 1,
+        Message: JSON.stringify(updateMsg.Message),
+      })
+
       history.push({
-        pathname: url.FRANCHISE_CUSTOMER_MASTER,
+        pathname: url.RETAILER_APPROVAL,
       })
 
     } else if (updateMsg.Status === true && !modalCss) {
-      dispatch(updateEmployeeIDSuccess({ Status: false }));
-      dispatch(
-        customAlert({
-          Type: 3,
-          Message: JSON.stringify(updateMsg.Message),
-        })
-      );
+      dispatch(updatePartyIDSuccess({ Status: false }));
+
+      customAlert({
+        Type: 3,
+        Message: JSON.stringify(updateMsg.Message),
+      })
+
     }
 
   }, [updateMsg, modalCss]);
@@ -301,9 +309,14 @@ const FranchisePartyMaster = (props) => {
 
 
   const handleAdd = ({ RowIndex, EditAddressDetails }) => {
-
+    debugger
     if (AdderssRef?.current?.value.trim() || PinRef?.current?.value.trim()) {
-      const inputRow = { Address: AdderssRef?.current?.value, PIN: PinRef?.current?.value, RowID: EditAddressDetails.IsEdit ? EditAddressDetails.RowID : RowIndex, fssaidocumenturl: null, IsDefault: IsDefaultRef?.current?.checked }
+      const inputRow = {
+        id: EditAddressDetails?.id, Address: AdderssRef?.current?.value, PIN: PinRef?.current?.value, RowID: EditAddressDetails.IsEdit ? EditAddressDetails.RowID : RowIndex, fssaidocumenturl: null, IsDefault: IsDefaultRef?.current?.checked
+        , FSSAINo: "",
+        FSSAIExipry: null,
+
+      }
       AdderssRef.current.value = "";
       PinRef.current.value = "";
       IsDefaultRef.current.checked = false
@@ -346,11 +359,12 @@ const FranchisePartyMaster = (props) => {
     PinRef.current.value = Row.PIN;
     IsDefaultRef.current.checked = Row.IsDefault;
 
-    setEditAddressDetails({ RowID: Row.RowID, IsEdit: true })
+    setEditAddressDetails({ RowID: Row.RowID, IsEdit: true, id: Row.id })
   };
 
 
   const SaveHandler = async (event) => {
+    debugger
     const formData = new FormData();
     event.preventDefault();
     const btnId = event.target.id;
@@ -382,7 +396,7 @@ const FranchisePartyMaster = (props) => {
           Delete: 0,
         }));
 
-
+        debugger
         const jsonBody = JSON.stringify({
           "Name": values.Name,
           "ShortName": "",
@@ -408,6 +422,14 @@ const FranchisePartyMaster = (props) => {
           "IsApprovedParty": isMobileRetailer && false,
           "PartySubParty": supplierArr,
           "PartyAddress": addressDetails.filter((row, i) => {
+            debugger
+            if (row.PIN === "" && row.RowID !== 0) {
+              customAlert({
+                Type: 4,
+                Message: "PIN Required",
+              })
+              return
+            }
             return row.RowID !== 0;
           }),
           "PartyPrefix": [
@@ -432,7 +454,9 @@ const FranchisePartyMaster = (props) => {
 
         formData.append('PartyData', jsonBody);
         addressDetails?.forEach((item, key) => {
-          formData.append(`fssaidocument_${item.RowID}`, item.file);
+          if (item.RowID !== 0) {  // 0 == iNPUT COLUMN
+            formData.append(`fssaidocument_${item.RowID}`, "");
+          }
         })
         if (pageMode === mode.edit) {
           dispatch(updatePartyID({ formData, updateId: values.id, btnId }));

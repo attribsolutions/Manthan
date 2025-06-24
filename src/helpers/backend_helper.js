@@ -203,7 +203,7 @@ export const Party_Master_Post_API = ({ formData }) => postForFormData(url.PARTY
 
 export const Party_Master_Delete_API = ({ deleteId }) => del(`${url.PARTY_MASTER_API}/${deleteId}`)// delete api
 export const Party_Master_Edit_API = ({ editId }) => get(`${url.PARTY_MASTER_API}/${editId}`)// edit api
-export const Party_Master_Update_API = ({ jsonBody, updateId }) => put(`${url.PARTY_MASTER_API}/${updateId}`, jsonBody)// update api
+export const Party_Master_Update_API = ({ formData, updateId }) => putForFormData(`${url.PARTY_MASTER_API}/${updateId}`, formData)// update api
 export const GetDistrictOnState_For_Dropdown = (id) => get(`${url.GetDistrictOnState}/${id}`)// GetDistrictOnState DropDown API
 export const GetAddressTypes_For_Dropdown = () => get(url.ADDRESSTYPES)// get addresstypes
 export const GetPartyTypes_For_Dropdown = () => get(url.PARTYTYPES)// get partytypes
@@ -634,13 +634,8 @@ export const WorkOrder_edit_Api = ({ editId }) => get(`${url.WORK_ORDER_LIST_API
 export const WorkOrder_Update_Api = ({ jsonBody, updateId }) => put(`${url.WORK_ORDER_LIST_API}/${updateId}`, jsonBody)// update api
 export const WorkOrder_Delete_Api = ({ deleteId }) => del(`${url.WORK_ORDER_LIST_API}/${deleteId}`)// delete api
 
-
 export const BatchTraceabilityReport_API = ({ jsonBody }) => post(url.BATCH_TRACEABILITY_REPORT_API, jsonBody)// post api
-
-
 export const Post_Bulk_BOM_For_WorkOrder_API = ({ jsonBody }) => post(url.BULK_BOM_FOR_WORKORDER, jsonBody)// post api
-
-
 
 
 // Material Issue

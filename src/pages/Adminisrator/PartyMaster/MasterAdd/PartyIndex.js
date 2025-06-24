@@ -605,10 +605,10 @@ const PartyMaster = (props) => {
 
 			formData.append('PartyData', jsonBody);
 			addressTabDetail?.forEach((item, key) => {
-				formData.append(`fssaidocument_${item.RowID}`, item.file);
+				formData.append(`fssaidocument_${item.RowID}`, item.file ? item.file : "");
 			})
 
-		
+
 
 			if (pageMode === mode.edit) {
 				dispatch(updatePartyID({ formData, updateId: EditData.id, btnId }));
