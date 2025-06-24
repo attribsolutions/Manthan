@@ -514,6 +514,7 @@ const PageMaster = (props) => {
       UpdatedBy: loginUserID(),
       PagePageAccess: Access,
       PageFieldMaster: PageFieldMaster,
+      Is_New: 1
     })
 
     if ((pageType_DropdownSelect.value === 1) && (PageFieldMaster.length === 0)) {

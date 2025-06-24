@@ -95,7 +95,7 @@ const AddressTabForm = forwardRef((props, ref) => {
 					FSSAIExipry: values.FSSAIExipry,
 					PIN: values.PIN,
 					IsDefault: values.IsDefault,
-					fssaidocument: imageTable
+					file: imageTable
 				};
 
 				if (values.IsDefault) {
@@ -108,7 +108,7 @@ const AddressTabForm = forwardRef((props, ref) => {
 
 					// Update the selected row
 					const updatedTableData = addressTable.map((row) => {
-						if (row.RowId === editRow.RowId) {
+						if (row.RowID === editRow.RowID) {
 							return { ...editRow, ...val }; // Update the selected row
 						} else {
 							return row; // Keep other rows unchanged
@@ -119,7 +119,7 @@ const AddressTabForm = forwardRef((props, ref) => {
 				} else {
 					// Add a new row
 					const tableleth = addressTable.length;
-					val.RowId = tableleth + 1;
+					val.RowID = tableleth + 1;
 					const updatedTableData = [...addressTable];
 					updatedTableData.push(val);
 
@@ -140,7 +140,7 @@ const AddressTabForm = forwardRef((props, ref) => {
 
 		const file = event.target.files[0]
 		const base64 = await convertBase64(file);
-		let ImageUpload = base64
+		let ImageUpload = file
 		setImageTable(ImageUpload)
 	}
 
@@ -174,7 +174,7 @@ const AddressTabForm = forwardRef((props, ref) => {
 			a.values.FSSAIExipry = date_ymd_func(row.FSSAIExipry)
 			a.values.PIN = row.PIN;
 			a.values.IsDefault = row.IsDefault;
-			a.values["RowId"] = row.RowId;
+			a.values["RowID"] = row.RowID;
 			a.values["id"] = row.id
 
 			a.hasValid.PartyAddress.valid = true

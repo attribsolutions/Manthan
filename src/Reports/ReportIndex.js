@@ -58,6 +58,8 @@ export const Item_Consumption_Report = "Item_Consumption_Report"
 
 
 
+export const Batch_Traceability_Report = "Batch_Traceability_Report"
+
 
 
 
@@ -142,19 +144,12 @@ const generateReport = (resp) => {
         case billDeleteSummaryReport:
             BillDeleteSummaryReport(resp.Data)
             break;
-
         case Item_Consumption_Report:
             ItemConsumptionReport(resp.Data)
             break;
-
-        case Item_Consumption_Report:
+        case Batch_Traceability_Report:
             BatchTraceabilityReport(resp.Data)
             break;
-
-
-
-
-
         default:
             break;
     }

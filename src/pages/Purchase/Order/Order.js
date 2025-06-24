@@ -1361,7 +1361,7 @@ const Order = (props) => {
             text: "Comment",
             classes: 'table-cursor-pointer',
             dataField: "",
-            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER) && true,
+            hidden: (subPageMode === url.IB_ORDER) && true,
             attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Comment" }),
             formatter: (value, row, k) => {
                 if (row.GroupRow || row.SubGroupRow) { return }
@@ -1886,9 +1886,10 @@ const Order = (props) => {
 
 
             const OrderDate = deliverydate.split(' ')[0]; // Date and time  split
+            debugger
             const comm_jsonBody = {
                 OrderDate: OrderDate,// only date 
-                DeliveryDate: IsFranchisesRole ? deliverydate : `${deliverydate} ${_cfunc.getCurrenthours_min_sec()}`,  //date with time  as develiery date
+                DeliveryDate: IsFranchisesRole ? deliverydate : (pageMode === mode.edit) ? deliverydate : `${deliverydate} ${_cfunc.getCurrenthours_min_sec()}`,  //date with time  as develiery date
                 OrderAmount: sumOfOrderAmount,
                 OrderItem: orderItems,
                 Description: descriptionRef.current.value,

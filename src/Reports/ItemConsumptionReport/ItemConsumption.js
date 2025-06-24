@@ -59,8 +59,8 @@ const ItemConsumption = (props) => {
 
     }));
 
-    const { FinishproductDetails = [] } = GoButtonData
-
+    const { Data = {} } = GoButtonData
+    debugger
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.ITEM_CONSUMPTION_REPORT));
@@ -108,7 +108,7 @@ const ItemConsumption = (props) => {
     }, []);
 
     useEffect(() => {
-
+        debugger
         if (GoButtonData.goBtnMode === "downloadExcel") {
             ExcelReportComponent({      // Download CSV
                 pageField,
@@ -321,7 +321,7 @@ const ItemConsumption = (props) => {
                 <div className="mb-1 table-responsive table">
                     <GlobalCustomTable
                         keyField={"id"}
-                        data={GoButtonData.goBtnMode === "showOnTable" ? FinishproductDetails : []}
+                        data={GoButtonData.goBtnMode === "showOnTable" ? Data?.FinishproductDetails : []}
                         columns={tableColumns}
                         id="table_Arrow"
                         noDataIndication={

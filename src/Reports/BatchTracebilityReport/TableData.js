@@ -1,142 +1,147 @@
 import { numberWithCommas } from "../Report_common_function";
 
-export const columns = [
-    "Company",
-    "Purchase Amount",
-    "Sale Amount",
-    "Return Value",
-    "Net Purchase Value",
-    "Budget Only Expiry ",
-    "Claim Amount",
-    "Claim % Against Purchase Amount",
+export const columns_1 = [
+    "Batch Card ID",
+    "Batch Card No",
+    "Work Order Date",
+    "Login Name",
+    "Quantity",
+    "Number Of Lot",
+    "Status"
 ];
 
-export const ProductWisecolumns = [
-    "Product",
-    "Purchase Amount",
-    "Sale Amount",
-    "Return Value",
-    "Net Purchase Value",
-    "Budget Generated",
-    "Claim Amount",
-    "Claim % Against Purchase Amount",
+export const columns_2 = [
+    "Item ID",
+    "ItemName",
+    "BOMQuantity",
+    "UnitName"
 ];
 
-export const Rows = (table = []) => {
+export const columns_3 = [
+    "Item ID",
+    "Item Name",
+    "Quantity",
+    "UnitName",
+    "Grn ID",
+    "GRN No",
+    "Production ID",
+    "Production No",
+    "Batch Code"
+];
 
+
+export const columns_4 = [
+    "Item ID",
+    "Item Name",
+    "Batch Card No",
+    "Number Of Lot",
+    "Lot Qty",
+    "Production Date",
+    "Printed Batch Code",
+    "Best Before",
+    "Batch Code",
+];
+
+
+export const columns_5 = [
+    "Invoice ID",
+    "Invoice No",
+    "Invoice Date",
+    "Customer Name",
+    "Quantity",
+    "Batch Code"
+];
+
+
+
+export const Rows_1 = (table = []) => {
     const returnArr = [];
-    let TotalCXprimaryAmount = 0
-    let TotalCXPurchaseAmount = 0
-    let TotalCXreturnValue = 0
-    let TotalCXNetPurchaseValue = 0
-    let TotalBudgetOnlyExpiryFrom = 0
-    let TotalCXClaimAmount = 0
-    let TotalNetSale = 0
-
     table.forEach((index, key) => {
         const tableitemRow = [
-            `${index.ItemReasonName}`,
-            `${numberWithCommas(Number(index.PurchaseAmount).toFixed(2))}`,
-            `${numberWithCommas(Number(index.SaleAmount).toFixed(2))}`,
-            `${numberWithCommas(Number(index.ReturnAmount).toFixed(2))}`,
-            `${numberWithCommas(Number(index.NetSaleValue).toFixed(2))}`,
-            `${numberWithCommas(Number(index.Budget).toFixed(2))}`,
-            `${numberWithCommas(Number(index.ClaimAmount).toFixed(2))}`,
-            `${numberWithCommas(Number(index.ClaimAgainstNetSale).toFixed(2))} %`,
+            `${index.BacthCardID}`,
+            `${index.BatchCardNo}`,
+            `${index.WorkOrderDate}`,
+            `${index.LoginName}`,
+            `${numberWithCommas(Number(index.Quantity).toFixed(2))}`,
+            `${numberWithCommas(Number(index.NumberOfLot).toFixed(2))}`,
+            `${index.Status}`,
+
         ];
-
-        function totalLots() {
-            TotalCXPurchaseAmount = Number(index.PurchaseAmount)
-            TotalCXprimaryAmount = Number(index.SaleAmount)
-            TotalCXreturnValue = Number(TotalCXreturnValue) + Number(index.ReturnAmount)
-            TotalCXNetPurchaseValue = Number(TotalCXNetPurchaseValue) + Number(index.NetSaleValue)
-            TotalBudgetOnlyExpiryFrom = Number(TotalBudgetOnlyExpiryFrom) + Number(index.Budget)
-            TotalCXClaimAmount = Number(TotalCXClaimAmount) + Number(index.ClaimAmount)
-            TotalNetSale = Number(TotalNetSale) + Number(index.ClaimAgainstNetSale)
-        };
-
-        function totalrow() {
-
-            const TotalNetPurchaseValue = TotalCXPurchaseAmount - TotalCXreturnValue;
-            table["TotalNetPurchaseValue"] = TotalNetPurchaseValue;
-            const ClaimAgainstNetSale = (TotalCXClaimAmount / TotalCXPurchaseAmount) * 100
-            return [
-                "Total",
-                `${numberWithCommas(Number(TotalCXPurchaseAmount).toFixed(2))}`,
-                `${numberWithCommas(Number(TotalCXprimaryAmount).toFixed(2))}`,
-                `${numberWithCommas(Number(TotalCXreturnValue).toFixed(2))}`,
-                `${numberWithCommas(Number(TotalNetPurchaseValue).toFixed(2))}`,
-                `${numberWithCommas(Number(TotalBudgetOnlyExpiryFrom).toFixed(2))}`,
-                `${numberWithCommas(Number(TotalCXClaimAmount).toFixed(2))}`,
-                `${numberWithCommas(Number(ClaimAgainstNetSale).toFixed(2))}%`,
-            ];
-        };
-
         returnArr.push(tableitemRow);
-        totalLots()
-
-        if (key === table.length - 1) {
-            returnArr.push(totalrow());
-        }
     })
     return returnArr;
 }
 
-export const ProductWiseRows = (data) => {
-    const { ProductwiseBudgetReport = [] } = data
-    ProductwiseBudgetReport.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
+export const Rows_2 = (table = []) => {
     const returnArr = [];
-    let TotalInQuantity = 0
-    let TotalCXprimaryAmount = 0
-    let TotalCXPurchaseAmount = 0
-    let TotalCXreturnValue = 0
-    let TotalCXNetPurchaseValue = 0
-    let TotalBudgetOnlyExpiryFrom = 0
-    let TotalCXClaimAmount = 0
-    let TotalNetSale = 0
-    ProductwiseBudgetReport.forEach((element, key) => {
+    table.forEach((index, key) => {
         const tableitemRow = [
-            `${element.Product}`,
-            `${numberWithCommas(Number(element.PurchaseAmount).toFixed(2))}`,
-            `${numberWithCommas(Number(element.SaleAmount).toFixed(2))}`,
-            `${numberWithCommas(Number(element.ReturnAmount).toFixed(2))}`,
-            `${numberWithCommas(Number(element.NetSaleValue).toFixed(2))}`,
-            `${numberWithCommas(Number(element.Budget).toFixed(2))}`,
-            `${numberWithCommas(Number(element.ClaimAmount).toFixed(2))}`,
-            `${numberWithCommas(Number(element.ClaimAgainstNetSale).toFixed(2))}%`,
+            `${index.ItemID}`,
+            `${index.ItemName}`,
+            `${numberWithCommas(Number(index.BOMQuantity).toFixed(2))}`,
+            `${index.UnitName}`
         ];
-        function totalLots() {
-            TotalInQuantity = Number(TotalInQuantity) + Number(element.InQuantity)
-            TotalCXprimaryAmount = Number(TotalCXprimaryAmount) + Number(element.SaleAmount)
-            TotalCXPurchaseAmount = Number(TotalCXPurchaseAmount) + Number(element.PurchaseAmount)
-            TotalCXreturnValue = Number(TotalCXreturnValue) + Number(element.ReturnAmount)
-            TotalCXNetPurchaseValue = Number(TotalCXNetPurchaseValue) + Number(element.NetSaleValue)
-            TotalBudgetOnlyExpiryFrom = Number(TotalBudgetOnlyExpiryFrom) + Number(element.Budget)
-            TotalCXClaimAmount = Number(TotalCXClaimAmount) + Number(element.ClaimAmount)
-            TotalNetSale = Number(TotalNetSale) + Number(element.ClaimAgainstNetSale)
-
-        };
-
-        function totalrow() {
-            const ClaimAgainstNetSale = (TotalCXClaimAmount / TotalCXPurchaseAmount) * 100
-            return [
-                "Total",
-                `${numberWithCommas(Number(TotalCXPurchaseAmount).toFixed(2))}`,
-                `${numberWithCommas(Number(TotalCXprimaryAmount).toFixed(2))}`,
-                `${numberWithCommas(Number(TotalCXreturnValue).toFixed(2))}`,
-                `${numberWithCommas(Number(TotalCXNetPurchaseValue).toFixed(2))}`,
-                `${numberWithCommas(Number(TotalBudgetOnlyExpiryFrom).toFixed(2))}`,
-                `${numberWithCommas(Number(TotalCXClaimAmount).toFixed(2))}`,
-                `${numberWithCommas(Number(ClaimAgainstNetSale).toFixed(2))}%`,
-            ];
-        };
-
         returnArr.push(tableitemRow);
-        totalLots()
-
-        if (key === ProductwiseBudgetReport.length - 1) {
-            returnArr.push(totalrow());
-        }
     })
     return returnArr;
 }
+
+export const Rows_3 = (table = []) => {
+    const returnArr = [];
+    table.forEach((index, key) => {
+        const tableitemRow = [
+            `${index.Item_id}`,
+            `${index.ItemName}`,
+            `${numberWithCommas(Number(index.Quantity).toFixed(2))}`,
+            `${index.UnitName}`,
+            `${index.grnID}`,
+            `${index.GRNNo}`,
+            `${index.ProductionID}`,
+            `${index.ProductionNo}`,
+            `${index.BatchCode}`
+
+        ];
+        returnArr.push(tableitemRow);
+    })
+    return returnArr;
+}
+
+export const Rows_4 = (table = []) => {
+    const returnArr = [];
+    table.forEach((index, key) => {
+        const tableitemRow = [
+            `${index.ItemID}`,
+            `${index.ItemName}`,
+            `${index.BatchCardNo}`,
+            `${numberWithCommas(Number(index.NumberOfLot).toFixed(2))}`,
+            `${numberWithCommas(Number(index.LotQty).toFixed(2))}`,
+            `${index.ProductionDate}`,
+            `${index.PrintedBatchCode}`,
+            `${index.BestBefore}`,
+            `${index.BatchCode}`,    
+        ];
+        returnArr.push(tableitemRow);
+    })
+    return returnArr;
+}
+
+export const Rows_5 = (table = []) => {
+    const returnArr = [];
+    table.forEach((index, key) => {
+        const tableitemRow = [
+            `${index.InvoiceID}`,
+            `${index.FullInvoiceNumber}`,
+            `${index.InvoiceDate}`,
+            `${index.CustomerName}`,
+            `${numberWithCommas(Number(index.Quantity).toFixed(2))}`,
+            `${index.BatchCode}`
+        ];
+        returnArr.push(tableitemRow);
+    })
+    return returnArr;
+}
+
+
+
+
+

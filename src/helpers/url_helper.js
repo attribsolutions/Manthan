@@ -434,6 +434,8 @@ export const WORK_ORDER_LIST = '/WorkOrderFilter'// ALL GET
 export const WORK_ORDER_LIST_API = '/WorkOrder' //Single gate and delete
 
 
+export const BATCH_TRACEABILITY_REPORT_API = '/BatchTraceabilityReport'
+
 export const BULK_BOM_FOR_WORKORDER = '/BulkBom'
 
 

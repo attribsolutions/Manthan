@@ -40,6 +40,7 @@ const Rows = (Data) => {
             "",
         ];
     }; function ClaimDetails() {
+        debugger
         return [
             "Month",
             `${new Date(Data.Month + "-01").toLocaleString('en-US', { year: 'numeric', month: 'long' })} `,
@@ -270,11 +271,12 @@ const voucherRedemptionClaimReport = (data) => {
     // });
 
     var doc = new jsPDF('l', 'pt', 'a5');
-    data.tableList.forEach((data, index) => {
+    data.tableList.forEach((inx_1, index) => {
+        inx_1["Month"] = data?.Month
         if (index !== 0) {  // Add a new page only after the first iteration
             doc.addPage();
         }
-        tableBody(doc, data);
+        tableBody(doc, inx_1);
         doc.setProperties({
             title: `Voucher Redeemption Claim/${data.FranchiseName}/${new Date(data.Month + "-01").toLocaleString('en-US', { year: 'numeric', month: 'long' })} `
         });

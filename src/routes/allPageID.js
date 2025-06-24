@@ -20,7 +20,7 @@ export const DAILY_DISPATCH_REPORT = 339
 
 export const POS_SALE_SUMMARY_REPORT = 340
 
-export const MANAGER_SUMMARY_REPORT = 347
+// export const MANAGER_SUMMARY_REPORT = 347
 
 export const ITEM_CONSUMPTION_REPORT = 353
 
@@ -467,6 +467,7 @@ export const STOCK_OUT_REPORT = 306
 
 export const FRANCHAISE_SALE_WITH_BILL_COUNT = 316
 
+export const FRANCHISE_PARTY_MASTER = 352
 
 export const BILL_BOOKING_REPORT = 318
 

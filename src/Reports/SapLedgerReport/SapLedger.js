@@ -70,8 +70,14 @@ const tableColumns = [
         dataField: "Credit_Amount",
         align: "right"
     },
+
     {
-        text: "	ItemText",
+        text: "Balance",
+        dataField: "Balance",
+        align: "right"
+    },
+    {
+        text: "ItemText",
         dataField: "ItemText",
     },
 

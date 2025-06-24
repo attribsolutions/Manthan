@@ -15,201 +15,22 @@ export const pageBorder = (doc) => {
 
 
 export const reportHeder1 = (doc, data) => {
-
     doc.setFontSize(18)
-    doc.text(`Chitale Bandhu Mithalwale`, 300, 45, 'center')
-    doc.setFontSize(12)
-    doc.setFont(undefined, 'bold')
-    doc.text(`Claim ID : ${data.Period.ClaimID}`, 450, 40)
-
+    doc.text(`Batch Traceability Report`, 300, 45, 'center')
 }
 
 
 export const pageHeder = (doc, data) => {
 
-    const StartDate = date_dmy_func(data.Period.FromDate).split('-');
-    const EndDate = date_dmy_func(data.Period.ToDate).split('-');
-    const monthIndex = parseInt(StartDate[1]) - 1;
-    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    const monthName = months[monthIndex];
-
-    doc.setDrawColor(0, 0, 0);
-    doc.setFont('Arial')
-
-    doc.setFont(undefined, 'bold')
-    doc.setFontSize(11)
-    doc.text(`${data.Period.PartyName}`, 300, 65, 'center')
-    doc.setFont(undefined, 'normal')
-
-    doc.text(`Company wise Budget Report From ${StartDate[0]}-${monthName} To ${EndDate[0]}-${monthName} `, 300, 75, 'center')
-    doc.text(`Expiry From Retailer(Approved/NonApproved)`, 300, 85, 'center')
-    // doc.text(`GT And Xpress Claim`, 300, 95, 'center')
-    doc.line(570, 52, 30, 52);//horizontal Line Below Name
 }
 export const tableBody = (doc, data) => {
-    let tableStartY = 100;
+    let tableStartY = 80;
 
-    data.ReasonwiseMasterClaim.forEach((index1) => {
+    doc.setFont(undefined, 'bold')
 
-        Object.keys(index1).forEach((index2) => {
-            doc.setFont(undefined, 'bold')
-            doc.text(`${index2}`, 300, (tableStartY - 5), 'center')
-
-            const options = {
-
-                didParseCell: (data1) => {
-
-                    if (data1.row.cells[0].raw === "Total") {
-
-                        data1.row.cells[1].styles.fontSize = 8
-                        data1.row.cells[2].styles.fontSize = 8
-                        data1.row.cells[3].styles.fontSize = 8
-                        data1.row.cells[4].styles.fontSize = 8
-                        data1.row.cells[5].styles.fontSize = 8
-                        data1.row.cells[6].styles.fontSize = 8
-                        data1.row.cells[7].styles.fontSize = 8
-                        data1.row.cells[0].styles.fontStyle = "bold"
-                        data1.row.cells[1].styles.fontStyle = "bold"
-                        data1.row.cells[2].styles.fontStyle = "bold"
-                        data1.row.cells[3].styles.fontStyle = "bold"
-                        data1.row.cells[4].styles.fontStyle = "bold"
-                        data1.row.cells[5].styles.fontStyle = "bold"
-                        data1.row.cells[6].styles.fontStyle = "bold"
-                        data1.row.cells[7].styles.fontStyle = "bold"
-                        data1.row.cells[0].rowSpan = 1
-                    }
-
-                    if (data1.cell.raw === numberWithCommas(Number(index1[index2][0].PurchaseAmount).toFixed(2))) {
-
-                        if (data1.row.cells[0].raw === "Total") {
-
-                            data1.row.cells[1].styles.valign = "top"
-                        } else {
-                            data1.row.cells[1].styles.halign = "right"
-                            data1.row.cells[1].styles.valign = "center"
-
-                            data1.row.cells[1].rowSpan = index1[index2].length
-                        }
-                    }
-                    if (data1.cell.raw === numberWithCommas(Number(index1[index2][0].SaleAmount).toFixed(2))) {
-
-                        if (data1.row.cells[0].raw === "Total") {
-
-                            data1.row.cells[2].styles.valign = "top"
-                        } else {
-                            data1.row.cells[2].styles.halign = "right"
-                            data1.row.cells[2].styles.valign = "center"
-                            data1.row.cells[2].rowSpan = index1[index2].length
-                        }
-                    }
-                    if (data1.row.index === 0) {
-
-                        if (data1.row.cells[4].raw === numberWithCommas(Number(index1[index2][0].NetSaleValue).toFixed(2))) {
-
-                            data1.row.cells[4].text[0] = `${numberWithCommas(Number(index1[index2].TotalNetPurchaseValue).toFixed(2))}`
-                            data1.row.cells[4].styles.halign = "right"
-                            data1.row.cells[4].styles.valign = "center"
-
-                            data1.row.cells[4].rowSpan = index1[index2].length
-                        }
-                    }
-
-
-
-                },
-                margin: {
-                    left: 30, right: 25,//200 bottom
-                },
-                theme: 'grid',
-                headerStyles: {
-                    cellPadding: 4,
-                    lineWidth: 0.5,
-                    valign: 'top',
-                    fontStyle: 'bold',
-                    halign: 'center',    //'center' or 'right'
-                    fillColor: "white",
-                    textColor: [0, 0, 0], //Black     
-                    fontSize: 8,
-                    rowHeight: 10,
-                    lineColor: "black"
-                },
-                bodyStyles: {
-                    textColor: [30, 30, 30],
-                    cellPadding: 3,
-                    fontSize: 7,
-                    columnWidth: 'wrap',
-                    lineColor: [0, 0, 0],
-                },
-                columnStyles: {
-                    0: {
-                        valign: "top",
-                        columnWidth: 125,
-                    },
-                    1: {
-                        columnWidth: 70,
-                        halign: 'right',
-
-                    },
-                    2: {
-                        columnWidth: 70,
-                        halign: 'right',
-                    },
-                    3: {
-                        columnWidth: 55,
-                        halign: 'right',
-                    },
-                    4: {
-                        columnWidth: 55,
-                        halign: 'right',
-                    },
-                    5: {
-                        columnWidth: 55,
-                        halign: 'right',
-                    },
-                    6: {
-                        columnWidth: 55,
-                        halign: 'right',
-                    },
-                    7: {
-                        columnWidth: 55,
-                        halign: 'right',
-                    },
-                    8: {
-                        columnWidth: 55,
-                        halign: 'right',
-                    },
-                },
-                startY: tableStartY,
-            }
-            doc.autoTable(table.columns, table.Rows(index1[index2]), options);
-            tableStartY = doc.previousAutoTable.finalY + 20;
-        })
-    })
-    const ProductWiseoptions = {
-        didParseCell: (data1) => {
-            if (data1.row.cells[0].raw === "Total") {
-                data1.row.cells[1].styles.fontSize = 8
-                data1.row.cells[2].styles.fontSize = 8
-                data1.row.cells[3].styles.fontSize = 8
-                data1.row.cells[4].styles.fontSize = 8
-                data1.row.cells[5].styles.fontSize = 8
-                data1.row.cells[6].styles.fontSize = 8
-                data1.row.cells[7].styles.fontSize = 8
-
-                data1.row.cells[0].styles.fontStyle = "bold"
-                data1.row.cells[1].styles.fontStyle = "bold"
-                data1.row.cells[2].styles.fontStyle = "bold"
-                data1.row.cells[3].styles.fontStyle = "bold"
-                data1.row.cells[4].styles.fontStyle = "bold"
-                data1.row.cells[5].styles.fontStyle = "bold"
-                data1.row.cells[6].styles.fontStyle = "bold"
-                data1.row.cells[7].styles.fontStyle = "bold"
-
-            }
-
-        },
+    const options_1 = {
         margin: {
-            left: 30, right: 25, top: 60
+            left: 30, right: 25,//200 bottom
         },
         theme: 'grid',
         headerStyles: {
@@ -217,9 +38,9 @@ export const tableBody = (doc, data) => {
             lineWidth: 0.5,
             valign: 'top',
             fontStyle: 'bold',
-            halign: 'center',
+            halign: 'center',    //'center' or 'right'
             fillColor: "white",
-            textColor: [0, 0, 0],
+            textColor: [0, 0, 0], //Black     
             fontSize: 8,
             rowHeight: 10,
             lineColor: "black"
@@ -232,30 +53,143 @@ export const tableBody = (doc, data) => {
             lineColor: [0, 0, 0],
         },
         columnStyles: {
-
             0: {
-                columnWidth: 125,
-                halign: 'left',
-
+                valign: "top",
+                columnWidth: 40,
+                halign: 'right',
             },
             1: {
                 columnWidth: 70,
                 halign: 'right',
+
             },
             2: {
-                columnWidth: 70,
+                columnWidth: 90,
                 halign: 'right',
             },
             3: {
-                columnWidth: 55,
+                columnWidth: 120,
                 halign: 'right',
             },
             4: {
-                columnWidth: 55,
+                columnWidth: 65,
                 halign: 'right',
             },
             5: {
-                columnWidth: 55,
+                columnWidth: 70,
+                halign: 'right',
+            },
+            6: {
+                columnWidth: 85,
+                halign: 'right',
+            },
+
+        },
+        startY: tableStartY,
+    }
+    doc.setFontSize(10)
+    doc.text(`BATCH DETAILS`, 35, 70, 'left')
+
+    doc.autoTable(table.columns_1, table.Rows_1(data.WorkOrderDetails), options_1);
+    const options_2 = {
+        margin: {
+            left: 30, right: 25,//200 bottom
+        },
+        theme: 'grid',
+        headerStyles: {
+            cellPadding: 4,
+            lineWidth: 0.5,
+            valign: 'top',
+            fontStyle: 'bold',
+            halign: 'center',    //'center' or 'right'
+            fillColor: "white",
+            textColor: [0, 0, 0], //Black     
+            fontSize: 8,
+            rowHeight: 10,
+            lineColor: "black"
+        },
+        bodyStyles: {
+            textColor: [30, 30, 30],
+            cellPadding: 3,
+            fontSize: 7,
+            columnWidth: 'wrap',
+            lineColor: [0, 0, 0],
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 40,
+                halign: 'right',
+            },
+            1: {
+                columnWidth: 200,
+                halign: 'left',
+
+            },
+            2: {
+                columnWidth: 140,
+                halign: 'right',
+            },
+            3: {
+                columnWidth: 160,
+                halign: 'right',
+            },
+
+        },
+        startY: doc.lastAutoTable.finalY + 20, // Use the final Y position of the previous table
+    }
+    doc.text(`BILL OF MATERIAL`, 35, doc.lastAutoTable.finalY + 15, 'left')
+
+    doc.autoTable(table.columns_2, table.Rows_2(data.WorkOrderItems), options_2);
+    const options_3 = {
+        margin: {
+            left: 30, right: 25,//200 bottom
+        },
+        theme: 'grid',
+        headerStyles: {
+            cellPadding: 4,
+            lineWidth: 0.5,
+            valign: 'top',
+            fontStyle: 'bold',
+            halign: 'center',    //'center' or 'right'
+            fillColor: "white",
+            textColor: [0, 0, 0], //Black     
+            fontSize: 8,
+            rowHeight: 10,
+            lineColor: "black"
+        },
+        bodyStyles: {
+            textColor: [30, 30, 30],
+            cellPadding: 3,
+            fontSize: 7,
+            columnWidth: 'wrap',
+            lineColor: [0, 0, 0],
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 40,
+                halign: 'right',
+            },
+            1: {
+                columnWidth: 90,
+                halign: 'left',
+
+            },
+            2: {
+                columnWidth: 60,
+                halign: 'right',
+            },
+            3: {
+                columnWidth: 50,
+                halign: 'right',
+            },
+            4: {
+                columnWidth: 50,
+                halign: 'right',
+            },
+            5: {
+                columnWidth: 50,
                 halign: 'right',
             },
             6: {
@@ -263,21 +197,145 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             7: {
-                columnWidth: 55,
+                columnWidth: 60,
                 halign: 'right',
             },
             8: {
-                columnWidth: 55,
+                columnWidth: 85,
                 halign: 'right',
             },
         },
-        tableLineColor: "black",
-        startY: doc.previousAutoTable.finalY + 20,
+        startY: doc.lastAutoTable.finalY + 20,
     }
 
-    doc.setFont(undefined, 'bold')
-    doc.text(`Product Wise Budget Report`, 300, doc.previousAutoTable.finalY + 14, 'center')
-    doc.autoTable(table.ProductWisecolumns, table.ProductWiseRows(data), ProductWiseoptions);
+    doc.text(`ACTUAL MATERIAL ISSUE`, 35, doc.lastAutoTable.finalY + 15, 'left')
+    doc.autoTable(table.columns_3, table.Rows_3(data.MaterialIssues), options_3);
+
+    const options_4 = {
+        margin: {
+            left: 30, right: 25,//200 bottom
+        },
+        theme: 'grid',
+        headerStyles: {
+            cellPadding: 4,
+            lineWidth: 0.5,
+            valign: 'top',
+            fontStyle: 'bold',
+            halign: 'center',    //'center' or 'right'
+            fillColor: "white",
+            textColor: [0, 0, 0], //Black     
+            fontSize: 8,
+            rowHeight: 10,
+            lineColor: "black"
+        },
+        bodyStyles: {
+            textColor: [30, 30, 30],
+            cellPadding: 3,
+            fontSize: 7,
+            columnWidth: 'wrap',
+            lineColor: [0, 0, 0],
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 40,
+                halign: 'right',
+            },
+            1: {
+                columnWidth: 90,
+                halign: 'left',
+
+            },
+            2: {
+                columnWidth: 60,
+                halign: 'right',
+            },
+            3: {
+                columnWidth: 40,
+                halign: 'right',
+            },
+            4: {
+                columnWidth: 40,
+                halign: 'right',
+            },
+            5: {
+                columnWidth: 50,
+                halign: 'right',
+            },
+            6: {
+                columnWidth: 75,
+                halign: 'right',
+            },
+            7: {
+                columnWidth: 60,
+                halign: 'right',
+            },
+            8: {
+                columnWidth: 85,
+                halign: 'right',
+            },
+        },
+        startY: doc.lastAutoTable.finalY + 20,
+    }
+    doc.text(`PRODUCTION DETAILS`, 35, doc.lastAutoTable.finalY + 15, 'left')
+
+
+    doc.autoTable(table.columns_4, table.Rows_4(data.ProductionDetails), options_4);
+
+    const options_5 = {
+        margin: {
+            left: 30, right: 25,//200 bottom
+        },
+        theme: 'grid',
+        headerStyles: {
+            cellPadding: 4,
+            lineWidth: 0.5,
+            valign: 'top',
+            fontStyle: 'bold',
+            halign: 'center',    //'center' or 'right'
+            fillColor: "white",
+            textColor: [0, 0, 0], //Black     
+            fontSize: 8,
+            rowHeight: 10,
+            lineColor: "black"
+        },
+        bodyStyles: {
+            textColor: [30, 30, 30],
+            cellPadding: 3,
+            fontSize: 7,
+            columnWidth: 'wrap',
+            lineColor: [0, 0, 0],
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 40,
+                halign: 'right',
+            },
+            1: {
+                columnWidth: 70,
+                halign: 'right',
+
+            },
+            2: {
+                columnWidth: 55,
+                halign: 'right',
+            },
+            3: {
+                columnWidth: 180,
+                halign: 'left',
+            },
+            4: {
+                columnWidth: 85,
+                halign: 'right',
+            },
+
+        },
+        startY: doc.lastAutoTable.finalY + 20,
+    }
+    doc.text(`CUSTOMER DISPATCH DETAILS`, 35, doc.lastAutoTable.finalY + 15, 'left')
+
+    doc.autoTable(table.columns_5, table.Rows_5(data.CustomerDispatchDetails), options_5);
 }
 
 export const pageFooter = (doc, data) => {
