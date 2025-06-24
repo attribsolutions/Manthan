@@ -73,9 +73,9 @@ function AddressDetailsTable({ addressTable = [], setAddressTable, onEdit }) {
 	const ondeleteHandeler = (ele) => {
 
 		if (ele.id === undefined) {
-			if (!(ele.RowId === 0)) {
+			if (!(ele.RowID === 0)) {
 				var fil = addressTable.filter((i) => {
-					return !(i.RowId === ele.RowId);
+					return !(i.RowID === ele.RowID);
 				});
 				setAddressTable(fil);
 			}
@@ -98,23 +98,55 @@ function AddressDetailsTable({ addressTable = [], setAddressTable, onEdit }) {
 	}
 
 	function myFunction(row) {
-		if (row.fssaidocument !== "") {
-			if (row.fssaidocument && row.fssaidocument.startsWith("data:application/pdf;base64,")) {
-				openPdfFromBase64(row.fssaidocument);
-			} else {
-				setFssaiDocument([{
-					Image: row.fssaidocument
-				}])
-				setmodal_backdrop(true)
-			}
-		} else {
+		debugger
+		const file = row.file;
+
+		if (!(file || row.fssaidocumenturl !== "")) {
 			customAlert({
 				Type: 3,
 				Message: alertMessages.imageNotUploaded,
-			})
-			return
+			});
+			return;
 		}
+		if (file) {
+			const fileURL = URL.createObjectURL(file);
+			const fileType = file.type;
+
+			if (fileType === "application/pdf") {
+				// Open PDF in new tab
+				window.open(fileURL, "_blank");
+			} else if (fileType.startsWith("image/")) {
+				// Show image in modal
+				setFssaiDocument([{ Image: fileURL }]);
+				setmodal_backdrop(true);
+			} else {
+				customAlert({
+					Type: 3,
+					Message: "Unsupported file format.",
+				});
+			}
+		} else {
+			const extension = row.fssaidocumenturl.split('.').pop().toLowerCase();
+
+			if (extension === "pdf") {
+				// Open PDF in new tab
+				window.open(row.fssaidocumenturl, "_blank");
+			} else if (["jpg", "jpeg", "png", "gif", "bmp", "webp"].includes(extension)) {
+				// Show image in modal
+				setFssaiDocument([{ Image: row.fssaidocumenturl }]);
+				setmodal_backdrop(true);
+			} else {
+				customAlert({
+					Type: 3,
+					Message: "Unsupported file format.",
+				});
+			}
+
+		}
+
 	}
+
+
 
 	function openPdfFromBase64(base64String) {
 		// Split the Base64 string to remove the `data:application/pdf;base64,` part

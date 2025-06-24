@@ -1,48 +1,48 @@
 
-import React, { useState, useEffect, useImperativeHandle, forwardRef, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Button, Card, CardBody, CardHeader, Col, Container, FormGroup, Input, Label, Row, } from 'reactstrap'
-import { bulkSetState, comAddPageFieldFunc, formValid, initialFiledFunc, onChangeCheckbox, onChangeSelect, onChangeText, resetFunction } from '../../../components/Common/validationFunction';
+import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeCheckbox, onChangeSelect, onChangeText, resetFunction } from '../../../components/Common/validationFunction';
 import { mode, pageId, url } from '../../../routes';
 import { useDispatch, useSelector } from 'react-redux';
 import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess, SSDD_List_under_Company } from '../../../store/actions';
-import { breadcrumbReturnFunc, btnIsDissablefunc, date_ymd_func, getSettingBasedPartyTypeID, loginCompanyID, loginJsonBody, loginPartyID, loginPartyName, loginPartyTypeName, loginRoleID, loginSystemSetting, loginUserAdminRole, loginUserDetails, loginUserID, metaTagLabel } from '../../../components/Common/CommonFunction';
+import { breadcrumbReturnFunc, btnIsDissablefunc, getSettingBasedPartyTypeID, loginCompanyID, loginJsonBody, loginPartyID, loginPartyName, loginPartyTypeName, loginRoleID, loginSystemSetting, loginUserDetails, loginUserID, metaTagLabel } from '../../../components/Common/CommonFunction';
 import { GetRoutesList, GetRoutesListSuccess } from '../../../store/Administrator/RoutesRedux/actions';
 import { priceListByPartyAction } from '../../../store/Administrator/PriceList/action';
-import { Get_Subcluster_On_cluster_API, mobileApp_Send_Retailer_Api } from '../../../helpers/backend_helper';
 import { editPartyIDSuccess, getDistrictOnState, getDistrictOnStateSuccess, postPartyData, postPartyDataSuccess, updatePartyID } from '../../../store/Administrator/PartyRedux/action';
-import { getCityOnDistrict, getCityOnDistrictSuccess, getState, saveEmployeeAction, updateEmployeeIDSuccess } from '../../../store/Administrator/EmployeeRedux/action';
+import { getCityOnDistrict, getCityOnDistrictSuccess, getState, updateEmployeeIDSuccess } from '../../../store/Administrator/EmployeeRedux/action';
 import AddMaster from '../EmployeePages/Drodown';
 import PartyType from '../PartyTypes/PartyType';
 import PriceDropOptions from './MasterAdd/FirstTab/PriceDropOptions';
 import Select from "react-select"
 import CityMaster from '../CityPages/CityMaster';
-import { C_Select, CInput } from '../../../CustomValidateForm';
+import { C_Select } from '../../../CustomValidateForm';
 import { C_Button, SaveButton } from '../../../components/Common/CommonButton';
 import { customAlert } from '../../../CustomAlert/ConfirmDialog';
-import { alertMessages } from '../../../components/Common/CommonErrorMsg/alertMsg';
 import { MetaTags } from 'react-meta-tags';
-import { userAccessUseEffect } from '../../../components/Common/CommonUseEffect';
 import { useHistory } from "react-router-dom";
 import { getPartyTypelist } from '../../../store/Administrator/PartyTypeRedux/action';
 import { getCountryList_Action, getCountryList_Success } from '../../../store/Administrator/CountryRedux/action';
-import AddressDetailsTable from './MasterAdd/AddressDetailsTab/Table';
 import AddressDetailsTable1 from './AddressDetailsTable1';
-import { showToastAlert } from '../../../helpers/axios_Config';
-// import AddressDetailsTable from './Table';
-// 
-
-// import { onChangeText,  } from '../../../../../components/Common/validationFunction'
-// import { Breadcrumb_inputName } from '../../../../../store/actions'
-
-
-
-
+import BootstrapTable from 'react-bootstrap-table-next';
+import ToolkitProvider from 'react-bootstrap-table2-toolkit';
+import SimpleBar from "simplebar-react"
+import SaveButtonDraggable from '../../../components/Common/saveButtonDraggable';
+import { deltBtnCss, editBtnCss, vieBtnCss } from '../../../components/Common/ListActionsButtons';
 
 const FranchisePartyMaster = (props) => {
 
   const dispatch = useDispatch();
-  const loginPartyType = loginPartyTypeName()
+
   const history = useHistory()
+
+  const AdderssRef = useRef(null);
+  const PinRef = useRef(null);
+  const IsDefaultRef = useRef(null);
+
+
+
+
+
 
   const fileds = {
 
@@ -58,47 +58,32 @@ const FranchisePartyMaster = (props) => {
     CityName: "",
     PIN: '',
     PartyAddress: "",
-    isActive: true,
+    isActive: false,
     PriceList: "",
   }
   const [state, setState] = useState(() => initialFiledFunc(fileds))
-  const [showAddressTable, setShowAddressTable] = useState(false);
-
+  const [isMobileRetailer, setIsMobileRetailer] = useState(false);
   const [priceListSelect, setPriceListSelect] = useState({ value: '' });
-  const [partyType_AddMasterAccess, setPartyType_AddMasterAccess] = useState(false)
-  const [city_AddMasterAccess, setCity_AddMasterAccess] = useState(false)
-
-  const [SubClusterOptions, setSubClusterOptions] = useState({});
-
-  const [partyTypeDisabled, setPartyTypeDisabled] = useState(false)
-  const [supplierDisabled, setSupplierDisabled] = useState(false)
-
-  const [buttonShow, setButtonShow] = useState(false);
-  const [imageTable, setImageTable] = useState('');
-  const [addressTable, setAddressTable] = useState([]);
-
+  const [addressDetails, setAddressDetails] = useState([{ Address: '', PIN: '', RowID: 0, IsDefault: false }]);
 
   const [pageMode, setPageMode] = useState(mode.defaultsave);
   const [userPageAccessState, setUserAccState] = useState(11);
   const [editCreatedBy, seteditCreatedBy] = useState("");
-  const baseTabRef = useRef(null);
-  const [activeTab1, setactiveTab1] = useState("1")
-  const addressTabRef = useRef(null);
-  const [EditData, setEditData] = useState('');
+
   const location = { ...history.location }
   const hasShowModal = props.hasOwnProperty(mode.editValue)
   const hasShowloction = location.hasOwnProperty(mode.editValue)
   const [modalCss, setModalCss] = useState(false);
-  const [page_id] = useState(() => (props).page_Id)
 
-  const prefixTabRef = useRef(null);
-  const [isMobileRetailer, setIsMobileRetailer] = useState(false);
+  const [EditAddressDetails, setEditAddressDetails] = useState({ RowId: 0, IsEdit: false });
+
+
+
 
   const values = { ...state.values }
+
   const { isError } = state;
   const { fieldLabel } = state;
-
-
 
   const {
     updateMsg,
@@ -111,7 +96,6 @@ const FranchisePartyMaster = (props) => {
     districtDropDownLoading,
     cityDropDownLoading,
     countryList,
-    countryListloading,
     commonPartyDropSelect,
     pageField,
     editData,
@@ -145,18 +129,13 @@ const FranchisePartyMaster = (props) => {
     const page_Id = pageId.FRANCHISE_PARTY_MASTER
     dispatch(commonPageFieldSuccess(null));
     dispatch(commonPageField(page_Id))
-    return () => {
 
-
-      // dispatch(saveSchemeTypeSuccess({ Status: false }))
-
-    }
   }, []);
 
 
 
   useEffect(async () => {
-    debugger
+
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
       dispatch(postPartyDataSuccess({ Status: false }));
       customAlert({
@@ -190,7 +169,6 @@ const FranchisePartyMaster = (props) => {
     return () => {
 
       dispatch(getCountryList_Success());
-
       dispatch(getCityOnDistrictSuccess([]))//clear City privious options
       dispatch(getDistrictOnStateSuccess([]))//clear district privious options
     }
@@ -226,13 +204,6 @@ const FranchisePartyMaster = (props) => {
   }, [userAccess])
 
 
-
-
-
-
-
-
-
   useEffect(() => {
 
     if ((hasShowloction || hasShowModal)) {
@@ -247,9 +218,9 @@ const FranchisePartyMaster = (props) => {
         setPageMode(props.pageMode)
         setModalCss(true)
       }
-
+      setIsMobileRetailer(location.IsMobileRetailer)
       if (hasEditVal) {
-        setEditData(hasEditVal);
+
         const { id, Name, MobileNo, isActive, Email, PartyType, PriceList, Supplier, PAN, State, District, PartyAddress, PIN, CityName } = hasEditVal
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
@@ -273,21 +244,24 @@ const FranchisePartyMaster = (props) => {
         values.Name = Name;
         values.MobileNo = MobileNo;
         values.Email = Email;
-        values.PartyType = PartyType;
+        values.PartyType = { value: PartyType?.id, label: PartyType?.Name };
         values.Supplier = Supplier;
-        values.PriceList = PriceList;
-        values.isActive = isActive;
-
+        values.PriceList = { value: PriceList?.id, label: PriceList?.Name };
+        values.isActive = location.IsMobileRetailer ? true : isActive
         values.PAN = PAN;
-        values.State = State;
-        values.District = District;
-        values.PartyAddress = PartyAddress;
-        values.PIN = PIN;
-        values.CityName = CityName;
+        values.State = { value: State?.id, label: State?.Name };
+        values.District = { value: District?.id, label: District?.Name };
 
+        values.PIN = PIN;
+        values.CityName = { value: CityName?.id, label: CityName?.Name };
+        setPriceListSelect({ value: PriceList?.id, label: PriceList?.Name })
+        setAddressDetails([
+          { Address: '', PIN: '', RowID: 0, IsDefault: false },
+          ...PartyAddress.map((r, i) => ({ ...r, RowID: i + 1 }))
+        ]);
 
         setState({ values, fieldLabel, hasValid, required, isError })
-        dispatch(editPartyIDSuccess({ Status: false }))
+
         dispatch(Breadcrumb_inputName(hasEditVal.Name))
         seteditCreatedBy(hasEditVal.CreatedBy)
       }
@@ -326,13 +300,64 @@ const FranchisePartyMaster = (props) => {
 
 
 
+  const handleAdd = ({ RowIndex, EditAddressDetails }) => {
+
+    if (AdderssRef?.current?.value.trim() || PinRef?.current?.value.trim()) {
+      const inputRow = { Address: AdderssRef?.current?.value, PIN: PinRef?.current?.value, RowID: EditAddressDetails.IsEdit ? EditAddressDetails.RowID : RowIndex, fssaidocumenturl: null, IsDefault: IsDefaultRef?.current?.checked }
+      AdderssRef.current.value = "";
+      PinRef.current.value = "";
+      IsDefaultRef.current.checked = false
+      if (EditAddressDetails.IsEdit) {
+        setAddressDetails(prev => {
+          return prev.map(row =>
+            row.RowID === EditAddressDetails.RowID ? { ...inputRow } : row
+          );
+        });
+        setEditAddressDetails({ RowID: 0, IsEdit: false })
+      } else {
+        setAddressDetails(prev => {
+          const maxRowId = prev.length > 0
+            ? Math.max(...prev.map(item => item.RowID || 0))
+            : -1;
+          const newRow = { ...inputRow, RowID: maxRowId + 1 };
+          return [...prev, newRow];
+        });
+      }
+
+
+    }
+  };
+
+  const handleDelete = (RowID) => {
+
+    setAddressDetails(prev => {
+
+      return prev.filter((row, i) => {
+        return row.RowID !== (RowID);
+      });
+    });
+
+
+  };
+
+
+  const handleEdit = (Row) => {
+    AdderssRef.current.value = Row.Address;
+    PinRef.current.value = Row.PIN;
+    IsDefaultRef.current.checked = Row.IsDefault;
+
+    setEditAddressDetails({ RowID: Row.RowID, IsEdit: true })
+  };
+
+
   const SaveHandler = async (event) => {
+    const formData = new FormData();
     event.preventDefault();
     const btnId = event.target.id;
 
 
     try {
-      const skipValidation = addressTable.length > 0;
+      const skipValidation = addressDetails.length > 0;
 
       // Step 1: Temporarily update validation flags for PartyAddress & PIN
       let modifiedState = { ...state };
@@ -364,8 +389,8 @@ const FranchisePartyMaster = (props) => {
           "PriceList": priceListSelect.value,
           "PartyType": values.PartyType.value,
           "Company": loginCompanyID(),
-          "PAN": values.PAN,
-          "Email": values.Email,
+          "PAN": "",
+          "Email": "",
           "MobileNo": values.MobileNo,
           "AlternateContactNo": "",
           "Country": loginUserDetails().Country_id,
@@ -376,16 +401,15 @@ const FranchisePartyMaster = (props) => {
           "Taluka": 0,
           "Latitude": "",
           "Longitude": "",
-
-
           "GSTIN": "",
-          "isActive": true,
+          "isActive": values.isActive,
           "CreatedBy": loginUserID(),
           "UpdatedBy": loginUserID(),
-          "IsApprovedParty": false,
+          "IsApprovedParty": isMobileRetailer && false,
           "PartySubParty": supplierArr,
-
-          PartyAddress: addressTable,
+          "PartyAddress": addressDetails.filter((row, i) => {
+            return row.RowID !== 0;
+          }),
           "PartyPrefix": [
             {
               "Orderprefix": "",
@@ -406,10 +430,14 @@ const FranchisePartyMaster = (props) => {
 
         });
 
+        formData.append('PartyData', jsonBody);
+        addressDetails?.forEach((item, key) => {
+          formData.append(`fssaidocument_${item.RowID}`, item.file);
+        })
         if (pageMode === mode.edit) {
-          dispatch(updatePartyID({ jsonBody, updateId: values.id, btnId }));
+          dispatch(updatePartyID({ formData, updateId: values.id, btnId }));
         } else {
-          dispatch(postPartyData({ jsonBody, btnId }));
+          dispatch(postPartyData({ formData, btnId }));
         }
       }
     } catch (e) {
@@ -419,16 +447,6 @@ const FranchisePartyMaster = (props) => {
 
 
 
-
-
-
-  useEffect(() => {
-    if (commonPartyDropSelect.value <= 0) {
-      setAddressTable([])
-    }
-  }, [commonPartyDropSelect]);
-
-
   useEffect(() => {
     if (pageField) {
       const fieldArr = pageField.PageFieldMaster
@@ -436,74 +454,6 @@ const FranchisePartyMaster = (props) => {
     }
   }, [pageField])
 
-  useEffect(() => {
-
-    userAccess.forEach((index) => {
-      if (index.id === pageId.FRANCHISE_PARTY_MASTER) {
-        return setPartyType_AddMasterAccess(true)
-      }
-      if (index.id === pageId.CITY) {
-        return setCity_AddMasterAccess(true)
-      }
-    });
-
-  }, [userAccess])
-  useEffect(() => {
-
-    if (commonPartyDropSelect.value <= 0) {
-      setPriceListSelect({ value: '' })
-      dispatch(Breadcrumb_inputName(""))
-    }
-
-
-    setState((i) => {
-      let a = { ...i }
-
-      a.values.Name = ''
-
-      a.values.MobileNo = ''
-      a.values.PartyType = ''
-
-      a.values.Supplier = []
-      a.values.PAN = ''
-      a.values.Email = ''
-
-      a.values.State = ''
-      a.values.District = ''
-
-      a.values.CityName = ''
-      a.values.PIN = ''
-      a.values.isActive = true;
-      a.values.PartyAddress = ''
-
-      a.hasValid.PartyAddress.valid = false;
-      a.hasValid.Name.valid = false;
-
-      a.hasValid.MobileNo.valid = false;
-      a.hasValid.PartyType.valid = false;
-
-      a.hasValid.Supplier.valid = false;
-      a.hasValid.PAN.valid = false;
-      a.hasValid.Email.valid = false;
-
-      a.hasValid.State.valid = false;
-      a.hasValid.District.valid = false;
-
-      a.hasValid.CityName.valid = false;
-
-      a.hasValid.PIN.valid = false;
-
-      return a
-    })
-
-    if (commonPartyDropSelect.value > 0) {
-      dispatch(GetRoutesList({ ...loginJsonBody(), "PartyID": commonPartyDropSelect.value }))
-
-    }
-    return () => {
-      dispatch(GetRoutesListSuccess([]));
-    }
-  }, [commonPartyDropSelect]);
 
 
   useEffect(() => {
@@ -529,69 +479,9 @@ const FranchisePartyMaster = (props) => {
         a.hasValid.valid = true;
         return a
       })
-
       dispatch(priceListByPartyAction(PartyTypes[0].id))
     }
   }, [PartyTypes])
-
-
-
-
-
-
-  const addOrUpdateDataHandler = (e, btnMode) => {
-    try {
-      const skipValidation = addressTable.length > 0 && btnMode === "add";
-
-      // Step 1: Temporarily update validation flags for PartyAddress & PIN
-      let modifiedState = { ...state };
-
-      if (skipValidation) {
-        modifiedState.hasValid.PartyAddress.valid = true;
-        modifiedState.hasValid.PIN.valid = true;
-        modifiedState.isError.PartyAddress = "";
-        modifiedState.isError.PIN = "";
-      }
-
-      // ✅ Pass modifiedState and update UI state also
-      const isvalid = formValid(modifiedState, setState);  // Just use setState
-
-      if (isvalid) {
-        const val = {
-          Address: modifiedState.values.PartyAddress,
-          PIN: modifiedState.values.PIN,
-        };
-
-        if (btnMode === "update") {
-          const updatedTableData = addressTable.map((row) =>
-            row.RowId === modifiedState.values.RowId ? { ...row, ...val } : row
-          );
-          setAddressTable(updatedTableData);
-        } else {
-          val.RowId = addressTable.length + 1;
-          setAddressTable([...addressTable, val]);
-          setShowAddressTable(true);
-        }
-
-        setButtonShow(false);
-
-        // Step 3: Clear PartyAddress & PIN fields after add/update
-        setState((prev) => {
-          const updated = { ...prev };
-          updated.values.PartyAddress = "";
-          updated.values.PIN = "";
-          updated.hasValid.PartyAddress.valid = false;
-          updated.hasValid.PIN.valid = false;
-          updated.isError.PartyAddress = "";
-          updated.isError.PIN = "";
-          return updated;
-        });
-      }
-    } catch (error) {
-      console.error("Error in addOrUpdateDataHandler:", error);
-    }
-  };
-
 
 
 
@@ -609,26 +499,6 @@ const FranchisePartyMaster = (props) => {
 
   }, [PartyTypes, pageField])
 
-  useEffect(() => {
-
-
-    setState((i) => {
-      const a = { ...i }
-      a.values.PartyType = { value: 31, label: "Franchise Customer" };
-      a.hasValid.PartyType.valid = true
-
-
-      a.values.Supplier = [{ value: loginPartyID(), label: loginPartyName() }];
-      a.hasValid.Supplier.valid = true
-
-      setSupplierDisabled(true);
-      setPartyTypeDisabled(true);
-      dispatch(priceListByPartyAction(31))
-      return a
-    })
-
-
-  }, [loginPartyType, PartyTypes, SupplierRedux])
 
   const PartyTypeDropdown_Options = PartyTypes.map((index) => ({
     value: index.id,
@@ -656,15 +526,6 @@ const FranchisePartyMaster = (props) => {
     value: index.id,
     label: index.Name
   }));
-
-
-
-
-  const CountryListOptions = countryList?.map((data) => ({
-    value: data.id,
-    label: data.Country
-  }));
-
 
 
 
@@ -704,33 +565,6 @@ const FranchisePartyMaster = (props) => {
 
 
 
-  const handleEditRow = (row) => {
-
-    setButtonShow(true);
-    setState((i) => {
-
-      const a = { ...i }
-      a.values.PartyAddress = row.Address;
-
-
-      a.values.PIN = row.PIN;
-
-      a.values["RowId"] = row.RowId;
-      a.values["id"] = row.id
-
-      a.hasValid.PartyAddress.valid = true
-
-      a.hasValid.PIN.valid = true
-
-
-      a.isError.PartyAddress = ""
-
-      a.isError.PIN = ""
-
-      return a
-    })
-  }
-
 
   const priceListOnClick = function () {
 
@@ -746,9 +580,125 @@ const FranchisePartyMaster = (props) => {
 
   };
 
+  const columns = [
+    {
+      dataField: 'Address',
+      text: 'Address',
+      formatExtraData: addressDetails,
+      formatter: (cell, row, rowIndex, addressDetails) => {
+        if (rowIndex === 0) {
+          return (
+            <Input
+              type="text"
+              name="Address"
+              innerRef={AdderssRef}
+              defaultValue={AdderssRef?.current?.value}
+              onChange={(e) => { AdderssRef.current.value = e.target.value }}
+              placeholder="Enter Address"
+            />
+          );
+        }
+        return cell;
+      }
+    },
+    {
+      dataField: 'PIN',
+      text: 'PIN',
+      formatter: (cell, row, rowIndex) => {
+        if (rowIndex === 0) {
+          return (
+            <Input
+              type="text"
+              name="PIN"
+              innerRef={PinRef}
+              value={PinRef?.current?.value}
+              onChange={(e) => { PinRef.current.value = e.target.value }}
+              placeholder="Enter Pin"
+            />
+          );
+        }
+        return cell;
+      }
+    },
+
+    {
+      dataField: 'IsDefault',
+      text: 'IsDefault',
+      formatter: (cell, row, rowIndex) => {
+        if (rowIndex === 0) {
+          return (
+
+
+            <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
+              <div className="form-check form-switch form-switch-md mb-3">
+                <Input type="checkbox"
+                  className="form-check-input"
+                  innerRef={IsDefaultRef}
+                  checked={IsDefaultRef?.current?.checked}
+                  name="IsDefault"
+                  onChange={(e) => { IsDefaultRef.current.checked = e.target.checked }}
+                />
+              </div>
+            </Col>
+          );
+        }
+        return cell;
+      }
+    },
 
 
 
+
+
+    {
+      dataField: 'Actions',
+      text: 'Actions',
+      formatExtraData: EditAddressDetails,
+      formatter: (cell, row, rowIndex, EditAddressDetails) => {
+        debugger
+        if (rowIndex === 0) {
+          return (
+            <Button
+              className={`btn-edit ${EditAddressDetails.IsEdit ? editBtnCss : vieBtnCss} mx-xxl-2`}
+              data-mdb-toggle="tooltip"
+              data-mdb-placement="top"
+              title="Edit Party Type"
+              onClick={() => handleAdd({ RowIndex: rowIndex, EditAddressDetails: EditAddressDetails })}
+            ><i className="dripicons-plus font-size-18"></i></Button>
+          );
+        }
+        return (
+          <>
+            <Button
+              className={`btn-edit ${editBtnCss} mx-xxl-2`}
+              data-mdb-toggle="tooltip"
+              data-mdb-placement="top"
+              disabled={EditAddressDetails.IsEdit && EditAddressDetails.RowID === row.RowID}
+              title="Edit Party Type"
+              onClick={() => handleEdit(row)}
+            ><i className="mdi mdi-pencil font-size-18"></i></Button>
+
+            <Button
+              className={`btn-delete ${deltBtnCss}`}
+              data-mdb-toggle="tooltip"
+              data-mdb-placement="top"
+              title="Delete Party Type"
+              onClick={() => handleDelete(row.RowID)}
+            >
+              <i className="mdi mdi-delete font-size-18"></i>
+            </Button>
+
+          </>
+          // <Button color="danger" size="sm" onClick={() => handleDelete(row.RowID)}>
+          //   Remove
+          // </Button>
+        );
+      }
+    }
+  ];
+
+
+  // const displayRows = [...addressDetails.map((r, i) => ({ ...r, RowID: i + 1 }))];
 
   if (!(userPageAccessState === '')) {
     return (
@@ -756,438 +706,275 @@ const FranchisePartyMaster = (props) => {
         <div className="page-content" >
           <Container fluid>
             <Row>
-              <Col lg={12}>
-                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
-
-                <Card className="text-black" style={{ backgroundColor: "whitesmoke" }} >
-                  <CardHeader className="card-header   text-black c_card_header" >
-                    <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
-                    <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
-                  </CardHeader>
-
-                  <CardBody className=" vh-10 0 text-black" >
-                    <Row className="mt-3 ">
-                      <Col md="3">
-                        <FormGroup className="mb-3">
-                          <Label >{fieldLabel.Name} </Label>
-
-                          <Input
-                            name="Name"
-                            id="txtName"
-                            value={values.Name}
-                            type="text"
-
-                            className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
-                            placeholder="Please Enter Name"
-                            autoComplete='off'
-                            autoFocus={true}
-                            onChange={(event) => {
-                              onChangeText({ event, state, setState })
-                              dispatch(Breadcrumb_inputName(event.target.value))
-                            }}
-                          />
-                          {isError.Name.length > 0 && (
-                            <span className="invalid-feedback">{isError.Name}</span>
-                          )}
-                        </FormGroup>
-                      </Col>
-                      <Col md="1">  </Col>
-                      <Col md="3">
-                        <FormGroup className="mb-3">
-                          <Label >{fieldLabel.Email} </Label>
-
-                          <Input
-                            name="Email"
-                            value={values.Email}
-                            type="text"
-                            className={isError.Email.length > 0 ? "is-invalid form-control" : "form-control"}
-                            placeholder="Please Enter Email"
-                            autoComplete='off'
-                            onChange={(event) => {
-                              onChangeText({ event, state, setState })
-                            }}
-                          />
-                          {isError.Email.length > 0 && (
-                            <span className="invalid-feedback">{isError.Email}</span>
-                          )}
-                        </FormGroup>
-                      </Col>
-
-
-                      <Col md="1">  </Col>
-
-                      <Col md="3">
-                        <FormGroup className="mb-3">
-                          <Label >{fieldLabel.MobileNo} </Label>
-
-                          <Input
-                            name="MobileNo"
-                            value={values.MobileNo}
-                            type="text"
-                            className={isError.MobileNo.length > 0 ? "is-invalid form-control" : "form-control"}
-                            placeholder="Please Enter Mobile"
-                            autoComplete='off'
-                            onChange={(event) => {
-                              onChangeText({ event, state, setState })
-                            }}
-                          />
-                          {isError.MobileNo.length > 0 && (
-                            <span className="invalid-feedback">{isError.MobileNo}</span>
-                          )}
-                        </FormGroup>
-                      </Col>
-
-                      <Col md="1">  </Col>
-
-                    </Row>
-
-
-
-
-                    <Row className='mt-1'>
-
-                      <Col md="3">
-                        <FormGroup className="mb-3">
-                          <Label> {fieldLabel.State} </Label>
-
-                          <Col sm={12}>
-                            <C_Select
-                              name="State"
-                              value={values.State}
-
-                              isSearchable={true}
-                              className="react-dropdown"
-                              classNamePrefix="dropdown"
-                              options={StateValues}
-                              placeholder="Select State"
-                              onChange={handllerState}
-                            />
-                            {isError.State.length > 0 && (
-                              <span className="text-danger f-8"><small>{isError.State}</small></span>
-                            )}
-                          </Col>
-                        </FormGroup>
-                      </Col>
-
-                      <Col md="1">  </Col>
-                      <Col md="3">
-                        <FormGroup className="mb-3">
-                          <Label > {fieldLabel.District} </Label>
-
-                          <Col sm={12}>
-                            <C_Select
-                              name="District"
-                              value={values.District}
-
-                              isSearchable={true}
-                              className="react-dropdown"
-                              classNamePrefix="dropdown"
-                              isLoading={districtDropDownLoading}
-                              options={DistrictOnStateValues}
-                              onChange={(hasSelect, evn) => {
-                                onChangeSelect({ hasSelect, evn, state, setState, })
-                                District_Dropdown_Handler(hasSelect)
-                              }}
-                            />
-                            {isError.District.length > 0 && (
-                              <span className="text-danger f-8"><small>{isError.District}</small></span>
-                            )}
-                          </Col>
-                        </FormGroup>
-                      </Col>
-
-                      <Col md="1"></Col>
-                      <Col md="3">
-                        <FormGroup className="mb-3">
-                          <Label htmlFor="validationCustom01">{fieldLabel.CityName} </Label>
-
-                          <C_Select
-                            name="CityName"
-                            id="CityName"
-                            value={values.CityName}
-
-                            isSearchable={true}
-                            classNamePrefix="dropdown"
-                            isLoading={cityDropDownLoading}
-                            options={City_DropdownOptions}
-                            onChange={(hasSelect, evn) => {
-                              onChangeSelect({ hasSelect, evn, state, setState, })
-                            }}
-                          />
-                          {isError.CityName.length > 0 && (
-                            <span className="text-danger f-8"><small>{isError.CityName}</small></span>
-                          )}
-                        </FormGroup>
-                      </Col>
-                      {
-
-                        (city_AddMasterAccess) ?
-                          <Col md="1" className=" mt-3">
-                            <AddMaster
-                              masterModal={CityMaster}
-                              masterPath={url.CITY}
-                            />
-                          </Col> : <Col md="1"> </Col>
-
-                      }
-                    </Row>
-                    <Row className='mt-1'>
-                      <Col md="3">
-                        <FormGroup className="mb-3">
-                          <Label > {fieldLabel.PartyType}</Label>
-                          <Col sm={12}>
-                            <Select
-                              name="PartyType"
-                              value={values.PartyType}
-                              isSearchable={true}
-
-                              className="react-dropdown"
-                              classNamePrefix="dropdown"
-                              options={PartyTypeDropdown_Options}
-                              onChange={partyTypeOnChange}
-                            />
-                            {isError.PartyType.length > 0 && (
-                              <span className="text-danger f-8"><small>{isError.PartyType}</small></span>
-                            )}
-
-                          </Col>
-                        </FormGroup>
-
-                      </Col>
-
-
-
-
-                      {
-
-                        (partyType_AddMasterAccess) ?
-                          <Col md="1" className=" mt-3">
-                            <AddMaster
-                              masterModal={PartyType}
-                              masterPath={url.PARTYTYPE}
-                            />
-                          </Col> : <Col md="1"> </Col>
-
-                      }     <Col md="3" className="mb-3">
-                        <FormGroup>
-                          <Label>{fieldLabel.PriceList} </Label>
-                          <Input
-                            value={priceListSelect.label}
-                            autoComplete={"off"}
-
-                            placeholder="Select..."
-                            onClick={priceListOnClick}
-                          >
-                          </Input>
-
-                          <PriceDropOptions
-                            data={priceListByPartyType}
-                            priceList={priceListSelect}
-                            setPriceSelect={setPriceListSelect} />
-                          {/* {(isError.PriceList.length > 0 && (priceListSelect.value === "" || priceListSelect.label === "")) && (
-                                        <span className="text-danger f-8"><small>{isError.PriceList}</small></span>
-                                    )} */}
-                        </FormGroup>
-
-                      </Col>
-
-                      <Col md="1"> </Col>
-
-                      < Col md="3">
-                        <FormGroup className="mb-3">
-                          <Label> {fieldLabel.Supplier} </Label>
-                          <Col sm={12}>
-                            <Select
-                              id="supplierName"
-                              name="Supplier"
-                              value={values.Supplier}
-
-                              className="react-dropdown"
-                              classNamePrefix="dropdown"
-                              options={SupplierOptions}
-                              isMulti={true}
-                              onChange={(hasSelect, evn) => {
-                                onChangeSelect({ hasSelect, evn, state, setState })
-                              }}
-                            />
-                            {isError.Supplier.length > 0 && (
-                              <span className="text-danger f-8"><small>{isError.Supplier}</small></span>
-                            )}
-                          </Col>
-                        </FormGroup>
-                      </Col>
-
-                    </Row>
-                    <Col md="1"></Col>
-                    <Col md="3">
-                      <FormGroup className="mb-3">
-                        <Label>{fieldLabel.PAN} </Label>
+              <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+              <Card className="text-black" style={{ backgroundColor: "whitesmoke" }} >
+                <CardHeader className="card-header   text-black c_card_header" >
+                  <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
+                  <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
+                </CardHeader>
+                <CardBody className="text-black">
+                  {/* Row 1 */}
+                  <Row className="mb-3">
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label >{fieldLabel.Name} </Label>
                         <Input
-                          name="PAN"
-                          value={values.PAN}
+                          name="Name"
+                          id="txtName"
+                          value={values.Name}
                           type="text"
-                          className={isError.PAN.length > 0 ? "is-invalid form-control" : "form-control"}
-                          placeholder="Please Enter PAN"
+                          className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
+                          placeholder="Please Enter Name"
+                          autoComplete='off'
+                          autoFocus={true}
+                          onChange={(event) => {
+                            onChangeText({ event, state, setState })
+                            dispatch(Breadcrumb_inputName(event.target.value))
+                          }}
+                        />
+                        {isError.Name.length > 0 && (
+                          <span className="invalid-feedback">{isError.Name}</span>
+                        )}
+                      </FormGroup>
+                    </Col>
+                    <Col md={4}>
+                      {/* <FormGroup>
+                        <Label >{fieldLabel.Email} </Label>
+                        <Input
+                          name="Email"
+                          value={values.Email}
+                          type="text"
+                          className={isError.Email.length > 0 ? "is-invalid form-control" : "form-control"}
+                          placeholder="Please Enter Email"
                           autoComplete='off'
                           onChange={(event) => {
                             onChangeText({ event, state, setState })
                           }}
                         />
-                        {isError.PAN.length > 0 && (
-                          <span className="invalid-feedback">{isError.PAN}</span>
+                        {isError.Email.length > 0 && (
+                          <span className="invalid-feedback">{isError.Email}</span>
+                        )}
+                      </FormGroup> */}
+                      <FormGroup>
+                        <Label >{fieldLabel.MobileNo} </Label>
+                        <Input
+                          name="MobileNo"
+                          value={values.MobileNo}
+                          type="text"
+                          className={isError.MobileNo.length > 0 ? "is-invalid form-control" : "form-control"}
+                          placeholder="Please Enter Mobile"
+                          autoComplete='off'
+                          onChange={(event) => {
+                            onChangeText({ event, state, setState })
+                          }}
+                        />
+                        {isError.MobileNo.length > 0 && (
+                          <span className="invalid-feedback">{isError.MobileNo}</span>
                         )}
                       </FormGroup>
                     </Col>
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label> {fieldLabel.Supplier} </Label>
+                        <Select
+                          id="supplierName"
+                          name="Supplier"
+                          value={values.Supplier}
+                          styles={{
+                            menu: provided => ({ ...provided, zIndex: 2 })
+                          }}
+                          className="react-dropdown"
+                          classNamePrefix="dropdown"
+                          options={SupplierOptions}
+
+                          isMulti={true}
+                          onChange={(hasSelect, evn) => {
+                            onChangeSelect({ hasSelect, evn, state, setState })
+                          }}
+                        />
+                        {isError.Supplier.length > 0 && (
+                          <span className="text-danger f-8"><small>{isError.Supplier}</small></span>
+                        )}
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row className="mb-3">
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label> {fieldLabel.State} </Label>
+                        <C_Select
+                          name="State"
+                          value={values.State}
+                          styles={{
+                            menu: provided => ({ ...provided, zIndex: 2 })
+                          }}
+                          isSearchable={true}
+                          className="react-dropdown"
+                          classNamePrefix="dropdown"
+                          options={StateValues}
+                          placeholder="Select State"
+                          onChange={handllerState}
+                        />
+                        {isError.State.length > 0 && (
+                          <span className="text-danger f-8"><small>{isError.State}</small></span>
+                        )}
+                      </FormGroup>
+                    </Col>
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label > {fieldLabel.District} </Label>
+                        <C_Select
+                          name="District"
+                          value={values.District}
+                          styles={{
+                            menu: provided => ({ ...provided, zIndex: 2 })
+                          }}
+                          isSearchable={true}
+                          className="react-dropdown"
+                          classNamePrefix="dropdown"
+                          isLoading={districtDropDownLoading}
+                          options={DistrictOnStateValues}
+                          onChange={(hasSelect, evn) => {
+                            onChangeSelect({ hasSelect, evn, state, setState, })
+                            District_Dropdown_Handler(hasSelect)
+                          }}
+                        />
+                        {isError.District.length > 0 && (
+                          <span className="text-danger f-8"><small>{isError.District}</small></span>
+                        )}
+                      </FormGroup>
+                    </Col>
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label htmlFor="validationCustom01">{fieldLabel.CityName} </Label>
+                        <C_Select
+                          name="CityName"
+                          id="CityName"
+                          value={values.CityName}
+                          styles={{
+                            menu: provided => ({ ...provided, zIndex: 2 })
+                          }}
+                          isSearchable={true}
+                          classNamePrefix="dropdown"
+                          isLoading={cityDropDownLoading}
+                          options={City_DropdownOptions}
+                          onChange={(hasSelect, evn) => {
+                            onChangeSelect({ hasSelect, evn, state, setState, })
+                          }}
+                        />
+                        {isError.CityName.length > 0 && (
+                          <span className="text-danger f-8"><small>{isError.CityName}</small></span>
+                        )}
+                      </FormGroup>
+                    </Col>
+                  </Row>
+
+                  {/* Row 3 */}
+                  <Row className="mb-3">
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label > {fieldLabel.PartyType}</Label>
+                        <Select
+                          name="PartyType"
+                          value={values.PartyType}
+                          isSearchable={true}
+                          styles={{
+                            menu: provided => ({ ...provided, zIndex: 2 })
+                          }}
+                          className="react-dropdown"
+                          classNamePrefix="dropdown"
+                          options={PartyTypeDropdown_Options}
+                          onChange={partyTypeOnChange}
+                        />
+                        {isError.PartyType.length > 0 && (
+                          <span className="text-danger f-8"><small>{isError.PartyType}</small></span>
+                        )}
+
+                      </FormGroup>
+                    </Col>
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label>{fieldLabel.PriceList} </Label>
+                        <Input
+                          value={priceListSelect.label}
+                          autoComplete={"off"}
+                          placeholder="Select..."
+                          onClick={priceListOnClick}
+                        >
+                        </Input>
+
+                        <PriceDropOptions
+                          data={priceListByPartyType}
+                          priceList={priceListSelect}
+                          setPriceSelect={setPriceListSelect} />
+                      </FormGroup>
+                    </Col>
+                    <Col md={4}>
+
+                      <FormGroup row className="align-items-center mt-xxl-4">
+                        <Label className="col-sm-4 col-form-label">
+                          {fieldLabel.isActive}
+                        </Label>
+
+                        <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
+
+                          <Col md={4} >
+                            <div className="form-check form-switch form-switch-md mb-3">
+                              <Input type="checkbox"
+                                className="form-check-input"
+                                checked={values.isActive}
+                                // disabled={( url.PARTY_SELF_EDIT) && true}
+                                name="isActive"
+                                onChange={(event) => onChangeCheckbox({ event, state, setState })}
+                              />
+                            </div>
+                          </Col>
 
 
-                    <Row>
-
-
-                      <Col md="3">
-                        <FormGroup className="mb-3">
-                          <Row style={{ marginTop: '25px' }}>
-                            <Label
-                              className="col-sm-4 col-form-label">
-                              {fieldLabel.isActive}
-                            </Label>
-                            <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
-                              <div className="form-check form-switch form-switch-md mb-3">
-                                <Input
-                                  type="checkbox"
-                                  className="form-check-input"
-                                  checked={values.isActive}
-                                  // disabled={( url.PARTY_SELF_EDIT) && true}
-                                  name="isActive"
-                                  onChange={(event) => onChangeCheckbox({ event, state, setState })}
-                                />
-                              </div>
-                            </Col>
-                          </Row>
-                        </FormGroup>
-                      </Col>
-                    </Row>
-
-
-                  </CardBody>
-                </Card>
-
-
-                <Card className="text-black" style={{ backgroundColor: "whitesmoke" }} >
-                  <CardBody className='vh-10 0 text-black'>
-                    <Row className='mt-3'>
-                      <Col md="9" >
-                        <FormGroup className="mb-3">
-                          <Label>{fieldLabel.PartyAddress} </Label>
-                          <Input
-                            name="PartyAddress"
-                            value={values.PartyAddress}
-                            type="textarea"
-                            className={isError.PartyAddress.length > 0 ? "is-invalid form-control" : "form-control"}
-                            placeholder="Please Enter Address"
-                            autoComplete='off'
-                            onChange={(event) => {
-                              onChangeText({ event, state, setState })
-                            }}
-                          />
-                          {isError.PartyAddress.length > 0 && (
-                            <span className="invalid-feedback">{isError.PartyAddress}</span>
-                          )}
-                        </FormGroup>
-
-                      </Col>
-                      {!(buttonShow) ?
-                        <Col md={1}>
-                          <Row className=" mt-3">
-                            <Col >
-                              <Button
-                                className="button_add badge badge-soft-primary font-size-12 waves-effect  waves-light  btn-outline-primary  "
-                                type="button"
-                                onClick={(e) => addOrUpdateDataHandler(e, "add")}
-                              >
-                                <i className="dripicons-plus mt-3"> </i>
-                              </Button>
-                            </Col>
-                          </Row>
-                        </Col> :
-                        <Col md={1}>
-                          <Row style={{ marginTop: "29px" }}>
-                            <Col >
-
-                              <C_Button
-                                // style={{ backgroundColor: "#0762ab", color: "#fff" }}
-                                type="button"
-                                className="btn btn-info font-size-12 text-center"
-                                onClick={(e) => addOrUpdateDataHandler(e, "update")}
-                              >
-                                Update
-                              </C_Button>
-                            </Col>
-                          </Row>
-                        </Col>}
-                      {/* 
-                      <Col md="1">  </Col> */}
-                      <Col md="3">
-                        <FormGroup className="mb-3">
-                          <Label>{fieldLabel.PIN}</Label>
-
-                          <Input
-                            name="PIN"
-                            value={values.PIN}
-                            type="text"
-                            cpattern={/^\d{6}$/}
-                            className={isError.PIN.length > 0 ? "is-invalid form-control" : "form-control"}
-                            placeholder="Please Enter PIN"
-                            autoComplete="off"
-                            onChange={(event) => onChangeText({ event, state, setState })}
-                          />
-                          {isError.PIN.length > 0 && (
-                            <span className="invalid-feedback">{isError.PIN}</span>
-                          )}
-                        </FormGroup>
-                      </Col>
-
-                    </Row>
-
-                  </CardBody>
-                </Card>
 
 
 
-              </Col>
-              <Row>
-
-                {addressTable.length > 0 && (
-                  <AddressDetailsTable1
-                    addressTable={addressTable}
-                    onEdit={handleEditRow}
-                    setAddressTable={setAddressTable}
-                  />
-                )}
 
 
 
-              </Row>
+                        </Col>
+                      </FormGroup>
+
+                    </Col>
+                  </Row>
+
+
+
+                  <hr></hr>
+                  <Row className="mb-3">
+                    <Col md={12}>
+                      <div className="p-3">
+                        <BootstrapTable
+                          keyField="id"
+                          data={addressDetails}
+                          columns={columns}
+                          bordered
+                          hover
+                          striped
+                        />
+                      </div>
+                    </Col>
+                  </Row>
+                </CardBody>
+              </Card>
             </Row>
-            <FormGroup>
-              <Row>
-                <div style={{ paddingBottom: "10px" }}>
-                  <SaveButton pageMode={pageMode}
-                    loading={saveBtnloading}
-                    userAcc={userPageAccessState}
-                    editCreatedBy={editCreatedBy}
-                    module={"PartyMaster"}
-                    onClick={SaveHandler}
-                  />
-                </div>
-              </Row>
-            </FormGroup>
 
-
-
-
+            <SaveButtonDraggable>
+              <SaveButton pageMode={pageMode}
+                loading={saveBtnloading}
+                userAcc={userPageAccessState}
+                editCreatedBy={editCreatedBy}
+                module={"PartyMaster"}
+                onClick={SaveHandler}
+              />
+            </SaveButtonDraggable>
           </Container>
-
         </div>
       </React.Fragment>
     )

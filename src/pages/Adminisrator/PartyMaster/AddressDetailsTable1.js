@@ -2,18 +2,18 @@ import React from 'react';
 import { Table, Button } from 'reactstrap';
 
 const AddressDetailsTable1 = ({ addressTable, onEdit, setAddressTable }) => {
-  
+
   const handleDelete = (rowIdToDelete) => {
-    const updated = addressTable.filter(row => row.RowId !== rowIdToDelete);
+    const updated = addressTable.filter(row => row.RowID !== rowIdToDelete);
     setAddressTable(updated);
   };
 
-  
+
   return (
     <Table bordered hover responsive className="mt-3">
       <thead>
         <tr>
-          <th>id</th>
+
           <th>Party Address</th>
           <th>PIN</th>
           <th>Actions</th>
@@ -22,8 +22,8 @@ const AddressDetailsTable1 = ({ addressTable, onEdit, setAddressTable }) => {
       <tbody>
         {addressTable.length > 0 ? (
           addressTable.map((row, index) => (
-            <tr key={row.RowId || index}>
-              <td>{index + 1}</td>
+            <tr key={row.RowID || index}>
+
               <td>{row.Address}</td>
               <td>{row.PIN}</td>
               <td>
@@ -38,7 +38,7 @@ const AddressDetailsTable1 = ({ addressTable, onEdit, setAddressTable }) => {
                 <Button
                   color="danger"
                   size="sm"
-                  onClick={() => handleDelete(row.RowId)}
+                  onClick={() => handleDelete(row.RowID)}
                 >
                   Delete
                 </Button>

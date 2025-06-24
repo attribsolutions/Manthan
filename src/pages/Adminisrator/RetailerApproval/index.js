@@ -56,7 +56,7 @@ const RetailerApprovalList = () => {
 
         if (editData.Status === true && editData.StatusCode === 200) {
             history.push({
-                pathname: url.RETAILER_MASTER,
+                pathname: url.FRANCHISE_PARTY_MASTER,
                 pageMode: mode.edit,
                 editValue: editData.Data,
                 IsMobileRetailer: true

@@ -320,7 +320,7 @@ const PartyMaster = (props) => {
 
 						let nextId = 1;
 						let addressTabPreIncrementId = hasEditVal.PartyAddress.map((obj) => {
-							const newObj = { ...obj, RowId: nextId };
+							const newObj = { ...obj, RowID: nextId };
 							nextId++;
 							return newObj;
 						})
@@ -439,7 +439,7 @@ const PartyMaster = (props) => {
 	}
 
 	const SaveHandler = (event) => {
-
+		const formData = new FormData(); // Create a new FormData object
 		event.preventDefault();
 		const btnId = event.target.id;
 
@@ -603,12 +603,18 @@ const PartyMaster = (props) => {
 
 			});
 
-			if (pageMode === mode.edit) {
+			formData.append('PartyData', jsonBody);
+			addressTabDetail?.forEach((item, key) => {
+				formData.append(`fssaidocument_${item.RowID}`, item.file);
+			})
 
-				dispatch(updatePartyID({ jsonBody, updateId: EditData.id, btnId }));
+		
+
+			if (pageMode === mode.edit) {
+				dispatch(updatePartyID({ formData, updateId: EditData.id, btnId }));
 			}
 			else {
-				dispatch(postPartyData({ jsonBody, btnId }));
+				dispatch(postPartyData({ formData, btnId }));
 			}
 
 		} catch (error) { btnIsDissablefunc({ btnId, state: false }) }
