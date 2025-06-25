@@ -272,6 +272,11 @@ import SchemeMaster from "../pages/Adminisrator/SchemeMaster/SchemeMaster.js";
 import SchemeMasterList from "../pages/Adminisrator/SchemeMaster/SchemeMasterList.js";
 import ItemConsumption from "../Reports/ItemConsumptionReport/ItemConsumption.js";
 import FranchisePartyMaster from "../pages/Adminisrator/PartyMaster/FranchisePartyMaster.js";
+import PosServiceSettingList from "../pages/Utility/PosSystemsetting/PosServiceSettingList.js";
+import PosServiceSetting from "../pages/Utility/PosSystemsetting/PosServiceSetting.js";
+
+import PhonePaySettingList from "../pages/Utility/PhonePaySetting/PhonePaySettingList.js";
+import PhonePaySetting from "../pages/Utility/PhonePaySetting/PhonePaySetting.js";
 
 
 
@@ -772,16 +777,15 @@ const userRoutes = [
 
 
 
-
-
-
-
 	// ************************************ Utility **************************************//
+	{ path: path.PHONE_PAY_SETTING_LIST, component: PhonePaySettingList },
+	{ path: path.PHONE_PAY_SETTING, component:  PhonePaySetting},
 
 
+	{ path: path.POS_SERVICE_SETTING_LIST, component: PosServiceSettingList },//not party wise
+	{ path: path.POS_SERVICE_SETTING, component: PosServiceSetting },//not party wise
 
-
-
+	{ path: path.SYSTEM_SETTING_LIST, component: SystemSettingList },//not party wise
 
 	{ path: path.SYSTEM_SETTING, component: SystemSetting },//not party wise
 

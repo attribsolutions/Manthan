@@ -463,6 +463,12 @@ export const ITEM_CONSUMPTION_REPORT = "/Item_Consumption_Report"
 
 
 
+export const POS_SERVICE_SETTING = "/Pos_Service_Setting"
+export const POS_SERVICE_SETTING_LIST = "/Pos_Service_Setting_List"
+
+
+export const PHONE_PAY_SETTING = "/Phone_Pay_Setting"
+export const PHONE_PAY_SETTING_LIST = "/Phone_Pay_Setting_List"
 
 
 export const SYSTEM_SETTING = "/System_Setting"

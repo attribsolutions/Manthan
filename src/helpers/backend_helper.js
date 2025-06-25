@@ -997,6 +997,20 @@ export const save_SystemSetting_API = ({ jsonBody }) => post(url.SYSTEM_SETTING_
 export const Frenchies_Item_sale_Report_API = ({ jsonBody }) => post(url.FRENCHIESE_ITEM_SALE_REPORT, jsonBody)// post api
 
 
+export const save_PosServiceSetting_API = ({ jsonBody }) => post(url.POS_SERVICE_SETTING, jsonBody)// post api
+export const del_PosServiceSetting_List_API = ({ deleteId }) => del(`${url.POS_SERVICE_SETTING}/${deleteId}`)// delete api
+export const edit_PosServiceSetting_List_Api = ({ editId }) => get(`${url.POS_SERVICE_SETTING}/${editId}`)// edit api
+export const update_PosServiceSetting_List_Api = ({ jsonBody, updateId }) => put(`${url.POS_SERVICE_SETTING}/${updateId}`, jsonBody)// update api
+export const get_PosServiceSetting_List_Api = () => get(url.POS_SERVICE_SETTING); // remove jsonBody
+
+
+
+//phone Pay setting
+export const save_PhonePaySetting_API = ({ jsonBody }) => post(url.PHONE_PAY_SETTING, jsonBody)// post api
+export const del_PhonePaySetting_List_API = ({ deleteId }) => del(`${url.PHONE_PAY_SETTING}/${deleteId}`)// delete api
+export const edit_PhonePaySetting_List_Api = ({ editId }) => get(`${url.PHONE_PAY_SETTING}/${editId}`)// edit api
+export const update_PhonePaySetting_List_Api = ({ jsonBody, updateId }) => put(`${url.PHONE_PAY_SETTING}/${updateId}`, jsonBody)// update api
+export const get_PhonePaySetting_List_Api = ({ jsonBody }) => get(url.PHONE_PAY_SETTING, jsonBody)// get api
 
 
 
