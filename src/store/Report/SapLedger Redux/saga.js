@@ -20,7 +20,7 @@ function* SapLedger_GoBtn_GenFuc({ filters }) {
 
 		if (response.Data.status_code === 200) {
 			const newresponse = yield response.Data.data.map((i, key) => {
-				TotalBalance += i.Balance
+				
 				i.id = key + 1
 				if (i.DebitCredit === "S") {
 					i.Debit_Amount = i.Amount
@@ -38,7 +38,7 @@ function* SapLedger_GoBtn_GenFuc({ filters }) {
 				PostingDate: "Total",
 				Credit_Amount: TotalCreditAmount.toFixed(2),
 				Debit_Amount: TotalDebitAmount.toFixed(2),
-				Balance: TotalBalance.toFixed(2)
+		
 
 			})
 
