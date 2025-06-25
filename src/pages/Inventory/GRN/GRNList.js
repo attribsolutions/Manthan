@@ -21,13 +21,14 @@ import * as report from '../../../Reports/ReportIndex'
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 
 
-const GRNList = () => {
+const GRNList = (props) => {
 
     const history = useHistory();
     const dispatch = useDispatch();
     const currentDate_ymd = date_ymd_func();
 
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
+
     const [pageMode, setPageMode] = useState(mode.defaultList);
     const [otherState, setOtherState] = useState({
         masterPath: '',
@@ -55,6 +56,7 @@ const GRNList = () => {
         })
     );
     const { pageField, customer, makeChallan, AccontingGRNData, listBtnLoading } = reducers;
+
     const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
     console.log(listBtnLoading)
     // Common Party select Dropdown useEffect
@@ -89,7 +91,7 @@ const GRNList = () => {
         deleteSucc: _act.deleteGRNIdSuccess
     }
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         let page_Id = '';
         let page_Mode = mode.defaultList;
         let masterPath = '';
@@ -128,7 +130,11 @@ const GRNList = () => {
         }
         else if (subPageMode === url.ACCOUNTING_GRN_LIST) {
             page_Id = pageId.ACCOUNTING_GRN_LIST;
+
             newBtnPath = url.GRN_FOR_ACCOUNTING_GRN;
+            MasterModal = GRN_ADD_1
+            masterPath = url.ACCOUNTING_GRN
+
         }
 
         else if (subPageMode === url.GRN_FOR_ACCOUNTING_GRN) {
@@ -139,8 +145,6 @@ const GRNList = () => {
         }
 
 
-
-        debugger
 
         setSubPageMode(subPageMode)
         setOtherState({ masterPath, makeBtnShow, newBtnPath, MasterModal, makeBtnName })
@@ -157,7 +161,7 @@ const GRNList = () => {
             dispatch(_act.AccountingGRNSuccess({ Status: false }))
         }
 
-    }, []);
+    }, [history.location]);
 
 
 
@@ -202,9 +206,7 @@ const GRNList = () => {
     venderOptions.unshift(allLabelWithBlank);
 
     const makeBtnFunc = (list = []) => {
-
         const id = list[0].id
-
         if (subPageMode === url.GRN_LIST_3 || subPageMode === url.GRN_FOR_ACCOUNTING_GRN) {
             dispatch(_act.AccountingGRN({ btnId: `btn-${mode.makeBtn}-${id}`, editId: id, btnmode: mode.modeSTPsave, path: url.ACCOUNTING_GRN }))
         } else {
@@ -214,6 +216,7 @@ const GRNList = () => {
             dispatch(_act.makeChallanAction({ makeBody, pageMode: mode.modeSTPsave, path: url.CHALLAN_LIST }))
         }
     };
+
 
     function goButtonHandler() {
         try {

@@ -142,6 +142,8 @@ import BillDeleteSummaryReportSaga from "./SweetPOSStore/Report/BillDeleteSummar
 import SchemeTypeSaga from "./Administrator/SchemeRedux/saga"
 import SchemeSaga from "./Administrator/SchemeMasterRedux/saga"
 import ItemConsumptionReportSaga from "./Report/ItemConsumptionReportRedux/saga"
+import PosServiceSettingSaga from "./Utilites/PosServiesSettingRedux/saga"
+import PhonePaySettingSaga from "./Utilites/PhonePaySettingRedux/saga"
 
 
 
@@ -283,10 +285,10 @@ export default function* rootSaga() {
 
 		fork(SchemeTypeSaga),
 		fork(SchemeSaga),
-		fork(ItemConsumptionReportSaga)
+		fork(ItemConsumptionReportSaga),
 
-
-
+		fork(PosServiceSettingSaga),
+	fork(PhonePaySettingSaga)
 
 
 	
@@ -296,6 +298,7 @@ export default function* rootSaga() {
 
 
 
+		
 
 
 

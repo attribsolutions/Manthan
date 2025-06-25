@@ -20,14 +20,14 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import * as _act from "../../../store/actions";
 
-import { CInput, C_DatePicker, decimalRegx, floatRegx, integier } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import { pageFieldUseEffect, saveMsgUseEffect, table_ArrowUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { goButtonForRate_Master, saveRateMaster } from "../../../store/Administrator/RateMasterRedux/action";
 import { Get_ledger, Invoice_No_Message } from "../../../helpers/backend_helper";
-import { ORDER_LIST_1 } from "../../../routes/route_url";
+
 
 
 
@@ -477,7 +477,7 @@ const GRN_ADD_1 = (props) => {
     }, [history.location.state])
 
     useEffect(() => {
-
+        debugger
         if ((hasShowloction || hasShowModal)) {
             let hasEditVal = null
             if (hasShowloction) {
@@ -491,18 +491,14 @@ const GRN_ADD_1 = (props) => {
 
             if (hasEditVal) {
                 setEditData(hasEditVal);
-                const { GRNItems = [], GRNReferences = [], InvoiceNumber } = hasEditVal;
-
-                let ChallanNo1 = ''
+                const { GRNItems = [], GRNReferences = [], InvoiceNumber, GrandTotal } = hasEditVal;
                 GRNReferences[0]["Full_OrderNumber"] = GRNReferences[0]?.Order?.FullOrderNumber
-                GRNReferences.forEach(ele => {
-                    ChallanNo1 = ChallanNo1.concat(`${ele.ChallanNo},`)
-                });
-                ChallanNo1 = ChallanNo1.replace(/,*$/, '');
                 setOpenPOdata(GRNReferences)
                 setInvoiceNo(InvoiceNumber)
-                setGrnDetail(ChallanNo1);
+                setGrnDetail(hasEditVal);
                 setgrnItemList(GRNItems)
+                dispatch(_act.BreadcrumbShowCountlabel(`Count:${GRNItems.length} currency_symbol ${_cfunc.amountCommaSeparateFunc((Number(GrandTotal)).toFixed(2))}`));
+
                 dispatch(_act.editGRNIdSuccess({ Status: false }))
                 dispatch(_act.Breadcrumb_inputName(hasEditVal.ItemName))
                 seteditCreatedBy(hasEditVal.CreatedBy)
@@ -1443,7 +1439,7 @@ const GRN_ADD_1 = (props) => {
             const isvalidMsg = [];
             let sum_roundedTotalAmount = 0
             grnItemList.forEach(i => {
-                debugger
+
                 const calculated = orderCalculateFunc(i, { GSTIn_1: grnDetail?.SupplierGSTIN, GSTIn_2: grnDetail?.CustomerGSTIN })// amount calculation function 
                 sum_roundedTotalAmount = sum_roundedTotalAmount + parseFloat(calculated.roundedTotalAmount)
                 const arr = {
@@ -1692,7 +1688,6 @@ const GRN_ADD_1 = (props) => {
                     <div className="px-2 c_card_filter text-black mb-1" >
                         <Row>
                             <Col sm={4}>
-
                                 <FormGroup className=" row mt-2 " >
                                     <Label className="col-sm-4 p-2"
                                         style={{ width: "130px" }}>GRN Date</Label>
@@ -1758,35 +1753,23 @@ const GRN_ADD_1 = (props) => {
                                     </Col>
                                 </FormGroup>
 
-
-
                                 {(subPageMode === url.ACCOUNTING_GRN) && <FormGroup className=" row  " >
                                     <Label className="col-md-4 p-2"
-                                        style={{ width: "130px" }}>{"Ledger"}</Label>
+                                        style={{ width: "130px" }}>{"GRN NO"}</Label>
                                     <Col md="7">
-                                        <Select
-                                            value={ledgerSelect}
-                                            classNamePrefix="select2-Customer"
-                                            options={ledgerOptions}
-                                            onChange={(e) => {
-                                                setLedgerSelect(e)
-                                            }}
-                                            styles={{
-                                                menu: provided => ({ ...provided, zIndex: 2 })
-                                            }}
+                                        <Input
+                                            value={grnDetail.FullGRNNumber}
+                                            disabled={true}
+
+
                                         />
                                     </Col>
 
-                                    <Col className="mt-1">
-                                        {pageMode !== mode.view &&
-                                            <C_Button
-                                                className="btn btn-outline-primary"
-                                                onClick={ledgerAddHandler}
-                                            >Add
-                                            </C_Button>
-                                        }
-                                    </Col>
-                                </FormGroup>}
+
+                                </FormGroup>
+
+
+                                }
 
 
                                 {(subPageMode === url.ACCOUNTING_GRN) ? null : <FormGroup className="mb-2 row  " >
@@ -1899,6 +1882,37 @@ const GRN_ADD_1 = (props) => {
                                         />
                                     </Col>
                                 </FormGroup>
+
+                                {(subPageMode === url.ACCOUNTING_GRN) && <FormGroup className=" row  " >
+                                    <Label className="col-md-4 p-2"
+                                        style={{ width: "130px" }}>{"Ledger"}</Label>
+                                    <Col md="7">
+                                        <Select
+                                            value={ledgerSelect}
+                                            classNamePrefix="select2-Customer"
+                                            options={ledgerOptions}
+                                            onChange={(e) => {
+                                                setLedgerSelect(e)
+                                            }}
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
+                                        />
+                                    </Col>
+
+                                    <Col className="mt-1">
+                                        {pageMode !== mode.view &&
+                                            <C_Button
+                                                className="btn btn-outline-primary"
+                                                onClick={ledgerAddHandler}
+                                            >Add
+                                            </C_Button>
+                                        }
+                                    </Col>
+                                </FormGroup>
+
+
+                                }
 
                             </Col> :
                                 <Col sm={4}>

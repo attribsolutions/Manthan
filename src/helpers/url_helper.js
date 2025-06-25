@@ -744,6 +744,17 @@ export const FRENCHIESE_DAILY_SALE_REPORT = '/SweetPOS/TopSaleItemsOfFranchise'
 export const FRENCHIESE_MOBILE_CUSTOMER = '/SweetPOS/SPOSMobileLinkToBill'
 
 
+// POS SERVICE SETTING API
+export const POS_SERVICE_SETTING = '/SweetPOS/PosSettings'
+
+
+
+
+
+// PhonePay Setting API
+export const PHONE_PAY_SETTING = '/'
+
+
 
 
 //ItemWiseUpdate

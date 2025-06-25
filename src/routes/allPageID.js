@@ -447,6 +447,16 @@ export const ORDER_ITEM_SUPPLIER_REPORT = 301
 
 // ***************** Sweet POS *******************
 
+export const POS_SERVICE_SETTING_LIST = 354
+
+export  const POS_SERVICE_SETTING = 353
+
+export const PHONE_PAY_SETTING_LIST = 357
+
+export const PHONE_PAY_SETTING = 356
+
+
+
 export const POS_ROLE_ACCESS = 266
 
 export const SYSTEM_SETTING = 268

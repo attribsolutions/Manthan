@@ -29,10 +29,11 @@ function* Save_Method_ForGroupMaster_GenFun({ config }) {              // Save A
   } catch (error) { yield put(GroupApiErrorAction()) }
 }
 
-function* Get_Group_List_GenFunc() {                                   // getList API
+function* Get_Group_List_GenFunc({config}) {                                   // getList API
   try {
-    const response = yield call(get_Group_List_Api);
+    const response = yield call(get_Group_List_Api, config);
     yield put(getGroupListSuccess(response.Data));
+    debugger
   } catch (error) { yield put(GroupApiErrorAction()) }
 }
 
