@@ -60,7 +60,12 @@ const FranchisePartyMaster = (props) => {
     PartyAddress: "",
     isActive: false,
     PriceList: "",
+    IsDefault: false,
+    Addressid: ""
   }
+
+
+
   const [state, setState] = useState(() => initialFiledFunc(fileds))
   const [isMobileRetailer, setIsMobileRetailer] = useState(false);
   const [priceListSelect, setPriceListSelect] = useState({ value: '' });
@@ -236,10 +241,12 @@ const FranchisePartyMaster = (props) => {
         hasValid.State.valid = true;
         hasValid.District.valid = true;
         hasValid.PartyAddress.valid = true;
-        hasValid.PIN.valid = true;
         hasValid.CityName.valid = true;
         hasValid.isActive.valid = true;
         hasValid.PriceList.valid = true;
+
+
+
 
         values.id = id;
         values.Name = Name;
@@ -253,7 +260,11 @@ const FranchisePartyMaster = (props) => {
         values.State = { value: State?.id, label: State?.Name };
         values.District = { value: District?.id, label: District?.Name };
 
-        values.PIN = PIN;
+        values.PartyAddress = PartyAddress[0]?.Address;
+        values.IsDefault = PartyAddress[0]?.IsDefault;;
+        values.PIN = PartyAddress[0]?.PIN;
+        values.Addressid = PartyAddress[0]?.id
+
         values.CityName = { value: CityName?.id, label: CityName?.Name };
         setPriceListSelect({ value: PriceList?.id, label: PriceList?.Name })
         setAddressDetails([
@@ -270,23 +281,28 @@ const FranchisePartyMaster = (props) => {
   }, [])
 
 
-  useEffect(() => {
+  useEffect(async () => {
 
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
       dispatch(updatePartyIDSuccess({ Status: false }));
+      dispatch(editPartyIDSuccess({ Status: false }));
+
       setState(() => resetFunction(fileds, state))//Clear form values
 
-      customAlert({
+      let isPermission = await customAlert({
         Type: 1,
-        Message: JSON.stringify(updateMsg.Message),
+        Status: true,
+        Message: updateMsg.Message,
       })
+      if (isPermission) {
+        history.push({ pathname: url.RETAILER_APPROVAL })
+      }
 
-      history.push({
-        pathname: url.RETAILER_APPROVAL,
-      })
 
     } else if (updateMsg.Status === true && !modalCss) {
       dispatch(updatePartyIDSuccess({ Status: false }));
+      dispatch(editPartyIDSuccess({ Status: false }));
+
 
       customAlert({
         Type: 3,
@@ -376,7 +392,7 @@ const FranchisePartyMaster = (props) => {
       // Step 1: Temporarily update validation flags for PartyAddress & PIN
       let modifiedState = { ...state };
 
-      if (skipValidation) {
+      if (skipValidation && !isMobileRetailer) {
         modifiedState.hasValid.PartyAddress.valid = true;
         modifiedState.hasValid.PIN.valid = true;
         modifiedState.isError.PartyAddress = "";
@@ -421,17 +437,27 @@ const FranchisePartyMaster = (props) => {
           "UpdatedBy": loginUserID(),
           "IsApprovedParty": isMobileRetailer && false,
           "PartySubParty": supplierArr,
-          "PartyAddress": addressDetails.filter((row, i) => {
-            debugger
-            if (row.PIN === "" && row.RowID !== 0) {
-              customAlert({
-                Type: 4,
-                Message: "PIN Required",
-              })
-              return
-            }
-            return row.RowID !== 0;
-          }),
+          "PartyAddress": isMobileRetailer ?
+            [{
+              Address: values.PartyAddress,
+              PIN: values.PIN,
+              RowID: 0,
+              IsDefault: values.IsDefault,
+              id: values.Addressid,
+              FSSAINo: "",
+              FSSAIExipry: null
+            }]
+            : addressDetails.filter((row, i) => {
+              debugger
+              if (row.PIN === "" && row.RowID !== 0) {
+                customAlert({
+                  Type: 4,
+                  Message: "PIN Required",
+                })
+                return
+              }
+              return row.RowID !== 0;
+            }),
           "PartyPrefix": [
             {
               "Orderprefix": "",
@@ -948,8 +974,72 @@ const FranchisePartyMaster = (props) => {
                               <Input type="checkbox"
                                 className="form-check-input"
                                 checked={values.isActive}
-                                // disabled={( url.PARTY_SELF_EDIT) && true}
                                 name="isActive"
+                                onChange={(event) => onChangeCheckbox({ event, state, setState })}
+                              />
+                            </div>
+                          </Col>
+                        </Col>
+                      </FormGroup>
+                    </Col>
+                  </Row>
+
+                  <hr></hr>
+
+                  {isMobileRetailer && <Row className="mb-3">
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label >{fieldLabel.PartyAddress} </Label>
+                        <Input
+                          name="PartyAddress"
+                          id="txtName"
+                          value={values.PartyAddress}
+                          type="text"
+                          className={isError.PartyAddress.length > 0 ? "is-invalid form-control" : "form-control"}
+                          placeholder="Please Enter PartyAddress"
+                          autoComplete='off'
+                          autoFocus={true}
+                          onChange={(event) => {
+                            onChangeText({ event, state, setState })
+                            dispatch(Breadcrumb_inputName(event.target.value))
+                          }}
+                        />
+                        {isError.PartyAddress.length > 0 && (
+                          <span className="invalid-feedback">{isError.PartyAddress}</span>
+                        )}
+                      </FormGroup>
+                    </Col>
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label >{fieldLabel.PIN} </Label>
+                        <Input
+                          name="PIN"
+                          value={values.PIN}
+                          type="text"
+                          className={isError.PIN.length > 0 ? "is-invalid form-control" : "form-control"}
+                          placeholder="Please Enter PIN"
+                          autoComplete='off'
+                          onChange={(event) => {
+                            onChangeText({ event, state, setState })
+                          }}
+                        />
+                        {isError.PIN.length > 0 && (
+                          <span className="invalid-feedback">{isError.PIN}</span>
+                        )}
+                      </FormGroup>
+                    </Col>
+                    <Col md={4}>
+                      <FormGroup row className="align-items-center mt-xxl-4">
+                        <Label className="col-sm-4 col-form-label">
+                          {fieldLabel.IsDefault}
+                        </Label>
+                        <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
+                          <Col md={4} >
+                            <div className="form-check form-switch form-switch-md mb-3">
+                              <Input type="checkbox"
+                                className="form-check-input"
+                                checked={values.IsDefault}
+                                name="IsDefault"
                                 onChange={(event) => onChangeCheckbox({ event, state, setState })}
                               />
                             </div>
@@ -964,14 +1054,12 @@ const FranchisePartyMaster = (props) => {
 
                         </Col>
                       </FormGroup>
-
                     </Col>
                   </Row>
+                  }
 
 
-
-                  <hr></hr>
-                  <Row className="mb-3">
+                  {!isMobileRetailer && <Row className="mb-3">
                     <Col md={12}>
                       <div className="p-3">
                         <BootstrapTable
@@ -984,7 +1072,7 @@ const FranchisePartyMaster = (props) => {
                         />
                       </div>
                     </Col>
-                  </Row>
+                  </Row>}
                 </CardBody>
               </Card>
             </Row>
