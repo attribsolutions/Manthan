@@ -17,7 +17,7 @@ const SaleSummaryThermalPrintReport = (tableData) => {
     // Step 1: Render to a temporary (offscreen) doc to measure height
     const tempDoc = new jsPDF({
         unit: 'mm',
-        format: [80, 1000], // Large enough to fit everything
+        format: [80, 10000], // Large enough to fit everything
         orientation: 'portrait'
     });
 
@@ -45,27 +45,10 @@ const SaleSummaryThermalPrintReport = (tableData) => {
     });
 
     // Step 2: Get the final Y position to determine content height
-
-
+    debugger
     const finalY = tempDoc.autoTable.previous.finalY;
 
-
-    const requiredHeight = finalY + 70; // Add padding
-
-    tempDoc.autoTable({
-        startY: finalY + 10,
-        margin: { left: 5, right: 5 },
-        theme: 'grid',
-        head: [['PayMentMode', 'Amount']],
-        body: PayMentMode_rows,
-        styles: { fontSize: 8, cellPadding: 2 },
-        bodyStyles: { fontSize: 7 },
-
-    });
-
-
-
-
+    const requiredHeight = finalY; // Add padding
 
     // Step 3: Create actual doc with calculated height
     const doc = new jsPDF({
