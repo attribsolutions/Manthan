@@ -237,8 +237,8 @@ const IBInvoice = (props) => {
                 if (inx_1.ItemTotalStock < inx_1.Quantity) {
                     inx_1.StockInValid = true;
                     const diffrence = Math.abs(inx_1.ItemTotalStock - inx_1.Quantity);
-                    const msg1 = `Short Stock Quantity ${inx_1.Quantity}`;
-                    const msg2 = `Short Stock Quantity ${diffrence}`;
+                    const msg1 = `Short Stock Quantity ${(inx_1.Quantity).toFixed(3)}`;
+                    const msg2 = `Short Stock Quantity ${(diffrence).toFixed(3)}`;
                     inx_1.StockInvalidMsg = inx_1.ItemTotalStock === 0 ? msg1 : msg2;
                 }
 
