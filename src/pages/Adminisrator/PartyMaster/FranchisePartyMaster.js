@@ -5,27 +5,20 @@ import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeCheckbox, onC
 import { mode, pageId, url } from '../../../routes';
 import { useDispatch, useSelector } from 'react-redux';
 import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess, SSDD_List_under_Company } from '../../../store/actions';
-import { breadcrumbReturnFunc, btnIsDissablefunc, getSettingBasedPartyTypeID, loginCompanyID, loginJsonBody, loginPartyID, loginPartyName, loginPartyTypeName, loginRoleID, loginSystemSetting, loginUserDetails, loginUserID, metaTagLabel } from '../../../components/Common/CommonFunction';
-import { GetRoutesList, GetRoutesListSuccess } from '../../../store/Administrator/RoutesRedux/actions';
+import { breadcrumbReturnFunc, btnIsDissablefunc, getSettingBasedPartyTypeID, loginCompanyID, loginRoleID, loginSystemSetting, loginUserDetails, loginUserID, metaTagLabel } from '../../../components/Common/CommonFunction';
 import { priceListByPartyAction } from '../../../store/Administrator/PriceList/action';
 import { editPartyIDSuccess, getDistrictOnState, getDistrictOnStateSuccess, postPartyData, postPartyDataSuccess, updatePartyID, updatePartyIDSuccess } from '../../../store/Administrator/PartyRedux/action';
-import { getCityOnDistrict, getCityOnDistrictSuccess, getState, updateEmployeeIDSuccess } from '../../../store/Administrator/EmployeeRedux/action';
-import AddMaster from '../EmployeePages/Drodown';
-import PartyType from '../PartyTypes/PartyType';
+import { getCityOnDistrict, getCityOnDistrictSuccess, getState } from '../../../store/Administrator/EmployeeRedux/action';
 import PriceDropOptions from './MasterAdd/FirstTab/PriceDropOptions';
 import Select from "react-select"
-import CityMaster from '../CityPages/CityMaster';
 import { C_Select } from '../../../CustomValidateForm';
-import { C_Button, SaveButton } from '../../../components/Common/CommonButton';
+import { SaveButton } from '../../../components/Common/CommonButton';
 import { customAlert } from '../../../CustomAlert/ConfirmDialog';
 import { MetaTags } from 'react-meta-tags';
 import { useHistory } from "react-router-dom";
 import { getPartyTypelist } from '../../../store/Administrator/PartyTypeRedux/action';
 import { getCountryList_Action, getCountryList_Success } from '../../../store/Administrator/CountryRedux/action';
-import AddressDetailsTable1 from './AddressDetailsTable1';
 import BootstrapTable from 'react-bootstrap-table-next';
-import ToolkitProvider from 'react-bootstrap-table2-toolkit';
-import SimpleBar from "simplebar-react"
 import SaveButtonDraggable from '../../../components/Common/saveButtonDraggable';
 import { deltBtnCss, editBtnCss, vieBtnCss } from '../../../components/Common/ListActionsButtons';
 
@@ -68,6 +61,11 @@ const FranchisePartyMaster = (props) => {
 
   const [state, setState] = useState(() => initialFiledFunc(fileds))
   const [isMobileRetailer, setIsMobileRetailer] = useState(false);
+
+  const [RedirectPath, setRedirectPath] = useState("");
+
+
+
   const [priceListSelect, setPriceListSelect] = useState({ value: '' });
   const [addressDetails, setAddressDetails] = useState([{ Address: '', PIN: '', RowID: 0, IsDefault: false }]);
 
@@ -225,6 +223,7 @@ const FranchisePartyMaster = (props) => {
         setModalCss(true)
       }
       setIsMobileRetailer(location.IsMobileRetailer)
+      setRedirectPath(location.Redirect_From)
       if (hasEditVal) {
 
         const { id, Name, MobileNo, PartySubParty, isActive, Email, PartyType, PriceList, Supplier, PAN, State, District, PartyAddress, PIN, CityName } = hasEditVal
@@ -295,7 +294,7 @@ const FranchisePartyMaster = (props) => {
         Message: updateMsg.Message,
       })
       if (isPermission) {
-        history.push({ pathname: url.RETAILER_APPROVAL })
+        history.push({ pathname: RedirectPath })
       }
 
 
