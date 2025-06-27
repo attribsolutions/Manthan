@@ -407,7 +407,7 @@ const MachineTypeMaster = (props) => {
                                                             id="MacID"
                                                             value={values.MacID}
                                                             type="text"
-                                                            disabled={true}
+                                                            disabled={false}
                                                             className={isError.MacID.length > 0 ? "is-invalid form-control" : "form-control"}
                                                             placeholder="Please Enter MacID"
                                                             autoComplete='off'
