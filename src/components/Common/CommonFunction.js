@@ -55,6 +55,26 @@ export const Frenchies_date_ymd_func = (isdate) => {
 };
 
 
+export function getExtensionFromMimeType(mimeType) {
+  const map = {
+    "application/pdf": "pdf",
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "image/gif": "gif",
+    "image/webp": "webp",
+    "text/plain": "txt",
+    "text/csv": "csv",
+    "application/msword": "doc",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx",
+    "application/vnd.ms-excel": "xls",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
+    // Add more as needed
+  };
+
+  return map[mimeType] || "";
+}
+
+
 export const date_dmy_func = (isdate) => { //+++++++++++++++ Current Date by format (dd-mm-yyy) ++++++++++++++++++++++++++++++++++++
 
   let date = isDateInitial(isdate);
