@@ -1055,7 +1055,7 @@ const BOMMaster = (props) => {
                                             </FormGroup>
                                         </Col>
 
-                                        <Col sm="6">
+                                        {_cfunc.IsSweetAndSnacksCompany() && <Col sm="6">
                                             <FormGroup className=" row ">
                                                 <Row className="justify-content-md-left">
                                                     <Label className="col-sm-5 col-form-label mt-2" style={{ width: "100px" }} >Is VDC Item</Label>
@@ -1078,7 +1078,7 @@ const BOMMaster = (props) => {
                                                     </Col>
                                                 </Row>
                                             </FormGroup>
-                                        </Col>
+                                        </Col>}
                                     </Row>
                                 </Col>
                             </div>
