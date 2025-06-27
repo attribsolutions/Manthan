@@ -331,32 +331,25 @@ const PartyMaster = (props) => {
 							hasEditVal.PartyAddress.map(async (obj) => {
 								const newObj = { ...obj, RowID: nextId++ };
 								debugger
-								const url = obj.fssaidocumenturl;
-								if (url && typeof url === "string" && url.startsWith("http")) {
-									try {
-										const response = await fetch(url);
-										const blob = await response.blob();
-										const contentType = response.headers.get("Content-Type");
-										newObj.file = new File([blob], `${(obj?.filename) ? obj?.filename : 'Document'}.${getExtensionFromMimeType(contentType)}`, { type: blob.type });;
+								// const url = obj.fssaidocumenturl;
+								// if (url && typeof url === "string" && url.startsWith("http")) {
+								// 	try {
+								// 		const response = await fetch(url);
+								// 		const blob = await response.blob();
+								// 		const contentType = response.headers.get("Content-Type");
+								// 		newObj.file = new File([blob], `${(obj?.filename) ? obj?.filename : 'Document'}.${getExtensionFromMimeType(contentType)}`, { type: blob.type });;
 
-									} catch (error) {
-										console.error("Error fetching file from URL:", error);
-									}
-								}
+								// 	} catch (error) {
+								// 		console.error("Error fetching file from URL:", error);
+								// 	}
+								// }
+								// newObj.file = null
 								newObj.fssaidocumenturl = null
 								return newObj;
 							})
 						);
 
 
-
-
-
-
-
-
-
-						debugger
 						let getBaseTab = baseTabRef.current.getCurrentState();
 						let setBaseTab = baseTabRef.current.setCurrentState;
 						let getPrefixtab = prefixTabRef.current.getCurrentState();
