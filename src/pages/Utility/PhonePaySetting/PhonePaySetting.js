@@ -47,6 +47,7 @@ import { commonPartyDropdown_API } from "../../../helpers/backend_helper";
 import { CashierSummaryReport_GoButton_API_Success } from '../../../store/SweetPOSStore/Report/CashierSummaryRedux/action';
 import { allLabelWithBlank } from '../../../components/Common/CommonErrorMsg/HarderCodeData';
 import { editPhonePaySettingIDSuccess, savePhonePaySettingMaster, savePhonePaySettingMaster_Success, updatePhonePaySettingID, updatePhonePaySettingIDSuccess } from '../../../store/Utilites/PhonePaySettingRedux/action';
+import SaveButtonDraggable from '../../../components/Common/saveButtonDraggable';
 // import PartySettingsTable from "./PartySettingsTable";
 
 
@@ -244,7 +245,8 @@ export const PhonePaySetting = (props) => {
 
                 if (pageMode === mode.edit) {
                     dispatch(updatePhonePaySettingID({
-
+                        jsonBody,
+                        updateId: values.id,
                     }));
 
                 } else {
@@ -323,7 +325,7 @@ export const PhonePaySetting = (props) => {
                                             <Row className="mt-2 justify-content-around mt-3">
                                                 <Col sm={3}>
                                                     <FormGroup >
-                                                        <Label htmlFor="validationCustom01">Merchant id </Label>
+                                                    <Label htmlFor="validationCustom01">{fieldLabel.merchant_id}  </Label>
                                                         <Input
                                                             name="Description"
                                                             id="txtName"
@@ -347,7 +349,7 @@ export const PhonePaySetting = (props) => {
 
                                                 <Col sm={3}>
                                                     <FormGroup >
-                                                        <Label htmlFor="validationCustom01">Provider Id </Label>
+                                                    <Label htmlFor="validationCustom01">{fieldLabel.provider_id}  </Label>
                                                         <Input
                                                             name="Description"
                                                             id="txtName"
@@ -371,7 +373,7 @@ export const PhonePaySetting = (props) => {
 
                                                 <Col sm={3}>
                                                     <FormGroup >
-                                                        <Label htmlFor="validationCustom01">Salt Key </Label>
+                                                    <Label htmlFor="validationCustom01">{fieldLabel.salt_key}  </Label>
                                                         <Input
                                                             name="Description"
                                                             id="txtName"
@@ -402,7 +404,7 @@ export const PhonePaySetting = (props) => {
                                                 <Col sm={3}>
 
                                                     <FormGroup >
-                                                        <Label htmlFor="validationCustom01">Terminal ID </Label>
+                                                    <Label htmlFor="validationCustom01">{fieldLabel.terminal_id}  </Label>
                                                         <Input
                                                             name="Description"
                                                             id="txtName"
@@ -426,7 +428,7 @@ export const PhonePaySetting = (props) => {
 
                                                 <Col sm={3}>
                                                     <FormGroup >
-                                                        <Label htmlFor="validationCustom01">Merchent Name </Label>
+                                                    <Label htmlFor="validationCustom01">{fieldLabel.merchant_name}  </Label>
                                                         <Input
                                                             name="Description"
                                                             id="txtName"
@@ -451,7 +453,7 @@ export const PhonePaySetting = (props) => {
 
                                                 <Col sm={3}>
                                                     <FormGroup >
-                                                        <Label htmlFor="validationCustom01">X-Call Back_Url </Label>
+                                                    <Label htmlFor="validationCustom01">{fieldLabel.x_callback_url}  </Label>
                                                         <Input
                                                             name="Description"
                                                             id="txtName"
@@ -476,7 +478,7 @@ export const PhonePaySetting = (props) => {
 
                                             </Row>
                                             <Row className='mt-2 justify-content-start ms-1'>
-                                                <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label  ms-5" >Is_Disabled</Label>
+                                                <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label  ms-5" >{fieldLabel.is_active}</Label>
                                                 <Col md="1"  >
                                                     <div className="form-check form-switch form-switch-md  " dir="ltr">
                                                         <Input type="checkbox" className="form-check-input mt-2  "
@@ -504,7 +506,8 @@ export const PhonePaySetting = (props) => {
 
                             
                             <FormGroup className="mt-1">
-                                <Row>
+                            
+                                <SaveButtonDraggable>
                                     <Col sm={2}>
                                         <SaveButton
                                             loading={saveBtnloading}
@@ -515,7 +518,8 @@ export const PhonePaySetting = (props) => {
                                         module={"GroupMaster"}
                                         />
                                     </Col>
-                                </Row>
+                                    </SaveButtonDraggable>
+                               
                             </FormGroup>
 
                         </Card>

@@ -144,6 +144,7 @@ import SchemeSaga from "./Administrator/SchemeMasterRedux/saga"
 import ItemConsumptionReportSaga from "./Report/ItemConsumptionReportRedux/saga"
 import PosServiceSettingSaga from "./Utilites/PosServiesSettingRedux/saga"
 import PhonePaySettingSaga from "./Utilites/PhonePaySettingRedux/saga"
+import Stock_Adjustment_ReportSaga from "./Report/StockAdjustMentRedux/saga"
 
 
 
@@ -286,22 +287,24 @@ export default function* rootSaga() {
 		fork(SchemeTypeSaga),
 		fork(SchemeSaga),
 		fork(ItemConsumptionReportSaga),
-
 		fork(PosServiceSettingSaga),
-	fork(PhonePaySettingSaga)
-
-
-	
+		fork(PhonePaySettingSaga),
 
 
 
 
 
 
-		
 
 
 
+
+
+
+
+
+
+		fork(Stock_Adjustment_ReportSaga)
 
 	])
 }

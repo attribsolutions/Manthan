@@ -786,7 +786,7 @@ const AddEmployee = (props) => {
                         </Col> : <Col md="1"></Col>
                         }
 
-                        <Col md="3">
+                        <Col md="7">
                           <FormGroup className="mb-3">
                             <Label>{fieldLabel.EmployeeParties}</Label>
                             <C_Select

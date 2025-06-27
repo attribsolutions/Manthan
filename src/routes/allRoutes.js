@@ -277,6 +277,7 @@ import PosServiceSetting from "../pages/Utility/PosSystemsetting/PosServiceSetti
 
 import PhonePaySettingList from "../pages/Utility/PhonePaySetting/PhonePaySettingList.js";
 import PhonePaySetting from "../pages/Utility/PhonePaySetting/PhonePaySetting.js";
+import StockadjustmentReport from "../Reports/StockadjustmentReport/index.js";
 
 
 
@@ -723,7 +724,7 @@ const userRoutes = [
 
 
 
-	
+
 
 	{ path: path.SWEET_POS_RATE_MASTER, component: SweetPOSRateMaster },//not party wise
 
@@ -774,18 +775,19 @@ const userRoutes = [
 	{ path: path.POS_SALE_SUMMARY_REPORT, component: PosSummarySale },//not party wise
 
 
+	{ path: path.STOCK_ADJUSTMENT_REPORT, component: StockadjustmentReport },//not party wise
 
 
 
 	// ************************************ Utility **************************************//
 	{ path: path.PHONE_PAY_SETTING_LIST, component: PhonePaySettingList },
-	{ path: path.PHONE_PAY_SETTING, component:  PhonePaySetting},
+	{ path: path.PHONE_PAY_SETTING, component: PhonePaySetting },
 
 
 	{ path: path.POS_SERVICE_SETTING_LIST, component: PosServiceSettingList },//not party wise
 	{ path: path.POS_SERVICE_SETTING, component: PosServiceSetting },//not party wise
 
-	{ path: path.SYSTEM_SETTING_LIST, component: SystemSettingList },//not party wise
+
 
 	{ path: path.SYSTEM_SETTING, component: SystemSetting },//not party wise
 

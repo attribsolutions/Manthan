@@ -11,7 +11,7 @@ import Slidewithcaption from '../../../../../components/Common/CommonImageCompon
 import { alertMessages } from '../../../../../components/Common/CommonErrorMsg/alertMsg';
 
 function AddressDetailsTable({ addressTable = [], setAddressTable, onEdit }) {
-
+	
 	const selectedRowIndexRef = useRef(-1);
 
 	const dispatch = useDispatch();
@@ -97,8 +97,8 @@ function AddressDetailsTable({ addressTable = [], setAddressTable, onEdit }) {
 		setAddressTable(newtableData)
 	}
 
-	function myFunction(row) {
-		debugger
+	async function myFunction(row) {
+		
 		const file = row.file;
 
 		if (!(file || row.fssaidocumenturl !== "")) {
@@ -125,59 +125,16 @@ function AddressDetailsTable({ addressTable = [], setAddressTable, onEdit }) {
 					Message: "Unsupported file format.",
 				});
 			}
-		} else {
-			const extension = row.fssaidocumenturl.split('.').pop().toLowerCase();
-
-			if (extension === "pdf") {
-				// Open PDF in new tab
-				window.open(row.fssaidocumenturl, "_blank");
-			} else if (["jpg", "jpeg", "png", "gif", "bmp", "webp"].includes(extension)) {
-				// Show image in modal
-				setFssaiDocument([{ Image: row.fssaidocumenturl }]);
-				setmodal_backdrop(true);
-			} else {
-				customAlert({
-					Type: 3,
-					Message: "Unsupported file format.",
-				});
-			}
-
 		}
-
 	}
 
-
-
-	function openPdfFromBase64(base64String) {
-		// Split the Base64 string to remove the `data:application/pdf;base64,` part
-		const base64 = base64String.split(",")[1];
-
-		// Convert Base64 string to binary data
-		const binary = atob(base64);
-		const array = new Uint8Array(binary.length);
-		for (let i = 0; i < binary.length; i++) {
-			array[i] = binary.charCodeAt(i);
-		}
-
-		// Create a Blob from the binary data
-		const blob = new Blob([array], { type: "application/pdf" });
-
-		// Create a URL for the Blob
-		const url = URL.createObjectURL(blob);
-
-		// Open the PDF in a new browser tab
-		window.open(url, "_blank");
-
-		// Optionally, revoke the Blob URL later to free up resources
-		setTimeout(() => URL.revokeObjectURL(url), 1000);
-	}
 
 	const onEditHandlerHandeler = (row) => {
 		onEdit(row); // Pass the selected row to the parent component
 	}
 
 	const tableRows = addressTable.map((info, key) => {
-		debugger
+
 		return (
 			<tr key={key} className={key === selectedRowIndexRef.current ? 'selected' : ''}>
 				<td>{info.Address}</td>

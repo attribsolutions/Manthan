@@ -20,7 +20,7 @@ export const DAILY_DISPATCH_REPORT = 339
 
 export const POS_SALE_SUMMARY_REPORT = 340
 
-// export const MANAGER_SUMMARY_REPORT = 347
+export const MANAGER_SUMMARY_REPORT = 347
 
 export const ITEM_CONSUMPTION_REPORT = 353
 
@@ -31,6 +31,11 @@ export const BILL_DELETE_SUMMARY_REPORT = 346
 export const SCHEME_MASTER_lIST = 351
 
 export const SCHEME_MASTER = 350
+
+export const STOCK_ADJUSTMENT_REPORT = 359
+
+
+
 
 
 
@@ -447,14 +452,17 @@ export const ORDER_ITEM_SUPPLIER_REPORT = 301
 
 // ***************** Sweet POS *******************
 
-export const POS_SERVICE_SETTING_LIST = 354
 
-export  const POS_SERVICE_SETTING = 353
 
-export const PHONE_PAY_SETTING_LIST = 357
+export const POS_SERVICE_SETTING_LIST = 356
 
-export const PHONE_PAY_SETTING = 356
+export const POS_SERVICE_SETTING = 355
 
+
+
+export const PHONE_PAY_SETTING_LIST = 358
+
+export const PHONE_PAY_SETTING = 357
 
 
 export const POS_ROLE_ACCESS = 266

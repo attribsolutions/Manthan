@@ -4,98 +4,20 @@ import { getFixedNumber } from '../../../../../components/Common/CommonFunction'
 import { numberWithCommas } from '../../../../../Reports/Report_common_function';
 
 
-// const SaleSummaryThermalPrintReport = (tableData) => {
-//     debugger
-//     const doc = new jsPDF({
-//         unit: 'mm',              // Use mm for precision with thermal paper
-//         format: [80, 297],       // 80mm width, 297mm height
-//         orientation: 'portrait'
-//     });
-
-//     doc.setFont('Tahoma')
-//     doc.setFontSize(18);
-
-//     doc.text('Sale Summary Report', 40, 13, { align: 'center' });
-//     doc.text(`${tableData.SupplierName}`, 40, 26, { align: 'center' });
-//     doc.text(`${tableData.GSTIN}`, 40, 39, { align: 'center' });
-
-
-
-//     // Table data
-//     doc.autoTable({
-//         startY: 49,
-//         margin: { left: 5, right: 5 },
-//         theme: 'grid',
-//         head: [['Item', 'Qty', 'Rate', 'Amount']],
-//         body: Rows_1(tableData),
-//         headerStyles: {
-//             cellPadding: 2,
-//             lineWidth: 0.1,
-//             valign: 'top',
-//             fontStyle: 'bold',
-//             halign: 'center',
-//             fillColor: "white",
-//             textColor: [0, 0, 0],
-//             fontSize: 7,
-//             rowHeight: 10,
-//             lineColor: [6, 3, 1]
-//         },
-//         columnStyles: {
-//             0: {
-//                 valign: "top",
-//                 columnWidth: 30,
-//             },
-//             1: {
-//                 columnWidth: 12,
-//                 halign: 'right',
-//             },
-//             2: {
-//                 columnWidth: 12,
-//                 halign: 'right',
-//             },
-
-//             3: {
-//                 columnWidth: 15,
-//                 halign: 'right',
-//             },
-
-
-//         },
-//         bodyStyles: {
-//             columnWidth: 'wrap',
-//             textColor: [30, 30, 30],
-//             cellPadding: 1,
-//             fontSize: 7,
-//             lineColor: [6, 3, 1]
-//         },
-//         didParseCell: (data1) => {
-//             if (data1.row.cells[3].raw === "Span") {
-//                 data1.row.cells[0].colSpan = 4;
-//                 data1.row.cells[0].styles.halign = "left";
-//                 data1.row.cells[0].styles.fontSize = 8;
-//                 data1.row.cells[0].styles.fontStyle = "bold";
-//             }
-
-//         },
-
-//         styles: { fontSize: 8, cellPadding: 2 },
-
-//     });
-
-
-//     const pdfBlob = doc.output('blob');
-//     const pdfUrl = URL.createObjectURL(pdfBlob);
-//     window.open(pdfUrl, '_blank');
-// }
-
 
 const SaleSummaryThermalPrintReport = (tableData) => {
     const rows = Rows_1(tableData);
 
+    const PayMentMode_rows = PayMentMode_Rows(tableData);
+
+
+
+
+
     // Step 1: Render to a temporary (offscreen) doc to measure height
     const tempDoc = new jsPDF({
         unit: 'mm',
-        format: [80, 1000], // Large enough to fit everything
+        format: [80, 10000], // Large enough to fit everything
         orientation: 'portrait'
     });
 
@@ -123,8 +45,10 @@ const SaleSummaryThermalPrintReport = (tableData) => {
     });
 
     // Step 2: Get the final Y position to determine content height
+    debugger
     const finalY = tempDoc.autoTable.previous.finalY;
-    const requiredHeight = finalY + 10; // Add padding
+
+    const requiredHeight = finalY; // Add padding
 
     // Step 3: Create actual doc with calculated height
     const doc = new jsPDF({
@@ -149,7 +73,7 @@ const SaleSummaryThermalPrintReport = (tableData) => {
         theme: 'grid',
         head: [['Item', 'Qty', 'Rate', 'Amount']],
         body: rows,
-      
+
         columnStyles: {
             0: { columnWidth: 30 },
             1: { columnWidth: 12, halign: 'right' },
@@ -184,6 +108,41 @@ const SaleSummaryThermalPrintReport = (tableData) => {
             }
         },
         styles: { fontSize: 8, cellPadding: 2 }
+    });
+
+    const Privious_Table = doc.autoTable.previous.finalY;
+    doc.autoTable({
+        startY: Privious_Table + 5,
+        margin: { left: 5, right: 5 },
+        theme: 'grid',
+        head: [['Payment Mode', 'Amount']],
+        showHead: 'firstPage',
+        headerStyles: {
+            cellPadding: 2,
+            lineWidth: 0.1,
+            valign: 'top',
+            fontStyle: 'bold',
+            halign: 'center',
+            fillColor: "white",
+            textColor: [0, 0, 0],
+            fontSize: 8,
+            rowHeight: 5,
+            lineColor: [6, 3, 1]
+        },
+        columnStyles: {
+            0: { columnWidth: 42 },
+            1: { columnWidth: 27, halign: 'right' },
+
+        },
+        body: PayMentMode_rows,
+        styles: { fontSize: 8, cellPadding: 2 },
+        bodyStyles: {
+            fontSize: 9,
+            textColor: [30, 30, 30],
+            cellPadding: 1,
+            lineColor: [6, 3, 1]
+        },
+
     });
 
     const pdfBlob = doc.output('blob');
@@ -309,6 +268,46 @@ export const Rows_1 = (data) => {
         ]);
     }
 
+    return returnArr;
+}
+
+
+
+
+export const PayMentMode_Rows = (data) => {
+    debugger
+
+    let Total = 0
+    data.sort((firstItem, secondItem) => firstItem.PaymentType - secondItem.PaymentType);
+    const returnArr = [];
+    const groupedItems = data.reduce((accumulator, currentItem) => {
+        const { GrandTotal, PaymentType, Amount } = currentItem;
+
+        const key = PaymentType;
+        if (accumulator[key]) {
+            accumulator[key].Amount += getFixedNumber(Amount, 3);
+        } else {
+            accumulator[key] = {
+                Amount: getFixedNumber(Amount, 3), PaymentType
+            };
+        }
+        return accumulator;
+    }, {});
+
+    Object.values(groupedItems).forEach((element, key) => {
+        Total = Total + element.Amount
+        const tableitemRow = [
+            `${element.PaymentType}`,
+            `${numberWithCommas(Number(element.Amount).toFixed(2))}`,
+        ];
+        returnArr.push(tableitemRow);
+    })
+
+    returnArr.push([
+        `Total `,
+        `${numberWithCommas(Number(Total).toFixed(2))}`,
+
+    ]);
     return returnArr;
 }
 
