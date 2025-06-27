@@ -95,7 +95,8 @@ const AddressTabForm = forwardRef((props, ref) => {
 					FSSAIExipry: values.FSSAIExipry,
 					PIN: values.PIN,
 					IsDefault: values.IsDefault,
-					file: imageTable
+					file: imageTable,
+					filename: imageTable.name
 				};
 
 				if (values.IsDefault) {

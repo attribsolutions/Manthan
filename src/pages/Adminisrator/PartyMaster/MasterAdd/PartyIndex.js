@@ -28,7 +28,7 @@ import {
 	updatePartyIDSuccess
 } from "../../../../store/Administrator/PartyRedux/action"
 import { Breadcrumb_inputName, commonPageField, commonPageFieldListSuccess, commonPageFieldSuccess } from "../../../../store/actions"
-import { btnIsDissablefunc, isEditMode_CssFun, loginCompanyID, loginPartyID, loginUserAdminRole, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction"
+import { btnIsDissablefunc, getExtensionFromMimeType, isEditMode_CssFun, loginCompanyID, loginPartyID, loginUserAdminRole, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction"
 import * as url from "../../../../routes/route_url";
 import * as pageId from "../../../../routes/allPageID"
 import * as mode from "../../../../routes/PageMode"
@@ -104,7 +104,7 @@ const PartyMaster = (props) => {
 	const [activeTab1, setactiveTab1] = useState("1")
 	const [modalCss, setModalCss] = useState(false);
 	const [isMobileRetailer, setIsMobileRetailer] = useState(false);
-	debugger
+
 	const [editCreatedBy, seteditCreatedBy] = useState("");
 
 	const {
@@ -199,14 +199,14 @@ const PartyMaster = (props) => {
 		dispatch(editPartyIDSuccess({ Status: false }));
 	}
 
-	useEffect(() => {
+	useEffect(async () => {
 
 		if (editData.Status === true) {
 
 			try {
 
 				if ((hasShowloction || hasShowModal) || (subPageMode === url.PARTY_SELF_EDIT)) {
-					debugger
+
 					let hasEditVal = null
 					if (hasShowloction) {
 						setPageMode(location.pageMode)
@@ -319,12 +319,44 @@ const PartyMaster = (props) => {
 						} : { label: '' };
 
 						let nextId = 1;
-						let addressTabPreIncrementId = hasEditVal.PartyAddress.map((obj) => {
-							const newObj = { ...obj, RowID: nextId };
-							nextId++;
-							return newObj;
-						})
+						// let addressTabPreIncrementId = hasEditVal.PartyAddress.map((obj) => {
+						// 	const newObj = { ...obj, RowID: nextId };
+						// 	nextId++;
+						// 	return newObj;
+						// })
 
+
+
+						let addressTabPreIncrementId = await Promise.all(
+							hasEditVal.PartyAddress.map(async (obj) => {
+								const newObj = { ...obj, RowID: nextId++ };
+								debugger
+								const url = obj.fssaidocumenturl;
+								if (url && typeof url === "string" && url.startsWith("http")) {
+									try {
+										const response = await fetch(url);
+										const blob = await response.blob();
+										const contentType = response.headers.get("Content-Type");
+										newObj.file = new File([blob], `${(obj?.filename) ? obj?.filename : 'Document'}.${getExtensionFromMimeType(contentType)}`, { type: blob.type });;
+
+									} catch (error) {
+										console.error("Error fetching file from URL:", error);
+									}
+								}
+								newObj.fssaidocumenturl = null
+								return newObj;
+							})
+						);
+
+
+
+
+
+
+
+
+
+						debugger
 						let getBaseTab = baseTabRef.current.getCurrentState();
 						let setBaseTab = baseTabRef.current.setCurrentState;
 						let getPrefixtab = prefixTabRef.current.getCurrentState();
@@ -502,6 +534,10 @@ const PartyMaster = (props) => {
 		};
 
 
+
+		if (pageMode === mode.edit) {
+
+		}
 		try {
 			btnIsDissablefunc({ btnId, state: true })
 
