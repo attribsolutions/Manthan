@@ -520,3 +520,5 @@ export const FRANCHAISE_SALE_WITH_BILL_COUNT = "/Franchise_Sale_With_Bill_Count"
 
 
 export const POS_SALE_SUMMARY_REPORT = "/POS_Summary_Sale_Report"
+
+export const STOCK_ADJUSTMENT_REPORT = "/Stock_Adjustment_Report"

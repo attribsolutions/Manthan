@@ -153,6 +153,7 @@ import SchemeReducer from "./Administrator/SchemeMasterRedux/reducer"
 import ItemConsumptionReportReducer from "./Report/ItemConsumptionReportRedux/reducer"
 import PosServiceSettingReducer from "./Utilites/PosServiesSettingRedux/reducer"
 import PhonePaySettingReducer from "./Utilites/PhonePaySettingRedux/reducer"
+import Stock_Adjustment_Report_Reducer from "./Report/StockAdjustMentRedux/reducer"
 
 const rootReducer = combineReducers({
 	Layout,
@@ -283,6 +284,7 @@ const rootReducer = combineReducers({
 	ItemConsumptionReportReducer,
 	PosServiceSettingReducer,
 	PhonePaySettingReducer,
+	Stock_Adjustment_Report_Reducer
 
 })
 export default rootReducer

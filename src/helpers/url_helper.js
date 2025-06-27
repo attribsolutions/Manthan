@@ -833,6 +833,7 @@ export const PERIODIC_GRN_REPORT = '/PeriodicGRNReport'
 
 
 export const GET_DATA_EXPORT_TO_SAP = '/UploadFileListDetails'
+export const STOCK_ADJUSTMENT_REPORT = '/StockAdjustmentReport'
 
 
 

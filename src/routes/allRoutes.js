@@ -277,6 +277,7 @@ import PosServiceSetting from "../pages/Utility/PosSystemsetting/PosServiceSetti
 
 import PhonePaySettingList from "../pages/Utility/PhonePaySetting/PhonePaySettingList.js";
 import PhonePaySetting from "../pages/Utility/PhonePaySetting/PhonePaySetting.js";
+import StockadjustmentReport from "../Reports/StockadjustmentReport/index.js";
 
 
 
@@ -774,6 +775,7 @@ const userRoutes = [
 	{ path: path.POS_SALE_SUMMARY_REPORT, component: PosSummarySale },//not party wise
 
 
+	{ path: path.STOCK_ADJUSTMENT_REPORT, component: StockadjustmentReport },//not party wise
 
 
 

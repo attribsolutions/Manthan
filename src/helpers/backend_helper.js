@@ -1097,16 +1097,13 @@ export const GRNDiscrepancyReport_API = ({ jsonBody }) => post(url.GRN_DISCREPAN
 
 export const CodeRedemptionReport_API = ({ jsonBody }) => post(url.CODE_REDEMPTION_REPORT, jsonBody)//Go button api
 
-
 export const DataExportToSAP_API = ({ jsonBody }) => post(url.DATA_EXPORT_TO_SAP, jsonBody)//Go button api
-
 
 export const DataExportToSAP_Get_API = () => get(url.GET_DATA_EXPORT_TO_SAP)//Go button api
 
-
 export const Periodic_Grn_Report_Api = ({ jsonBody }) => post(url.PERIODIC_GRN_REPORT, jsonBody)//Go button api
 
-
+export const Stock_Adjustment_Report_GoButton_API = ({ jsonBody }) => post(url.STOCK_ADJUSTMENT_REPORT, jsonBody)//Go button api
 
 
 export {
