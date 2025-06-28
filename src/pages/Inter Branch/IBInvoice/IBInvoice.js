@@ -237,7 +237,7 @@ const IBInvoice = (props) => {
                 if (inx_1.ItemTotalStock < inx_1.Quantity) {
                     inx_1.StockInValid = true;
                     const diffrence = Math.abs(inx_1.ItemTotalStock - inx_1.Quantity);
-                    const msg1 = `Short Stock Quantity ${(inx_1.Quantity).toFixed(3)}`;
+                    const msg1 = `Short Stock Quantity ${(Number(inx_1.Quantity)).toFixed(3)}`;
                     const msg2 = `Short Stock Quantity ${(diffrence).toFixed(3)}`;
                     inx_1.StockInvalidMsg = inx_1.ItemTotalStock === 0 ? msg1 : msg2;
                 }
@@ -271,7 +271,7 @@ const IBInvoice = (props) => {
 
 
     useEffect(async () => {
-        
+
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveChallan_ChallanAddSuccess({ Status: false }))
             dispatch(makeGRN_Mode_1ActionSuccess({ Status: false }))
