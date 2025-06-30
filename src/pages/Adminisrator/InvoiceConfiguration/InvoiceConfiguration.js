@@ -75,7 +75,8 @@ const InvoiceConfiguration = (props) => {
         CRDRNoteA4Print: "",
         EWayBillApplicable: "",
         OrderA4Print: "",
-        AutoInvoiceSendToSap: ""
+        AutoInvoiceSendToSap: "",
+        AutoEwayBill: "",
         // IsTCSPercentageforNonValidatedPANCustomer: "",
         // IsTCSPercentageforValidatedPANCustomer: ""
     }
@@ -241,7 +242,7 @@ const InvoiceConfiguration = (props) => {
             }
 
             setState((i) => {
-
+debugger
                 const a = { ...i }
                 a.values.Invoicea4 = Data.A4Print;
                 a.values.AddressInInvoice = Data.AddressOnInvoice;
@@ -259,7 +260,8 @@ const InvoiceConfiguration = (props) => {
                 a.values.EWayBillApplicable = Data.EWayBillApplicable;
                 a.values.OrderA4Print = Data.OrderA4Print;
                 a.values.AutoInvoiceSendToSap = Data.AutoInvoiceSendToSap;
-
+                 a.values.AutoEwayBill = Data.AutoEwayBill;
+                
                 return a
             })
         }
@@ -750,22 +752,26 @@ const InvoiceConfiguration = (props) => {
                                                     </FormGroup>
                                                 </Col>
 
+
+
                                                 <Col sm={8}>
                                                     <FormGroup className="mb-3">
                                                         <Row>
                                                             <Col sm={3} >
-                                                                <Label htmlFor="validationCustom01">  {fieldLabel.CreditDebitAmountRound} </Label>
+                                                                <Label htmlFor="validationCustom01">  {fieldLabel.AutoEwayBill} </Label>
                                                             </Col>
                                                             <Col sm={9} >
                                                                 <Input
                                                                     style={{ marginLeft: "53px" }}
                                                                     type="checkbox"
                                                                     className="p-2"
-                                                                    checked={values.CreditDebitAmountRound.Value === "0" ? false : true}
+                                                                    checked={values.AutoEwayBill.Value === "0" ? false : true}
                                                                     onChange={(e) => {
+
                                                                         setState((i) => {
                                                                             const a = { ...i }
-                                                                            a.values.CreditDebitAmountRound.Value = e.target.checked === false ? "0" : "1";
+
+                                                                            a.values.AutoEwayBill.Value = e.target.checked === false ? "0" : "1";
                                                                             return a
                                                                         })
                                                                     }}
@@ -776,6 +782,8 @@ const InvoiceConfiguration = (props) => {
                                                         </Row>
                                                     </FormGroup>
                                                 </Col>
+
+                                              
 
 
                                             </Row>
@@ -912,7 +920,36 @@ const InvoiceConfiguration = (props) => {
 
                                             </Row>
 
+                                            <Row>
+                                          
+                                            <Col sm={7}>
+                                                    <FormGroup className="mb-3">
+                                                        <Row>
+                                                            <Col sm={3} >
+                                                                <Label htmlFor="validationCustom01">  {fieldLabel.CreditDebitAmountRound} </Label>
+                                                            </Col>
+                                                            <Col sm={9} >
+                                                                <Input
+                                                                    style={{ marginLeft: "53px" }}
+                                                                    type="checkbox"
+                                                                    className="p-2"
+                                                                    checked={values.CreditDebitAmountRound.Value === "0" ? false : true}
+                                                                    onChange={(e) => {
+                                                                        setState((i) => {
+                                                                            const a = { ...i }
+                                                                            a.values.CreditDebitAmountRound.Value = e.target.checked === false ? "0" : "1";
+                                                                            return a
+                                                                        })
+                                                                    }}
+                                                                >
+                                                                </Input>
 
+                                                            </Col>
+                                                        </Row>
+                                                    </FormGroup>
+                                                </Col>
+
+                                            </Row>
 
 
 
