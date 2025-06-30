@@ -126,6 +126,9 @@ export const ManagementParties = url.MANAGEMENT_PARTIES
 export const BankMaster = url.BANK_LIST
 export const BankList = url.BANK
 
+export const Pos_Service_Setting = url.POS_SERVICE_SETTING_LIST
+export const Pos_Service_Setting_List = url.POS_SERVICE_SETTING
+
 export const RetailerMaster = url.RETAILER_LIST
 export const RetailerList = url.RETAILER_MASTER
 

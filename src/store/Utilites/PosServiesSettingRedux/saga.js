@@ -1,12 +1,12 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import {
-    PosServiceSettingApiErrorAction,
-    deletePosServiceSettingSuccess,
-    editPosServiceSettingIDSuccess,
+  PosServiceSettingApiErrorAction,
+  deletePosServiceSettingSuccess,
+  editPosServiceSettingIDSuccess,
   getPosServiceSettingSuccess,
   savePosServiceSettingMaster_Success,
   updatePosServiceSettingIDSuccess,
-  
+
 
 } from "./action";
 import {
@@ -25,21 +25,21 @@ import {
 } from "./actionType";
 
 function* Save_Method_ForPosServiceSetting_GenFun({ config }) {
-  
+
   try {
     const response = yield call(save_PosServiceSetting_API, config);
-    debugger
+
     yield put(savePosServiceSettingMaster_Success(response));
 
   } catch (error) { yield put(PosServiceSettingApiErrorAction()) }
- 
+
 }
 
 
 function* Get_PosServiceSetting_Genrator() {
   try {
     const response = yield call(get_PosServiceSetting_List_Api);  // get Liat
-    debugger
+
     yield put(getPosServiceSettingSuccess(response.Data));
   } catch (error) {
     yield put(PosServiceSettingApiErrorAction());
@@ -56,7 +56,7 @@ function* Delete_PosServiceSetting_ID_GenFunc({ config }) {                    /
 }
 
 function* Edit_PosServiceSetting_ID_GenFunc({ config }) {
-                    // edit API 
+  debugger
   const { btnmode } = config;
   try {
     const response = yield call(edit_PosServiceSetting_List_Api, config);
