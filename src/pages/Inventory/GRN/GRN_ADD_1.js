@@ -180,9 +180,9 @@ const GRN_ADD_1 = (props) => {
             setInvoiceNo([]);
             setOpenPOdata([]);
 
-            if (ratePostJsonBody.length > 0) {
-                dispatch(saveRateMaster(JSON.stringify(ratePostJsonBody)));
-            }
+            // if (ratePostJsonBody.length > 0) {
+            //     dispatch(saveRateMaster(JSON.stringify(ratePostJsonBody)));
+            // }
         }
     }, [postMsg])
 
@@ -200,7 +200,9 @@ const GRN_ADD_1 = (props) => {
     useEffect(() => {
         debugger
         if ((AccontingGRN.Status === true) && (AccontingGRN.StatusCode === 200)) {
-
+            if (ratePostJsonBody.length > 0 && subPageMode === url.ACCOUNTING_GRN) {
+                dispatch(saveRateMaster(JSON.stringify(ratePostJsonBody)));
+            }
             customAlert({
                 Type: 1,
                 Message: AccontingGRN.Message,
