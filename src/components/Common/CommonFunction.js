@@ -409,6 +409,17 @@ export const loginPartyTypeID = () => {//+++++++++++++++++++++ Session loginPart
 };
 
 
+export const FranchiesPartyType = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
+
+  try {
+    return 19;  // Party Type ID for Franchies
+  } catch (e) {
+    CommonConsole("Common FranchiesTypeName Error");
+  }
+
+};
+
+
 export const loginUserIsFranchisesRole = () => { //+++++++++++++++++++++ IsFranchises Company Id+++++++++++++++++++++++++++++
 
   try {
