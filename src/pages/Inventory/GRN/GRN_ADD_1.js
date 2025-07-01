@@ -20,7 +20,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import * as _act from "../../../store/actions";
 
-import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, decimalRegx, decimalRegx_3dit } from "../../../CustomValidateForm";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import { pageFieldUseEffect, saveMsgUseEffect, table_ArrowUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
@@ -166,9 +166,6 @@ const GRN_ADD_1 = (props) => {
     }), [userAccess]);
 
     useEffect(() => saveMsgUseEffect({// saveMsgUseEffect common useEffect 
-
-
-
         postMsg, pageMode,
         history, dispatch,
         postSuccss: _act.saveGRNSuccess,
@@ -176,6 +173,7 @@ const GRN_ADD_1 = (props) => {
     }), [postMsg]);
 
     useEffect(() => {
+
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             setgrnItemList([]);
             setGrnDetail({});
@@ -192,15 +190,15 @@ const GRN_ADD_1 = (props) => {
         value: index.id,
         label: index.Name,
     }));
-    useEffect(() => {
-        if (ratePostJsonBody.length > 0 && subPageMode === url.ACCOUNTING_GRN) {
-            dispatch(saveRateMaster(JSON.stringify(ratePostJsonBody)));
-        }
-    }, [ratePostJsonBody])
+    // useEffect(() => {
+    //     if (ratePostJsonBody.length > 0 && subPageMode === url.ACCOUNTING_GRN) {
+    //         dispatch(saveRateMaster(JSON.stringify(ratePostJsonBody)));
+    //     }
+    // }, [ratePostJsonBody])
 
 
     useEffect(() => {
-
+        debugger
         if ((AccontingGRN.Status === true) && (AccontingGRN.StatusCode === 200)) {
 
             customAlert({
@@ -212,10 +210,9 @@ const GRN_ADD_1 = (props) => {
             });
         }
         else if ((AccontingGRN.Status === false) && (AccontingGRN.StatusCode === 406)) {
-
             customAlert({
                 Type: 4,
-                Message: AccontingGRN.Message,
+                Message: JSON.stringify(AccontingGRN.Message),
             });
         }
     }, [AccontingGRN])
@@ -362,8 +359,6 @@ const GRN_ADD_1 = (props) => {
 
             grnDetails["InvoiceDate"] = _cfunc.date_ymd_func(grnDetails.InvoiceDate)
             grnDetails["DemandDate"] = _cfunc.date_ymd_func(grnDetails.DemandDate)
-
-
 
             setGrnDetail(grnDetails)
             setInvoiceNo(grnDetails.GRNReferences[0]?.Invoice_NO)
@@ -791,7 +786,7 @@ const GRN_ADD_1 = (props) => {
                             className=" text-end"
                             disabled={openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN}
                             defaultValue={row.Rate}
-                            cpattern={decimalRegx}
+                            cpattern={decimalRegx_3dit}
                             autoComplete="off"
                             // disabled={((row.GST === '') || (pageMode === mode.view)) ? true : false}
                             onChange={e => {
@@ -1065,7 +1060,8 @@ const GRN_ADD_1 = (props) => {
         },
     ];
 
-    const DeleteHandler = (row) => {
+    const DeleteHandler = (row, ledgerDetailList) => {
+        debugger
         const Data = ledgerDetailList.filter((item) => item.id !== row.id);
 
         const ledgerAmount = Data.reduce((acc, ele) => acc + Number(ele.Taxable_Amount), 0)
@@ -1257,9 +1253,9 @@ const GRN_ADD_1 = (props) => {
         {//------------- ItemName column ----------------------------------
             text: "Action",
             dataField: "",
-            formatExtraData: grnItemList,
+            formatExtraData: { grnItemList, ledgerDetailList },
             // sort: true,
-            formatter: (value, row, k) => (
+            formatter: (value, row, k, { ledgerDetailList }) => (
                 <div className="row mt-1" >
                     <span className="d-flex justify-content-center align-items-center">
                         <Button
@@ -1268,7 +1264,7 @@ const GRN_ADD_1 = (props) => {
 
                             className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light btn btn-secondary"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete Item'
-                            onClick={() => { DeleteHandler(row); }}
+                            onClick={() => { DeleteHandler(row, ledgerDetailList); }}
                         >
                             <i className="mdi mdi-delete font-size-16"></i>
                         </Button>
@@ -1365,6 +1361,14 @@ const GRN_ADD_1 = (props) => {
 
 
     const ledgerAddHandler = () => {
+        debugger
+        if (!ledgerSelect) {
+            customAlert({
+                Type: 3,
+                Message: `Please Select Ledger`,
+            })
+            return
+        }
         if (ledgerDetailList.length > 0) {
             const isfound = ledgerDetailList.filter(ind => {
 
@@ -1612,7 +1616,9 @@ const GRN_ADD_1 = (props) => {
                 return
             }
 
+
             console.log("ledgerDetailList", ledgerDetailList)
+
 
             const GRNExpenses = ledgerDetailList.map(item => ({
                 GRN: grnDetail.id,
@@ -1622,7 +1628,6 @@ const GRN_ADD_1 = (props) => {
                 CGST: item.CGST,
                 SGST: item.SGST,
                 IGST: item.IGST,
-
                 Amount: item.Taxable_Amount
             }))
 
@@ -1760,15 +1765,9 @@ const GRN_ADD_1 = (props) => {
                                         <Input
                                             value={grnDetail.FullGRNNumber}
                                             disabled={true}
-
-
                                         />
                                     </Col>
-
-
                                 </FormGroup>
-
-
                                 }
 
 
@@ -1932,24 +1931,6 @@ const GRN_ADD_1 = (props) => {
 
 
                             }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                         </Row>
                     </div>
