@@ -10,6 +10,7 @@ function addTitleRow(worksheet, title) {
     const workSheetName = [`Summary For ${title}`];
     worksheet.addRow(workSheetName); // Add title row
     styleHeaderRow(worksheet, 'CCC0DA'); // Apply style to title row
+
     worksheet.addRow([]); // Add empty row after title
 }
 
@@ -25,7 +26,7 @@ function addMergedTitleRow(worksheet, HeaderColumns) {
 
 // Function to add rows and format cells based on table data
 function addRowsAndFormatCells(worksheet, HeaderColumns, dataRow, controlTypeName, key) {
-    
+
     const headerRow = worksheet.addRow(HeaderColumns);
     // Merge cells in the header row with the cells in the merge row
 
@@ -161,19 +162,67 @@ function addRowsAndFormatCells(worksheet, HeaderColumns, dataRow, controlTypeNam
         };
     }
 
-
+    
 
     styleHeaderRow(worksheet); // Apply style to header row
 
     // Iterate through each data row, add rows and format cells accordingly
     dataRow.forEach((item) => {
+
         const row = worksheet.addRow(item);
         row.eachCell((cell, colNumber) => {
             const controlType = controlTypeName[colNumber - 1];
             formatCellByDataType(cell, controlType, item[colNumber - 1]); // Format cell based on data type
         });
     });
+
+
+
+   //  Only for B2B, B2CL, CDNR keys, total row for selected columns
+if (["B2B"].includes(key)) {
+
+    const columnsToTotal = ["invoice value", "state tax", "central tax", "taxable"];
+
+    const columnIndexes = columnsToTotal.map(colName =>
+        HeaderColumns.findIndex(col => col.toLowerCase().includes(colName))
+    );
+
+    const totals = columnIndexes.map(index => {
+        if (index === -1) return ""; // Column not found
+        return dataRow.reduce((sum, row) => {
+            const value = parseFloat(row[index]);
+            return sum + (isNaN(value) ? 0 : value);
+        }, 0);
+    });
+
+    const totalRowValues = new Array(HeaderColumns.length).fill("");
+    totalRowValues[0] = "Total"; // Set label in first column
+
+    columnIndexes.forEach((colIdx, i) => {
+        if (colIdx !== -1) {
+            totalRowValues[colIdx] = totals[i];
+        }
+    });
+
+    const totalRow = worksheet.addRow(totalRowValues);
+
+    columnIndexes.forEach((colIdx) => {
+        if (colIdx !== -1) {
+            const cell = totalRow.getCell(colIdx + 1);
+            cell.font = { bold: true };
+            cell.alignment = { horizontal: 'right' };
+        }
+    });
+
+    // Bold "Total" label
+    totalRow.getCell(1).font = { bold: true };
 }
+
+
+}
+
+
+
 function setColumnWidths(worksheet) {
     worksheet.columns.forEach((column) => {
         column.width = Math.max(20, column.width);
@@ -199,7 +248,7 @@ function formatCellByDataType(cell, controlType, value) {
 
 
 function GST_ExcelDownloadFun({ excelTableData, excelFileName, pageName }) {
-    
+
     const workbook = new ExcelJS.Workbook(); // Create a new Excel workbook
 
     // Iterate through each key-value pair in the excelTableData object
@@ -210,7 +259,7 @@ function GST_ExcelDownloadFun({ excelTableData, excelFileName, pageName }) {
         addTitleRow(worksheet, key);
 
         if (pageName === "GST-R1") {
-            
+
             // If there are elements in the first index
             if (value.length > 0) {
 
@@ -228,7 +277,7 @@ function GST_ExcelDownloadFun({ excelTableData, excelFileName, pageName }) {
         setColumnWidths(worksheet)
 
         if (value.length > 0) {
-            
+
             let valueCopy = value
             if (pageName === "GST-R1" && !(key === "WithOutGSTIN" || key === "WithGSTIN")) {
                 valueCopy = value.slice(1); // Create a copy of the value array excluding the first index

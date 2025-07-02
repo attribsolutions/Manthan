@@ -32,7 +32,9 @@ import {
     editInvoiceActionSuccess,
     updateInvoiceAction,
     updateInvoiceActionSuccess,
-    InvoiceSendToScm
+    InvoiceSendToScm,
+
+    UpdateVehicleInvoice_Success
 } from "../../../store/Sales/Invoice/action";
 import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
@@ -48,7 +50,7 @@ import "./invoice.scss"
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 import { getVehicleList, getVehicleListSuccess } from "../../../store/Administrator/VehicleRedux/action";
-import { Get_Invoice_Batch_Details, Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
+import { EwayBill_Uploade_Get_API, Get_Invoice_Batch_Details, Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
 import GlobalCustomTable from "../../../GlobalCustomTable";
 import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
@@ -62,6 +64,7 @@ import { getDriverList } from "../../../store/Administrator/DriverRedux/action";
 import { width } from "dom-helpers";
 import { getOrdersMakeInvoiceDataActionSuccess } from "../../../store/Sales/bulkInvoice/action";
 import { hideBtnCss } from "../../../components/Common/ListActionsButtons";
+
 
 const Invoice = (props) => {
 
@@ -100,6 +103,11 @@ const Invoice = (props) => {
 
 
 
+
+
+
+
+
     // for invoice page heder discount functionality useSate ************************************
     const [discountValueAll, setDiscountValueAll] = useState("");
     const [discountTypeAll, setDiscountTypeAll] = useState({ value: 2, label: " % " });
@@ -127,7 +135,8 @@ const Invoice = (props) => {
         commonPartyDropSelect,
         StockEnteryForFirstYear,
         StockEnteryForBackdated,
-        DriverList
+        DriverList,
+        Update_Vehicle_Invoice
     } = useSelector((state) => ({
         postMsg: state.InvoiceReducer.postMsg,
         editData: state.InvoiceReducer.editData,
@@ -138,6 +147,7 @@ const Invoice = (props) => {
         customer: state.CommonAPI_Reducer.customer,
         gobutton_Add: state.InvoiceReducer.gobutton_Add,
         vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
+        Update_Vehicle_Invoice: state.InvoiceReducer.Update_Vehicle_Invoice,
         VehicleNumber: state.VehicleReducer.VehicleList,
         makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
         saveBtnloading: state.InvoiceReducer.saveBtnloading,
@@ -163,7 +173,6 @@ const Invoice = (props) => {
 
     }, []);
 
-    // Common Party Dropdown useEffect
     useEffect(() => {
 
         if (commonPartyDropSelect.value > 0) {
@@ -197,7 +206,6 @@ const Invoice = (props) => {
         }
     }, [commonPartyDropSelect]);
 
-    // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
         let locationPath = location.pathname;
@@ -228,13 +236,10 @@ const Invoice = (props) => {
         };
     }, [userAccess])
 
-
-
-
     useEffect(async () => {
+        debugger
         if (postMsg.Status === true && postMsg.StatusCode === 200) {
 
-            dispatch(invoiceSaveActionSuccess({ Status: false })); // Reset the status to false
             const config = {
                 editId: postMsg.TransactionID.join(', '),////for saveAndDownloadPdfMode
                 ReportType: report.invoice,//for saveAndDownloadPdfMode
@@ -246,26 +251,41 @@ const Invoice = (props) => {
             if (postMsg.saveAndDownloadPdfMode) {
                 dispatch(getpdfReportdata(Invoice_Singel_Get_for_Report_Api, config));
             }
-
             // ***************** Upload E-Invoice if AutoEInvoice and EInvoiceApplicable are both "1"  *****/
-            if (systemSetting.AutoEInvoice === "1" && systemSetting.EInvoiceApplicable === "1") {
+            if (systemSetting?.AutoEInvoice === "1" && systemSetting?.EInvoiceApplicable === "1") {
                 try {
                     dispatch(Uploaded_EInvoiceAction(config));
+
                 } catch (error) { }
             }
 
-            if (_cfunc.IsSweetAndSnacksCompany() && systemSetting.AutoInvoiceSendToSap === "1") {
+            if (_cfunc.IsSweetAndSnacksCompany() && systemSetting?.AutoInvoiceSendToSap === "1") {
                 const jsonBody = JSON.stringify({ InvoiceID: postMsg.TransactionID[0] })
                 const btnId = config.btnId
                 dispatch(InvoiceSendToScm({ jsonBody, btnId }))
             }
 
-            customAlert({
-                Type: 1,
-                Message: postMsg.Message,
-            });
+            if ((systemSetting?.AutoEwayBill === "1" && (Number(systemSetting?.AutoEwayBillminAmount) < (postMsg?.GrandTotal))) && subPageMode === url.INVOICE_1) {
+                let config = { UserID: _cfunc.loginUserID(), Invoice_Identifier_ID: postMsg?.Invoice_Identifier_ID, RowId: postMsg?.TransactionID[0] };
+                const Resp = await EwayBill_Uploade_Get_API(config)
+                if (Resp.Status === true && Resp.StatusCode === 204) {
+                    customAlert({
+                        Type: 11,
+                        Message: JSON.stringify(postMsg.Message),
+                        Title: "Applicable for Auto E-wayBill.",
+                        TitleMessage: JSON.stringify(Resp.Message),
+                        ActionButton: "OK",
+                        Icon: "mdi mdi-check-all",
+                        color: "success",
+                    });
+                }
+            } else {
+                customAlert({
+                    Type: 1,
+                    Message: JSON.stringify(postMsg.Message),
+                });
+            }
 
-            // Redirect to appropriate page based on subPageMode
             if (subPageMode === url.INVOICE_1) {
                 history.push({ pathname: url.INVOICE_LIST_1, updatedRowBlinkId: postMsg.TransactionID.join(', ') });
             } else if (subPageMode === url.IB_INVOICE) {
@@ -304,6 +324,8 @@ const Invoice = (props) => {
         }
     }, [pageField])
 
+
+
     useEffect(() => {
 
         if (makeIBInvoice.Status === true && makeIBInvoice.StatusCode === 200) {
@@ -319,7 +341,6 @@ const Invoice = (props) => {
     }, [makeIBInvoice]);
 
     useEffect(() => {
-
         if (gobutton_Add.Status === true && gobutton_Add.StatusCode === 200) {
 
             setState((i) => {
@@ -845,7 +866,7 @@ const Invoice = (props) => {
             classes: () => "invoice-discount-row",
             formatter: (cellContent, index1, key, formatExtraData) => {
                 let { tableList } = formatExtraData;
-                debugger
+
                 if (!index1.DiscountType) { index1.DiscountType = discountTypeAll.value }
 
                 const defaultDiscountTypelabel =
@@ -1131,6 +1152,19 @@ const Invoice = (props) => {
         try {
             let jsonBody;  //json body decleration 
             if (subPageMode === url.INVOICE_1) {
+
+                if ((systemSetting?.AutoEwayBill === "1" && (Number(systemSetting?.AutoEwayBillminAmount) < (Number(calcalateGrandTotal?.sumOfGrandTotal)))) && values.VehicleNo === "") {
+                    customAlert({
+                        Type: 11,
+                        Message: "",
+                        Title: "Applicable for Auto E-way Bill",
+                        TitleMessage: `E-Way Bill is mandatory for invoices above ₹${systemSetting?.AutoEwayBillminAmount}. Please select a Vehicle Number to proceed.`,
+                        ActionButton: "OK",
+                        Icon: "mdi mdi-alert-circle-outline",
+                        color: "info",
+                    });
+                    return
+                }
                 const body = { InvoiceData: [{ ...for_common_json(), ...forInvoice_1_json() }] }
                 jsonBody = JSON.stringify(body);
             } else if (subPageMode === url.IB_INVOICE) {
@@ -1153,6 +1187,8 @@ const Invoice = (props) => {
 
         } catch (e) { _cfunc.CommonConsole("invoice save Handler", e) }
     }
+
+
 
     if (!(userPageAccessState === '')) {
         return (
@@ -1318,6 +1354,7 @@ const Invoice = (props) => {
                             </SaveButtonDraggable>
                         }
                     </form>
+
                 </div >
 
             </React.Fragment >
