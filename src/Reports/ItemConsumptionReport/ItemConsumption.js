@@ -6,7 +6,7 @@ import { C_Button } from "../../components/Common/CommonButton";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, Get_Items_Drop_Down, getpdfReportdataSuccess, getUserList } from "../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, Get_Items_Drop_Down, getpdfReportdataSuccess,  } from "../../store/actions";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
@@ -14,7 +14,6 @@ import GlobalCustomTable from "../../GlobalCustomTable";
 import C_Report from "../../components/Common/C_Report";
 import * as report from '../ReportIndex'
 import { allLabelWithBlank, allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
-import { CashierName_Api } from "../../helpers/backend_helper";
 import { ItemConsumptionReport_GoButton_API, ItemConsumptionReport_GoButton_API_Success } from "../../store/Report/ItemConsumptionReportRedux/action";
 import { getCommonPartyDrodownOptionAction } from "../../store/Utilites/PartyDrodown/action";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
@@ -30,14 +29,13 @@ const ItemConsumption = (props) => {
     const [toDate, setToDate] = useState(currentDate_ymd)
     const [Cashier, setCashier] = useState([allLabelWithBlank])
     const [PartyDropdown, setPartyDropdown] = useState(allLabelWithZero)
-    const [CashierOption, setCashierOption] = useState([])
+  
     const [Item, setItem] = useState("");
 
     const [userPageAccessState, setUserAccState] = useState('');
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
-    const IsMannagementParty = !_cfunc.loginUserIsFranchisesRole() && _cfunc.loginIsSCMParty();
-
+  
 
     const {
         userAccess,
@@ -45,7 +43,7 @@ const ItemConsumption = (props) => {
         GoBtnLoading,
         pageField,
         ItemDropDown,
-        partyDropdownLoading,
+      
         ItemDropDownloading,
         Party
     } = useSelector((state) => ({
@@ -59,8 +57,8 @@ const ItemConsumption = (props) => {
 
     }));
 
-    const { Data = {} } = GoButtonData
-    debugger
+    const { Data = [] } = GoButtonData;
+   
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.ITEM_CONSUMPTION_REPORT));
@@ -108,7 +106,7 @@ const ItemConsumption = (props) => {
     }, []);
 
     useEffect(() => {
-        debugger
+       debugger
         if (GoButtonData.goBtnMode === "downloadExcel") {
             ExcelReportComponent({      // Download CSV
                 pageField,
@@ -131,22 +129,12 @@ const ItemConsumption = (props) => {
 
     }, [GoButtonData, pageField]);
 
+   
 
 
 
 
-
-    const Party_Option = useMemo(() => {
-        let options = [];
-
-        options = Party.map((i) => ({
-            value: i.id,
-            label: i.Name,
-            GSTIN: i.GSTIN,
-        }));
-        options.unshift(allLabelWithZero);
-        return options;
-    }, [Party]);
+  
 
 
     function goButtonHandler(goBtnMode) {
@@ -181,26 +169,12 @@ const ItemConsumption = (props) => {
         setToDate(date);
         dispatch(ItemConsumptionReport_GoButton_API_Success([]));
     }
-    const CashierOnchange = (e) => {
-        if (e.length === 0) {
-            e = [allLabelWithBlank]
-        } else {
-            e = e.filter(i => !(i.value === ''))
-        }
-        setCashier(e)
-        dispatch(ItemConsumptionReport_GoButton_API_Success([]));
+   
 
-    }
-
-    const PartyOnchange = (e) => {
-        setPartyDropdown(e)
-        setCashier([allLabelWithBlank]);
-        dispatch(ItemConsumptionReport_GoButton_API_Success([]));
-
-    }
+   
 
 
-
+    
     // Cashier_Summary_Report
 
     return (
@@ -321,7 +295,7 @@ const ItemConsumption = (props) => {
                 <div className="mb-1 table-responsive table">
                     <GlobalCustomTable
                         keyField={"id"}
-                        data={GoButtonData.goBtnMode === "showOnTable" ? Data?.FinishproductDetails : []}
+                        data={GoButtonData.goBtnMode === "showOnTable" ? Data?.FinishproductDetails || [] : []}
                         columns={tableColumns}
                         id="table_Arrow"
                         noDataIndication={
