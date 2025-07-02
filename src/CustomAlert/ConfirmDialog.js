@@ -43,6 +43,8 @@ const ConfirmDialog = () => {
                 break;
             case 10: component = <AlertMsgArray btnRef={buttonRef} />
                 break;
+            case 11: component = <AlertEwayBill btnRef={buttonRef} />
+                break;
             default: return null;
         }
     }
@@ -274,6 +276,47 @@ const AlertMsgArray = ({ btnRef }) => {
 
 
 
+const AlertEwayBill = ({ btnRef }) => {
+
+    const { onCancel, confirmState } = useConfirm();
+    const { Status = false, Message = " Warning Error", } = confirmState;
+
+    const outerNo = (e, no) => {
+        if (no === 2) {
+            e.stopPropagation();
+            return;
+        } else {
+            e.stopPropagation();
+            onCancel();
+        };
+    };
+
+    const innerOk = (e) => {
+        e.stopPropagation();
+        onCancel();
+    };
+
+    return (
+
+
+
+        <div className="modal fade show transparent1" role="dialog" onClick={(e) => outerNo(e, 1)} tabindex="-1" style={{ display: Status ? "block" : "none" }}>
+            <div className="modal-dialog modal-dialog-centered" role="document">
+                <div className="modal-content alertbody" onClick={(e) => outerNo(e, 2)}>
+                    <div className={`px-6 mb-0 text-center alert alert-${confirmState.color} alert-dismissible fade show`} role="alert"><button type="button"
+                        className="close" aria-label="Close" onClick={outerNo}><span aria-hidden="true">×</span></button><i
+                            className={`${confirmState.Icon} d-block display-6 mt-2 mb-3 text-${confirmState.color}`}></i>
+                        <EWayBillMessageFun msg={Message} />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    )
+};
+
+
 
 
 
@@ -306,7 +349,9 @@ const AlertDanger = ({ btnRef }) => {
                             aria-hidden="true">×</span></button><i
                                 className="mdi mdi-block-helper d-block display-4 mt-2 mb-3  text-danger"></i>
                         <MessageFun msg={Message} />
+
                         <button type="button" ref={btnRef} className="btn btn-primary" onClick={innerOk}>OK</button>
+
                     </div>
                 </div>
             </div>
@@ -571,6 +616,55 @@ const MessageArrFun = ({ msg }) => {
 };
 
 
+
+
+const EWayBillMessageFun = ({ msg }) => {
+
+    const { onConfirm, confirmState } = useConfirm();
+
+    const renderDynamicMessages = () => {
+        let msgArr = [];
+
+        msg.forEach((item) => {
+            Object.keys(item).forEach((key) => {
+                if (item[key] !== null) {
+                    msgArr.push(`${key}: ${item[key]}`);
+                }
+            });
+        });
+
+        return msgArr.map((text, index) => (
+            <div key={index} style={{ textAlign: 'left' }}>
+                <h5>{text}</h5>
+            </div>
+        ));
+    };
+
+    const innerYes = (e) => {
+        e.stopPropagation();
+        onConfirm();
+    };
+
+    return (
+        <div>
+            {Array.isArray(msg) ? renderDynamicMessages() : (
+                <div style={{ textAlign: 'center' }}>
+                    <h5>{msg}</h5>
+                </div>
+            )}
+            <div style={{ textAlign: 'center', color: "#4848ff", marginBottom: '10px' }}>
+                <p><strong>{confirmState.Title}</strong></p>
+            </div>
+            <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+                <p><strong> {confirmState.TitleMessage}</strong></p>
+            </div>
+
+            {confirmState.ActionButton && <div style={{ textAlign: 'center', marginTop: '15px' }}>
+                <button onClick={innerYes} className="btn btn-primary">{confirmState.ActionButton}</button>
+            </div>}
+        </div>
+    );
+};
 
 
 

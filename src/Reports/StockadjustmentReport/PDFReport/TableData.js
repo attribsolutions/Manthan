@@ -5,9 +5,9 @@ export const columns = [
     "Stock Date",
     "Party Name",
     "Item Name",
-    "Before Adjustment",
+    "Prev. Quantity",
+    "UOM",
     "Difference",
-    "Quantity",
     "Unit Name",
 ];
 
@@ -29,8 +29,8 @@ export const Rows = (data) => {
             `${element.PartyName}`,
             `${element.ItemName}`,
             `${element.BeforeAdjustment}`,
-            `${element.Difference}`,
             `${element.Quantity}`,
+            `${element.Difference}`,
             `${element.UnitName}`,
         ];
 
@@ -42,8 +42,8 @@ export const Rows = (data) => {
                 "",
                 "",
                 "",
-                "",
                 `${(TotalQuantity).toFixed(2)}`,
+                "",
                 "",
             ];
         };
@@ -57,7 +57,6 @@ export const Rows = (data) => {
 
 export const ReportHederRows = (data) => {
 
-    const UserDetails = loginUserDetails()
     var reportArray = [
 
     ]

@@ -10,7 +10,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useHistory } from "react-router-dom";
 import FeatherIcon from "feather-icons-react";
-
+import Flatpickr from "react-flatpickr";
 import { orderCalculateFunc } from "../../Purchase/Order/OrderPageCalulation";
 import { C_Button, SaveButton } from "../../../components/Common/CommonButton";
 import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
@@ -103,6 +103,11 @@ const GRN_ADD_1 = (props) => {
     const [roundoffAmount, setRoundoffAmount] = useState(0);
 
     const [invoiceNo, setInvoiceNo] = useState('');
+
+    const [PostingDate, setPostingDate] = useState(currentDate_ymd);
+
+
+
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [EditData, setEditData] = useState({});
     const [ratePostJsonBody, setRatePostJsonBody] = useState([]);
@@ -1490,20 +1495,12 @@ const GRN_ADD_1 = (props) => {
                 })
 
                 if (isfound.length > 0) {
-                    let dubli = isfound.filter(ele => {
-                        let condition = ((i.Rate === ele.Rate) && (i.BatchDate === ele.BatchDate) && (i.BatchCode === ele.BatchCode) && (i.Unit === ele.Unit))
-                        return condition
-                    })
-
                     if ((Number(i.Quantity) > 0)) {
-
                         // if (dubli.length === 0) {
                         GRNItemArray.push(arr)
                         // } else {
                         //     isvalidMsg.push(`${i.ItemName}:  This Item Is Dublicate...`)
                         // }
-
-
 
                     }
                 } else if ((Number(i.Quantity) > 0)) {
@@ -1638,6 +1635,7 @@ const GRN_ADD_1 = (props) => {
             const jsonBody = JSON.stringify({
                 RoundOffAmount: roundoffAmount,
                 Comment: comment,
+                PostingDate: PostingDate,
                 GRNDate: grnDate,
                 FullGRNNumber: grnDetail?.FullGRNNumber,  //Only for Accounting GRN Mode
                 IsSave: (subPageMode === url.ACCOUNTING_GRN) ? 0 : 1,
@@ -1745,7 +1743,7 @@ const GRN_ADD_1 = (props) => {
                                         />
                                     </Col>
                                 </FormGroup>
-                                <FormGroup className="row  " >
+                                <FormGroup className="row" >
                                     <Label className="col-md-4 p-2"
                                         style={{ width: "130px" }}>{"Invoice No"}</Label>
                                     <Col md="7">
@@ -1771,7 +1769,6 @@ const GRN_ADD_1 = (props) => {
                                     </Col>
                                 </FormGroup>
                                 }
-
 
                                 {(subPageMode === url.ACCOUNTING_GRN) ? null : <FormGroup className="mb-2 row  " >
                                     <Label className="col-md-4 p-2"
@@ -1843,13 +1840,29 @@ const GRN_ADD_1 = (props) => {
                                         }
                                     </Col>
                                 </FormGroup>}
-
                             </Col>
 
 
                             {subPageMode === url.ACCOUNTING_GRN ? <Col sm={4}>
 
-                                <FormGroup className="row mt-2 " >
+                                {subPageMode === url.ACCOUNTING_GRN && <FormGroup className="row mt-2" >
+                                    <Label className="col-md-4 p-2"
+                                        style={{ width: "130px" }}>{"Posting Date"}</Label>
+                                    <Col md="7">
+                                        <C_DatePicker
+                                            value={(PostingDate)}
+                                            options={{
+                                                maxDate: "",
+                                                altInput: true,
+                                                altFormat: "d-m-Y",
+                                                dateFormat: "Y-m-d",
+                                            }}
+                                            onChange={(e, date) => { setPostingDate(date) }}
+                                        />
+                                    </Col>
+                                </FormGroup>}
+
+                                <FormGroup className="row  " >
                                     <Label className="col-md-4 p-2"
                                         style={{ width: "130px" }}>{"Round off Total"}</Label>
                                     <Col md="7">
@@ -1911,8 +1924,6 @@ const GRN_ADD_1 = (props) => {
                                         }
                                     </Col>
                                 </FormGroup>
-
-
                                 }
 
                             </Col> :
