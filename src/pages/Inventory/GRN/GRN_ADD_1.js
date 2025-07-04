@@ -998,7 +998,7 @@ const GRN_ADD_1 = (props) => {
 
                 return (
                     <>
-                        <div className="div-1 mb-1" style={{ minWidth: "150px" }}>
+                        <div className="div-1 mb-1" style={{ minWidth: "70px" }}>
                             <div>
                                 <Select
                                     classNamePrefix="select2-selection"
@@ -1010,7 +1010,7 @@ const GRN_ADD_1 = (props) => {
                                 ></Select>
                             </div>
                         </div>
-                        <div className="div-1" style={{ minWidth: "150px" }}>
+                        <div className="div-1" style={{ minWidth: "70px" }}>
                             <Input
                                 type="text"
                                 className="input"
