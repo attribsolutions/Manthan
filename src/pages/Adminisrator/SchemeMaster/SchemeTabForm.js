@@ -1,8 +1,7 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState, } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useState, } from "react";
 import {
     Card,
     CardBody,
-    CardHeader,
     Col,
     Container,
     FormGroup,
@@ -23,17 +22,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
-    formValid,
     initialFiledFunc,
     onChangeDate,
     onChangeSelect,
     onChangeText,
     resetFunction
 } from "../../../components/Common/validationFunction";
-import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
-    btnIsDissablefunc,
     metaTagLabel,
 } from "../../../components/Common/CommonFunction";
 import * as pageId from "../../../routes/allPageID";
@@ -41,14 +37,13 @@ import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_DatePicker } from "../../../CustomValidateForm";
-import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { getCommonPartyDrodownOptionAction } from "../../../store/Utilites/PartyDrodown/action";
 import { getSchemeTypelist } from "../../../store/Administrator/SchemeRedux/action";
 
 
 
-const SchemeMaster = forwardRef((props, ref) => {
+const SchemeMaster = forwardRef(({ props }, ref) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -71,22 +66,22 @@ const SchemeMaster = forwardRef((props, ref) => {
         OverLappingScheme: null,
         SchemeDetails: "",
         SchemeValueUpto: "",
-        Party: ""
+        SchemeQuantity: "",
+        Party: "",
+        SchemeId: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
+
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
-    const [activeTab, setactiveTab] = useState("1")
+
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
         pageField,
-        saveBtnloading,
-        ItemDropDown,
-        Party,
         SchemeType,
         userAccess } = useSelector((state) => ({
             postMsg: state.SPos_MachineType_Reducer.postMsg,
@@ -119,7 +114,7 @@ const SchemeMaster = forwardRef((props, ref) => {
     const values = { ...state.values }
 
     const { isError } = state;
-    debugger
+
     const { fieldLabel } = state;
 
     // userAccess useEffect
@@ -160,17 +155,6 @@ const SchemeMaster = forwardRef((props, ref) => {
 
 
 
-    const Party_Option = Party.map(i => ({
-        value: i.id,
-        label: i.Name,
-        PartyType: i.PartyType
-    })).filter(index => index.PartyType === "Franchises");
-
-    const toggle1 = tab => {
-        if (activeTab !== tab) {
-            setactiveTab(tab)
-        }
-    }
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time
     useEffect(() => {
@@ -188,12 +172,12 @@ const SchemeMaster = forwardRef((props, ref) => {
             }
 
             if (hasEditVal) {
-                const { SchemeName, SchemeValue, ValueIn, FromPeriod,
-                    ToPeriod, ItemDetails, VoucherLimit, QRPrefix, IsActive,
+                const { SchemeName, SchemeValue, ValueIn, FromPeriod, SchemeId,
+                    ToPeriod, ItemDetails, VoucherLimit, QrPrefix, IsActive,
                     SchemeTypeID, BillAbove, Message, OverLappingScheme, SchemeTypeName,
-                    SchemeDetails, SchemeValueUpto, PartyDetails
-                } = hasEditVal
-
+                    SchemeDetails, SchemeValueUpto, PartyDetails, UsageTime, UsageType, SchemeQuantity
+                } = hasEditVal[0]
+                debugger
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.ToPeriod.valid = true;
@@ -209,6 +193,10 @@ const SchemeMaster = forwardRef((props, ref) => {
                 hasValid.SchemeValueUpto.valid = true;
                 hasValid.OverLappingScheme.valid = true;
                 hasValid.SchemeDetails.valid = true;
+                hasValid.SchemeQuantity.valid = true;
+
+
+
                 values.ToPeriod = ToPeriod
                 values.IsActive = IsActive
                 values.Item = ItemDetails.map(i => ({
@@ -220,14 +208,18 @@ const SchemeMaster = forwardRef((props, ref) => {
                     value: i.PartyID
                 }));
                 values.SchemeValue = SchemeValue
+                values.SchemeId = SchemeId
                 values.ValueIn = ValueIn
-                values.QRPrefix = QRPrefix
+                values.QRPrefix = QrPrefix
                 values.SchemeName = SchemeName
                 values.BillAbove = BillAbove
+                values.UsageTime = UsageTime
+                values.UsageType = UsageType
                 values.VoucherLimit = VoucherLimit
                 values.IsActive = IsActive
                 values.FromPeriod = FromPeriod
                 values.Message = Message
+                values.SchemeQuantity = SchemeQuantity
                 values.SchemeTypeID = {
                     label: SchemeTypeName,
                     value: SchemeTypeID
@@ -235,42 +227,14 @@ const SchemeMaster = forwardRef((props, ref) => {
                 values.SchemeValueUpto = SchemeValueUpto
                 values.OverLappingScheme = OverLappingScheme
                 values.SchemeDetails = SchemeDetails
+
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.RoleMaster))
             }
         }
     }, [location]);
 
-    useEffect(async () => {
 
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-
-            setState(() => resetFunction(fileds, state)) // Clear form values 
-
-            if (pageMode === "other") {
-                customAlert({
-                    Type: 1,
-                    Message: postMsg.Message,
-                })
-            }
-            else {
-                let isPermission = await customAlert({
-                    Type: 1,
-                    Status: true,
-                    Message: postMsg.Message,
-                })
-                if (isPermission) {
-                    history.push({ pathname: url.SWEET_POS_MACHINE_LIST })
-                }
-            }
-        }
-        else if (postMsg.Status === true) {
-            customAlert({
-                Type: 4,
-                Message: JSON.stringify(postMsg.Message),
-            })
-        }
-    }, [postMsg])
 
     useEffect(() => {
 
@@ -463,14 +427,13 @@ const SchemeMaster = forwardRef((props, ref) => {
                                                             value={values.SchemeTypeID}
                                                             isSearchable={true}
                                                             // className="react-dropdown"
-                                                            className={isError.SchemeDetails.length > 0 ? "is-invalid" : "react-dropdown"}
+                                                            className={isError.SchemeTypeID.length > 0 ? "is-invalid" : "react-dropdown"}
                                                             classNamePrefix="dropdown"
                                                             styles={{
                                                                 menu: provided => ({ ...provided, zIndex: 2 })
                                                             }}
                                                             options={SchemeType_Options}
                                                             onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-
                                                         />
                                                         {isError.SchemeTypeID.length > 0 && (
                                                             <span className="invalid-feedback">{isError.SchemeTypeID}</span>
@@ -644,7 +607,27 @@ const SchemeMaster = forwardRef((props, ref) => {
 
 
                                                 <Row className="mt-1">
-                                                    <FormGroup className="mb-2 col col-11 ">
+                                                    <FormGroup className="mb-2 col col-sm-2">
+                                                        <Label htmlFor="validationCustom01">{fieldLabel.SchemeQuantity} </Label>
+                                                        <Input
+                                                            name="SchemeQuantity"
+                                                            id="SchemeQuantity"
+                                                            value={values.SchemeQuantity}
+                                                            type="text"
+                                                            className={isError.SchemeQuantity.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                            placeholder="Please Enter Scheme Value Upto"
+                                                            autoComplete='off'
+                                                            onChange={(event) => {
+                                                                onChangeText({ event, state, setState })
+
+                                                            }}
+                                                        />
+                                                        {isError.SchemeQuantity.length > 0 && (
+                                                            <span className="invalid-feedback">{isError.SchemeQuantity}</span>
+                                                        )}
+                                                    </FormGroup>
+                                                    <Col md="1">  </Col>
+                                                    <FormGroup className="mb-2 col col-8">
                                                         <Label htmlFor="validationCustom01">{fieldLabel.SchemeDetails} </Label>
                                                         <Input
                                                             name="SchemeDetails"

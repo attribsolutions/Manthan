@@ -1,14 +1,22 @@
-import { forwardRef, useImperativeHandle, useState } from 'react'
+import { forwardRef, useImperativeHandle, useState, useEffect } from 'react'
 import { Card, CardBody, Col, Label, Button, Input } from 'reactstrap'
 import Select from "react-select";
 import { useSelector } from 'react-redux';
-import BootstrapTable from 'react-bootstrap-table-next';
-import GlobalCustomTable from '../../../GlobalCustomTable';
 
-const SchemePartyTabForm = forwardRef((props, ref) => {
+import GlobalCustomTable from '../../../GlobalCustomTable';
+import { useHistory } from "react-router-dom";
+import { mode } from '../../../routes';
+const SchemePartyTabForm = forwardRef(({ props }, ref) => {
+
+    const history = useHistory();
+    const { location } = history
+
+    const hasShowloction = location.hasOwnProperty("rowData")
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
+
     const [selectedParty, setSelectedParty] = useState(null);
     const [tableData, setTableData] = useState([]);
-    const [update, forceUpdate] = useState(0);
+
 
     const { PartyDropDown } = useSelector((state) => ({
         PartyDropDown: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
@@ -23,6 +31,36 @@ const SchemePartyTabForm = forwardRef((props, ref) => {
         getValue: () => tableData,
         updateValue: (newVal) => setTableData(newVal)
     }));
+
+
+
+    useEffect(() => {
+
+        if ((hasShowloction || hasShowModal)) {
+
+            let hasEditVal = null
+            if (hasShowloction) {
+
+                hasEditVal = location.rowData
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+            }
+            if (hasEditVal) {
+                debugger
+                const { PartyDetails
+                } = hasEditVal[0]
+                setTableData(PartyDetails.map(i => ({
+                    label: i.PartyName,
+                    value: i.PartyID
+                })))
+
+            }
+        }
+    }, [location]);
+
+
+
 
     const handleAdd = () => {
         if (selectedParty && !tableData.some(i => i.value === selectedParty.value)) {
@@ -88,20 +126,20 @@ const SchemePartyTabForm = forwardRef((props, ref) => {
                 </form>
 
                 <hr />
+                <div style={{ height: "376px", overflowY: "auto" }}>
+                    <GlobalCustomTable
+                        keyField={"id"}
+                        data={tableData}
+                        columns={columns}
+                        id="table_Arrow"
+                        noDataIndication={
+                            <div className="text-danger text-center ">
+                                Partys Not available
+                            </div>
+                        }
 
-                <GlobalCustomTable
-                    keyField={"id"}
-                    data={tableData}
-                    columns={columns}
-                    id="table_Arrow"
-                    noDataIndication={
-                        <div className="text-danger text-center ">
-                            Partys Not available
-                        </div>
-                    }
-
-                />
-
+                    />
+                </div>
             </CardBody>
         </Card>
     )

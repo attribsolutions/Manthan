@@ -576,9 +576,8 @@ export const Get_ledger = () => get(url.LEDGER) // get api
 
 
 
+export const update_Scheme_List_Api = ({ jsonBody, updateId }) => put(`${url.SCHEME}/${updateId}`, jsonBody)// update api
 
-
-export const update_Scheme_List_Api = (data) => post(url.SCHEME, data)//Loading Sheet go button API For Master Page
 export const save_Scheme_API = ({ jsonBody }) => post(url.SCHEME, jsonBody)// Loading Sheet Post API For Master Page
 export const Get_Scheme_List = () => get(url.SCHEME_LIST) // get api
 export const del_Scheme_List_API = ({ deleteId }) => del(`${url.SCHEME}/${deleteId}`)// Loading Sheet Post API For Master Page

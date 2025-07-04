@@ -1,13 +1,22 @@
-import { forwardRef, useImperativeHandle, useState } from 'react'
+import { forwardRef, useImperativeHandle, useState, useEffect } from 'react'
 import { Card, CardBody, Col, Label, Button, Input } from 'reactstrap'
 import Select from "react-select";
 import { useSelector } from 'react-redux';
-import BootstrapTable from 'react-bootstrap-table-next';
+import { useHistory } from "react-router-dom";
 import GlobalCustomTable from '../../../GlobalCustomTable';
+import { mode } from '../../../routes';
 
-const SchemeItemTabForm = forwardRef((props, ref) => {
+const SchemeItemTabForm = forwardRef(({ props }, ref) => {
+
+    const history = useHistory();
+    const { location } = history
+    const hasShowloction = location.hasOwnProperty("rowData")
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+
     const [selectedItem, setSelectedItem] = useState(null);
     const [tableData, setTableData] = useState([]);
+    debugger
     const [update, forceUpdate] = useState(0);
 
     const { ItemDropDown } = useSelector((state) => ({
@@ -24,12 +33,39 @@ const SchemeItemTabForm = forwardRef((props, ref) => {
         updateValue: (newVal) => setTableData(newVal)
     }));
 
+
+    useEffect(() => {
+
+        if ((hasShowloction || hasShowModal)) {
+
+            let hasEditVal = null
+            if (hasShowloction) {
+
+                hasEditVal = location.rowData
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+            }
+            if (hasEditVal) {
+                debugger
+                const { ItemDetails
+                } = hasEditVal[0]
+                setTableData(ItemDetails.map(i => ({
+                    ...i,
+                    label: i.ItemName,
+                    value: i.ItemID
+                })))
+
+            }
+        }
+    }, [location]);
+
     const handleAdd = () => {
         if (selectedItem && !tableData.some(i => i.value === selectedItem.value)) {
             const newItem = {
                 ...selectedItem,
                 isDefault: false,
-                ItemType: {},
+                TypeForItem: {},
                 DiscountType: "", // Default value for DiscountType
 
             };
@@ -49,28 +85,58 @@ const SchemeItemTabForm = forwardRef((props, ref) => {
             text: 'Item Name',
         },
         {
-            dataField: 'label',
+            dataField: 'TypeForItem',
             text: 'Type For Item',
             formatExtraData: update,
+            formatter: (_, row) => {
+                const Options = [{ value: 1, label: 'Aplicable' }, { value: 2, label: 'Not Aplicable' }, { value: 3, label: 'Effective' }]
+                return (
+                    <Select
+                        id="Item"
+                        name="Item"
+                        value={Options.find(opt => opt.value === row.TypeForItem)}
+                        isSearchable={true}
+                        className="react-dropdown  mt-2"
+                        classNamePrefix="dropdown"
+                        styles={{
+                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                        }}
+                        options={Options}
+                        onChange={(e) => {
+                            debugger
+                            row.TypeForItem = e.value;
+                            forceUpdate(n => n + 1);
+                        }}
+                    />
+                )
+            },
+        },
+
+        {
+            dataField: '',
+            text: 'Quantity',
+            formatExtraData: update,
+
             formatter: (_, row) => (
-                <Select
-                    id="Item"
-                    name="Item"
-                    value={row.ItemType}
-                    isSearchable={true}
-                    className="react-dropdown  mt-2"
-                    classNamePrefix="dropdown"
-                    styles={{
-                        menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                    }}
-                    options={[{ value: 1, label: 'Aplicable' }, { value: 2, label: 'Mot Aplicable' }, { value: 3, label: 'Effective' }]}
-                    onChange={(e) => {
-                        row.ItemType = e;
+
+                <Input
+                    name="Quantity"
+                    id={`Quantity`}
+                    value={row.Quantity || ""}
+                    type="text"
+                    placeholder="Enter Value"
+                    autoComplete="off"
+                    className="font-size-12 mt-2"
+                    style={{ maxWidth: "150px" }}
+                    onChange={(event) => {
+                        row.Quantity = event.target.value;
                         forceUpdate(n => n + 1);
                     }}
                 />
+
             ),
         },
+
         {
             dataField: 'label',
             text: 'Discount',
@@ -85,7 +151,6 @@ const SchemeItemTabForm = forwardRef((props, ref) => {
                         type="text"
                         placeholder="Enter Value"
                         autoComplete="off"
-
                         className="font-size-12"
                         style={{ maxWidth: "150px" }}
                         onChange={(event) => {
@@ -124,11 +189,7 @@ const SchemeItemTabForm = forwardRef((props, ref) => {
                             %
                         </label>
                     </div>
-
-
                 </div>
-
-
             ),
         },
         {
@@ -144,7 +205,7 @@ const SchemeItemTabForm = forwardRef((props, ref) => {
 
     return (
         <Card className="text-black" style={{ marginTop: "3px" }}>
-            <CardBody className="vh-50 text-black" style={{ marginTop: "3px", height: "500px" }} >
+            <CardBody className="text-black" style={{ marginTop: "3px", height: "500px", overflow: "hidden" }}>
                 <form noValidate>
                     <div className="row">
                         <Col md={4}>
@@ -162,7 +223,12 @@ const SchemeItemTabForm = forwardRef((props, ref) => {
                             />
                         </Col>
                         <Col md={2} className="d-flex align-items-end my-xxl-1">
-                            <Button type="button" color="primary" onClick={handleAdd} disabled={!selectedItem}>
+                            <Button
+                                type="button"
+                                color="primary"
+                                onClick={handleAdd}
+                                disabled={!selectedItem}
+                            >
                                 Add
                             </Button>
                         </Col>
@@ -170,20 +236,19 @@ const SchemeItemTabForm = forwardRef((props, ref) => {
                 </form>
 
                 <hr />
-
-                <GlobalCustomTable
-                    keyField={"id"}
-                    data={tableData}
-                    columns={columns}
-                    id="table_Arrow"
-                    noDataIndication={
-                        <div className="text-danger text-center ">
-                            Items Not available
-                        </div>
-                    }
-
-                />
-
+                <div style={{ height: "376px", overflowY: "auto" }}>
+                    <GlobalCustomTable
+                        keyField={"id"}
+                        data={tableData}
+                        columns={columns}
+                        id="table_Arrow"
+                        noDataIndication={
+                            <div className="text-danger text-center">
+                                Items Not available
+                            </div>
+                        }
+                    />
+                </div>
             </CardBody>
         </Card>
     )

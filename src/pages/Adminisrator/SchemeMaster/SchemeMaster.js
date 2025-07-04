@@ -47,12 +47,13 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { getCommonPartyDrodownOptionAction } from "../../../store/Utilites/PartyDrodown/action";
-import { saveSchemeMaster, saveSchemeMaster_Success } from "../../../store/Administrator/SchemeMasterRedux/action";
+import { editSchemeIDSuccess, saveSchemeMaster, saveSchemeMaster_Success, updateSchemeID, updateSchemeIDSuccess } from "../../../store/Administrator/SchemeMasterRedux/action";
 import { getSchemeTypelist } from "../../../store/Administrator/SchemeRedux/action";
 import classnames from "classnames"
 import SchemeTabForm from "./SchemeTabForm";
 import SchemeItemTabForm from "./SchemeItemTabForm";
 import SchemePartyTabForm from "./SchemePartyTabForm";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const SchemeMaster = (props) => {
 
@@ -62,6 +63,8 @@ const SchemeMaster = (props) => {
     const SchemeTabRef = useRef(null);
     const SchemeItemTabRef = useRef(null);
     const SchemePartyTabRef = useRef(null);
+
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
 
     const fileds = {
         SchemeName: "",
@@ -79,7 +82,8 @@ const SchemeMaster = (props) => {
         OverLappingScheme: null,
         SchemeDetails: "",
         SchemeValueUpto: "",
-        Party: ""
+        Party: "",
+        SchemeId: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -111,16 +115,13 @@ const SchemeMaster = (props) => {
         dispatch(getCommonPartyDrodownOptionAction())
         return () => {
             dispatch(saveSchemeMaster_Success({ Status: false }));
+            dispatch(editSchemeIDSuccess({ Status: false }));
+
         }
     }, []);
 
-    const hasShowloction = location.hasOwnProperty("rowData")
+
     const hasShowModal = props.hasOwnProperty(mode.editValue)
-
-    const values = { ...state.values }
-
-    const { isError } = state;
-    const { fieldLabel } = state;
 
     // userAccess useEffect
     useEffect(() => {
@@ -150,6 +151,24 @@ const SchemeMaster = (props) => {
         };
     }, [userAccess])
 
+
+    useEffect(() => {
+
+        if ((hasShowloction || hasShowModal)) {
+
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.rowData
+            }
+            else if (hasShowModal) {
+                setPageMode(props.pageMode)
+                hasEditVal = props.editValue
+            }
+
+        }
+    }, [location]);
+
     const getItemData = () => {
         return SchemeItemTabRef.current.getValue();
     }
@@ -167,74 +186,7 @@ const SchemeMaster = (props) => {
         }
     }
 
-    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time
-    useEffect(() => {
 
-        if ((hasShowloction || hasShowModal)) {
-
-            let hasEditVal = null
-            if (hasShowloction) {
-                setPageMode(location.pageMode)
-                hasEditVal = location.rowData
-            }
-            else if (hasShowModal) {
-                hasEditVal = props.editValue
-                setPageMode(props.pageMode)
-            }
-            debugger
-            if (hasEditVal) {
-                const { SchemeName, SchemeValue, ValueIn, FromPeriod,
-                    ToPeriod, ItemDetails, VoucherLimit, QRPrefix, IsActive,
-                    SchemeTypeID, BillAbove, Message, OverLappingScheme, SchemeTypeName,
-                    SchemeDetails, SchemeValueUpto, PartyDetails
-                } = hasEditVal[0]
-                debugger
-                const { values, fieldLabel, hasValid, required, isError } = { ...state }
-
-                hasValid.ToPeriod.valid = true;
-                hasValid.IsActive.valid = true;
-                hasValid.SchemeValue.valid = true;
-                hasValid.ValueIn.valid = true;
-                hasValid.SchemeName.valid = true;
-                hasValid.QRPrefix.valid = true;
-                hasValid.BillAbove.valid = true;
-                hasValid.VoucherLimit.valid = true;
-                hasValid.FromPeriod.valid = true;
-                hasValid.SchemeTypeID.valid = true;
-                hasValid.SchemeValueUpto.valid = true;
-                hasValid.OverLappingScheme.valid = true;
-                hasValid.SchemeDetails.valid = true;
-                values.ToPeriod = ToPeriod
-                values.IsActive = IsActive
-                values.Item = ItemDetails.map(i => ({
-                    label: i.ItemName,
-                    value: i.ItemID
-                }));
-                values.Party = PartyDetails.map(i => ({
-                    label: i.PartyName,
-                    value: i.PartyID
-                }));
-                values.SchemeValue = SchemeValue
-                values.ValueIn = ValueIn
-                values.QRPrefix = QRPrefix
-                values.SchemeName = SchemeName
-                values.BillAbove = BillAbove
-                values.VoucherLimit = VoucherLimit
-                values.IsActive = IsActive
-                values.FromPeriod = FromPeriod
-                values.Message = Message
-                values.SchemeTypeID = {
-                    label: SchemeTypeName,
-                    value: SchemeTypeID
-                }
-                values.SchemeValueUpto = SchemeValueUpto
-                values.OverLappingScheme = OverLappingScheme
-                values.SchemeDetails = SchemeDetails
-                setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(Breadcrumb_inputName(hasEditVal.RoleMaster))
-            }
-        }
-    }, [location]);
 
     useEffect(async () => {
 
@@ -268,6 +220,11 @@ const SchemeMaster = (props) => {
         }
     }, [postMsg])
 
+
+
+
+
+
     useEffect(() => {
 
         if (pageField) {
@@ -276,7 +233,7 @@ const SchemeMaster = (props) => {
         }
     }, [pageField])
 
-    const SaveHandler = async (event) => {
+    const SaveHandler = (event) => {
         event.preventDefault();
         const btnId = event.target.id
         const SchemeData = getSchemeData()
@@ -284,14 +241,31 @@ const SchemeMaster = (props) => {
         const PartyData = getPartyData()
         const setSchemeData = SchemeTabRef.current.updateValue;
 
-        // const setItemData = SchemeItemTabRef.current.updateValue;
 
+        if (PartyData.length > 0 && ItemData.length > 0) {
+            SchemeData.hasValid.Party.valid = true
+            SchemeData.hasValid.Item.valid = true
+        }
+        if (PartyData.length === 0) {
+            customAlert({
+                Type: 4,
+                Message: alertMessages.selectParty,
+            })
+            return
+        }
 
-
+        if (ItemData.length === 0) {
+            customAlert({
+                Type: 4,
+                Message: alertMessages.selectItemName,
+            })
+            return
+        }
+        debugger
         try {
             if (formValid(SchemeData, setSchemeData)) {
                 btnIsDissablefunc({ btnId, state: true })
-                debugger
+
                 const jsonBody = JSON.stringify({
                     SchemeName: SchemeData.values.SchemeName,
                     SchemeValue: SchemeData.values.SchemeValue,
@@ -299,11 +273,13 @@ const SchemeMaster = (props) => {
                     FromPeriod: SchemeData.values.FromPeriod,
                     ToPeriod: SchemeData.values.ToPeriod,
                     FreeItemID: null,
+                    OverLappingScheme: SchemeData.values.OverLappingScheme,
                     VoucherLimit: SchemeData.values.VoucherLimit,
                     SchemeValueUpto: SchemeData.values.SchemeValueUpto,
                     BillAbove: SchemeData.values.BillAbove,
                     QRPrefix: SchemeData.values.QRPrefix,
                     IsActive: SchemeData.values.IsActive,
+                    SchemeQuantity: SchemeData.values.SchemeQuantity,
                     SchemeTypeID: SchemeData.values.SchemeTypeID.value,
                     BillEffect: 1,
                     PartyDetails: PartyData.map(i => ({
@@ -314,11 +290,19 @@ const SchemeMaster = (props) => {
                         Item: i.value,    // ItemID           
                         ItemName: i.label, // ItemName
                         DiscountType: i.DiscountType, // DiscountType
-                        TypeForItem: i.ItemType.value, // ItemType
+                        TypeForItem: i.TypeForItem, // TypeForItem
                         DiscountValue: i.DiscountValue, // DiscountValue
+                        Quantity: i.Quantity || 0,
                     })),
                 });
-                dispatch(saveSchemeMaster({ jsonBody }));
+
+                if (pageMode == mode.edit) {
+                    dispatch(updateSchemeID({ jsonBody, updateId: SchemeData.values.SchemeId, }));
+                } else {
+                    dispatch(saveSchemeMaster({ jsonBody }));
+                }
+
+
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
@@ -400,30 +384,25 @@ const SchemeMaster = (props) => {
 
                                     <TabContent activeTab={activeTab} className="p-3 text-muted">
                                         <TabPane tabId="1">
-                                            <SchemeTabForm ref={SchemeTabRef} />
+                                            <SchemeTabForm ref={SchemeTabRef} props={props} />
                                         </TabPane>
 
                                         <TabPane tabId="2">
-                                            <SchemeItemTabForm ref={SchemeItemTabRef} />
+                                            <SchemeItemTabForm ref={SchemeItemTabRef} props={props} />
                                         </TabPane>
 
-
-
                                         <TabPane tabId="3">
-                                            <SchemePartyTabForm ref={SchemePartyTabRef} />
+                                            <SchemePartyTabForm ref={SchemePartyTabRef} props={props} />
                                         </TabPane>
 
                                     </TabContent>
 
+                                    <SaveButton pageMode={pageMode}
+                                        loading={saveBtnloading}
+                                        onClick={SaveHandler}
+                                        userAcc={userPageAccessState}
+                                    />
 
-
-                                    <SaveButtonDraggable>
-                                        <SaveButton pageMode={pageMode}
-                                            loading={saveBtnloading}
-                                            onClick={SaveHandler}
-                                            userAcc={userPageAccessState}
-                                        />
-                                    </SaveButtonDraggable>
                                 </form>
                             </CardBody>
                         </Card>
