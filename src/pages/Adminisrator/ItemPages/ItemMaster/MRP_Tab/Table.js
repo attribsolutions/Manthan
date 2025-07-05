@@ -14,6 +14,7 @@ function MRPTable(props) {
   }));
 
   const onDeleteHandeler = async(info) => {
+    debugger
     if (info.IsAdd) {
       var fil = props.tableData.filter((i) => {
         return !(i.id === info.id);
@@ -63,8 +64,11 @@ function MRPTable(props) {
     return [...props.tableData].sort((a, b) => b.id - a.id)
       .map((info) => (
         <tr key={info.id} style={{ backgroundColor: info.IsAdd && "#9dadf09e" }}>
+           <td>{info.PartyTypeName}</td> 
           <td>{info.EffectiveDate}</td>
           <td>{info.MRP}</td>
+         
+
           <td>
             <Button
               className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
@@ -90,8 +94,12 @@ function MRPTable(props) {
 
             <Thead>
               <tr >
+              <th className="col col-sm-3" >PartyType</th>
                 <th className="col col-sm-3">Effective Date</th>
                 <th className="col col-sm-3" >MRP</th>
+              
+               
+
                 <th className="col col-sm-3">{"Action"}</th>
               </tr>
             </Thead>

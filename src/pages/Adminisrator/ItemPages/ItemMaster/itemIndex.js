@@ -105,7 +105,7 @@ const ItemsMaster = (props) => {
     }]);
 
     const [baseUnitTableData, setBaseUnitTableData] = useState([unitConversionInitial]);
-    debugger
+    
     const [previousBaseUnitTableData, setPreviousBaseUnitTableData] = useState([]);
     const [MRP_Tab_TableData, setMRP_Tab_TableData] = useState([]);
     const [Group_Tab_TableData, setGroup_Tab_TableData] = useState([]);
@@ -443,7 +443,7 @@ const ItemsMaster = (props) => {
     }
 
     const SaveHandler = (event) => {
-
+debugger
         event.preventDefault();
         const btnId = event.target.id;
         btnIsDissablefunc({ btnId, state: true })
@@ -514,7 +514,7 @@ const ItemsMaster = (props) => {
                 let isChangeBaseUnitTable = false; // Flag to track if there are any changes in the data
 
                 // Check if the page is in edit mode and compare the current and previous baseUnitTableData arrays
-                debugger
+              
                 if (isEditMode) {
                     // Check if the lengths of the arrays are different, indicating a change
                     if (baseUnitTableData.length !== previousBaseUnitTableData.length) {
@@ -540,9 +540,9 @@ const ItemsMaster = (props) => {
                         }
                     }
                 }
-                debugger
+                
                 let itemUnitDetails = baseUnitTableData.reduce((result, index, key) => {
-                    debugger
+                
                     const val1 = index.Conversion !== '' ? parseFloat(index.Conversion).toFixed(3) : '';
                     const unit1 = index.Unit.value;
 
@@ -593,9 +593,10 @@ const ItemsMaster = (props) => {
                 // ======================  MRP Tab *****start   ====================== 
                 let hasAdd_MRP = []
                 MRP_Tab_TableData.forEach((index) => {
+                  
                     if (index.IsAdd === true) { hasAdd_MRP.push(index) }
                 })
-
+                debugger
                 // ======================  Margin Tab *****start   ====================== 
                 let hasAdd_Margin = []
                 marginMaster.forEach((index) => {

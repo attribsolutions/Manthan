@@ -104,6 +104,7 @@ export const selectAllCheck = ({
 const LABEL_COLORS = {
   "Invoice Created": "green_label",
   "Order Confirm": "yellow_label",
+  "Invoice Deleted": "red_label",
   "Open": "blue_lable",
   "Send To Supplier": "indigo_label",
   "Approved": "green_label",
@@ -116,23 +117,51 @@ const LABEL_COLORS = {
 
 
 const listColomnformatter = (cell, row, pagefield) => {
-
-  if (cell === row.Status && row.SAPStatus === "Order send To SAP") {
-    return (
-      <>
-        <div className={`label ${LABEL_COLORS[row.Status]}`} style={{ marginBottom: "8px" }}>
-          {row.Status}
+  if (pagefield.ControlID === "Status") {
+    const labels = [];
+    debugger
+    //  Show "Order Confirm" ONLY if InvoiceCreated !== true
+    if (row.IsConfirm === true && row.InvoiceCreated !== true) {
+      labels.push(
+        <div className={`label ${LABEL_COLORS["Order Confirm"]}`} style={{ marginBottom: "5px" }}>
+          Order Confirm
         </div>
+      );
+    }
+
+    // Show main status (Invoice Deleted / Invoice Created / Others)
+    // Avoid duplicate "Order Confirm" label
+    if (LABEL_COLORS[row.Status] && !(row.Status === "Order Confirm" && row.IsConfirm === true)) {
+      labels.push(
+        <div className={`label ${LABEL_COLORS[row.Status]}`} style={{ marginBottom: "5px" }}>
+          {row.Status}
+          {row.Status === "Invoice Created" && (
+            <span className="badge bg-info ms-2" style={{ fontSize: "11px", cursor: "pointer" }} title={`Invoice Count`}>
+              {row.InvoiceCount > 1 ? `${row.InvoiceCount} ` : ""}
+
+            </span>
+          )}
+        </div>
+      );
+    }
+
+
+    //  Show SAP Status if applicable
+    if (row.SAPStatus === "Order send To SAP") {
+      labels.push(
         <div className={`label ${LABEL_COLORS["Order send To SAP"]}`}>
           Order send To SAP
         </div>
-      </>
-    );
+      );
+    }
+
+    return <>{labels}</>;
   }
 
+  //  Rest of columns unchanged (like it was)
   if (LABEL_COLORS[cell]) {
     return (
-      <span className={`label  ${LABEL_COLORS[cell]}`} >
+      <span className={`label ${LABEL_COLORS[cell]}`}>
         {cell}
       </span>
     );
@@ -154,6 +183,10 @@ const listColomnformatter = (cell, row, pagefield) => {
 
   return <>{typeof cell === "boolean" ? String(cell) : cell}</>;
 };
+
+
+
+
 
 const DynamicColumnHook = ({
   reducers = "",
