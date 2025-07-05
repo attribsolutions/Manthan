@@ -283,26 +283,50 @@ function* orderList_GoBtn_GenFunc({ config }) {
       }
 
       //+++++++++++++++++++++++++  Status colonm show Status   ++++++++++++++++++++++++++++++++++++++
+      // if (i.SAPResponse) {
+      //   i.SAPStatus = "Order send To SAP"
+      // }
+
+      // if (i.InvoiceCreated === true) {
+      //   i.Status = "Invoice Created"
+      //   if ((subPageMode === url.ORDER_LIST_4) && (isSweetAndSnacksCompany)) {
+      //     i.forceMakeBtnHide = false
+
+      //     i.forceExtraSelectDissabled = true;
+      //   }
+      // }
+      // else if (i.IsConfirm === true) {
+      //   i.Status = "Order Confirm"
+      //   if ((subPageMode === url.ORDER_LIST_4) && (isSweetAndSnacksCompany)) {
+      //     i.forceExtraSelectDissabled = false;;
+      //   }
+
+
+      // }
+
+
+      //+++++++++++++++++++++++++  Status colonm show Status   ++++++++++++++++++++++++++++++++++++++
       if (i.SAPResponse) {
         i.SAPStatus = "Order send To SAP"
       }
 
-      if (i.InvoiceCreated === true) {
+      if (i.InvoiceDeleted === true) {                     //  New Flag Logic
+        i.Status = "Invoice Deleted";
+      } else if (i.InvoiceCreated === true) {
         i.Status = "Invoice Created"
         if ((subPageMode === url.ORDER_LIST_4) && (isSweetAndSnacksCompany)) {
           i.forceMakeBtnHide = false
-
           i.forceExtraSelectDissabled = true;
         }
       }
       else if (i.IsConfirm === true) {
         i.Status = "Order Confirm"
         if ((subPageMode === url.ORDER_LIST_4) && (isSweetAndSnacksCompany)) {
-          i.forceExtraSelectDissabled = false;;
+          i.forceExtraSelectDissabled = false;
         }
-
-
       }
+
+
 
       //**********************************order Aproval button Show Condition ********************************************************** */
 

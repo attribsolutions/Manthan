@@ -54,7 +54,7 @@ function Margin_Tab(props) {
 
 
     const addRowsHandler = (data) => {
-
+        
         const val = {
             PriceList: priceList.value,
             PriceListName: priceList.label,
@@ -74,7 +74,8 @@ function Margin_Tab(props) {
             && !(margin === "")
             && !(effectiveDate === "")
         ) {
-            let highestId = -Infinity;
+
+            let highestId = props?.tableData.length + 1;;
             for (const item of props.tableData) {
                 if (item.id !== undefined && item.id > highestId) {
                     highestId = item.id;
@@ -86,8 +87,7 @@ function Margin_Tab(props) {
             props.func(updatedTableData)
             clearState();
 
-        }
-        else { customAlert({ Type: 4, Message: alertMessages.enterValue }) }
+        } else { customAlert({ Type: 4, Message: alertMessages.enterValue }) }
     };
 
     const clearState = () => {

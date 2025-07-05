@@ -98,6 +98,35 @@ const ManPowerReport = (props) => {
 
     const [tableColumns] = DynamicColumnHook({ pageField });
 
+    const modifiedColumns = tableColumns.map((col) => {
+        if (col.dataField === "FSSAIDocument") {
+            return {
+                ...col,
+                formatter: (cell, row) => {
+                    if (row.FSSAIDocumentFilename && row.FSSAIDocument) { // Check if the filename and document link exist
+                        return (
+                            <a
+                                href={row.FSSAIDocument}
+                                download
+
+                                rel="noopener noreferrer"
+                                className="text-primary text-decoration-underline"
+                                title="Download FSSAI Document "
+                            >
+                                {row.FSSAIDocumentFilename}
+                            </a>
+                        );
+                    } else {
+                        return "";
+                    }
+                }
+            };
+        }
+        return col;
+    });
+
+
+
     useEffect(() => {
 
         if (manPowerReportRedux.length > 0) {
@@ -166,7 +195,8 @@ const ManPowerReport = (props) => {
                     <ToolkitProvider
                         keyField="id"
                         data={tableData}
-                        columns={tableColumns}
+                        //  columns={tableColumns}
+                        columns={modifiedColumns}
                         search
                     >
                         {(toolkitProps,) => (
