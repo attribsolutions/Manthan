@@ -6,7 +6,7 @@ import { C_Button } from "../../components/Common/CommonButton";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, Get_Items_Drop_Down, getpdfReportdataSuccess,  } from "../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, Get_Items_Drop_Down, getpdfReportdataSuccess, } from "../../store/actions";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
@@ -29,13 +29,13 @@ const ItemConsumption = (props) => {
     const [toDate, setToDate] = useState(currentDate_ymd)
     const [Cashier, setCashier] = useState([allLabelWithBlank])
     const [PartyDropdown, setPartyDropdown] = useState(allLabelWithZero)
-  
+
     const [Item, setItem] = useState("");
 
     const [userPageAccessState, setUserAccState] = useState('');
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
-  
+
 
     const {
         userAccess,
@@ -43,7 +43,7 @@ const ItemConsumption = (props) => {
         GoBtnLoading,
         pageField,
         ItemDropDown,
-      
+
         ItemDropDownloading,
         Party
     } = useSelector((state) => ({
@@ -58,7 +58,7 @@ const ItemConsumption = (props) => {
     }));
 
     const { Data = [] } = GoButtonData;
-   
+
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.ITEM_CONSUMPTION_REPORT));
@@ -106,7 +106,7 @@ const ItemConsumption = (props) => {
     }, []);
 
     useEffect(() => {
-       debugger
+        debugger
         if (GoButtonData.goBtnMode === "downloadExcel") {
             ExcelReportComponent({      // Download CSV
                 pageField,
@@ -129,12 +129,12 @@ const ItemConsumption = (props) => {
 
     }, [GoButtonData, pageField]);
 
-   
 
 
 
 
-  
+
+
 
 
     function goButtonHandler(goBtnMode) {
@@ -169,12 +169,12 @@ const ItemConsumption = (props) => {
         setToDate(date);
         dispatch(ItemConsumptionReport_GoButton_API_Success([]));
     }
-   
-
-   
 
 
-    
+
+
+
+
     // Cashier_Summary_Report
 
     return (
@@ -292,22 +292,22 @@ const ItemConsumption = (props) => {
                     </Row>
                 </div>
 
-                <div className="mb-1 table-responsive table">
-                    <GlobalCustomTable
-                        keyField={"id"}
-                        data={GoButtonData.goBtnMode === "showOnTable" ? Data?.FinishproductDetails || [] : []}
-                        columns={tableColumns}
-                        id="table_Arrow"
-                        noDataIndication={
-                            <div className="text-danger text-center ">
-                                Record Not available
-                            </div>
-                        }
-                        onDataSizeChange={({ dataCount, filteredData = [] }) => {
-                            dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${_cfunc.TotalAmount_Func(filteredData)}`));
-                        }}
-                    />
-                </div>
+
+                <GlobalCustomTable
+                    keyField={"id"}
+                    data={GoButtonData.goBtnMode === "showOnTable" ? Data?.FinishproductDetails || [] : []}
+                    columns={tableColumns}
+                    id="table_Arrow"
+                    noDataIndication={
+                        <div className="text-danger text-center ">
+                            Record Not available
+                        </div>
+                    }
+                    onDataSizeChange={({ dataCount, filteredData = [] }) => {
+                        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${_cfunc.TotalAmount_Func(filteredData)}`));
+                    }}
+                />
+
             </div>
             <C_Report />
         </React.Fragment >

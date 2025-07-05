@@ -55,24 +55,47 @@ export const Frenchies_date_ymd_func = (isdate) => {
 };
 
 
-export function getExtensionFromMimeType(mimeType) {
-  const map = {
-    "application/pdf": "pdf",
-    "image/jpeg": "jpg",
-    "image/png": "png",
-    "image/gif": "gif",
-    "image/webp": "webp",
-    "text/plain": "txt",
-    "text/csv": "csv",
-    "application/msword": "doc",
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx",
-    "application/vnd.ms-excel": "xls",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
-    // Add more as needed
+export function getFileExtensionType(filename) {
+  const extension = filename.split('.').pop().toLowerCase();
+  const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
+  const documentExtensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt'];
+  if (imageExtensions.includes(extension)) return 'Image';
+  if (documentExtensions.includes(extension)) return 'Document';
+  return 'Unknown';
+}
+
+
+export function getMimeTypeFromExtension(filename) {
+  const extension = filename.split('.').pop().toLowerCase();
+
+  const mimeTypes = {
+    jpg: 'image/jpeg',
+    jpeg: 'image/jpeg',
+    png: 'image/png',
+    gif: 'image/gif',
+    bmp: 'image/bmp',
+    webp: 'image/webp',
+    svg: 'image/svg+xml',
+    pdf: 'application/pdf',
+    txt: 'text/plain',
+    html: 'text/html',
+    css: 'text/css',
+    js: 'application/javascript',
+    json: 'application/json',
+    doc: 'application/msword',
+    docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    xls: 'application/vnd.ms-excel',
+    xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    mp3: 'audio/mpeg',
+    mp4: 'video/mp4',
+    avi: 'video/x-msvideo',
+    mov: 'video/quicktime'
+    // Add more if needed
   };
 
-  return map[mimeType] || "";
+  return mimeTypes[extension] || 'application/octet-stream'; // default fallback
 }
+
 
 
 export const date_dmy_func = (isdate) => { //+++++++++++++++ Current Date by format (dd-mm-yyy) ++++++++++++++++++++++++++++++++++++

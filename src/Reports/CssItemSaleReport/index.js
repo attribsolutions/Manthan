@@ -25,6 +25,7 @@ import { allLabelWithBlank, allLabelWithZero } from "../../components/Common/Com
 import { Css_Item_Sale_Gobtn_Action, Css_Item_Sale_Gobtn_Success } from "../../store/Report/CssItemSaleReport/action";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
+import GlobalCustomTable from "../../GlobalCustomTable";
 
 const CssItemSaleReport = (props) => {
 
@@ -172,6 +173,7 @@ const CssItemSaleReport = (props) => {
                     config.rowData["StatusCode"] = tableData.StatusCode
                     config.rowData["Data"] = tableData.Data
                     config.rowData["Data"]["Date"] = `From  ${_cfunc.date_dmy_func(values.FromDate)}  To  ${_cfunc.date_dmy_func(values.ToDate)}`
+                    config.rowData["Data"]["SelectDivision"] = values.division
                     dispatch(getpdfReportdataSuccess(config.rowData))
                     dispatch(Css_Item_Sale_Gobtn_Success([]));
                 }
@@ -461,41 +463,20 @@ const CssItemSaleReport = (props) => {
                 </div>
 
 
-
-                <div className="mt-1">
-                    <ToolkitProvider
-                        keyField="id"
-                        data={Type === "show" ? Data : []}
-                        columns={tableColumns}
-                        search
-                    >
-                        {(toolkitProps,) => (
-                            <React.Fragment>
-                                <Row>
-                                    <Col xl="12">
-                                        <div className="table-responsive table">
-                                            <BootstrapTable
-                                                keyField="id"
-                                                classes={"table  table-bordered table-hover"}
-                                                noDataIndication={
-                                                    <div className="text-danger text-center ">
-                                                        Record Not available
-                                                    </div>
-                                                }
-                                                onDataSizeChange={({ dataSize }) => {
-                                                    dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
-                                                }}
-                                                {...toolkitProps.baseProps}
-                                            />
-                                            {globalTableSearchProps(toolkitProps.searchProps)}
-                                        </div>
-                                    </Col>
-                                </Row>
-
-                            </React.Fragment>
-                        )}
-                    </ToolkitProvider>
-                </div>
+                <GlobalCustomTable
+                    keyField={"id"}
+                    data={Type === "show" ? Data : []}
+                    columns={tableColumns}
+                    id="table_Arrow"
+                    noDataIndication={
+                        <div className="text-danger text-center ">
+                            Record Not available
+                        </div>
+                    }
+                    onDataSizeChange={({ dataCount, filteredData = [] }) => {
+                        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${_cfunc.TotalAmount_Func(filteredData)}`));
+                    }}
+                />
 
             </div>
             <C_Report />

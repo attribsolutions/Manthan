@@ -6,31 +6,28 @@ var pageHeder = function (doc, data) {
     style.pageBorder(doc, data);
     style.pageHeder(doc, data);     //Title
     style.reportHeder1(doc, data);
-    style.reportHeder2(doc, data);
+  
 
 };
 function reportBody(doc, data) {
 
     style.tableBody(doc, data);
 
-
-
-
 }
 function pageFooter(doc, data) {
     style.pageFooter(doc, data);
-    // style.reportFooter(doc, data);
+
 }
 
 const CSSItemSaleReport = (data) => {
-    
-    data["Period"] = data[0].Period
+
+
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc, data);
     reportBody(doc, data);
     pageFooter(doc, data);
     doc.setProperties({
-        title: "Material  Register"
+        title: "Item Sale Report"
     });
 
     function generateSaveAndOpenPDFReport() {

@@ -169,14 +169,14 @@ export const tableBody = (doc, data) => {
 
         didParseCell: (data1) => {
             if (data1.row.cells[1].raw.includes("Open")) {
-                data1.row.cells[0].colSpan = 3
+                data1.row.cells[0].colSpan = 4
                 data1.row.cells[0].styles.fontSize = 7
                 data1.row.cells[0].styles.fontStyle = "bold"
 
             }
 
             if (data1.row.cells[1].raw.includes("Close")) {
-                data1.row.cells[0].colSpan = 3
+                data1.row.cells[0].colSpan = 4
                 data1.row.cells[0].styles.fontSize = 7
                 data1.row.cells[0].styles.fontStyle = "bold"
 
@@ -195,6 +195,12 @@ export const tableBody = (doc, data) => {
 
             }
 
+            if (data1.row.cells[1].raw.includes("Receive")) {
+                data1.row.cells[0].colSpan = 4
+                data1.row.cells[0].styles.fontSize = 7
+                data1.row.cells[0].styles.fontStyle = "bold"
+
+            }
 
 
 
@@ -235,13 +241,13 @@ export const tableBody = (doc, data) => {
 
             },
             2: {
-                columnWidth: 140,
+                columnWidth: 90,
                 halign: 'right',
             },
-            // 3: {
-            //     columnWidth: 95,
-            //     halign: 'left',
-            // },
+            3: {
+                columnWidth: 50,
+                halign: 'left',
+            },
 
 
 
