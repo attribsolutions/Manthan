@@ -6,12 +6,12 @@ import { PartyAddressDeleteID, PartyAddressDeleteIDSuccess } from '../../../../.
 import { customAlert } from '../../../../../CustomAlert/ConfirmDialog';
 import { deltBtnCss, editBtnCss } from '../../../../../components/Common/ListActionsButtons';
 import "./editDeleteCss.scss"
-import { date_dmy_func } from '../../../../../components/Common/CommonFunction';
+import { date_dmy_func, getFileExtensionType } from '../../../../../components/Common/CommonFunction';
 import Slidewithcaption from '../../../../../components/Common/CommonImageComponent';
 import { alertMessages } from '../../../../../components/Common/CommonErrorMsg/alertMsg';
 
 function AddressDetailsTable({ addressTable = [], setAddressTable, onEdit }) {
-	
+
 	const selectedRowIndexRef = useRef(-1);
 
 	const dispatch = useDispatch();
@@ -98,10 +98,10 @@ function AddressDetailsTable({ addressTable = [], setAddressTable, onEdit }) {
 	}
 
 	async function myFunction(row) {
-		
+		debugger
 		const file = row.file;
 
-		if (!(file || row.fssaidocumenturl !== "")) {
+		if ((!(file || (row.fssaidocumenturl !== "" && row.fssaidocumenturl !== null)))) {
 			customAlert({
 				Type: 3,
 				Message: alertMessages.imageNotUploaded,
@@ -110,14 +110,29 @@ function AddressDetailsTable({ addressTable = [], setAddressTable, onEdit }) {
 		}
 		if (file) {
 			const fileURL = URL.createObjectURL(file);
-			const fileType = file.type;
+			// const fileType = file.type;
+			const fileType = getFileExtensionType(file.name)
 
-			if (fileType === "application/pdf") {
+			if (fileType === "Document") {
 				// Open PDF in new tab
 				window.open(fileURL, "_blank");
-			} else if (fileType.startsWith("image/")) {
+			} else if (fileType === "Image") {
 				// Show image in modal
 				setFssaiDocument([{ Image: fileURL }]);
+				setmodal_backdrop(true);
+			} else {
+				customAlert({
+					Type: 3,
+					Message: "Unsupported file format.",
+				});
+			}
+		} else if (row.fssaidocumenturl !== "" && row.filename !== "") {
+			const fileType = getFileExtensionType(row.filename)
+
+			if (fileType === "Document") {
+				window.open(row.fssaidocumenturl, "_blank");
+			} else if (fileType === "Image") {
+				setFssaiDocument([{ Image: row.fssaidocumenturl }]);
 				setmodal_backdrop(true);
 			} else {
 				customAlert({

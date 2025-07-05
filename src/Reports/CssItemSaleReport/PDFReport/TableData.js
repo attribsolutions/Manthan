@@ -1,4 +1,4 @@
-import { date_dmy_func, loginUserDetails } from "../../../components/Common/CommonFunction";
+
 import { numberWithCommas } from "../../Report_common_function";
 
 export const columns = [
@@ -25,9 +25,7 @@ export const GST_Persentage_Table = [
 ];
 
 export const PageHedercolumns = [
-    "Billed by",
-    "Billed to",
-    ''
+    "",
 ]
 
 export const Rows = (data) => {
@@ -95,15 +93,6 @@ export const GST_Rows = (data) => {
 
 
 
-
-
-
-
-
-
-
-
-
     const returnArr = [];
     let TotalBasicAmount = 0;
     let TotalQuantity = 0;
@@ -116,22 +105,7 @@ export const GST_Rows = (data) => {
 
     data.forEach((element, key) => {
         const gst = isNaN(element.GSTPercentage) ? 0 : Number(element.GSTPercentage);
-        debugger
-        const tableitemRow = [
-            `${element.ItemName}`,
-            isNaN(element.Quantity) ? "0" : `${element.Quantity}`,
-            `${element.UnitName}`,
-            isNaN(element.BasicAmount) ? "0" : `${element.BasicAmount}`,
-            isNaN(element.GSTPercentage) ? "0" : `${element.GSTPercentage}`,
-            isNaN(element.CGST) ? "0" : `${element.CGST}`,
-            isNaN(element.SGST) ? "0" : `${element.SGST}`,
-            isNaN(element.IGST) ? "0" : `${element.IGST}`,
-            isNaN(element.GrandTotal) ? "0" : `${element.GrandTotal}`,
-            isNaN(element.AvgRate) ? "0" : `${element.AvgRate}`,
-        ];
 
-        // Push item row
-        // returnArr.push(tableitemRow);
 
         // Update grand totals
         TotalBasicAmount += Number(element.BasicAmount) || 0;
@@ -178,7 +152,6 @@ export const GST_Rows = (data) => {
                     numberWithCommas(safeFormat(values.SGST)),
                     numberWithCommas(safeFormat(values.IGST)),
                     numberWithCommas(safeFormat(values.GrandTotal)),
-
                 ]);
             });
             returnArr.push([
@@ -199,12 +172,17 @@ export const GST_Rows = (data) => {
 };
 
 
-
 export const ReportHederRows = (data) => {
+    debugger
+    const Division = data.SelectDivision.map((item, index) => `${index + 1}) ${item.label}`).join(", ")
 
-    const UserDetails = loginUserDetails()
+
     var reportArray = [
-
+        [`                   ${Division}`],
+        [`                   ${data.Date}`]
     ]
+
+
     return reportArray;
 }
+

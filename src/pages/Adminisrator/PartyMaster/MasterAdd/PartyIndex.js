@@ -1,5 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react"
-import MetaTags from "react-meta-tags"
+import React, { useEffect, useRef, useState } from "react"
 import {
 	Card,
 	CardBody,
@@ -27,8 +26,8 @@ import {
 	updatePartyID,
 	updatePartyIDSuccess
 } from "../../../../store/Administrator/PartyRedux/action"
-import { Breadcrumb_inputName, commonPageField, commonPageFieldListSuccess, commonPageFieldSuccess } from "../../../../store/actions"
-import { btnIsDissablefunc, getExtensionFromMimeType, isEditMode_CssFun, loginCompanyID, loginPartyID, loginUserAdminRole, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction"
+import { Breadcrumb_inputName, commonPageField } from "../../../../store/actions"
+import { btnIsDissablefunc, getMimeTypeFromExtension, loginCompanyID, loginUserAdminRole, loginUserID } from "../../../../components/Common/CommonFunction"
 import * as url from "../../../../routes/route_url";
 import * as pageId from "../../../../routes/allPageID"
 import * as mode from "../../../../routes/PageMode"
@@ -318,10 +317,8 @@ const PartyMaster = (props) => {
 							label: hasEditVal.PriceList.Name, value: hasEditVal.PriceList.id,
 						} : { label: '' };
 
-						let nextId = 1;
 						// let addressTabPreIncrementId = hasEditVal.PartyAddress.map((obj) => {
-						// 	const newObj = { ...obj, RowID: nextId };
-						// 	nextId++;
+						// 	const newObj = { ...obj, RowID: obj.id };
 						// 	return newObj;
 						// })
 
@@ -329,26 +326,22 @@ const PartyMaster = (props) => {
 
 						let addressTabPreIncrementId = await Promise.all(
 							hasEditVal.PartyAddress.map(async (obj) => {
-								const newObj = { ...obj, RowID: nextId++ };
-								debugger
+								const newObj = { ...obj, RowID: obj.id };
 								const url = obj.fssaidocumenturl;
+								debugger
 								if (url && typeof url === "string" && url.startsWith("http")) {
 									try {
 										const response = await fetch(url);
 										const blob = await response.blob();
-										const contentType = response.headers.get("Content-Type");
-										newObj.file = new File([blob], `${(obj?.filename) ? obj?.filename : 'Document'}.${getExtensionFromMimeType(contentType)}`, { type: blob.type });;
+										newObj.file = new File([blob], `${(obj?.filename)}`, { type: getMimeTypeFromExtension(obj?.filename) });;
 
 									} catch (error) {
 										console.error("Error fetching file from URL:", error);
 									}
 								}
-								newObj.file = null
-								newObj.fssaidocumenturl = null
 								return newObj;
 							})
 						);
-
 
 						let getBaseTab = baseTabRef.current.getCurrentState();
 						let setBaseTab = baseTabRef.current.setCurrentState;
@@ -569,9 +562,10 @@ const PartyMaster = (props) => {
 
 			addressTabDetail.map((i) => {
 				if (i.id === undefined) {
-					i["id"] = "0"
+					i["id"] = "0";
 				}
-			})
+				delete i.fssaidocumenturl; // Remove the key
+			});
 
 			if (
 				(priceListSelect.label === "" || priceListSelect.value === "") &&

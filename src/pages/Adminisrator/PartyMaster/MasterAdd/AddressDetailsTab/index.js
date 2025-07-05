@@ -118,9 +118,12 @@ const AddressTabForm = forwardRef((props, ref) => {
 					setAddressTable(updatedTableData);
 
 				} else {
-					// Add a new row
+
+
 					const tableleth = addressTable.length;
 					val.RowID = tableleth + 1;
+					val.filename = `${tableleth + 1}_${val.filename}`
+
 					const updatedTableData = [...addressTable];
 					updatedTableData.push(val);
 

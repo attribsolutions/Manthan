@@ -38,15 +38,9 @@ export const reportHeder1 = (doc, data) => {
 
 
     var options3 = {
-        didParseCell: (data1) => {
 
-            if (data1.row.cells[1].raw.includes(':')) {
-                data1.row.cells[1].colSpan = 2
-
-            }
-        },
         didDrawCell: (data1) => {
-
+            debugger
 
             const rowIdx = data1.row.index;
             const colIdx = data1.column.index;
@@ -55,47 +49,15 @@ export const reportHeder1 = (doc, data) => {
                 let y = data1.cursor.y + 10
                 doc.setFontSize(9)
                 doc.setFont(undefined, 'bold')
-                doc.text('Customer: ', x, y)
+                doc.text('Division: ', x, y)
             };
-            if (rowIdx === 0 && colIdx === 1) {
 
-                let x = data1.cursor.x + 2
-                let y = data1.cursor.y + 10
-                doc.setFontSize(9)
-                doc.setFont(undefined, 'bold')
-                doc.text('Material: ', x, y)
-            };
             if (rowIdx === 1 && colIdx === 0) {
-
                 let x = data1.cursor.x + 2
                 let y = data1.cursor.y + 10
                 doc.setFontSize(9)
                 doc.setFont(undefined, 'bold')
-                doc.text('From Date: ', x, y)
-            };
-            if (rowIdx === 2 && colIdx === 0) {
-
-                let x = data1.cursor.x + 2
-                let y = data1.cursor.y + 10
-                doc.setFontSize(9)
-                doc.setFont(undefined, 'bold')
-                doc.text('FSSAI No: ', x, y)
-            };
-            if (rowIdx === 1 && colIdx === 1) {
-
-                let x = data1.cursor.x + 2
-                let y = data1.cursor.y + 10
-                doc.setFontSize(9)
-                doc.setFont(undefined, 'bold')
-                doc.text('To Date: ', x, y)
-            };
-            if (rowIdx === 2 && colIdx === 1) {
-
-                let x = data1.cursor.x + 2
-                let y = data1.cursor.y + 10
-                doc.setFontSize(9)
-                doc.setFont(undefined, 'bold')
-                doc.text('To Date: ', x, y)
+                doc.text('Date: ', x, y)
             };
 
 
@@ -122,17 +84,10 @@ export const reportHeder1 = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 230,
+                columnWidth: 540,
                 halign: 'lfet',
             },
-            1: {
-                columnWidth: 147,
-                halign: 'left',
-            },
-            2: {
-                columnWidth: 163,
-                halign: 'left',
-            },
+
         },
         tableLineColor: "black",
         startY: 80
@@ -140,12 +95,7 @@ export const reportHeder1 = (doc, data) => {
     doc.autoTable(table.PageHedercolumns, table.ReportHederRows(data), options3);
 }
 
-export const reportHeder2 = (doc, data) => {
-    doc.setFont('Tahoma')
-    doc.setFontSize(10)
-    doc.setFont(undefined, 'bold')
 
-}
 
 
 
@@ -286,8 +236,6 @@ export const tableBody = (doc, data) => {
                 columnWidth: 76,
                 halign: 'right',
             },
-          
-
 
 
         },

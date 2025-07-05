@@ -6,7 +6,7 @@ export const columns = [
     "Name",
     "Production Quantity",
     "Used Quantity",
-    // "UOM",
+    "UOM",
 
 ];
 
@@ -36,6 +36,15 @@ export const Rows = (data) => {
         ];
     };
 
+    function ReceiveQuantity() {
+        return [
+            `Receive/Tranfer Quantity : ${data.RecieveQuantity} ${data?.RawMaterialUnit}`,
+            "Receive",
+            "",
+
+        ];
+    };
+
 
     function ClosingBalance() {
         return [
@@ -47,7 +56,9 @@ export const Rows = (data) => {
     };
 
 
+    returnArr.push(ReceiveQuantity());
     returnArr.push(OpeningBalance());
+
     data.FinishproductDetails.forEach((element) => {
         const ProductionQty = Number(element.ProductionQty) || 0;
         const UsedQty = Number(element.UsedQty) || 0;
@@ -61,7 +72,7 @@ export const Rows = (data) => {
             `${element?.FinishProduct}`,
             `${element?.ProductionQty}`,
             `${element?.UsedQty}`,
-            // `${element?.UOM  }`,
+            `${data?.RawMaterialUnit}`,
 
         ];
 
