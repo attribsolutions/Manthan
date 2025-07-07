@@ -22,7 +22,7 @@ import ExtraTableWrapper from "../../GlobalCustomTable/TableWrapper";
 import SaveButtonDraggable from "./saveButtonDraggable";
 import * as report from '../../Reports/ReportIndex'
 import { Invoice_Singel_Get_for_Report_Api } from "../../helpers/backend_helper";
-
+import { useSelector } from "react-redux";
 
 
 export async function isAlertFunc(type, Msg) {
@@ -78,6 +78,11 @@ const CommonPurchaseList = (props) => {
 
   const { PageFieldMaster = [] } = { ...pageField };
 
+  const { radioButtonNonDelete, radioButtonDelete } = useSelector(state => ({
+    radioButtonNonDelete: state.BreadcrumbReducer.radioButtonNonDelete,
+    radioButtonDelete: state.BreadcrumbReducer.radioButtonDelete,
+  }));
+
   useEffect(async () => {
 
     const locationPath = history.location.pathname;
@@ -101,24 +106,45 @@ const CommonPurchaseList = (props) => {
     }
   }, [userAccess]);
 
+
+
+
+
   useEffect(() => {
     let downList = [];
     let defaultDownList2 = [];
-    let listObj = {};
     let listObj2 = {};
 
-    tableList.forEach((index1) => {
+    //  Filter Data According to Radio Buttons (Deleted/Non-Deleted)
+    let filteredData = [];
+
+    const IsDeleted = tableList.filter(item => item.IsRecordDeleted === true);
+    const IsNonDeleted = tableList.filter(item => item.IsRecordDeleted !== true);
+
+    if (radioButtonNonDelete && radioButtonDelete) {
+      filteredData = tableList; // Both Selected → All Records
+    } else if (radioButtonNonDelete) {
+      filteredData = IsNonDeleted; // Only Non-Deleted
+    } else if (radioButtonDelete) {
+      filteredData = IsDeleted; // Only Deleted
+    } else {
+      filteredData = []; // None Selected → No Records (Optional)
+    }
+
+    //  Prepare Excel Data From Filtered Data Only
+    filteredData.forEach((index1) => {
+      let listObj = {};
       PageFieldMaster.forEach((index2) => {
         if (index2.ShowInDownload) {
           listObj2[index2.ControlID] = index2.ShownloadDefaultSelect;
           listObj[index2.ControlID] = index1[index2.ControlID];
         }
       });
-
       downList.push(listObj);
       defaultDownList2.push(listObj2);
-      listObj = {};
     });
+
+    //  Dispatch Excel Data With Filtered Records
     dispatch(
       CommonBreadcrumbDetails({
         downBtnData: downList,
@@ -135,7 +161,9 @@ const CommonPurchaseList = (props) => {
     if (hasRole("RoleAccess_DeletedNonDeletedRecords")) {
       dispatch(BreadcrumbRadioButtonView(true));
     }
-  }, [tableList, pageField, userAccState]);
+  }, [tableList, pageField, userAccState, radioButtonNonDelete, radioButtonDelete]);
+
+
 
   useEffect(() => {
 
