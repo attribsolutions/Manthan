@@ -42,7 +42,7 @@ function MRPTab(props) {
   const [MRP, setMRP] = useState("");
 
   const [state, setState] = useState("")
-  const [PartyType, setPartyType] = useState(null);
+  const [PartyType, setPartyType] = useState({ value: null, label: "All" });
 
   const [priceListSelect, setPriceListSelect] = useState({ value: '' });
 
@@ -69,10 +69,9 @@ function MRPTab(props) {
       EffectiveDate: effectiveDate,
       MRP: MRP,
 
-      // ✅ Store PartyTypeID and PartyTypeName separately
-      PartyType: PartyType?.value || "",
-      PartyTypeName: PartyType?.label || "",
 
+      PartyType: PartyType.value,
+      PartyTypeName: PartyType?.label || "",
       CreatedBy: loginUserID(),
       UpdatedBy: loginUserID(),
       Company: loginCompanyID(),
@@ -83,7 +82,7 @@ function MRPTab(props) {
     val.id = props?.tableData.length + 1; // ✅ Assign a unique ID based on the current length of tableData
 
 
-    if (!(effectiveDate === "") && !(MRP === "") && PartyType?.value) {
+    if (!(effectiveDate === "") && !(MRP === "")) {
       const updatedTableData = [...props.tableData, val];   // ✅ Direct push
       props.func(updatedTableData);
       clearState();
@@ -140,6 +139,8 @@ function MRPTab(props) {
     division: index.IsDivision,
     IsRetailer: index.IsRetailer
   }));
+
+  PartyTypeDropdown_Options.unshift({ value: null, label: "All" });
 
   function partyTypeOnChange(hasSelect, evn) {
 

@@ -315,7 +315,7 @@ const MachineTypeMaster = (props) => {
     }, [pageField])
 
     const SaveHandler = async (event) => {
-
+        debugger
         event.preventDefault();
         const btnId = event.target.id
 
@@ -332,6 +332,7 @@ const MachineTypeMaster = (props) => {
 
                 const jsonBody = JSON.stringify({
 
+                    "id": values.id,
                     "MacID": values.MacID,
                     "MachineType": values.MachineType.map(i => i.value).join(','),
                     "Party": commonPartyDropSelect.value,
