@@ -38,6 +38,8 @@ const Dashboard_1 = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [selectedOption, setSelectedOption] = useState('TODAYS');
     const [data, setData] = useState([]);
+    const [amountLoading, setAmountLoading] = useState(false);
+
 
 
     const isFrenchises = loginUserIsFranchisesRole()
@@ -75,7 +77,7 @@ const Dashboard_1 = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
 
-        
+
     }, []);
 
     useEffect(() => {
@@ -136,9 +138,9 @@ const Dashboard_1 = (props) => {
     }
 
     const handleChange = (event) => {
-
         const value = event.target.value;
         setSelectedOption(value);
+        setAmountLoading(true);  // Spinner start
 
         const today = new Date();
         let fromDate;
@@ -169,6 +171,7 @@ const Dashboard_1 = (props) => {
 
 
 
+
     const RedirectHandler = (Type) => {
         if (Type === 1) {
             history.push(url.ORDER_LIST_4)
@@ -183,11 +186,20 @@ const Dashboard_1 = (props) => {
         }
     }
 
-    useEffect(async () => {
+    useEffect(() => {
+        const fetchData = async () => {
+            const jsonData = await GetDailySaleData({
+                fromDate: dateRange.fromDate,
+                toDate: dateRange.toDate,
+                Party_Id: loginPartyID(),
+            });
+            setData(jsonData.Data);
+            setAmountLoading(false);  // Spinner stop
+        };
 
-        const jsonData = await GetDailySaleData({ fromDate: dateRange.fromDate, toDate: dateRange.toDate, Party_Id: loginPartyID(), })
-        setData(jsonData.Data)
-    }, [dateRange])
+        fetchData();
+    }, [dateRange]);
+
 
 
 
@@ -387,10 +399,17 @@ const Dashboard_1 = (props) => {
 
 
                                         <div className="ml-auto" style={{ marginLeft: "5px" }}>
-                                            <span className="badge rounded-pill badge-soft-primary fw-large" style={{ fontSize: "20px" }}>
-                                                ₹ {data[0]?.TotalAmount ? amountCommaSeparateFunc(data[0].TotalAmount) : 0}
-                                            </span>
+                                            {amountLoading ? (
+                                                <span className="badge rounded-pill badge-soft-primary fw-large d-flex align-items-center justify-content-center" style={{ fontSize: "20px" }}>
+                                                    <div className="spinner-border spinner-border-sm text-primary"></div>  {/*  Spinner */}
+                                                </span>
+                                            ) : (
+                                                <span className="badge rounded-pill badge-soft-primary fw-large" style={{ fontSize: "20px" }}>
+                                                    ₹ {data[0]?.TotalAmount ? amountCommaSeparateFunc(data[0].TotalAmount) : 0}
+                                                </span>
+                                            )}
                                         </div>
+
                                     </div>}
 
 
