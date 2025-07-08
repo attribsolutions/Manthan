@@ -5,10 +5,10 @@ export const columns = [
     "Stock Date",
     "Party Name",
     "Item Name",
-    "Prev. Quantity",
-    "UOM",
+    "Before Adj.",
+    "Prev.Qty",
     "Difference",
-    "Unit Name",
+    "UOM",
 ];
 
 
@@ -20,12 +20,12 @@ export const PageHedercolumns = [
 ]
 
 export const Rows = (data) => {
-    debugger
+
     const returnArr = [];
     let TotalQuantity = 0;
     data.forEach((element, key) => {
         const tableitemRow = [
-            `${date_dmy_func(element.StockDate)}`,
+            `${element.StockDate}`,
             `${element.PartyName}`,
             `${element.ItemName}`,
             `${element.BeforeAdjustment}`,
