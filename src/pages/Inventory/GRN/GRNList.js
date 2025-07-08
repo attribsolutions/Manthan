@@ -244,6 +244,19 @@ const GRNList = (props) => {
         dispatch(_act.getpdfReportdata(Invoice_Singel_Get_for_Report_Api, config))
     }
 
+    useEffect(() => {
+        const Todate = _cfunc.ToDate({
+            FromDate: hederFilters.fromdate,
+            Todate: hederFilters.todate
+        });
+    
+        setHederFilters((prev) => ({
+            ...prev,
+            todate: Todate
+        }));
+    }, [hederFilters.fromdate]);
+    
+
     function fromdateOnchange(e, date) {
         let newObj = { ...hederFilters }
         newObj.fromdate = date

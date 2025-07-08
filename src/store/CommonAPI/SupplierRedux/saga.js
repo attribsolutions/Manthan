@@ -93,10 +93,12 @@ function* getVendorGenFunc({ jsonBody = '' }) {
   }
 }
 
-function* getSupplierGenFunc({ jsonBody = '' }) {
 
+function* getSupplierGenFunc({ jsonBody = '' }) {
   const { PartyID = loginPartyID() } = jsonBody
+ 
   try {
+
     const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": PartyID, "Company": loginCompanyID(), Route: "" });
     yield put(getSupplierSuccess(response.Data));
   } catch (error) {
@@ -105,7 +107,9 @@ function* getSupplierGenFunc({ jsonBody = '' }) {
   }
 }
 
+
 function* getCustomerGenFunc() {
+
   try {
     const response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": loginPartyID(), "Company": loginCompanyID(), Route: "" });
     yield put(GetCustomerSuccess(response.Data));
@@ -124,7 +128,7 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     Company = loginCompanyID() } = data
 
   let response;
-  debugger
+
   const isVender = (subPageMode === url.ORDER_1 //vendor mode 1
     || subPageMode === url.ORDER_LIST_1
     || subPageMode === url.GRN_STP_1);
@@ -140,6 +144,9 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     || subPageMode === url.PARTY_DETAILS
     || subPageMode === url.ORDER_QUATATION
     || subPageMode === url.ORDER_QUATATION_LIST
+    
+    || subPageMode === url.ACCOUNTING_GRN_LIST       
+    || subPageMode === url.GRN_FOR_ACCOUNTING_GRN 
   )
 
     ;
