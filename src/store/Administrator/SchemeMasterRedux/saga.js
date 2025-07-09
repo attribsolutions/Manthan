@@ -36,14 +36,18 @@ function* Save_Method_ForSchemeMaster_GenFun({ config }) {              // Save 
   } catch (error) { yield put(SchemeApiErrorAction()) }
 }
 
-function* Get_Scheme_List_GenFunc() {
+function* Get_Scheme_List_GenFunc({ config  }) {
+  debugger
   const PartyTypeID = loginPartyTypeID()                                 // getList API
   try {
-    const response = yield call(Get_Scheme_List);
+    const response = yield call(Get_Scheme_List , config); // config is optional
     const List = response.Data.map((item) => {
       return {
         ...item,
         PartyTypeID: PartyTypeID,
+        isEditButtonDisabled: item.IsSchemeActive
+
+
       }
     })
 

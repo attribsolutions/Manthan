@@ -17,8 +17,9 @@ import {
 } from "./actionType";
 
 
-export const getSchemeList = () => ({// get List Action
+export const getSchemeList = (config = {}) => ({// get List Action
   type: GET_SCHEME_LIST,
+  config,
 });
 
 export const getSchemeListSuccess = (pages) => ({// get List success
