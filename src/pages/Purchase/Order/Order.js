@@ -353,7 +353,7 @@ const Order = (props) => {
 
     const processedData = useMemo(() => {
         console.log("itemSelect", itemSelect)
-        debugger
+
         if (itemSelect?.value === "") {
             return ModifyTableData_func(orderItemTable);
         } else {
@@ -897,7 +897,7 @@ const Order = (props) => {
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, key, { tableList }) => {
                 if (row.GroupRow || row.SubGroupRow) { return }
-
+                debugger
                 if (!row.UnitName) {
                     row["Unit_id"] = 0;
                     row["UnitName"] = 'null';
@@ -1010,9 +1010,11 @@ const Order = (props) => {
         },
 
         {//------------- Rate column ----------------------------------
-            text: (IsFranchisesRole && subPageMode === url.ORDER_4) ? "MRP" : "Basic Rate",
+            text: "Basic Rate",
             classes: 'table-cursor-pointer',
             dataField: "",
+            hidden: IsFranchisesRole,
+
             attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Basic Rate" }),
             headerStyle: () => {
                 return { width: '9%', textAlign: 'center' };
@@ -1020,6 +1022,7 @@ const Order = (props) => {
 
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, k, { tableList }) => {
+
                 if (row.GroupRow || row.SubGroupRow) { return }
 
                 if (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER) {
@@ -1044,6 +1047,7 @@ const Order = (props) => {
                     )
                 }
                 else {
+
                     return (
                         <div key={row.id} className="text-end">
 
@@ -1065,9 +1069,10 @@ const Order = (props) => {
             headerStyle: () => {
                 return { width: '8%', textAlign: 'center' };
             },
-            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER || IsFranchisesRole || isSweetAndSnacksCompany) && true,
+            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER || isSweetAndSnacksCompany) && true,
             formatter: (value, row, k) => {
                 if (row.GroupRow || row.SubGroupRow) { return }
+
                 return (
                     <div key={row.id} className="text-end">
                         <span>{row.MRPValue}</span>
@@ -1886,7 +1891,7 @@ const Order = (props) => {
 
 
             const OrderDate = deliverydate.split(' ')[0]; // Date and time  split
-            debugger
+
             const comm_jsonBody = {
                 OrderDate: OrderDate,// only date 
                 DeliveryDate: IsFranchisesRole ? deliverydate : (pageMode === mode.edit) ? deliverydate : `${deliverydate} ${_cfunc.getCurrenthours_min_sec()}`,  //date with time  as develiery date

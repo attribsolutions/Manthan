@@ -278,6 +278,7 @@ import PosServiceSetting from "../pages/Utility/PosSystemsetting/PosServiceSetti
 import PhonePaySettingList from "../pages/Utility/PhonePaySetting/PhonePaySettingList.js";
 import PhonePaySetting from "../pages/Utility/PhonePaySetting/PhonePaySetting.js";
 import StockadjustmentReport from "../Reports/StockadjustmentReport/index.js";
+import BatchTraceability from "../Reports/BatchTracebilityReport/BatchTracebilityreport.js";
 
 
 
@@ -711,6 +712,12 @@ const userRoutes = [
 	{ path: path.VOUCHER_REDEMPTION_CLAIM_, component: VoucherRedemptionClaim },
 
 	{ path: path.RATE_ADJUSTMENT, component: StockAdjustment, isPartyWisePage: true },
+
+	{ path: path.BATCH_TRACEABILITY, component: BatchTraceability, isPartyWisePage: true },
+
+
+
+
 
 
 	//******************************* Sweet Pos ************************************//
