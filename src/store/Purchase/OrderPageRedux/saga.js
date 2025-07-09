@@ -80,10 +80,13 @@ function* goButtonGenFunc({ config }) {                     // GO-Botton order A
         const isRateForSweetAndSnacksCompany = CheckRateFromCompany().isRateForSweetAndSnacksCompany;
 
         if ((subPageMode === url.ORDER_4) && loginUserIsFranchisesRole()) {
-          ele.Rate = Number(ele.MRPValue)
+          // ele.Rate = Number(ele.MRPValue)
+
+          ele.Rate = parseFloat((Number(ele.MRPValue) * 100 / (100 + Number(ele.GSTPercentage))).toFixed(2))
           ele.UnitDetails = ele.UnitDetails.map(unit => ({
-            ...unit, Rate: Number(ele.MRPValue),
+            ...unit, Rate: parseFloat((Number(ele.MRPValue) * 100 / (100 + Number(ele.GSTPercentage))).toFixed(2)),
           }))
+
         }
 
         if ((subPageMode === url.ORDER_1) || (subPageMode === url.IB_ORDER) || isRateForSweetAndSnacksCompany) {
@@ -91,6 +94,7 @@ function* goButtonGenFunc({ config }) {                     // GO-Botton order A
           ele.UnitDetails = ele.UnitDetails.map(unit => ({
             ...unit, Rate: Number(ele.VRate),
           }))
+
         }
       });
       const termArr = []
@@ -150,18 +154,27 @@ function* saveOrder_GenFunc({ config }) {
 
 
 
-function* editOrderGenFunc({ config }) {     //  Edit Order by subPageMode
+function* editOrderGenFunc({ config }) {     //  Edit Order by subPageModede
 
   const { btnmode, btnId, subPageMode } = config;
   try {
     const isRateForSweetAndSnacksCompany = CheckRateFromCompany().isRateForSweetAndSnacksCompany;
     let response = yield call(OrderPage_Edit_Post_API, config);
+    debugger
     if ((subPageMode === url.ORDER_LIST_1) || (subPageMode === url.IB_ORDER_PO_LIST) || isRateForSweetAndSnacksCompany) {
       response.Data.OrderItems.forEach((ele, k) => {
+
+        // if ((subPageMode === url.ORDER_4) && loginUserIsFranchisesRole()) {
+        //   ele.Rate = Number(ele.MRPValue)
+        //   ele.UnitDetails = ele.UnitDetails.map(unit => ({
+        //     ...unit, Rate: Number(ele.MRPValue),
+        //   }))
+        // } else {
         ele.Rate = Number(ele.VRate)
         ele.UnitDetails = ele.UnitDetails.map(unit => ({
           ...unit, Rate: Number(ele.VRate),
         }))
+        // }
       })
     }
 
@@ -258,7 +271,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.forceHideOrderAprovalBtn = true;
       i.ExtraSelect = false
 
-      debugger
+
       if (i.Inward > 0) {
 
         i.Inward = "Close"

@@ -483,6 +483,10 @@ export const VOUCHER_REDEMPTION_CLAIM_ = "/Voucher_Redeemption_Claim"
 
 export const RATE_ADJUSTMENT = "/Rate_Adjustment"
 
+export const BATCH_TRACEABILITY = "/Batch_Traceability_Report"
+
+
+
 
 
 
