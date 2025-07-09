@@ -995,7 +995,14 @@ const Order = (props) => {
                                 row["Rate"] = ((e.BaseUnitQuantity / e.BaseUnitQuantityNoUnit) * e.Rate).toFixed(2);
                                 itemWise_CalculationFunc(row, undefined, tableList)
 
-                                document.getElementById(`Rate-${key}`).innerText = _cfunc.amountCommaSeparateFunc(Number(row.Rate).toFixed(2))
+                                const rateElement = document.getElementById(`Rate-${key}`);
+                                if (rateElement) {
+                                    const rate = Number(row.Rate);
+                                    rateElement.innerText = _cfunc.amountCommaSeparateFunc(rate.toFixed(2));
+                                }
+
+
+                                // document.getElementById(`Rate-${key}`).innerText = _cfunc.amountCommaSeparateFunc(Number(row.Rate).toFixed(2))
                             }}
                             styles={{
                                 menu: provided => ({ ...provided, zIndex: 2 })
