@@ -23,6 +23,7 @@ const GlobalCustomTable = ({
     updatedRowBlinkId,
     onDataSizeChange,
     paginationEnabled = false,
+    isPaginationTotalStandalone = true,
     ...rest
 }) => {
     const updatedRowBlinkIds_string = updatedRowBlinkId?.toString() || '';
@@ -31,7 +32,7 @@ const GlobalCustomTable = ({
 
 
     const debounceHandleSearch = _debounce((val) => {
-        
+
         setCurrentPage(1); // Update currentPage when data changes
         setSearchText(val);
     }, 300);
@@ -55,7 +56,7 @@ const GlobalCustomTable = ({
     };
 
     const filteredData = useMemo(() => {
-        
+
         return data.filter((row) =>
             columns.some((column) => {
                 const columnValue = row[column.dataField];
@@ -147,9 +148,9 @@ const GlobalCustomTable = ({
                             {...paginationTableProps}
                             bootstrap4
                         />
-                        <PaginationTotalStandalone
+                       {isPaginationTotalStandalone && <PaginationTotalStandalone
                             {...paginationProps}
-                        />
+                        />}
                         {paginationEnabled && <div className=" pagination pagination-rounded justify-content-end" style={{ marginTop: "-20px", marginBottom: "40px" }}>
 
                             <PaginationListStandalone

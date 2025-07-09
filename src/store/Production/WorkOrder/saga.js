@@ -89,13 +89,9 @@ function* GetWorkOrderGenFunc({ filters }) {
 
     newList = yield response.Data.map((i) => {
 
-
       const DateAndTimeLable = listpageConcatDateAndTime(i.WorkOrderDate, i.CreatedOn);
       i["transactionDate"] = `${i.CreatedOn}${DateAndTimeLable}`; // transactionDate for sorting and filtering data 
       i["transactionDateLabel"] = DateAndTimeLable;
-
-
-
 
       if (i.Status === 0) {
         i.Status = "Open";
@@ -105,7 +101,9 @@ function* GetWorkOrderGenFunc({ filters }) {
       }
       else if (i.Status === 2) {
         i.Status = "Completed";
-        i.forceMakeBtnHide = true
+        if (!(subPageMode === url.BATCH_TRACEABILITY)) {
+          i.forceMakeBtnHide = true
+        }
       }
       else if (i.Status === 3) {
         i.Status = "Close";

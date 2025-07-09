@@ -42,7 +42,7 @@ function initialState(history) {
     let listPath = ''
     let sub_Mode = history.location.pathname;
 
-    if (sub_Mode === url.GRN_ADD_1) {
+    if (sub_Mode === url.GRN_ADD_1 || sub_Mode === url.BATCH_TRACEABILITY) {
         page_Id = pageId.GRN_ADD_1;
         listPath = url.GRN_LIST_3;
     }

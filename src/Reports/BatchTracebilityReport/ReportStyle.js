@@ -25,7 +25,7 @@ export const pageHeder = (doc, data) => {
 }
 export const tableBody = (doc, data) => {
     let tableStartY = 80;
-
+    debugger
     doc.setFont(undefined, 'bold')
 
     const options_1 = {
@@ -89,7 +89,7 @@ export const tableBody = (doc, data) => {
     }
     doc.setFontSize(10)
     doc.text(`BATCH DETAILS`, 35, 70, 'left')
-
+    doc.text(` ${data?.Period?.ItemName}`, 310, 70, 'center')
     doc.autoTable(table.columns_1, table.Rows_1(data.WorkOrderDetails), options_1);
     const options_2 = {
         margin: {
