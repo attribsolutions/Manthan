@@ -946,30 +946,30 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                     </FormGroup>
                                 </Col>
                             }
-                            <Col md="1"> </Col>
+                 
 
-                            <Col md="3">
-                                <FormGroup className="mb-3">
-                                    <Row style={{ marginTop: '25px' }}>
-                                        <Label
-                                            className="col-sm-4 col-form-label">
-                                            {fieldLabel.IsSEZ}
-                                        </Label>
-                                        <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
-                                            <div className="form-check form-switch form-switch-md mb-3">
-                                                <Input
-                                                    type="checkbox"
-                                                    className="form-check-input"
-                                                    checked={values.IsSEZ}
-
-                                                    name="IsSEZ"
-                                                    onChange={(event) => onChangeCheckbox({ event, state, setState })}
-                                                />
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                </FormGroup>
-                            </Col>
+                            {(subPageMode === url.FRANCHISE_CUSTOMER_MASTER) &&
+                                <Col md="3">
+                                    <FormGroup className="mb-3">
+                                        <Row style={{ marginTop: '25px' }}>
+                                            <Label className="col-sm-4 col-form-label">
+                                                {fieldLabel.IsSEZ}
+                                            </Label>
+                                            <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
+                                                <div className="form-check form-switch form-switch-md mb-3">
+                                                    <Input
+                                                        type="checkbox"
+                                                        className="form-check-input"
+                                                        checked={values.IsSEZ}
+                                                        name="IsSEZ"
+                                                        onChange={(event) => onChangeCheckbox({ event, state, setState })}
+                                                    />
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                    </FormGroup>
+                                </Col>
+                            }
 
                         </Row>
                     </CardBody>
