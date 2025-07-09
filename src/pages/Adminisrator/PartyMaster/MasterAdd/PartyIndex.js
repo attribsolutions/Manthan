@@ -227,7 +227,7 @@ const PartyMaster = (props) => {
 					}
 
 					if (hasEditVal) {
-
+					
 						setEditData(hasEditVal);
 						dispatch(Breadcrumb_inputName(hasEditVal.Name))
 						seteditCreatedBy(hasEditVal.CreatedBy);
@@ -255,6 +255,7 @@ const PartyMaster = (props) => {
 							})),
 
 							PAN: hasEditVal.PAN,
+							IsSEZ: hasEditVal.IsSEZ , 
 							Email: hasEditVal.Email,
 							AlternateContactNo: hasEditVal.AlternateContactNo,
 							CountryName: hasEditVal.Country === null ? {
@@ -293,6 +294,8 @@ const PartyMaster = (props) => {
 							},
 							GSTIN: hasEditVal.GSTIN,
 							isActive: location.IsMobileRetailer ? true : hasEditVal.isActive,
+							
+
 
 						};
 
