@@ -19,21 +19,33 @@ import {
 } from "../../../store/Administrator/SchemeMasterRedux/action";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
-import CommonListPage from "../../../components/Common/CommonMasterListPage";
-import { Button, Col, Label, Modal, Row, Spinner } from "reactstrap";
+
+import { Button, Col, FormGroup, Label, Modal, Row, Spinner } from "reactstrap";
 import Dropzone from "react-dropzone";
 import * as XLSX from 'xlsx';
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { C_DatePicker } from "../../../CustomValidateForm";
+import * as _cfunc from "../../../components/Common/CommonFunction";
+
 const SchemeMasterList = () => {
 
+
+
+
+
   const dispatch = useDispatch();
+  const IsSCMCompany = _cfunc.loginIsSCMCompany()
+
+
+
   const [ModalOpen, setModalOpen] = useState({ Open: false, Data: null });
   const [borderStyle, setBorderStyle] = useState("2px dashed #ced4da");
   const [uploadedFile, setUploadedFile] = useState(null);
   const [validJsonData, setValidJsonData] = useState(null); // Store valid JSON data
-
+  const [hederFilters, setHederFilters] = useState({ fromdate: _cfunc.currentDate_ymd, todate: _cfunc.currentDate_ymd })
+  const { fromdate, todate, } = hederFilters;
   const [fileStatus, setFileStatus] = useState(null); // "valid" | "invalid" | null
   const [message, setMessage] = useState("");
 
@@ -55,7 +67,7 @@ const SchemeMasterList = () => {
     })
   );
 
-  const { UploadBtnloading, deleteVoucherMsg, deleteVoucherLoading, UploadMsg } = reducers;
+  const { UploadBtnloading, deleteVoucherMsg, deleteVoucherLoading, UploadMsg, listBtnLoading } = reducers;
 
 
   const action = {
@@ -71,7 +83,7 @@ const SchemeMasterList = () => {
     const page_Id = pageId.SCHEME_MASTER_lIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    dispatch(getSchemeList())
+    goButtonHandler();
   }, []);
 
 
@@ -150,7 +162,7 @@ const SchemeMasterList = () => {
   useEffect(async () => {
 
     if ((deleteVoucherMsg.Status === true) && (deleteVoucherMsg.StatusCode === 200)) {
-      dispatch(getSchemeList())
+
       dispatch(DeleteGiftVouchersBySchemeSuccess({ Status: false }));
       customAlert({
         Type: 1,
@@ -186,11 +198,88 @@ const SchemeMasterList = () => {
     }
   }, [UploadMsg,]);
 
+  function todateOnchange(e, date) {
+    let newObj = { ...hederFilters }
+    newObj.todate = date
+    setHederFilters(newObj)
+  }
+
+  function fromdateOnchange(e, date) {
+    let newObj = { ...hederFilters }
+    newObj.fromdate = date
+    setHederFilters(newObj)
+  }
+
+  const goButtonHandler = () => {
+    let config = {};
+    debugger
+    const jsonBody = JSON.stringify({
+      FromDate: fromdate,
+      ToDate: todate,
+    });
+    config["jsonBody"] = jsonBody;
+
+    dispatch(getSchemeList(config));
+  };
+
 
   const { pageField, goBtnLoading } = reducers
   return (
     <React.Fragment>
       <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
+
+      <>
+        <div className="px-2   c_card_filter text-black" >
+          <div className="row" >
+            <Col sm="3" className="">
+              <FormGroup className="mb-2 row mt-3 " >
+                <Label className="col-sm-5 p-2"
+                  style={{ width: "83px" }}>FromDate</Label>
+                <Col sm="7">
+                  <C_DatePicker
+                    name='FromDate'
+                    value={fromdate}
+                    onChange={fromdateOnchange}
+                  />
+                </Col>
+              </FormGroup>
+            </Col>
+
+            <Col sm="3" className="">
+              <FormGroup className="mb-2 row mt-3 " >
+                <Label className="col-sm-5 p-2"
+                  style={{ width: "65px" }}>ToDate</Label>
+                <Col sm="7">
+                  <C_DatePicker
+
+                    options={{
+                      minDate: (_cfunc.disablePriviousTodate({ fromDate: fromdate })),
+                      maxDate: "today",
+                      altInput: true,
+                      altFormat: "d-m-Y",
+                      dateFormat: "Y-m-d",
+                    }}
+                    value={_cfunc.ToDate({ FromDate: fromdate, Todate: todate })}
+                    name="ToDate"
+                    onChange={todateOnchange}
+                  />
+                </Col>
+              </FormGroup>
+            </Col>
+
+            <Col sm="5" ></Col>
+
+            <Col sm="1" className="mt-3 mb-2 ">
+              <Go_Button
+                // loading={listBtnLoading}
+                onClick={goButtonHandler}
+                loading={goBtnLoading}
+             
+              />
+            </Col>
+          </div>
+        </div>
+      </>
       {
         (pageField) &&
         <CommonPurchaseList
@@ -203,6 +292,7 @@ const SchemeMasterList = () => {
           newBtnPath={url.SCHEME_MASTER}
           ButtonMsgLable={"Scheme"}
           deleteName={"SchemeName"}
+          goButnFunc={goButtonHandler}
         />
       }
       <Modal

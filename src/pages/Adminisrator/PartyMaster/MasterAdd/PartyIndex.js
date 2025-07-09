@@ -601,6 +601,7 @@ const PartyMaster = (props) => {
 				"SubCluster": baseValue.SubCluster.value,
 				"GSTIN": baseValue.GSTIN,
 				"isActive": baseValue.isActive,
+				"IsSEZ": baseValue.IsSEZ ,
 				"CreatedBy": loginUserID(),
 				"UpdatedBy": loginUserID(),
 				"IsApprovedParty": isMobileRetailer && false,

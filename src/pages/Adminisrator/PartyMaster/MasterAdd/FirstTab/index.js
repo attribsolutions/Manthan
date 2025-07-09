@@ -40,6 +40,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         Route: "",
         Distance: "",
         isActive: true,
+        IsSEZ: true,
         Latitude: "",
         Longitude: "",
         Cluster: "",
@@ -126,6 +127,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
     }, [userAccess])
 
     // Common Party Dropdown useEffect
+    debugger
     useEffect(() => {
 
         if (commonPartyDropSelect.value <= 0) {
@@ -152,6 +154,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
             a.values.Route = ''
             a.values.Distance = ''
             a.values.isActive = true
+            a.values.IsSEZ = true
             a.values.Latitude = ''
             a.values.Longitude = ''
             a.values.ShortName = ''
@@ -176,7 +179,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
 
 
-            
+
             return a
         })
 
@@ -201,7 +204,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
     useEffect(() => {
         if (PartyTypes.length === 1) {
-            
+
             setState((i) => {
                 let a = { ...i }
                 a.values.PartyType = {
@@ -217,7 +220,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
     }, [PartyTypes])
 
     useEffect(() => {
-        
+
         const PartyTypeID = getSettingBasedPartyTypeID(loginSystemSetting().PriceListSetting, loginRoleID())
         let PartyType = null
         if (PartyTypeID !== null) {
@@ -253,7 +256,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
     useEffect(() => {
 
         if (loginPartyType && subPageMode === url.FRANCHISE_CUSTOMER_MASTER) {
-            
+
             setState((i) => {
                 const a = { ...i }
                 a.values.PartyType = { value: 31, label: "Franchise Customer" };
@@ -943,6 +946,31 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                     </FormGroup>
                                 </Col>
                             }
+                            <Col md="1"> </Col>
+
+                            <Col md="3">
+                                <FormGroup className="mb-3">
+                                    <Row style={{ marginTop: '25px' }}>
+                                        <Label
+                                            className="col-sm-4 col-form-label">
+                                            {fieldLabel.IsSEZ}
+                                        </Label>
+                                        <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
+                                            <div className="form-check form-switch form-switch-md mb-3">
+                                                <Input
+                                                    type="checkbox"
+                                                    className="form-check-input"
+                                                    checked={values.IsSEZ}
+
+                                                    name="IsSEZ"
+                                                    onChange={(event) => onChangeCheckbox({ event, state, setState })}
+                                                />
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </FormGroup>
+                            </Col>
+
                         </Row>
                     </CardBody>
                 </Card>
