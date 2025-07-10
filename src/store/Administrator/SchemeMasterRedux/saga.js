@@ -27,8 +27,8 @@ import {
   UPDATE_SCHEMEMASTER_ID,
   UPLOAD_VOUCHER
 } from "./actionType";
-import { loginPartyTypeID } from "../../../components/Common/CommonFunction";
-
+import { date_dmy_func, loginPartyTypeID } from "../../../components/Common/CommonFunction";
+import SchemeMaster from "../../../pages/Adminisrator/SchemeMaster/SchemeTabForm";
 function* Save_Method_ForSchemeMaster_GenFun({ config }) {              // Save API
   try {
     const response = yield call(save_Scheme_API, config);
@@ -36,18 +36,17 @@ function* Save_Method_ForSchemeMaster_GenFun({ config }) {              // Save 
   } catch (error) { yield put(SchemeApiErrorAction()) }
 }
 
-function* Get_Scheme_List_GenFunc({ config  }) {
+function* Get_Scheme_List_GenFunc({ config }) {
   debugger
   const PartyTypeID = loginPartyTypeID()                                 // getList API
   try {
-    const response = yield call(Get_Scheme_List , config); // config is optional
+    const response = yield call(Get_Scheme_List, config); // config is optional
     const List = response.Data.map((item) => {
       return {
         ...item,
         PartyTypeID: PartyTypeID,
-        isEditButtonDisabled: item.IsSchemeActive
-
-
+        isEditButtonDisabled: !item.IsSchemeActive,
+        SchemePeriod: `${date_dmy_func(item?.FromPeriod)} - ${date_dmy_func(item?.ToPeriod)}`,
       }
     })
 
