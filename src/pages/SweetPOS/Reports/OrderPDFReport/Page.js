@@ -56,7 +56,7 @@ const FrenchiesesOrderReport = (data) => {
             }
 
             pageHeder(doc, tableData);
-
+            style.reportHeder3(doc, tableData);
             const lastTablePosition = tableData.initial_y;
             let startY = lastTablePosition;
             let currentSection = 1;
@@ -196,7 +196,7 @@ const FrenchiesesOrderReport = (data) => {
                     doc.setPage(i);
 
                     style.pageHeder1(doc, tableData);
-                    style.reportHeder3(doc, tableData);
+
                     style.pageBorder(doc, tableData);
 
                     doc.setFont('helvetica', 'Normal');

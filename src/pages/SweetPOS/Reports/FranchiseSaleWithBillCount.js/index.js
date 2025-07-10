@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Label, Row, } from "reactstrap";
+import { Col, FormGroup, Input, Label, Row, } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { C_Button } from "../../../../components/Common/CommonButton";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
@@ -12,6 +12,7 @@ import { C_DatePicker } from "../../../../CustomValidateForm";
 import { ExcelReportComponent } from "../../../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import GlobalCustomTable from "../../../../GlobalCustomTable";
 import { Franchise_Sale_With_Bill_Count_API } from "../../../../helpers/backend_helper";
+import { downloadExcel } from "./ExcelDownload";
 
 const FranchiseSaleWithBillCount = (props) => {
 
@@ -21,6 +22,8 @@ const FranchiseSaleWithBillCount = (props) => {
 
     const [fromDate, setFromDate] = useState(currentDate_ymd)
     const [toDate, setToDate] = useState(currentDate_ymd)
+    const [clientWiseBill, setClientWiseBill] = useState(false)
+    debugger
 
     const [userPageAccessState, setUserAccState] = useState('');
     const [btnMode, setBtnMode] = useState("");
@@ -74,19 +77,25 @@ const FranchiseSaleWithBillCount = (props) => {
         };
     }, [userAccess])
 
-    const [tableColumns] = DynamicColumnHook({ pageField })
+    // const [tableColumns] = DynamicColumnHook({ pageField })
 
 
     useEffect(() => {
         if (btnMode === "downloadExcel") {
             if (tableData.length > 0) {
-                ExcelReportComponent({      // Download CSV
-                    pageField,
-                    excelTableData: tableData,
-                    excelFileName: "Franchise Sale With Bill Count Report"
-                })
-                setTableData([]);
-                setApiResponse([]);
+                if (!clientWiseBill) {
+                    ExcelReportComponent({      // Download CSV
+                        pageField,
+                        excelTableData: tableData,
+                        excelFileName: "Franchise Sale With Bill Count Report"
+                    })
+                    setTableData([]);
+                    setApiResponse([]);
+                } else {
+                    downloadExcel(tableData, "Franchise_Sale_With_Bill_Count_Report")
+                    setTableData([]);
+                    setApiResponse([]);
+                }
             }
         }
     }, [tableData, pageField]);
@@ -100,9 +109,23 @@ const FranchiseSaleWithBillCount = (props) => {
                 "EmployeeID": _cfunc.loginEmployeeID(),
             })
             setGoBtnLoading(true)
-            const resp = await Franchise_Sale_With_Bill_Count_API({ jsonBody });
+            let resp = await Franchise_Sale_With_Bill_Count_API({ jsonBody });
 
             if (resp.StatusCode === 200) {
+
+                resp.Data = resp.Data.map(entry => {
+                    const totalBills = entry.BillDetails.reduce((sum, bill) => sum + bill.Bills, 0);
+                    const totalGrand = entry.BillDetails.reduce(
+                        (sum, bill) => sum + parseFloat(bill.GrandTotal),
+                        0
+                    );
+                    return {
+                        ...entry,
+                        Bills: totalBills,
+                        GrandTotal: totalGrand.toFixed(2)
+                    };
+                });
+                debugger
                 setApiResponse(resp.Data);
             }
             setGoBtnLoading(false)
@@ -122,10 +145,54 @@ const FranchiseSaleWithBillCount = (props) => {
         setApiResponse([]);
     }
 
+    const columns = [
+        {
+            dataField: "Name",
+            text: "Franchise",
+        },
+        {
+            dataField: "Bills",
+            text: "Bill Count",
+        },
+        {
+            dataField: "GrandTotal",
+            text: "Bill Amount",
+        },
+
+        {
+            dataField: "BillDetails",
+            text: "Client Details",
+            formatExtraData: clientWiseBill,
+            hidden: !clientWiseBill,
+            formatter: (cell, row) => {
+                return (
+                    <GlobalCustomTable
+                        keyField="ClientID"
+                        data={cell}
+                        columns={[
+                            { dataField: "ClientID", text: "Client ID" },
+                            { dataField: "Bills", text: "Bills" },
+                            { dataField: "GrandTotal", text: "Total" },
+                            {
+                                dataField: "LastBillTime",
+                                text: "Last Bill Time",
+                                formatter: (time) => _cfunc.DateTime(time)
+                            }
+                        ]}
+                        isPaginationTotalStandalone={false}
+                        bordered
+                        condensed
+                        wrapperClasses="table-sm"
+                    />
+                );
+            }
+        }
+    ];
+
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
-            
+
             <div className="page-content">
 
                 <div className="px-2   c_card_filter text-black " >
@@ -159,7 +226,33 @@ const FranchiseSaleWithBillCount = (props) => {
                         </Col>
 
 
-                        <Col sm={6} className=" d-flex justify-content-end" >
+                        <Col sm={3}>
+                            <FormGroup className="">
+                                <Row className="mt-2">
+                                    <Label
+                                        className="col-sm-4 col-form-label">
+                                        Client Wise Bill
+                                    </Label>
+                                    <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
+                                        <div className="form-check form-switch form-switch-md ">
+                                            <Input
+                                                type="checkbox"
+                                                className="form-check-input"
+                                                defaultChecked={clientWiseBill}
+
+                                                onChange={(e) => {
+                                                    debugger
+                                                    setClientWiseBill(e.target.checked)
+                                                }}
+                                            />
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </FormGroup>
+                        </Col>
+
+
+                        <Col sm={3} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
@@ -183,22 +276,14 @@ const FranchiseSaleWithBillCount = (props) => {
                     </Row>
                 </div>
 
-                <div className="mb-1 table-responsive table">
-                    <GlobalCustomTable
-                        keyField={"id"}
-                        data={tableData}
-                        columns={tableColumns}
-                        id="table_Arrow"
-                        noDataIndication={
-                            <div className="text-danger text-center ">
-                                Record Not available
-                            </div>
-                        }
-                        onDataSizeChange={({ dataCount, filteredData = [] }) => {
-                            dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${_cfunc.TotalAmount_Func(filteredData)}`));
-                        }}
-                    />
-                </div>
+                <GlobalCustomTable
+                    keyField="id"
+                    data={tableData}
+                    columns={columns}
+                    bordered
+                />
+
+
             </div>
         </React.Fragment >
     )

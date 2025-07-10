@@ -45,7 +45,7 @@ const SaleSummaryThermalPrintReport = (tableData) => {
     });
 
     // Step 2: Get the final Y position to determine content height
-    debugger
+
     const finalY = tempDoc.autoTable.previous.finalY;
 
     const requiredHeight = finalY; // Add padding
@@ -173,7 +173,7 @@ export const Rows_1 = (data) => {
     let finalDiscountAmount = 0
 
     const groupedItems = data.reduce((accumulator, currentItem) => {
-        const { ItemName, BaseItemUnitQuantity, Rate, GrandTotal, GSTPercentage, GSTAmount, BasicAmount, DiscountAmount, Amount, MRPValue } = currentItem;
+        const { ItemName, BaseItemUnitQuantity, Rate, GrandTotal, GSTPercentage, GSTAmount, BasicAmount, DiscountAmount, Amount, MRPValue, id, RoundOffAmount } = currentItem;
 
         const key = ItemName + '_' + MRPValue;
         if (accumulator[key]) {
@@ -183,21 +183,26 @@ export const Rows_1 = (data) => {
             accumulator[key].BasicAmount += getFixedNumber(BasicAmount, 3);
             accumulator[key].DiscountAmount += getFixedNumber(DiscountAmount, 3);
             accumulator[key].Amount += getFixedNumber(Amount, 3);
+            accumulator[key].RoundOffAmount += RoundOffAmount;
+
 
         } else {
             accumulator[key] = {
                 Rate, ItemName, GrandTotal: getFixedNumber(GrandTotal, 3), MRPValue,
-                BaseItemUnitQuantity: getFixedNumber(BaseItemUnitQuantity, 3), GSTPercentage: GSTPercentage, GSTAmount: getFixedNumber(GSTAmount, 3), BasicAmount: getFixedNumber(BasicAmount, 3), DiscountAmount: getFixedNumber(DiscountAmount, 3), Amount: getFixedNumber(Amount, 3)
+                BaseItemUnitQuantity: getFixedNumber(BaseItemUnitQuantity, 3), GSTPercentage: GSTPercentage, GSTAmount: getFixedNumber(GSTAmount, 3), BasicAmount: getFixedNumber(BasicAmount, 3), DiscountAmount: getFixedNumber(DiscountAmount, 3), Amount: getFixedNumber(Amount, 3), RoundOffAmount: RoundOffAmount, id: id
             };
         }
         return accumulator;
     }, {});
-    debugger
+
     const TotalItemlength = Object.values(groupedItems).length;
     data["TotalItemlength"] = TotalItemlength;
-
+    const uniqueMap = new Map();
     Object.values(groupedItems).forEach((element, key) => {
-
+        debugger
+        if (!uniqueMap.has(element.id)) {
+            uniqueMap.set(element.id, element.RoundOffAmount);
+        }
         finalTotal += element.Amount;
         finalTotalGST += element.GSTAmount;
         finalBasicAmount += element.BasicAmount;
@@ -221,6 +226,8 @@ export const Rows_1 = (data) => {
         };
 
         function totalLots() {
+
+
             totalQuantity = getFixedNumber(totalQuantity, 3) + getFixedNumber(element.BaseItemUnitQuantity, 3)
             totalAmount = getFixedNumber(totalAmount, 3) + getFixedNumber(element.Amount, 3)
             totalGst = getFixedNumber(totalGst, 3) + getFixedNumber(element.GSTAmount, 3)
@@ -234,7 +241,7 @@ export const Rows_1 = (data) => {
             totalLots()
         }
         else {
-            debugger
+
             returnArr.push(totalrow());
             returnArr.push(tableitemRow);
             totalGst = 0;
@@ -258,6 +265,14 @@ export const Rows_1 = (data) => {
             `Span`,
         ]);
     }
+    if (returnArr.length - 1) {
+        returnArr.push([
+            `Round Off: ${([...uniqueMap.values()].reduce((sum, amt) => sum + amt, 0)).toFixed(2)}`,
+            ``,
+            ``,
+            `Span`,
+        ]);
+    }
 
     if (returnArr.length - 1) {
         returnArr.push([
@@ -267,6 +282,7 @@ export const Rows_1 = (data) => {
             `Span`,
         ]);
     }
+    debugger
 
     return returnArr;
 }
@@ -275,20 +291,20 @@ export const Rows_1 = (data) => {
 
 
 export const PayMentMode_Rows = (data) => {
-    debugger
+
 
     let Total = 0
     data.sort((firstItem, secondItem) => firstItem.PaymentType - secondItem.PaymentType);
     const returnArr = [];
     const groupedItems = data.reduce((accumulator, currentItem) => {
-        const { GrandTotal, PaymentType, Amount } = currentItem;
+        const { PaymentType, Amount, RoundOffAmount, id } = currentItem;
 
         const key = PaymentType;
         if (accumulator[key]) {
             accumulator[key].Amount += getFixedNumber(Amount, 3);
         } else {
             accumulator[key] = {
-                Amount: getFixedNumber(Amount, 3), PaymentType
+                Amount: getFixedNumber(Amount, 3), PaymentType, RoundOffAmount: RoundOffAmount, id: id
             };
         }
         return accumulator;
@@ -296,9 +312,12 @@ export const PayMentMode_Rows = (data) => {
 
     Object.values(groupedItems).forEach((element, key) => {
         Total = Total + element.Amount
+
         const tableitemRow = [
             `${element.PaymentType}`,
             `${numberWithCommas(Number(element.Amount).toFixed(2))}`,
+            `Span`,
+
         ];
         returnArr.push(tableitemRow);
     })
@@ -306,7 +325,7 @@ export const PayMentMode_Rows = (data) => {
     returnArr.push([
         `Total `,
         `${numberWithCommas(Number(Total).toFixed(2))}`,
-
+        `Span`
     ]);
     return returnArr;
 }
