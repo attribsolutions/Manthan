@@ -40,7 +40,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         Route: "",
         Distance: "",
         isActive: true,
-        IsSEZ: true,
+        IsSEZ: false,
         Latitude: "",
         Longitude: "",
         Cluster: "",
@@ -154,7 +154,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
             a.values.Route = ''
             a.values.Distance = ''
             a.values.isActive = true
-            a.values.IsSEZ = true
+            a.values.IsSEZ = false
             a.values.Latitude = ''
             a.values.Longitude = ''
             a.values.ShortName = ''
