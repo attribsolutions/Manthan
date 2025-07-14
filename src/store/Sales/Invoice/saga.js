@@ -393,6 +393,11 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
       const isUnitIDPresent = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
       const isMCunitID = index1.UnitDetails.find(findEle => findEle.DeletedMCUnitsUnitID === index1.DeletedMCUnitsUnitID);
       const defaultunit = isUnitIDPresent !== undefined ? isUnitIDPresent : isMCunitID;
+      debugger
+      if (defaultunit === undefined) {
+        customAlert({ Type: 3, Message: `${index1.ItemName} - Default Unit not found` });
+        return;
+      }
 
       const { IsTCSParty, ISCustomerPAN } = customer;
 

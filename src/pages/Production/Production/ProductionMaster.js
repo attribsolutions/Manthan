@@ -53,6 +53,8 @@ const ProductionMaster = (props) => {
         EstimatedQuantity: "",
         ActualQuantity: "",
         PrintedBatchCode: "",
+        ProductionQty: "",
+        StockQty: "",
         BestBefore: currentDate_ymd,
         Remark: "",
         ItemName: "",
@@ -127,6 +129,9 @@ const ProductionMaster = (props) => {
                 const { Item, ItemName, UnitName, Unit, id,
                     EstimatedQuantity = 0,
                     ShelfDate,
+                    StockQty,
+                    ProductionQty,
+
                     Remark = "", PrintedBatchCode = '',
                     NumberOfLot = 0, ActualQuantity = '',
                     ProductionDate = currentDate_ymd } = hasEditVal;
@@ -155,6 +160,8 @@ const ProductionMaster = (props) => {
                     i.values.ActualQuantity = ActualQuantity;
                     i.values.BestBefore = ShelfDate;
                     i.values.PrintedBatchCode = PrintedBatchCode;
+                    i.values.StockQty = StockQty;
+                    i.values.ProductionQty = ProductionQty;
                     i.values.Remark = Remark;
 
 
@@ -165,7 +172,8 @@ const ProductionMaster = (props) => {
                     i.hasValid.NumberOfLot.valid = true
                     i.hasValid.PrintedBatchCode.valid = true
                     i.hasValid.ActualQuantity.valid = true
-
+                    i.hasValid.StockQty.valid = true
+                    i.hasValid.ProductionQty.valid = true
 
 
                     return i
@@ -346,6 +354,8 @@ const ProductionMaster = (props) => {
                     BatchDate: batchDate,
                     StoreLocation: "1234",
                     PrintedBatchCode: values.PrintedBatchCode,
+                    ProductionQty: values.ProductionQty,
+                    StockQty: values.StockQty,
                     BestBefore: values.BestBefore,
                     Remark: values.Remark,
                     CreatedBy: loginUserID(),
@@ -613,7 +623,57 @@ const ProductionMaster = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
+
+                                <Col sm={5}>
+                                    <FormGroup className=" row  " >
+                                        <Label className="col-md-4 p-2"
+                                            style={{ width: "170px" }}>{fieldLabel.ProductionQty}</Label>
+                                        <Col md="7">
+                                            <Input
+                                                type="text"
+                                                name="ProductionQty"
+                                                value={values.ProductionQty}
+                                                disabled={pageMode === mode.view ? true : false}
+
+                                                placeholder="Enter Printed BatchCode"
+                                                autoComplete="off"
+                                                onChange={(event) => {
+                                                    onChangeText({ event, state, setState })
+                                                }}
+                                            />
+                                            {isError.ProductionQty.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.ProductionQty}</small></span>
+                                            )}
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
                             </Row>
+                            <Row>
+                                <Col sm={5}>
+                                    <FormGroup className=" row  " >
+                                        <Label className="col-md-4 p-2"
+                                            style={{ width: "170px" }}>{fieldLabel.StockQty}</Label>
+                                        <Col md="7">
+                                            <Input
+                                                type="text"
+                                                name="StockQty"
+                                                value={values.StockQty}
+                                                disabled={pageMode === mode.view ? true : false}
+
+                                                placeholder="Enter Printed BatchCode"
+                                                autoComplete="off"
+                                                onChange={(event) => {
+                                                    onChangeText({ event, state, setState })
+                                                }}
+                                            />
+                                            {isError.StockQty.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.StockQty}</small></span>
+                                            )}
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+
                         </div>
 
                         <SaveButtonDraggable>

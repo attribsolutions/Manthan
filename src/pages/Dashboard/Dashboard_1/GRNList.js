@@ -30,9 +30,10 @@ export default function InvoiceForGRN() {
     const [userAccState, setUserAccState] = useState('');
 
 
-    const { tableList, GRNitem, listBtnLoading, commonPartyDropSelect, userAccess } = useSelector((state) => ({
+    const { tableList, GRNitem, listBtnLoading, commonPartyDropSelect, userAccess, IBInvoiceList } = useSelector((state) => ({
         tableList: IsCompanySweetAndSnacks ? state.InvoiceReducer.Invoicelist : state.OrderReducer.orderList,
         GRNitem: state.GRNReducer.GRNitem,
+        IBInvoiceList: state.ChallanReducer.ChallanList,
         listBtnLoading: state.GRNReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading,
         userAccess: state.Login.RoleAccessUpdateData,
         commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
@@ -40,7 +41,7 @@ export default function InvoiceForGRN() {
 
     let TableListWithNonDeleteRecord = []
     if (IsCompanySweetAndSnacks) {
-        TableListWithNonDeleteRecord = tableList
+        TableListWithNonDeleteRecord = [...IBInvoiceList, ...tableList]
     } else {
         TableListWithNonDeleteRecord = tableList.filter(i => i.IsRecordDeleted === false);
     }
@@ -71,8 +72,8 @@ export default function InvoiceForGRN() {
                 const filtersBody = JSON.stringify({
                     FromDate: currentDate_ymd,
                     ToDate: currentDate_ymd,
-                    Customer: "",
-                    Party: commonPartyDropSelect.value,
+                    Customer: commonPartyDropSelect.value,
+                    Party: "",
                     IBType: "IBGRN",
                     DashBoardMode: 0,
                     IsVDCChallan: ""

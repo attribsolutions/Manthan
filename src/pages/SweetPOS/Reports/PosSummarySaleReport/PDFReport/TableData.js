@@ -1,5 +1,6 @@
 import { getFixedNumber, groupBy } from "../../../../../components/Common/CommonFunction";
 import { numberWithCommas } from "../../../../../Reports/Report_common_function";
+import { PayMentMode_Rows } from "../ThermalPrintReport/Report";
 
 // original
 export const columns_1 = [
@@ -35,7 +36,7 @@ export const Rows_1 = (data) => {
     data.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
 
     // const RoundOffAmount = data.reduce((sum, row) => sum + row.RoundOffAmount, 0);
-    debugger
+
 
     const uniqueMap = new Map();
 
@@ -50,6 +51,9 @@ export const Rows_1 = (data) => {
     let finalBasicAmount = 0
     let finalDiscountAmount = 0
     let finalRoundOffAmount = 0;
+
+
+
 
     const groupedItems = data.reduce((accumulator, currentItem) => {
         const { id, ItemName, BaseItemUnitQuantity, Rate, GrandTotal, GSTPercentage, GSTAmount, BasicAmount, DiscountAmount, Amount, MRPValue, RoundOffAmount } = currentItem;
@@ -181,8 +185,24 @@ export const Rows_1 = (data) => {
             `Span`,
         ]);
     }
+    if (returnArr.length - 1) {
+        returnArr.push([
+            `Payment Mode`,
+            ``,
+            ``,
+            `SpanAll`,
+        ]);
+    }
+    const PaymentRows = PayMentMode_Rows(data)
+    const transformed = PaymentRows.map(([mode, amount, type]) => [
+        `${mode.trim()}:`,
+        '',
+        amount,
+        type
+    ]);
 
-
+    returnArr.push(...transformed);
+    debugger
     return returnArr;
 }
 
@@ -209,7 +229,9 @@ export const ReportRows = (data, doc) => {
     [`${slicedArray?.[1] === undefined ? "" : slicedArray[1]?.TermsAndCondition}`,
     ],
     ]
+
     return TableArray
+
 }
 
 export const BilledByRow = (data) => {
