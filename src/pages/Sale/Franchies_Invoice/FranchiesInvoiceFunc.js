@@ -174,7 +174,7 @@ export function Franchies_invoice_Calculate_Func(row, index1, IsComparGstIn,) {
 
     if (IsComparGstIn) {  //compare Supplier and Customer are Same State by GSTIn Number
 
-        let isSameSate = compareGSTINState(IsComparGstIn.GSTIn_1, IsComparGstIn.GSTIn_2)
+        let isSameSate = compareGSTINState(IsComparGstIn.GSTIn_1, IsComparGstIn.GSTIn_2, IsComparGstIn?.IsSEZ);
         if (isSameSate) {// iF isSameSate = true ===not same GSTIn
 
             cgst = 0;

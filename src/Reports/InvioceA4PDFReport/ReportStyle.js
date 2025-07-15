@@ -441,7 +441,7 @@ export const reportFooter = (doc, data) => {
 
 
 
-    const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN)
+    const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN, data?.IsSEZ)
     if ((isIGST || data.isAmerica)) {
 
         doc.text(`Total Basic:`, 440, 730,)

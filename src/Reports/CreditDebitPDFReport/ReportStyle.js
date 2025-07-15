@@ -1,8 +1,7 @@
 
 import * as table from './TableData'
 import { numberWithCommas, toWords } from "../Report_common_function";
-import upi_qr_code from "../../assets/images/upi_qr_code.png"
-import { date_dmy_func, convertOnlyTimefunc, convertTimefunc, currentDate_dmy, CurrentTime, compareGSTINState } from "../../components/Common/CommonFunction";
+import { date_dmy_func, convertOnlyTimefunc, currentDate_dmy, CurrentTime, compareGSTINState } from "../../components/Common/CommonFunction";
 
 
 export const pageBorder = (doc) => {
@@ -359,18 +358,18 @@ export const reportHeder1 = (doc, data) => {
     priLength()
 
     doc.autoTable(table.DetailsOfTransport, table.DetailsOfTransportRow(data), DetailsOfTransportStyle);
-    
+
     priLength()
 
 
     doc.line(570, data.isQR ? initial_y : 61, 30, data.isQR ? initial_y : 61);// full horizontal bill by bill to below line 
 
-    doc.line(408, initial_y , 408, 16);//vertical line header section billby 
-    doc.line(220, initial_y , 220, data.isQR ? 103 : 46);//vertical  line header section billto
+    doc.line(408, initial_y, 408, 16);//vertical line header section billby 
+    doc.line(220, initial_y, 220, data.isQR ? 103 : 46);//vertical  line header section billto
 
 
     doc.line(570, initial_y, 30, initial_y);// full horizontal bill by bill to below line 
-    
+
 
 }
 
@@ -442,7 +441,7 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(8)
 
 
-    const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN)
+    const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN, data?.IsSEZ)
     if (isIGST) {
 
         doc.text(`Total Basic:`, 440, 327,)
@@ -1016,7 +1015,7 @@ export const reportFooterA4 = (doc, data) => {
     doc.setFontSize(8)
 
 
-    const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN)
+    const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN, data?.IsSEZ)
     if (isIGST) {
 
         doc.text(`Total Basic:`, 440, 748,)

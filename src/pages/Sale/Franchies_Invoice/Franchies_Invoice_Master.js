@@ -327,7 +327,7 @@ const Franchies_Invoice_Master = (props) => {
     useLayoutEffect(() => {
 
         if (((editData.Status === true) && (editData.StatusCode === 200))) {
-            debugger
+
             setState((i) => {
                 const obj = { ...i }
                 obj.values.Customer = editData.customer;
@@ -680,7 +680,7 @@ const Franchies_Invoice_Master = (props) => {
     };
 
     const SaveHandler = async (event, btnId) => {
-        debugger
+
         event.preventDefault();
         setBtnMode(btnId)
         setSaveBtnloading(true)
@@ -688,7 +688,7 @@ const Franchies_Invoice_Master = (props) => {
         const invoiceItems = []
 
         // IsComparGstIn= compare Supplier and Customer are Same State by GSTIn Number
-        let IsComparGstIn = { GSTIn_1: values.Customer.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() }
+        let IsComparGstIn = { GSTIn_1: values.Customer.CustomerGSTIN, GSTIn_2: _cfunc.loginUserGSTIN(), IsSEZ: values?.Customer?.IsSEZ }
 
         orderItemDetails.forEach((index) => {
 

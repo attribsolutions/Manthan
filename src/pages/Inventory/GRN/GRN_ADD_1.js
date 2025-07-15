@@ -1426,7 +1426,7 @@ const GRN_ADD_1 = (props) => {
             }
         });
 
-        const GST_Type = _cfunc.compareGSTINState(grnDetail.SupplierGSTIN, grnDetail.CustomerGSTIN)
+        const GST_Type = _cfunc.compareGSTINState(grnDetail.SupplierGSTIN, grnDetail.CustomerGSTIN, grnDetail?.IsSEZ)
         const updatedLedgerSelect = {
             ...ledgerSelect,
             GST_Type: GST_Type ? "IGST" : "CGST/SGST",

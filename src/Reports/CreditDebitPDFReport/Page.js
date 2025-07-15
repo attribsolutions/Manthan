@@ -21,7 +21,7 @@ var pageHeder = function (doc, data) {
 
 
 function reportBody(doc, data) {
-    const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN)
+    const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN, data?.IsSEZ)
     if (isIGST) {
         style.tableBodyWithIGST(doc, data);                 //table Body
     } else {

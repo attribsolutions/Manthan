@@ -22,7 +22,7 @@ var pageHeder = function (doc, data) {
 
 function reportBody(doc, data) {
 
-    const isIGST = compareGSTINState(data.CustomerGSTIN, data.SupplierGSTIN)
+    const isIGST = compareGSTINState(data.CustomerGSTIN, data.SupplierGSTIN, data?.IsSEZ)
     if (isIGST) {
         style.tableBodyWithIGST(doc, data);
     } else if (data.isAmerica) {

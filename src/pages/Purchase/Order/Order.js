@@ -1757,12 +1757,12 @@ const Order = (props) => {
 
             // Function to handle value changes in order items
             function processValueChanged({ item, isEdit, isDelete }) {
-
+                debugger
                 let calculated = {}
                 if (IsFranchisesRole && subPageMode === url.ORDER_4) {
-                    calculated = Franchies_Order_Calculate_Func(item)
+                    calculated = Franchies_Order_Calculate_Func(item, { GSTIn_1: supplierSelect.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() })
                 } else {
-                    calculated = orderCalculateFunc(item, { GSTIn_1: supplierSelect.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() });
+                    calculated = orderCalculateFunc(item, { GSTIn_1: supplierSelect.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN(), IsSEZ: supplierSelect?.IsSEZ });
                 }
 
                 // Create an object for the order item

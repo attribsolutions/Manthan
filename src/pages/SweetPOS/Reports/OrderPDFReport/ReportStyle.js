@@ -1,9 +1,8 @@
 
 import cbm_logo from "../../../../assets/images/cbm_logo.png"
 import * as table from './TableData'
-import { toWords, numberWithCommas } from "../../../../Reports/Report_common_function";
-import { CurrentTime, compareGSTINState, convertOnlyTimefunc, currentDate_dmy, date_dmy_func } from "../../../../components/Common/CommonFunction";
-import { url } from "../../../../routes";
+import { convertOnlyTimefunc, date_dmy_func } from "../../../../components/Common/CommonFunction";
+
 let initial_y = 0
 
 
@@ -294,7 +293,7 @@ export const reportHeder2 = (doc, data) => {
 
 
 export const reportHeder3 = (doc, data) => {
-    
+
     // Check if data.CreatedOn is defined and is a valid string before using substring
     if (!data || !data.CreatedOn) {
         console.error('CreatedOn is missing or undefined in the data');

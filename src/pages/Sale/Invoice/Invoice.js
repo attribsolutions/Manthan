@@ -1099,8 +1099,8 @@ const Invoice = (props) => {
         const invoiceItems = []
 
         // IsComparGstIn= compare Supplier and Customer are Same State by GSTIn Number
-        let IsComparGstIn = { GSTIn_1: values.Customer.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() }
-
+        let IsComparGstIn = { GSTIn_1: values.Customer.CustomerGSTIN, GSTIn_2: _cfunc.loginUserGSTIN() }
+        debugger
         orderItemDetails.forEach((index) => {
             if (index.StockInValid) {
                 validMsg.push({ [index.ItemName]: ` ${index.StockInvalidMsg}.` })

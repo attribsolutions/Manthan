@@ -290,7 +290,7 @@ const PartyMasterBulkUpdate = (props) => {
             })
             return;
         }
-        
+
         const jsonBody = JSON.stringify({
 
             PartyID: commonPartyDropSelect.value,
@@ -445,13 +445,14 @@ const PartyMasterBulkUpdate = (props) => {
 
                         </Col> :
 
-                        SelectFieldName.label === "IsDivision" ?
+                        ((SelectFieldName.label === "IsDivision") ||
+                            (SelectFieldName.label === "IsSEZ")) ?
 
                             < Col md={2} style={{ marginTop: '9px' }} >
                                 <div className="form-check form-switch form-switch-md mb-3">
                                     <Input type="checkbox" className="form-check-input"
                                         id={key}
-                                        defaultChecked={row.IsDivision}
+                                        defaultChecked={row[SelectFieldName.label]}
                                         onChange={(event) => divisionhandler(event, row)}
                                         name="IsActive"
 
@@ -716,9 +717,9 @@ const PartyMasterBulkUpdate = (props) => {
                         <div className="px-2   c_card_filter text-black" >
                             <div className="row" >
                                 <Col sm="3" className="">
-                                    <FormGroup className="mb- row mt-3 " >
+                                    <FormGroup className=" row mt-2" >
                                         <Label className="col-sm-5 p-2"
-                                            style={{ width: "83px" }}>{fieldLabel.Type}</Label>
+                                            style={{ width: "100px" }}>{fieldLabel.Type}</Label>
                                         <Col sm="7">
                                             <Select
                                                 name="SelectField"
@@ -737,9 +738,9 @@ const PartyMasterBulkUpdate = (props) => {
                                     </FormGroup>
                                 </Col>
                                 <Col sm="3" className="">
-                                    <FormGroup className="mb- row mt-3 " >
+                                    <FormGroup className=" row mt-2" >
                                         <Label className="col-sm-5 p-2"
-                                            style={{ width: "80px" }}>{fieldLabel.Routes}</Label>
+                                            style={{ width: "100px" }}>{fieldLabel.Routes}</Label>
                                         <Col sm="7">
                                             <Select
                                                 name="RoutesName"
@@ -759,7 +760,7 @@ const PartyMasterBulkUpdate = (props) => {
                                     </FormGroup>
                                 </Col>
                                 <Col sm="5">
-                                    <FormGroup className="mb-2 row mt-3 " >
+                                    <FormGroup className=" row mt-2" >
                                         <Label className="col-md-4 p-2"
                                             style={{ width: "115px" }}>{fieldLabel.Party}</Label>
                                         <Col sm="5">
@@ -780,7 +781,7 @@ const PartyMasterBulkUpdate = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col >
-                                <Col sm="1" className="mt-3 ">
+                                <Col sm="1" className="mt-2 ">
                                     {!Data.length > 0 ?
                                         <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listBtnLoading} />
                                         : <Change_Button
