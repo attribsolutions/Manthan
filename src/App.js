@@ -19,9 +19,11 @@ import NonAuthLayout from "./components/NonAuthLayout"
 // Import scss
 import "./assets/scss/theme.scss"
 import "./assets/scss/preloader.scss"
+import { useRealTimeToLocalStorage } from './components/Common/RealTimeDate'
 
 const App = props => {
   const history = useHistory();
+  useRealTimeToLocalStorage();
   const userPageAccess = history.location.state
 
   function getLayout() {
