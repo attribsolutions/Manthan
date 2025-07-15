@@ -38,6 +38,8 @@ export const SCHEME_MASTER = 350
 export const STOCK_ADJUSTMENT_REPORT = 359
 
 
+ export const SWIGGY_ZOMATO_CLAIM = 362 
+
 
 
 

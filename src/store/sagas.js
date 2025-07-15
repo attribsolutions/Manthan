@@ -145,6 +145,7 @@ import ItemConsumptionReportSaga from "./Report/ItemConsumptionReportRedux/saga"
 import PosServiceSettingSaga from "./Utilites/PosServiesSettingRedux/saga"
 import PhonePaySettingSaga from "./Utilites/PhonePaySettingRedux/saga"
 import Stock_Adjustment_ReportSaga from "./Report/StockAdjustMentRedux/saga"
+import SwiggyZomatoClaimSaga from "./Report/SwiggyZomatoRedux/saga"
 
 
 
@@ -287,6 +288,7 @@ export default function* rootSaga() {
 		fork(ItemConsumptionReportSaga),
 		fork(PosServiceSettingSaga),
 		fork(PhonePaySettingSaga),
-		fork(Stock_Adjustment_ReportSaga)
+		fork(Stock_Adjustment_ReportSaga),
+		fork(SwiggyZomatoClaimSaga),
 	])
 }

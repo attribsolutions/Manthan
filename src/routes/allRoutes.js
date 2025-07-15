@@ -279,6 +279,7 @@ import PhonePaySettingList from "../pages/Utility/PhonePaySetting/PhonePaySettin
 import PhonePaySetting from "../pages/Utility/PhonePaySetting/PhonePaySetting.js";
 import StockadjustmentReport from "../Reports/StockadjustmentReport/index.js";
 import BatchTraceability from "../Reports/BatchTracebilityReport/BatchTracebilityreport.js";
+import SwiggyZomatoClaim from "../Reports/SwiggyZomatoClaim/SwiggyZomatoClaim.js";
 
 
 
@@ -715,7 +716,7 @@ const userRoutes = [
 
 	{ path: path.BATCH_TRACEABILITY, component: BatchTraceability, isPartyWisePage: true },
 
-
+	{ path: path.SWIGGY_ZOMATO_CLAIM, component: SwiggyZomatoClaim },//not party wise
 
 
 

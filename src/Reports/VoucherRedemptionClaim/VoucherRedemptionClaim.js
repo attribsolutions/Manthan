@@ -4,7 +4,7 @@ import {
     commonPageFieldList,
     commonPageFieldListSuccess
 } from "../../store/actions";
-import { claimList_API, claimList_API_Success, deleteClaimSuccess, delete_Claim_ID } from "../../store/Report/ClaimSummary/action";
+
 import * as report from '../ReportIndex'
 import { getpdfReportdataSuccess } from "../../store/Utilites/PdfReport/actions";
 import { Col, FormGroup, Input, Label } from "reactstrap";
@@ -18,10 +18,10 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 import { sideBarPageFiltersInfoAction } from "../../store/Utilites/PartyDrodown/action";
 import { VoucherRedemptionClaim_Action, VoucherRedemptionClaim_Action_Success } from "../../store/Report/VoucherRedemptionClaimRedux/action";
-import C_Report from "../../components/Common/C_Report";
+
 import { C_Select } from "../../CustomValidateForm";
 import { allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
-import { Get_Scheme_List, Scheme_List_Per_Month_API } from "../../helpers/backend_helper";
+import {  Scheme_List_Per_Month_API } from "../../helpers/backend_helper";
 
 const SelectedMonth = () => _cfunc.getPreviousMonthAndYear({ date: new Date(), Privious: 1 })
 const FirstAndLastDate = () => _cfunc.getFirstAndLastDateOfMonth(SelectedMonth());

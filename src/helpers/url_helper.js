@@ -689,7 +689,9 @@ export const POS_VERSION = "/SweetPOS/LVersionList"
 
 export const VOUCHER_REDEMPTION_CLAIM = "/MATAVoucherRedeemptionClaimTotalList"
 
+// swiggyZomato Claim API
 
+export const SWIGGY_ZOMATO_CLAIM = "/SweetPOS/SwiggyZomatoClaimList"
 
 
 
