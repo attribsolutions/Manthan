@@ -63,6 +63,8 @@ const MaterialIssueMaster = (props) => {
         TotalQty: 0,
         TotalNumberOfLot: 0,
         Suppiler: "",
+        ProductionQty: "",
+        StockQty: "",
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -173,15 +175,17 @@ const MaterialIssueMaster = (props) => {
 
             if (GoButton.goButtonCallByMode) {
                 if (ListData) {
-                    const { id, Item, ItemName, Unit, Quantity, NumberOfLot, Bom, RemaningQty, RemainingLot, TotalQty, TotalNumberOfLot } = ListData;
+                    const { id, Item, ItemName, Unit, Quantity, NumberOfLot, Bom, RemaningQty, RemainingLot , ProductionQty, StockQty } = ListData;
 
                     setState((i) => {
                         i.values.MaterialIssueDate = currentDate_ymd
                         i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: Quantity };
                         i.values.NumberOfLot = RemainingLot;
                         i.values.LotQuantity = RemaningQty;
-                        i.values.TotalNumberOfLot = TotalNumberOfLot;
-                        i.values.TotalQty = TotalQty;
+                        i.values.TotalNumberOfLot = NumberOfLot  ;
+                        i.values.TotalQty = Quantity ;
+                        i.values.ProductionQty = ProductionQty;
+                        i.values.StockQty = StockQty;
 
                         i.hasValid.ItemName.valid = true;
                         i.hasValid.MaterialIssueDate.valid = true;
@@ -189,6 +193,8 @@ const MaterialIssueMaster = (props) => {
                         i.hasValid.LotQuantity.valid = true;
                         i.hasValid.TotalNumberOfLot.valid = true;
                         i.hasValid.TotalQty.valid = true;
+                        i.hasValid.ProductionQty.valid = true;
+                        i.hasValid.StockQty.valid = true;
                         return i
                     })
                     setItemselect({ Item: Item, Unit: Unit, id: id, Bom: Bom, Quantity: Quantity })
@@ -240,6 +246,8 @@ const MaterialIssueMaster = (props) => {
                     i.hasValid.MaterialIssueDate.valid = true;
                     i.hasValid.NumberOfLot.valid = true;
                     i.hasValid.LotQuantity.valid = true;
+                    i.hasValid.ProductionQty.valid = true;
+                    i.hasValid.StockQty.valid = true;
                     return i
                 })
                 // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
@@ -352,6 +360,8 @@ const MaterialIssueMaster = (props) => {
         WorkDate: index.WorkDate,
         TotalNumberOfLot: index.NumberOfLot,
         TotalQty: index.Quantity,
+        ProductionQty: index.ProductionQty,
+        StockQty: index.StockQty,
 
     }));
     function modalToggleFunc() {
@@ -544,6 +554,8 @@ const MaterialIssueMaster = (props) => {
             i.values.ItemName = hasSelect
             i.values.NumberOfLot = hasSelect.NumberOfLot;
             i.values.LotQuantity = hasSelect.Quantity;
+            i.values.ProductionQty = hasSelect.ProductionQty;
+            i.values.StockQty = hasSelect.StockQty;
             i.hasValid.NumberOfLot.valid = true;
             i.hasValid.LotQuantity.valid = true;
             i.hasValid.MaterialIssueDate.valid = true;
@@ -593,8 +605,10 @@ const MaterialIssueMaster = (props) => {
             };
             i.values.NumberOfLot = e.NumberOfLot;
             i.values.LotQuantity = e.Quantity;
-            i.values.TotalNumberOfLot = e.TotalNumberOfLot;
-            i.values.TotalQty = e.TotalQty;
+            i.values.ProductionQty = e.ProductionQty;
+            i.values.StockQty = e.StockQty;
+            i.values.TotalNumberOfLot = e.NumberOfLot  ;
+            i.values.TotalQty = e.Quantity ;
             i.hasValid.NumberOfLot.valid = true;
             i.hasValid.LotQuantity.valid = true;
             i.hasValid.TotalNumberOfLot.valid = true;
@@ -868,7 +882,7 @@ const MaterialIssueMaster = (props) => {
                 pathname: url.STOCK_ADJUSTMENT,
                 StockDetails,
             })
-        }else {
+        } else {
             customAlert({
                 Type: 4,
                 Message: alertMessages.StockNotAvaliable,
@@ -888,11 +902,14 @@ const MaterialIssueMaster = (props) => {
             <components.Option {...props}>
                 <div {...innerProps}>
                     <div >Name:{data.ItemName}</div>
-                    <div>Total Number Of Lot:{data.TotalNumberOfLot}</div>
+                    <div>Total Number Of Lot:{data.NumberOfLot  }</div>
                     <div>Number Of Lot:{data.NumberOfLot}</div>
-                    <div>Total Qty:{data.TotalQty}</div>
+                    <div>Total Qty:{data.Quantity }</div>
                     <div>Quantity:{data.Quantity}</div>
                     <div>WorkDate:{_cfunc.date_dmy_func(data.WorkDate)}</div>
+                    <div>ProductionQty:{data.ProductionQty}</div>
+                    <div>StockQty:{data.StockQty}</div>
+
                 </div>
             </components.Option>
         );
@@ -905,148 +922,165 @@ const MaterialIssueMaster = (props) => {
 
                 <div className="page-content" >
                     <form >
-                        <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
-                            <Row>
-                                <Col className=" mt-1 row" sm={11} >
-                                    <Col sm="6">
-                                        <FormGroup className="row mt-2  ">
-                                            <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.MaterialIssueDate} </Label>
-                                            <Col sm="7">
-                                                <C_DatePicker
-                                                    name="MaterialIssueDate"
-                                                    value={values.MaterialIssueDate}
-                                                    onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                                />
-                                                {isError.MaterialIssueDate.length > 0 && (
-                                                    <span className="invalid-feedback">{isError.MaterialIssueDate}</span>
-                                                )}
-                                            </Col>
-                                        </FormGroup>
-                                    </Col>
+                        <Col className="px-2 mb-1 c_card_filter header text-black " sm={12}>
+                            <Row className="mx-0 ">
 
-                                    <Col sm="6">
-                                        <FormGroup className="row mt-2 ">
-                                            <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.ItemName} </Label>
-                                            <Col sm={7}>
-                                                <Select
-                                                    name="ItemName"
-                                                    value={values.ItemName}
-                                                    // isDisabled={Data.length > 0 ? true : false}
-                                                    isSearchable={true}
-                                                    className="react-dropdown"
-                                                    classNamePrefix="dropdown"
-                                                    options={ItemDropdown_Options}
-                                                    components={{ Option: customOption }}
-                                                    isDisabled={(goButtonList.length > 0) ? true : false}
-                                                    onChange={ItemOnchange}
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                                    }}
-                                                />
-                                                {isError.ItemName.length > 0 && (
-                                                    <span className="text-danger f-8"><small>{isError.ItemName}</small></span>
-                                                )}
-                                            </Col>
-                                        </FormGroup>
-                                    </Col >
-
-                                    <Col sm="6">
-                                        <FormGroup className="mt-2 row" >
-                                            <Label className="mt-1" style={{ width: "150px" }}>
-                                                {fieldLabel.TotalNumberOfLot}
-                                            </Label>
-                                            <Col sm={7}>
-                                                <Label className="mt-1" style={{ width: "150px", marginRight: "20px" }}>
-                                                    {values.TotalNumberOfLot}
-                                                </Label>
-                                            </Col>
-                                        </FormGroup>
-                                    </Col>
-
-                                    <Col sm="6">
-                                        <FormGroup className=" mt-2  row" >
-                                            <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.TotalQty} </Label>
-                                            <Col sm={7}>
-                                                <Label className="mt-2" style={{ width: "100px" }}>
-                                                    {values.TotalQty}
-                                                </Label>
-                                            </Col>
-                                        </FormGroup>
-                                    </Col>
-
-
-
-                                    <Col sm="6">
-                                        <FormGroup className="mb-2 mt-1 row  " style={{ marginTop: "" }}>
-                                            <Label className="mt-1" style={{ width: "150px" }}> {fieldLabel.NumberOfLot} </Label>
-                                            <Col sm={7}>
-                                                <CInput
-                                                    style={{ textAlign: "right" }}
-                                                    name="NumberOfLot"
-                                                    cpattern={decimalRegx}
-                                                    value={values.NumberOfLot}
-                                                    disabled={(goButtonList.length > 0) ? true : false}
-                                                    type="text"
-                                                    className={isError.NumberOfLot.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                    placeholder="Please Enter Number Of Lots"
-                                                    autoComplete='off'
-                                                    onChange={(e) => NumberOfLotchange(e.target.value)}
-                                                />
-
-                                            </Col>
-                                        </FormGroup>
-                                    </Col>
-
-                                    <Col sm="6">
-                                        <FormGroup className="mb-1 mt-1  row" >
-                                            <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.LotQuantity} </Label>
-                                            <Col sm={7}>
-                                                <CInput
-                                                    style={{ textAlign: "right" }}
-                                                    name="LotQuantity"
-                                                    value={values.LotQuantity}
-                                                    // disabled={(goButtonList.length > 0) ? true : false}
-                                                    type="text"
-                                                    cpattern={decimalRegx}
-                                                    disabled={true}
-                                                    className={isError.LotQuantity.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                    placeholder="Please Enter LotQuantity"
-                                                    autoComplete='off'
-                                                    onChange={Quantitychange}
-
-                                                />
-                                            </Col>
-                                            <div className="col col-1">
-                                                <Label style={{ marginTop: '7px', width: "72px", marginLeft: '-23px' }}>
-                                                    {Itemselect.UnitName}
-                                                </Label>
-                                            </div>
-                                        </FormGroup>
-                                    </Col>
+                                {/* === Row 1: 5 columns with horizontal labels === */}
+                                <Col sm="2">
+                                    <FormGroup className="row mt-2">
+                                        <Label className="col-sm-5 col-form-label">{fieldLabel.MaterialIssueDate}</Label>
+                                        <Col sm="7">
+                                            <C_DatePicker
+                                                name="MaterialIssueDate"
+                                                value={values.MaterialIssueDate}
+                                                onChange={(y, v, e) => onChangeDate({ e, v, state, setState })}
+                                            />
+                                            {isError.MaterialIssueDate.length > 0 && (
+                                                <span className="invalid-feedback">{isError.MaterialIssueDate}</span>
+                                            )}
+                                        </Col>
+                                    </FormGroup>
                                 </Col>
 
+                                <Col sm="2">
+                                    <FormGroup className="row mt-2">
+                                        <Label className="col-sm-5 col-form-label">{fieldLabel.LotQuantity}</Label>
+                                        <Col sm="7">
+                                            <CInput
+                                                style={{ textAlign: "right" }}
+                                                name="LotQuantity"
+                                                value={values.LotQuantity}
+                                                cpattern={decimalRegx}
+                                                disabled={true}
+                                                className={isError.LotQuantity.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                placeholder="Lot Quantity"
+                                                autoComplete='off'
+                                                onChange={Quantitychange}
+                                            />
+                                            <small>{Itemselect.UnitName}</small>
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
 
-                                <Col sm={1} className="mt-2">
+                                <Col sm="2">
+                                    <FormGroup className="row mt-2">
+                                        <Label className="col-sm-5 col-form-label">{fieldLabel.NumberOfLot}</Label>
+                                        <Col sm="7">
+                                            <CInput
+                                                style={{ textAlign: "right" }}
+                                                name="NumberOfLot"
+                                                cpattern={decimalRegx}
+                                                value={values.NumberOfLot}
+                                                disabled={(goButtonList.length > 0)}
+                                                className={isError.NumberOfLot.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                placeholder="No. of Lots"
+                                                autoComplete='off'
+                                                onChange={(e) => NumberOfLotchange(e.target.value)}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+
+                                <Col sm="3">
+                                    <FormGroup className="row mt-2">
+                                        <Label className="col-sm-5 col-form-label">{fieldLabel.ProductionQty}</Label>
+                                        <Col sm="7">
+                                            <CInput
+                                                style={{ textAlign: "right" }}
+                                                name="ProductionQty"
+                                                value={values.ProductionQty}
+                                                type="text"
+                                                placeholder="Production Qty"
+                                                autoComplete='off'
+                                                onChange={(e) => NumberOfLotchange(e.target.value)}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+
+                                <Col sm="2">
+                                    <FormGroup className="row mt-2">
+                                        <Label className="col-sm-5 col-form-label">{fieldLabel.StockQty}</Label>
+                                        <Col sm="7">
+                                            <CInput
+                                                style={{ textAlign: "right" }}
+                                                name="StockQty"
+                                                value={values.StockQty}
+                                                type="text"
+                                                placeholder="Stock Qty"
+                                                autoComplete='off'
+                                                onChange={(e) => NumberOfLotchange(e.target.value)}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+
+                                {/* Go / Change Button */}
+                                <Col sm="1" className="mt-2 ms-">
+                                <div className="ms-5">
                                     {!(pageMode === "view") && (goButtonList.length > 0) ? (
-                                        <Change_Button onClick={(e) => {
+                                        <Change_Button onClick={() => {
                                             setChangeButtonEnable(true);
                                             dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]));
                                             setGoButtonList([]);
                                         }} />
                                     ) : (
-                                        (!(goButtonList.length > 0)) ? (
-                                            <Go_Button
-                                                loading={goBtnloading}
-                                                onClick={(e) => goButtonHandler(e)} />
-                                        ) : null
+                                        !(goButtonList.length > 0) && (
+                                            <Go_Button loading={goBtnloading} onClick={goButtonHandler} />
+                                        )
                                     )}
+                                    </div>
+                                </Col>
+                            </Row>
+
+                            {/* === Row 2: Total Lot, Total Qty, Item Name === */}
+                            <Row className="mx-0 ">
+                                <Col sm="2 ">
+                                    <FormGroup className="row mt-2 mb-2">
+                                        <Label className="col-sm-5 col-form-label">{fieldLabel.TotalNumberOfLot}</Label>
+                                        <Col sm="7">
+                                            <Label className="form-control-plaintext">{values.TotalNumberOfLot}</Label>
+                                        </Col>
+                                    </FormGroup>
                                 </Col>
 
+                                <Col sm="2">
+                                    <FormGroup className="row mt-2 mb-2">
+                                        <Label className="col-sm-5 col-form-label">{fieldLabel.TotalQty}</Label>
+                                        <Col sm="7">
+                                            <Label className="form-control-plaintext">{values.TotalQty}</Label>
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
 
-                                <Col>
+                                <Col sm="5">
+                                    <FormGroup className="row mt-2 mb-2">
+                                        <Label className="col-sm-2 col-form-label">{fieldLabel.ItemName}</Label>
+                                        <Col sm="10">
+                                            <Select
+                                                name="ItemName"
+                                                value={values.ItemName}
+                                                isSearchable={true}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                options={ItemDropdown_Options}
+                                                components={{ Option: customOption }}
+                                                isDisabled={(goButtonList.length > 0)}
+                                                onChange={ItemOnchange}
+                                                styles={{ menu: provided => ({ ...provided, zIndex: 2 }) }}
+                                            />
+                                            {isError.ItemName.length > 0 && (
+                                                <span className="text-danger f-8">
+                                                    <small>{isError.ItemName}</small>
+                                                </span>
+                                            )}
+                                        </Col>
+                                    </FormGroup>
                                 </Col>
                             </Row>
                         </Col>
+
+
 
                         <ToolkitProvider
                             keyField={"id"}
