@@ -998,7 +998,7 @@ export const pageFooter = (doc, data) => {
 
     const TotalGST = totalCGST + totalSGST;
 
-    const isIGST = compareGSTINState(data.CustomerGSTIN, data.SupplierGSTIN)
+    const isIGST = compareGSTINState(data.CustomerGSTIN, data.SupplierGSTIN, data?.IsSEZ)
     if (isIGST || data.isAmerica) {
         doc.setFontSize(8)
         doc.text(`Total Basic:`, 434, 742,)
@@ -1226,7 +1226,7 @@ export const pageFooter_A5 = (doc, data) => {
 
     const TotalGST = totalCGST + totalSGST;
 
-    const isIGST = compareGSTINState(data.CustomerGSTIN, data.SupplierGSTIN)
+    const isIGST = compareGSTINState(data.CustomerGSTIN, data.SupplierGSTIN, data?.IsSEZ)
     if (isIGST || data.isAmerica) {
         doc.setFontSize(8)
         doc.text(`Total Basic:`, 434, 300,)

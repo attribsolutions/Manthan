@@ -121,6 +121,7 @@ const Bulk_Invoice2 = (props) => {
       const IsComparGstIn = {
         GSTIn_1: orderInfo.CustomerGSTIN,
         GSTIn_2: loginPartyGstIn,
+        IsSEZ: orderInfo?.IsSEZ,
       };
       const orderIncoiceItems = [];
       let sumOfItemAmount = 0;

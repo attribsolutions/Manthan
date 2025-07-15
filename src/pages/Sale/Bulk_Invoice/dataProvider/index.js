@@ -61,7 +61,7 @@ export const BulkInvoiceProvider = ({ children, data = [] }) => {
                 let orderAmountWithGst = 0;
                 const IsTCSParty = order.IsTCSParty;
                 const IsCustomerPAN = order.IsTCSParty;
-                const IsComparGstIn = { GSTIn_1: order.CustomerGSTIN, GSTIn_2: loginPartyGstIn }
+                const IsComparGstIn = { GSTIn_1: order.CustomerGSTIN, GSTIn_2: loginPartyGstIn, IsSEZ: order?.IsSEZ };
 
                 order.OrderItemDetails.forEach(orderItem => {
                     const itemId = `itemId-${orderItem.Item}`;

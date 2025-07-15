@@ -23,7 +23,7 @@ var pageHeder = function (doc, data) {
 };
 
 function reportBody(doc, data) {
-    const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN)
+    const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN, data?.IsSEZ)
     const isSweetAndSnacksCompany = IsSweetAndSnacksCompany()
 
 

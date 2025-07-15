@@ -98,8 +98,8 @@ export const itemAmounWithGst = (props) => {
     let CGST_Percentage = (GST_Percentage / 2);
 
     if (IsComparGstIn) {  //compare Supplier and Customer are Same State by GSTIn Number
-        let isSameSate = compareGSTINState(IsComparGstIn?.GSTIn_1, IsComparGstIn?.GSTIn_2)
-        if (isSameSate) {// iF isSameSate = true ===not same GSTIn
+        let isSameState = compareGSTINState(IsComparGstIn?.GSTIn_1, IsComparGstIn?.GSTIn_2 , IsComparGstIn?.IsSEZ);
+        if (isSameState) {// iF isSameState = true ===not same GSTIn
             CGST_Amount = 0;
             SGST_Amount = 0;
             IGST_Amount = Number(roundedGstAmount.toFixed(2))
