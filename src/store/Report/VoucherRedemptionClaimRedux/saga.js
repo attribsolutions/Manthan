@@ -3,7 +3,6 @@ import { VOUCHER_REDEMPTION_CLAIM_ACTION } from "./actionType";
 import { VoucherRedemptionClaim_Action_Success, VoucherRedemptionClaim_ErrorAction } from "./action";
 import { VoucherRedemption_Aip } from "../../../helpers/backend_helper";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { amountCommaSeparateFunc } from "../../../components/Common/CommonFunction";
 import { numberWithCommas } from "../../../Reports/Report_common_function";
 
 

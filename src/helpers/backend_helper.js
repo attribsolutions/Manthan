@@ -910,6 +910,9 @@ export const POSExEVersion_Api = ({ jsonBody }) => post(url.POS_VERSION, jsonBod
 export const VoucherRedemption_Aip = ({ jsonBody }) => post(url.VOUCHER_REDEMPTION_CLAIM, jsonBody);
 
 
+// Swiggy Zomato API
+export const SwiggyZomatoClaim_API = ({ jsonBody }) => post(url.SWIGGY_ZOMATO_CLAIM, jsonBody)  //  api
+
 
 
 
