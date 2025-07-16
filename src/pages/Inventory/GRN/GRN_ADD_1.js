@@ -99,7 +99,7 @@ const GRN_ADD_1 = (props) => {
     const [grnItemList, setgrnItemList] = useState([]);
     const [openPOdrp, setOpenPOdrp] = useState(false);
     const [openPOdata, setOpenPOdata] = useState([]);
-
+    debugger
     const [roundoffAmount, setRoundoffAmount] = useState(0);
 
     const [invoiceNo, setInvoiceNo] = useState('');
@@ -203,7 +203,7 @@ const GRN_ADD_1 = (props) => {
 
 
     useEffect(() => {
-
+        debugger
         if ((AccontingGRN.Status === true) && (AccontingGRN.StatusCode === 200)) {
             if (ratePostJsonBody.length > 0 && subPageMode === url.ACCOUNTING_GRN) {
                 dispatch(saveRateMaster(JSON.stringify(ratePostJsonBody)));
@@ -384,7 +384,7 @@ const GRN_ADD_1 = (props) => {
     useEffect(() => {
 
         if (history?.location?.state?.isAccountingGRN && subPageMode === url.ACCOUNTING_GRN) { // Accounting GRN
-            debugger
+
             const Data = history.location.state
             const grnDetails = { ...Data }
 
@@ -479,7 +479,7 @@ const GRN_ADD_1 = (props) => {
     }, [history.location.state])
 
     useEffect(() => {
-
+        debugger
         if ((hasShowloction || hasShowModal)) {
             let hasEditVal = null
             if (hasShowloction) {
@@ -493,14 +493,17 @@ const GRN_ADD_1 = (props) => {
 
             if (hasEditVal) {
                 setEditData(hasEditVal);
-                const { GRNItems = [], GRNReferences = [], InvoiceNumber, GrandTotal, RoundOffAmount } = hasEditVal;
+                const { GRNItems = [], GRNReferences = [], InvoiceNumber, GrandTotal, } = hasEditVal;
                 GRNReferences[0]["Full_OrderNumber"] = GRNReferences[0]?.Order?.FullOrderNumber
                 setOpenPOdata(GRNReferences)
                 setInvoiceNo(InvoiceNumber)
                 setGrnDetail(hasEditVal);
-                setgrnItemList(GRNItems)
+                setgrnItemList(GRNItems);
+                setPostingDate(hasEditVal.PostingDate);
+
+                setgrnDate(hasEditVal.GRNDate);
                 dispatch(_act.BreadcrumbShowCountlabel(`Count:${GRNItems.length} currency_symbol ${_cfunc.amountCommaSeparateFunc((Number(GrandTotal)).toFixed(2))}`));
-                setRoundoffAmount(RoundOffAmount)
+
                 dispatch(_act.editGRNIdSuccess({ Status: false }))
                 dispatch(_act.Breadcrumb_inputName(hasEditVal.ItemName))
                 seteditCreatedBy(hasEditVal.CreatedBy)
@@ -890,16 +893,13 @@ const GRN_ADD_1 = (props) => {
             text: "Amount",
             dataField: "",
             // sort: true,
-            formatter: (value, row, k) => {
-
-                return (
-                    <div className="row mt-1" >
-                        <div className="text-end ">
-                            <samp key={row.id} id={`abc${row.id}`}>{row.Amount}</samp>
-                        </div>
+            formatter: (value, row, k) => (
+                <div className="row mt-1" >
+                    <div className="text-end ">
+                        <samp key={row.id} id={`abc${row.id}`}>{row.Amount}</samp>
                     </div>
-                )
-            },
+                </div>
+            ),
             headerStyle: (colum, colIndex) => {
                 return { width: '100px', textAlign: 'center', text: "center" };
             }
@@ -1071,7 +1071,7 @@ const GRN_ADD_1 = (props) => {
     ];
 
     const DeleteHandler = (row, ledgerDetailList) => {
-
+        debugger
         const Data = ledgerDetailList.filter((item) => item.id !== row.id);
 
         const ledgerAmount = Data.reduce((acc, ele) => acc + Number(ele.Taxable_Amount), 0)
@@ -1371,7 +1371,7 @@ const GRN_ADD_1 = (props) => {
 
 
     const ledgerAddHandler = () => {
-
+        debugger
         if (!ledgerSelect) {
             customAlert({
                 Type: 3,
@@ -1456,7 +1456,6 @@ const GRN_ADD_1 = (props) => {
 
                 const calculated = orderCalculateFunc(i, { GSTIn_1: grnDetail?.SupplierGSTIN, GSTIn_2: grnDetail?.CustomerGSTIN })// amount calculation function 
                 sum_roundedTotalAmount = sum_roundedTotalAmount + parseFloat(calculated.roundedTotalAmount)
-                debugger
                 const arr = {
                     Item: i.Item,
                     Quantity: subPageMode === url.ACCOUNTING_GRN ? i.poQuantity : i.Quantity,
@@ -1637,7 +1636,7 @@ const GRN_ADD_1 = (props) => {
             const Manual_sum_roundedTotalAmount = Number(sum_roundedTotalAmount) + Number(roundoffAmount);
 
             const jsonBody = JSON.stringify({
-                RoundOffAmount: (subPageMode === url.ACCOUNTING_GRN) ? roundoffAmount : (_cfunc.roundFixed((_cfunc.roundFixed(sum_roundedTotalAmount, 0)) - (_cfunc.roundFixed(sum_roundedTotalAmount, 2)), 2)),
+                RoundOffAmount: roundoffAmount,
                 Comment: comment,
                 PostingDate: PostingDate,
                 GRNDate: grnDate,
@@ -1646,7 +1645,7 @@ const GRN_ADD_1 = (props) => {
                 InvoiceDate: openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN ? (grnDetail?.InvoiceDate) : (grnDetail?.DemandDate),
                 Customer: grnDetail?.Customer,
                 GRNNumber: 1,
-                GrandTotal: (subPageMode === url.ACCOUNTING_GRN) ? _cfunc.roundFixed(Manual_sum_roundedTotalAmount) : _cfunc.roundFixed(sum_roundedTotalAmount, 0),
+                GrandTotal: (subPageMode === url.ACCOUNTING_GRN) ? (Manual_sum_roundedTotalAmount).toFixed(2) : Number(sum_roundedTotalAmount).toFixed(2),
                 Party: grnDetail?.Supplier,
                 InvoiceNumber: invoiceNo,
                 CreatedBy: _cfunc.loginUserID(),
@@ -1742,7 +1741,8 @@ const GRN_ADD_1 = (props) => {
                                         style={{ width: "130px" }}>{"Invoice Date"}</Label>
                                     <Col md="7">
                                         <C_DatePicker
-                                            value={openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN ? (grnDetail.InvoiceDate) : (grnDetail.DemandDate)}
+
+                                            value={((openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN) || ((subPageMode === url.ACCOUNTING_GRN && pageMode === mode.view))) ? (grnDetail.InvoiceDate) : (grnDetail.DemandDate)}
                                             disabled={(openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN || openPOdata[0]?.GRN_From === url.ORDER_LIST_1 || grnDetail.isAccountingGRN) ? false : true}
                                         />
                                     </Col>
