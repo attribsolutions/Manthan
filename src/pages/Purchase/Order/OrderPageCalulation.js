@@ -1,7 +1,7 @@
-import { compareGSTINState } from "../../../components/Common/CommonFunction";
+import { compareGSTINState, roundFixed } from "../../../components/Common/CommonFunction";
 
 export const orderCalculateFunc = (row, IsComparGstIn) => {
-  debugger
+
   // Retrieve values from input object
   const rate = Number(row.Rate) || 0;
   const quantity = Number(row.Quantity) || 0;
@@ -11,7 +11,7 @@ export const orderCalculateFunc = (row, IsComparGstIn) => {
 
   // Calculate basic amount
   const basicAmount = rate * quantity;
-  debugger
+
   // Calculate the discount amount based on the discount type
   // const disCountAmt = discountType === 2 ? basicAmount - (basicAmount / ((100 + discount) / 100)) : quantity * discount;
 
@@ -47,31 +47,53 @@ export const orderCalculateFunc = (row, IsComparGstIn) => {
     if (isSameSate) {// iF isSameSate = true ===not same GSTIn
       CGST_Amount = 0;
       SGST_Amount = 0;
-      IGST_Amount = Number(roundedGstAmount.toFixed(2))
+      IGST_Amount = roundFixed(roundedGstAmount, 2);
       IGST_Percentage = GST_Percentage;
       SGST_Percentage = 0;
       CGST_Percentage = 0;
     }
   }
   // Return the calculated values as an object
+  debugger
+  // return {
+  //   basicAmount: basicAmount.toFixed(2),
+  //   DiscountType: discountType,
+  //   discountBaseAmt: Number(discountBaseAmt.toFixed(2)),
+  //   disCountAmt: Number(disCountAmt.toFixed(2)),
+
+  //   roundedTotalAmount: totalAmount.toFixed(2),
+  //   roundedGstAmount: roundedGstAmount.toFixed(2),
+  //   roundFixed: roundFixed(totalAmount, 2),
+  //   CGST_Amount: CGST_Amount.toFixed(2),
+  //   SGST_Amount: SGST_Amount.toFixed(2),
+  //   IGST_Amount: (IGST_Amount).toFixed(2),
+
+  //   GST_Percentage: GST_Percentage.toFixed(2),
+  //   CGST_Percentage: CGST_Percentage.toFixed(2),
+  //   SGST_Percentage: SGST_Percentage.toFixed(2),
+  //   IGST_Percentage: IGST_Percentage.toFixed(2),
+
+  // };
+
   return {
-    basicAmount: basicAmount.toFixed(2),
+    basicAmount: roundFixed(basicAmount, 2),
     DiscountType: discountType,
-    discountBaseAmt: Number(discountBaseAmt.toFixed(2)),
-    disCountAmt: Number(disCountAmt.toFixed(2)),
+    discountBaseAmt: Number(roundFixed(discountBaseAmt, 2)),
+    disCountAmt: Number(roundFixed(disCountAmt, 2)),
+    roundedTotalAmount: roundFixed(totalAmount, 2),
+    roundedGstAmount: roundFixed(roundedGstAmount, 2),
+    CGST_Amount: roundFixed(CGST_Amount, 2),
+    SGST_Amount: roundFixed(SGST_Amount, 2),
+    IGST_Amount: roundFixed(IGST_Amount, 2),
 
-    roundedTotalAmount: totalAmount.toFixed(2),
-    roundedGstAmount: roundedGstAmount.toFixed(2),
-    CGST_Amount: CGST_Amount.toFixed(2),
-    SGST_Amount: SGST_Amount.toFixed(2),
-    IGST_Amount: (IGST_Amount).toFixed(2),
-
-    GST_Percentage: GST_Percentage.toFixed(2),
-    CGST_Percentage: CGST_Percentage.toFixed(2),
-    SGST_Percentage: SGST_Percentage.toFixed(2),
-    IGST_Percentage: IGST_Percentage.toFixed(2),
+    GST_Percentage: roundFixed(GST_Percentage, 2),
+    CGST_Percentage: roundFixed(CGST_Percentage, 2),
+    SGST_Percentage: roundFixed(SGST_Percentage, 2),
+    IGST_Percentage: roundFixed(IGST_Percentage, 2),
 
   };
+
+
 };
 
 
@@ -80,7 +102,7 @@ export const orderCalculateFunc = (row, IsComparGstIn) => {
 
 
 export function Franchies_Order_Calculate_Func(row, index1, IsComparGstIn,) {
-  debugger
+
   const discountBasedOnRate = true
 
   const qty = Number(row.Quantity) || 0;
@@ -135,7 +157,6 @@ export function Franchies_Order_Calculate_Func(row, index1, IsComparGstIn,) {
       itemFinalAmount = taxableAmount + gstAmount;
     }
   }
-
 
 
   return {
