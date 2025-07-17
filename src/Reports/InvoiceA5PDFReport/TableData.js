@@ -100,10 +100,10 @@ export const RowsWithCGST_SGST = (data) => {
 
         if (currentItem.UnitName !== "") {
             const matchFound = currentItem.UnitName.match(pattern);
-            const extractedText = matchFound[1];
-            const match = extractedText.split(" ")
-            PcsinNumber = match[0];
-            PcsinNumberUnit = match[1];
+            const extractedText = matchFound?.[1] ?? "";
+            const match = extractedText?.split(" ")
+            PcsinNumber = match?.[0] ?? "";
+            PcsinNumberUnit = match?.[1] ?? "";
 
         }
 
@@ -287,10 +287,10 @@ export const RowsWithIGST = (data) => {
 
         if (currentItem.UnitName !== "") {
             const matchFound = currentItem.UnitName.match(pattern);
-            const extractedText = matchFound[1];
-            const match = extractedText.split(" ")
-            PcsinNumber = match[0];
-            PcsinNumberUnit = match[1];
+            const extractedText = matchFound?.[1] ?? "";
+            const match = extractedText?.split(" ")
+            PcsinNumber = match?.[0] ?? "";
+            PcsinNumberUnit = match?.[1] ?? "";
 
         }
 
@@ -669,7 +669,7 @@ export const DetailsOfTransportRow = (data) => {
     }
 
     var DetailsOfTransportArray = [
-        [`              ${OrderNumber}`],
+        [`                 ${OrderNumber}`],
         [data.DriverName === null ? "" : `                        ${data.DriverName}`],
         [`                      ${data.VehicleNo === null ? "" : data.VehicleNo}`],
         [`                          ${(EwayData.EwayBillNo === undefined) || (EwayData.EwayBillNo === null) ? "" : EwayData.EwayBillNo}`],

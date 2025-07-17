@@ -16,9 +16,10 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
 import GRN_ADD_1 from "./GRN_ADD_1";
 import GRNAdd3 from "./GRN_ADD_3";
-import { Invoice_Singel_Get_for_Report_Api, Pos_Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
+import { transformGRNtoInvoiceFormat } from "./GRNDataModifyFunc";
+import { GRN_Edit_API } from "../../../helpers/backend_helper";
 
 
 const GRNList = (props) => {
@@ -52,10 +53,11 @@ const GRNList = (props) => {
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
             makeChallan: state.ChallanReducer.makeChallan,
+            PrintData: state.GRNReducer.PrintData
 
         })
     );
-    const { pageField, customer, makeChallan, AccontingGRNData, listBtnLoading } = reducers;
+    const { pageField, customer, makeChallan, AccontingGRNData, listBtnLoading, PrintData } = reducers;
 
     const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
     console.log(listBtnLoading)
@@ -175,6 +177,15 @@ const GRNList = (props) => {
         }
     }, [makeChallan]);
 
+    useEffect(() => {
+        if (PrintData.Status === true && PrintData.StatusCode === 200) {
+            debugger
+            const Data = transformGRNtoInvoiceFormat(PrintData);
+            Data["ReportType"] = report.invoice;
+            dispatch(_act.getpdfReportdataSuccess(Data))
+        }
+    }, [PrintData]);
+
 
 
     useEffect(() => {
@@ -238,10 +249,8 @@ const GRNList = (props) => {
     }
 
     function downBtnFunc(config) {
-
-        config["ReportType"] = report.invoice;
-        config["editId"] = config.rowData.InvoiceID
-        dispatch(_act.getpdfReportdata(Invoice_Singel_Get_for_Report_Api, config))
+        config["editId"] = config.rowData.id
+        dispatch(_act.GRNPrint(config));
     }
 
     useEffect(() => {
@@ -249,13 +258,13 @@ const GRNList = (props) => {
             FromDate: hederFilters.fromdate,
             Todate: hederFilters.todate
         });
-    
+
         setHederFilters((prev) => ({
             ...prev,
             todate: Todate
         }));
     }, [hederFilters.fromdate]);
-    
+
 
     function fromdateOnchange(e, date) {
         let newObj = { ...hederFilters }
