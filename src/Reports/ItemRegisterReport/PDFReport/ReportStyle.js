@@ -7,10 +7,10 @@ import cbm_logo from "../../../assets/images/cbm_logo.png"
 
 export const pageBorder = (doc) => {
     doc.setDrawColor('black');
-    doc.line(570, 17, 30, 17);//horizontal line (Top)
-    doc.line(30, 815, 30, 17);//vertical line (left)
-    doc.line(570, 815, 570, 17);//vertical line (Right)
-    doc.line(570, 815, 30, 815);//horizontal line (Bottom)   
+     doc.line(570, 17, 30, 17);//horizontal line (Top)
+     doc.line(30, 815, 30, 17);//vertical line (left)
+     doc.line(570, 815, 570, 17);//vertical line (Right)
+     doc.line(570, 815, 30, 815);//horizontal line (Bottom)   
 }
 export const pageHeder = (doc, data) => {
     doc.addFont("Arial", 'Normal')
@@ -22,7 +22,7 @@ export const pageHeder = (doc, data) => {
         doc.addImage(cbm_logo, 'PNG', 33, -2, 80, 80, null, 'FAST')
     }
     doc.setFontSize(15)
-    doc.text('Material Register', 200, 40,) //Tax invoice Header
+    doc.text('Material Register', 250, 40,) //Tax invoice Header
 }
 export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
@@ -35,13 +35,13 @@ export const reportHeder1 = (doc, data) => {
     doc.line(570, 80, 30, 80);//horizontal line 3
 
 
-    doc.line(408, 60, 408, 17);//vertical header report Name Section
-    // doc.line(250, 134, 250, 80);//vertical right 2
-    // doc.line(570, 134, 30, 134);//horizontal line table 
+  
+    doc.line(250, 134, 250, 80);//vertical right 2
+    doc.line(570, 134, 30, 134);//horizontal line table 
 
 
-    doc.line(250, 100, 570, 100) //horizontal line Current date upper
-    doc.line(250, 117, 570, 117) //horizontal line Current date upper
+     // doc.line(250, 100, 570, 100) //horizontal line Current date upper
+    // doc.line(250, 117, 570, 117) //horizontal line Current date upper
 
 
 
@@ -176,11 +176,11 @@ export const reportHeder3 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(10)
     // doc.line(570, 35, 408, 35) //horizontal line 1 billby upper
-    doc.line(408, 55, 408, 17);//vertical header report Name Section
+    // doc.line(408, 55, 408, 17);//vertical header report Name Section
 
     doc.setFont(undefined, 'bold')
 
-    doc.text(`Date:  ${date_dmy_func()} `, 415, 40) //Invoice date
+    // doc.text(`Date:  ${date_dmy_func()} `, 415, 40) //Invoice date
 
     doc.setFontSize(11)
     // doc.text(`Material: ${data.ItemName}`, 415, 75) //Invoice date
