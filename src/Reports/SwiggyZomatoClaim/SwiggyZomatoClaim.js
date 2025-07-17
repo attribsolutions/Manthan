@@ -108,7 +108,7 @@ const SwiggyZomatoClaim = () => {
 
                         {/* From Date */}
                         <Col sm={2}>
-                            <FormGroup className="row mt-3">
+                            <FormGroup className="row mt-2">
                                 <Label className="col-sm-4 p-2" style={{ width: "83px" }}>FromDate</Label>
                                 <Col sm="7">
                                     <C_DatePicker
@@ -122,7 +122,7 @@ const SwiggyZomatoClaim = () => {
 
                         {/* To Date */}
                         <Col sm={2}>
-                            <FormGroup className="row mt-3">
+                            <FormGroup className="row mt-2">
                                 <Label className="col-sm-4 p-2" style={{ width: "65px" }}>ToDate</Label>
                                 <Col sm="7">
                                     <C_DatePicker
@@ -137,7 +137,7 @@ const SwiggyZomatoClaim = () => {
                         {/* Party Dropdown */}
                         {IsMannagementParty &&
                             <Col sm={3}>
-                                <FormGroup className="row mt-3">
+                                <FormGroup className="row mt-2">
                                     <Label className="col-sm-4 p-2" style={{ width: "65px", marginRight: "20px" }}>Party</Label>
                                     <Col sm="8">
                                         <C_Select
@@ -159,7 +159,7 @@ const SwiggyZomatoClaim = () => {
                         }
 
                         {/* Show Button - Aligned to right side */}
-                        <Col className="d-flex justify-content-end" style={{ minHeight: "78px" }}>
+                        <Col className="d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"

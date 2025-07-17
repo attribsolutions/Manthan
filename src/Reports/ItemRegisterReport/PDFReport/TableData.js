@@ -28,7 +28,7 @@ export const PageHedercolumns = [
 
 
 export const Rows = (data) => {
-
+    debugger
     const openingBalance = Number(data[data.length - 1].OpeningBalance);
 
     // InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
@@ -40,23 +40,15 @@ export const Rows = (data) => {
     let Unit = data.Period.Unit.label
     let BalanceAmount = Number(openingBalance)
 
+
     data.forEach((element, key) => {
+        debugger
 
         let RowQuantityIn = 0
         let RowQuantityOut = 0
 
-        if (Unit === "No") {
-            RowQuantityIn = Number(element.QtyInNo)
-            RowQuantityOut = Number(element.QtyInNo)
-        }
-        if (Unit === "Kg") {
-            RowQuantityIn = Number(element.QtyInKg)
-            RowQuantityOut = Number(element.QtyInKg)
-        }
-        if (Unit === "Box") {
-            RowQuantityIn = Number(element.QtyInBox)
-            RowQuantityOut = Number(element.QtyInBox)
-        }
+        RowQuantityIn = Number(element.Quantity) //  Use correct field name
+        RowQuantityOut = Number(element.Quantity)
 
         if (element.Sequence === 1) {
             element.QuantityIn = RowQuantityIn
@@ -131,11 +123,10 @@ export const Rows = (data) => {
             TotalQuantityIn = Number(TotalQuantityIn) + Number(element.QuantityIn)
             TotalBalance = Number(TotalBalance) + Number(BalanceAmount)
         };
-
+       
         if (key === data.length - 3) {
             data["Close"] = BalanceAmount
         }
-
 
 
         function totalopen() {
@@ -151,6 +142,7 @@ export const Rows = (data) => {
 
             ];
         };
+     
 
         function totalclose() {
             return [
@@ -173,6 +165,7 @@ export const Rows = (data) => {
 
         // else {
         //     // returnArr.push(totalrow());
+        
         if (key === 0) {
             returnArr.push(totalopen());
         }
@@ -180,13 +173,24 @@ export const Rows = (data) => {
             returnArr.push(tableitemRow);
             totalLots()
         }
+       
 
         if (key === data.length - 2) {
-            returnArr.push(totalclose())
-
+            returnArr.push([
+                "Grand Total", "", "", "",
+                numberWithCommas(TotalQuantityIn.toFixed(2)),
+                numberWithCommas(TotalQuantityOut.toFixed(2)),
+                "",
+            ]);
         }
+        
+        if (key === data.length - 2) {
+            returnArr.push(totalclose())
+        }
+        
 
     })
+    
     return returnArr;
 }
 
