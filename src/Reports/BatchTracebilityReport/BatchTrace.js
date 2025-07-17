@@ -3,14 +3,15 @@ import { Card, CardBody, Modal, ModalBody, Spinner } from 'reactstrap'; // or 'r
 import 'bootstrap/dist/css/bootstrap.min.css';
 import GlobalCustomTable from '../../GlobalCustomTable';
 import { BatchTraceabilityReport_API, Invoice_Singel_Get_for_Report_Api } from '../../helpers/backend_helper';
-import { editGRNAction, getpdfReportdata } from '../../store/actions';
+import { getpdfReportdata, getpdfReportdataSuccess, GRNPrint } from '../../store/actions';
 import * as report from '../../Reports/ReportIndex'
 import { useSelector, useDispatch } from "react-redux";
 import C_Report from '../../components/Common/C_Report';
 import { useEffect, useState } from 'react';
 import GRN_ADD_1 from '../../pages/Inventory/GRN/GRN_ADD_1';
 import { mode, url } from '../../routes';
-import { Item } from '../../pages/SweetPOS/Reports/InvoicePDFReport/TableData';
+
+import { transformGRNtoInvoiceFormat } from '../../pages/Inventory/GRN/GRNDataModifyFunc';
 
 
 const BatchTrace = ({ updateBatchData, Data }) => {
@@ -18,12 +19,14 @@ const BatchTrace = ({ updateBatchData, Data }) => {
 
     const [modal_open, setmodal_open] = useState(false);
 
-    const { Loading, ButtonLoading, editData } = useSelector(
+    const { Loading, ButtonLoading, editData, PrintData, listBtnLoading } = useSelector(
         (state) => ({
 
             Loading: state.PdfReportReducers.ReportBtnLoading,
             ButtonLoading: state.PdfReportReducers.goBtnLoading,
             editData: state.GRNReducer.editData,
+            PrintData: state.GRNReducer.PrintData,
+            listBtnLoading: state.GRNReducer.listBtnLoading
 
         })
     );
@@ -32,17 +35,23 @@ const BatchTrace = ({ updateBatchData, Data }) => {
 
     const dispatch = useDispatch();
     const handleGRNClick = (row) => {
+
         row["ReportType"] = report.invoice;
         row["editId"] = row.grnID;
         row["btnId"] = row.grnID;
-        dispatch(editGRNAction(row))
+        dispatch(GRNPrint(row))
+
+
     }
 
     useEffect(() => {
-        if (editData?.Status && editData?.StatusCode === 200) {
-            setmodal_open(true);
+        if (PrintData.Status === true && PrintData.StatusCode === 200) {
+            
+            const Data = transformGRNtoInvoiceFormat(PrintData);
+            Data["ReportType"] = report.invoice;
+            dispatch(getpdfReportdataSuccess(Data))
         }
-    }, [editData])
+    }, [PrintData]);
 
 
     const handleInvoiceClick = (row) => {
@@ -85,10 +94,10 @@ const BatchTrace = ({ updateBatchData, Data }) => {
                 {
                     dataField: 'GRNNo',
                     text: 'GRN No',
-                    formatExtraData: Loading,
+                    formatExtraData: listBtnLoading,
                     formatter: (cell, row) => {
                         return (
-                            (row.grnID === Loading) ? (
+                            (row.grnID === listBtnLoading) ? (
                                 <div className="dot-pulse">  &nbsp;
                                     <div className="bounce1" style={{ background: "Blue" }}></div>
                                     <div className="bounce2" style={{ background: "Blue" }}></div>

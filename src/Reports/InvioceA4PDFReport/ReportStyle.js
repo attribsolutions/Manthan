@@ -26,11 +26,23 @@ export const pageHeder = (doc, data) => {
     doc.setFont('Arial')
 
     doc.setFontSize(18)
+    debugger
     if (data.isQR) {
-        doc.text('TAX INVOICE', 160, 55,)
+        if (data?.ReportFormat === "GRN") {
+            doc.text('Goods Received Note', 150, 55,)
+        } else {
+            doc.text('TAX INVOICE', 160, 55,)
+        }
 
     } else {
-        doc.text('TAX INVOICE', 200, 45,)
+
+        if (data?.ReportFormat === "GRN") {
+            doc.text('Goods Received Note', 180, 45,)
+        } else {
+            doc.text('TAX INVOICE', 200, 45,)
+        }
+
+
     }
     doc.setFontSize(9)
     doc.text('Original For Buyer', 320, 26,)
@@ -259,6 +271,7 @@ export const reportHeder1 = (doc, data) => {
                 doc.setFontSize(8)
                 doc.setFont(undefined, 'bold')
                 doc.text('PO No: ', x, y)
+              
             };
             if (rowIdx === 1 && colIdx === 0) {
 
@@ -376,7 +389,7 @@ export const reportHeder1 = (doc, data) => {
     doc.autoTable(table.BilledTo, table.BilledToRow(data), BilledToStyle);
     priLength()
 
-    doc.autoTable(table.DetailsOfTransport, table.DetailsOfTransportRow(data), DetailsOfTransportStyle);
+    doc.autoTable(table.DetailsOfTransport, table.DetailsOfTransportRow(data, doc), DetailsOfTransportStyle);
     priLength()
 }
 
@@ -395,8 +408,17 @@ export const reportHeder3 = (doc, data) => {
     doc.line(570, 33, 408, 33) //horizontal line 1 billby upper
 
     doc.setFont(undefined, 'bold')
-    doc.text(`Invoice No:   ${data.FullInvoiceNumber}`, 415, 27) //Invoice Id
-    doc.text(`Invoice Date: ${date}`, 415, 43) //Invoice date
+
+    if (data?.ReportFormat === "GRN") {
+        doc.text(`GRN No:   ${data.FullInvoiceNumber}`, 415, 27) //Invoice Id
+        doc.text(`GRN Date: ${date}`, 415, 43) //Invoice date
+    } else {
+        doc.text(`Invoice No:   ${data.FullInvoiceNumber}`, 415, 27) //Invoice Id
+        doc.text(`Invoice Date: ${date}`, 415, 43) //Invoice date
+    }
+
+
+
 
 
 

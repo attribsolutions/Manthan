@@ -20,6 +20,8 @@ import {
   ACCOUNTING_GRN_SUCCESS,
   UPDATE_ACCOUNTING_GRN,
   UPDATE_ACCOUNTING_GRN_SUCCESS,
+  GRN_PRINT,
+  GRN_PRINT_SUCCESS,
   // POST_INVOICENO_MESSAGE_SUCCESS,
   // POST_INVOICENO_MESSAGE
 } from './actionType'
@@ -80,6 +82,16 @@ export const deleteGRNId = (config = {}) => ({
 });
 export const deleteGRNIdSuccess = (resp) => ({
   type: DELETE_GRN_FOR_GRN_PAGE_SUCCESS,
+  payload: resp,
+});
+
+
+export const GRNPrint = (config = {}) => ({
+  type: GRN_PRINT,
+  config,
+});
+export const GRNPrintSuccess = (resp) => ({
+  type: GRN_PRINT_SUCCESS,
   payload: resp,
 });
 

@@ -1,6 +1,7 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import {
   AccountingGRNSuccess,
+  GRNPrintSuccess,
   GrnApiErrorAction,
   Update_accounting_GRN_Success,
   deleteGRNIdSuccess,
@@ -32,6 +33,7 @@ import {
   HIDE_INVOICE_FOR_GRN_ACTION,
   ACCOUNTING_GRN,
   UPDATE_ACCOUNTING_GRN,
+  GRN_PRINT,
 } from "./actionType";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url } from "../../../routes";
@@ -95,10 +97,21 @@ function* Accounting_GRN_GenratorFunction({ config }) { // Edit  GRN  genrator f
     const { btnmode, path } = config;
     const response = yield call(GRN_Edit_API, config);
     response.pageMode = btnmode
-    response.pageMode = btnmode
     response["path"] = path;
     response.Data = response.Data[0];
     yield put(AccountingGRNSuccess(response));
+  } catch (error) { yield put(GrnApiErrorAction()) }
+}
+
+
+function* GRN_Print_GenratorFunction({ config }) { // Edit  GRN  genrator function
+  try {
+    const { btnmode, path } = config;
+    const response = yield call(GRN_Edit_API, config);
+    response.pageMode = btnmode
+    response["path"] = path;
+    // response.Data = response.Data[;
+    yield put(GRNPrintSuccess(response));
   } catch (error) { yield put(GrnApiErrorAction()) }
 }
 
@@ -256,6 +269,7 @@ function* GRNSaga() {
   yield takeLatest(GET_GRN_LIST_PAGE, GRNListfilterGerFunc);
   yield takeLatest(ACCOUNTING_GRN, Accounting_GRN_GenratorFunction);
   yield takeLatest(UPDATE_ACCOUNTING_GRN, UpdateAccountingGRNGenFunc);
+  yield takeLatest(GRN_PRINT, GRN_Print_GenratorFunction);
 
 
 
