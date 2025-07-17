@@ -883,6 +883,11 @@ export const isToDateisgreterThanFormDate = ({ FromDate, ToDate }) => {
 
 
 
+export function roundFixed(value, decimals = 2) {
+  const factor = Math.pow(10, decimals);
+  return (Math.round(value * factor) / factor).toFixed(decimals);
+}
+
 export const areAllDatesSame = (dates) => {
   if (!Array.isArray(dates) || dates.length === 0) {
     return null; // Return null for empty arrays or non-array inputs

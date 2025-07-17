@@ -17,6 +17,8 @@ import {
   ACCOUNTING_GRN_SUCCESS,
   UPDATE_ACCOUNTING_GRN,
   UPDATE_ACCOUNTING_GRN_SUCCESS,
+  GRN_PRINT,
+  GRN_PRINT_SUCCESS,
 } from "./actionType"
 
 const INIT_STATE = {
@@ -34,6 +36,7 @@ const INIT_STATE = {
   saveBtnloading: false,
   listBtnLoading: false,
   AccontingGRNpayload: { Status: false },
+  PrintData: { Status: false },
 }
 
 const GRNReducer = (state = INIT_STATE, action) => {
@@ -102,8 +105,25 @@ const GRNReducer = (state = INIT_STATE, action) => {
         editData: action.payload,
       }
 
+    case GRN_PRINT:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      }
+
+
+    case GRN_PRINT_SUCCESS:
+      return {
+        ...state,
+        listBtnLoading: false,
+        PrintData: action.payload,
+      }
+
+
+
+
     case ACCOUNTING_GRN:
-      debugger
+      
       return {
         ...state,
         listBtnLoading: action.config.btnId,
@@ -120,7 +140,7 @@ const GRNReducer = (state = INIT_STATE, action) => {
 
 
     case UPDATE_ACCOUNTING_GRN:
-      debugger
+      
       return {
         ...state,
         saveBtnloading: true,

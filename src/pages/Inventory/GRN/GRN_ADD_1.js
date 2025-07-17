@@ -99,7 +99,7 @@ const GRN_ADD_1 = (props) => {
     const [grnItemList, setgrnItemList] = useState([]);
     const [openPOdrp, setOpenPOdrp] = useState(false);
     const [openPOdata, setOpenPOdata] = useState([]);
-
+    debugger
     const [roundoffAmount, setRoundoffAmount] = useState(0);
 
     const [invoiceNo, setInvoiceNo] = useState('');
@@ -493,12 +493,15 @@ const GRN_ADD_1 = (props) => {
 
             if (hasEditVal) {
                 setEditData(hasEditVal);
-                const { GRNItems = [], GRNReferences = [], InvoiceNumber, GrandTotal } = hasEditVal;
+                const { GRNItems = [], GRNReferences = [], InvoiceNumber, GrandTotal, } = hasEditVal;
                 GRNReferences[0]["Full_OrderNumber"] = GRNReferences[0]?.Order?.FullOrderNumber
                 setOpenPOdata(GRNReferences)
                 setInvoiceNo(InvoiceNumber)
                 setGrnDetail(hasEditVal);
-                setgrnItemList(GRNItems)
+                setgrnItemList(GRNItems);
+                setPostingDate(hasEditVal.PostingDate);
+
+                setgrnDate(hasEditVal.GRNDate);
                 dispatch(_act.BreadcrumbShowCountlabel(`Count:${GRNItems.length} currency_symbol ${_cfunc.amountCommaSeparateFunc((Number(GrandTotal)).toFixed(2))}`));
 
                 dispatch(_act.editGRNIdSuccess({ Status: false }))
@@ -1738,7 +1741,8 @@ const GRN_ADD_1 = (props) => {
                                         style={{ width: "130px" }}>{"Invoice Date"}</Label>
                                     <Col md="7">
                                         <C_DatePicker
-                                            value={openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN ? (grnDetail.InvoiceDate) : (grnDetail.DemandDate)}
+
+                                            value={((openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN) || ((subPageMode === url.ACCOUNTING_GRN && pageMode === mode.view))) ? (grnDetail.InvoiceDate) : (grnDetail.DemandDate)}
                                             disabled={(openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN || openPOdata[0]?.GRN_From === url.ORDER_LIST_1 || grnDetail.isAccountingGRN) ? false : true}
                                         />
                                     </Col>

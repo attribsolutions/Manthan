@@ -25,7 +25,22 @@ export const pageHeder = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFont(undefined, 'bold')
     doc.setFontSize(15)
-    doc.text('TAX INVOICE', 180, 35,)
+
+
+
+
+
+
+
+
+    if (data?.ReportFormat === "GRN") {
+        doc.text('Goods Received Note', 180, 35,)
+    } else {
+        doc.text('TAX INVOICE', 180, 35,)
+    }
+
+
+
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 45, 30, 45) //Full horizontal line Bill by Upper line
     doc.setFontSize(7)
@@ -333,10 +348,20 @@ export const reportHeder3 = (doc, data) => {
     // doc.line(570, 44, 408, 44) //horizontal line 1 billby upper
 
     doc.setFont(undefined, 'bold')
-    doc.text(`Invoice No:   ${data.FullInvoiceNumber}`, 415, 25) //Invoice Id
-    var date = date_dmy_func(data.InvoiceDate)
-    var time = convertOnlyTimefunc(data.CreatedOn)
-    doc.text(`Invoice Date: ${date}  ${time}`, 415, 40) //Invoice date
+
+
+
+    if (data?.ReportFormat === "GRN") {
+        doc.text(`GRN No:   ${data.FullInvoiceNumber}`, 415, 25) //Invoice Id
+        var date = date_dmy_func(data.InvoiceDate)
+        var time = convertOnlyTimefunc(data.CreatedOn)
+        doc.text(`GRN Date: ${date}  ${time}`, 415, 40) //Invoice date
+    } else {
+        doc.text(`Invoice No:   ${data.FullInvoiceNumber}`, 415, 25) //Invoice Id
+        var date = date_dmy_func(data.InvoiceDate)
+        var time = convertOnlyTimefunc(data.CreatedOn)
+        doc.text(`Invoice Date: ${date}  ${time}`, 415, 40) //Invoice date
+    }
 
 }
 
