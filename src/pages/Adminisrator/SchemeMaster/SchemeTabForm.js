@@ -668,33 +668,6 @@ const SchemeMaster = forwardRef((props, ref) => {
                                         </Card>
                                     </Col>
 
-
-                                    <div className="row ">
-
-                                        <CardBody className="c_card_body">
-                                            <Col md={11}>
-                                                {/* <FormGroup className="mb-2 col col-sm-3 "> */}
-                                                <Label htmlFor="validationCustom01">{fieldLabel.Party} </Label>
-                                                <Select
-                                                    id="Party"
-                                                    name="Party"
-                                                    value={values.Party}
-                                                    isMulti={true}
-                                                    className={isError.Party.length > 0 ? "is-invalid" : "react-dropdown"}
-                                                    isSearchable={true}
-                                                    classNamePrefix="dropdown"
-                                                    options={Party_Option}
-                                                    onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-                                                />
-                                                {isError.Party.length > 0 && (
-                                                    <span className="invalid-feedback">{isError.Party}</span>
-                                                )}
-                                                {/* </FormGroup> */}
-                                            </Col>
-                                        </CardBody>
-                                    </div>
-
-
                                 </form>
                             </CardBody>
                         </Card>

@@ -52,6 +52,7 @@ import { getSchemeTypelist } from "../../../store/Administrator/SchemeRedux/acti
 import classnames from "classnames"
 import SchemeTabForm from "./SchemeTabForm";
 import SchemeItemTabForm from "./SchemeItemTabForm";
+import SchemePartyTabForm from "./SchemePartyTabForm";
 
 const SchemeMaster = (props) => {
 
@@ -60,6 +61,7 @@ const SchemeMaster = (props) => {
     const { location } = history
     const SchemeTabRef = useRef(null);
     const SchemeItemTabRef = useRef(null);
+    const SchemePartyTabRef = useRef(null);
 
     const fileds = {
         SchemeName: "",
@@ -154,6 +156,11 @@ const SchemeMaster = (props) => {
     const getSchemeData = () => {
         return SchemeTabRef.current.getValue();
     }
+
+    const getPartyData = () => {
+        return SchemePartyTabRef.current.getValue();
+    }
+
     const toggle1 = tab => {
         if (activeTab !== tab) {
             setactiveTab(tab)
@@ -273,9 +280,10 @@ const SchemeMaster = (props) => {
         event.preventDefault();
         const btnId = event.target.id
         const SchemeData = getSchemeData()
+        const ItemData = getItemData()
+        const PartyData = getPartyData()
         const setSchemeData = SchemeTabRef.current.updateValue;
 
-        const ItemData = getItemData()
         // const setItemData = SchemeItemTabRef.current.updateValue;
 
 
@@ -298,10 +306,8 @@ const SchemeMaster = (props) => {
                     IsActive: SchemeData.values.IsActive,
                     SchemeTypeID: SchemeData.values.SchemeTypeID.value,
                     BillEffect: 1,
-                    PartyDetails: SchemeData.values.Party.map(i => ({
+                    PartyDetails: PartyData.map(i => ({
                         PartyID: i.value,
-                        TypeForItem: i.PartyID,
-                        DiscountType: i.DiscountType
 
                     })),
                     ItemDetails: ItemData.map(i => ({
@@ -371,6 +377,25 @@ const SchemeMaster = (props) => {
                                                 <span className="d-none d-sm-block">Scheme Item</span>
                                             </NavLink>
                                         </NavItem>
+
+                                        <NavItem>
+                                            <NavLink
+                                                id="nave-link-3"
+                                                style={{ cursor: "pointer" }}
+                                                className={classnames({
+                                                    active: activeTab === "3",
+                                                })}
+                                                onClick={() => {
+                                                    toggle1("3")
+                                                }}
+                                            >
+                                                <span className="d-block d-sm-none">
+                                                    <i className="fas fa-home"></i>
+                                                </span>
+                                                <span className="d-none d-sm-block">Scheme Party</span>
+                                            </NavLink>
+                                        </NavItem>
+
                                     </Nav>
 
                                     <TabContent activeTab={activeTab} className="p-3 text-muted">
@@ -382,6 +407,11 @@ const SchemeMaster = (props) => {
                                             <SchemeItemTabForm ref={SchemeItemTabRef} />
                                         </TabPane>
 
+
+
+                                        <TabPane tabId="3">
+                                            <SchemePartyTabForm ref={SchemePartyTabRef} />
+                                        </TabPane>
 
                                     </TabContent>
 

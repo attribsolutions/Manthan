@@ -27,7 +27,6 @@ const VoucherList = () => {
 
   const [hederFilters, setHederFilters] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd });
 
-
   const reducers = useSelector(
     (state) => ({
       listBtnLoading: state.VoucherReducer.listBtnLoading,
@@ -56,8 +55,6 @@ const VoucherList = () => {
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
     goButtonHandler();
-
-
 
     return () => {
       dispatch(getVoucherlistSuccess([]));

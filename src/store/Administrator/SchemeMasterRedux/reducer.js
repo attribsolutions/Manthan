@@ -9,7 +9,11 @@ import {
   SAVE_SCHEME_MASTER,
   SAVE_SCHEME_MASTER_SUCCESS,
   UPDATE_SCHEMEMASTER_ID,
-  UPDATE_SCHEMEMASTER_ID_SUCCESS
+  UPDATE_SCHEMEMASTER_ID_SUCCESS,
+  UPLOAD_VOUCHER_SUCCESS,
+  UPLOAD_VOUCHER,
+  DELETE_VOUCHERS_BY_SCHEME,
+  DELETE_VOUCHERS_BY_SCHEME_SUCCESS
 } from "./actionType";
 
 const INIT_STATE = {
@@ -20,7 +24,11 @@ const INIT_STATE = {
   updateMsg: { Status: false },
   saveBtnloading: false,
   listBtnLoading: false,
-  goBtnLoading:false
+  deleteVoucherMsg: { Status: false },
+  UploadMsg: { Status: false },
+  UploadBtnloading: false,
+  deleteVoucherLoading: false,
+  goBtnLoading: false
 }
 
 const SchemeReducer = (state = INIT_STATE, action) => {
@@ -55,7 +63,7 @@ const SchemeReducer = (state = INIT_STATE, action) => {
         goBtnLoading: false,
       }
 
-      
+
     //  del
     case DELETE_SCHEME_LIST_ID:
       return {
@@ -102,12 +110,42 @@ const SchemeReducer = (state = INIT_STATE, action) => {
 
       };
 
+
+    case UPLOAD_VOUCHER:
+      return {
+        ...state,
+        UploadBtnloading: true,
+
+      };
+
+    case UPLOAD_VOUCHER_SUCCESS:
+      return {
+        ...state,
+        UploadMsg: action.payload,
+        UploadBtnloading: false,
+
+      };
+
+    case DELETE_VOUCHERS_BY_SCHEME:
+      return {
+        ...state,
+        deleteVoucherLoading: true,
+      };
+
+    case DELETE_VOUCHERS_BY_SCHEME_SUCCESS:
+      return {
+        ...state,
+        deleteVoucherLoading: false,
+        deleteVoucherMsg: action.payload,
+      };
+
+
     case SCHEME_API_ERROR_ACTION:
       return {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
-        goBtnLoading:false
+        goBtnLoading: false
       };
 
     default:

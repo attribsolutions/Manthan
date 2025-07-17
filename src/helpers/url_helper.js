@@ -318,6 +318,13 @@ export const LOADING_SHEET_LIST = '/LoadingSheetList'
 
 export const SCHEME = '/Scheme'
 
+export const VOUCHER_UPLOAD = '/GiftVoucherUpload'
+
+export const VOUCHER_DELETE_API = '/DeleteGiftVouchersByScheme' // for delete voucher by scheme
+
+
+
+
 export const SCHEME_LIST_PER_MONTH = '/SchemeListperMonth'
 
 

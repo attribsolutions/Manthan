@@ -582,9 +582,11 @@ export const del_Scheme_List_API = ({ deleteId }) => del(`${url.SCHEME}/${delete
 export const edit_Scheme_List_Api = ({ editId }) => get(`${url.SCHEME}/${editId}`)// Loading Sheet Post API For Master Page
 
 
+
+export const del_Voucher_By_Scheme_API = ({ deleteId }) => del(`${url.VOUCHER_DELETE_API}/${deleteId}`)// Loading Sheet Post API For Master Page
+export const Voucher_Upload_API = ({ jsonBody }) => post(url.VOUCHER_UPLOAD, jsonBody)// Loading Sheet Post API For Master Page
+
 export const Scheme_List_Per_Month_API = ({ jsonBody }) => post(url.SCHEME_LIST_PER_MONTH, jsonBody)// Loading Sheet Post API For Master Page
-
-
 
 export const GRN_Make_API = ({ jsonBody }) => post(url.GRN_MAKE_API, jsonBody)
 // export const Hide_Invoice_For_GRN_API = ({ InvoiceId, IsHide }) => del(`${url.HIDE_INVOICE_FOR_GRN}/${InvoiceId}/${IsHide}`)
