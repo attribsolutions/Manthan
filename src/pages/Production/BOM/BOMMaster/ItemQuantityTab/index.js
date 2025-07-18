@@ -17,7 +17,7 @@ import { C_Select } from '../../../../../CustomValidateForm';
 import * as mode from "../../../../../routes/PageMode";
 
 function ItemTab(props) {
-    
+
     const [contentItemSelect, setContentItemSelect] = useState('');
     const [Quantity, setQuantity] = useState('');
     const [unitSelect, setUnitSelect] = useState('');
@@ -27,11 +27,13 @@ function ItemTab(props) {
         Items: state.ItemMastersReducer.ItemList,
         ItemListloading: state.ItemMastersReducer.loading,
     }));
+    const ItemDropdown_Options = Items
+        .filter(item => item.IsMixItem === 0)
+        .map(item => ({
+            value: item.id,
+            label: item.Name,
+        }));
 
-    const ItemDropdown_Options = Items.map((index) => ({
-        value: index.id,
-        label: index.Name,
-    }));
 
     function ContentItem_Handler(e) {
 
@@ -113,7 +115,7 @@ function ItemTab(props) {
             event.target.value = ""
         }
     };
-    
+
 
     return (
         <Row>
@@ -128,7 +130,7 @@ function ItemTab(props) {
                                         styles={{
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
-                                        isDisabled={ props.pageMode === mode.view}
+                                        isDisabled={props.pageMode === mode.view}
                                         value={contentItemSelect}
                                         options={ItemDropdown_Options}
                                         onChange={ContentItem_Handler}
@@ -146,7 +148,7 @@ function ItemTab(props) {
                                     <Input
                                         type="text"
                                         className='text-end'
-                                        disabled={ props.pageMode === mode.view}
+                                        disabled={props.pageMode === mode.view}
                                         value={Quantity}
                                         placeholder="Please Enter Quantity"
                                         autoComplete="off"
@@ -165,7 +167,7 @@ function ItemTab(props) {
                                         styles={{
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
-                                        isDisabled={ props.pageMode === mode.view}
+                                        isDisabled={props.pageMode === mode.view}
                                         value={unitSelect}
                                         options={ItemUnitOptions}
                                         onChange={Unit_Handler}
@@ -175,7 +177,7 @@ function ItemTab(props) {
 
                                 <Col sm="2" className=" mt-1">
                                     <Button type="button" color="btn btn-outline-primary border-1 font-size-13 text-center"
-                                        disabled={ props.pageMode === mode.view}
+                                        disabled={props.pageMode === mode.view}
                                         onClick={addRowsHandler}
                                     >Add</Button>
                                 </Col>
