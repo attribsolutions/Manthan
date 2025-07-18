@@ -32,6 +32,7 @@ const ItemRegisterReport = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
 
     const reducers = useSelector(
+        
         (state) => ({
             pdfdata: state.PdfReportReducers.pdfdata,
             ItemList: state.PartyItemsReducer.partyItem,
@@ -44,8 +45,9 @@ const ItemRegisterReport = (props) => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, pdfdata, CustomerLoading, ItemList, BaseUnit } = reducers;
 
+    const { userAccess, pdfdata, CustomerLoading, ItemList, BaseUnit } = reducers;
+  
     const values = { ...state.values }
 
     // Featch Modules List data  First Rendering
@@ -104,11 +106,22 @@ const ItemRegisterReport = (props) => {
         label: i.ItemName,
     }))
 
-    const BaseUnit_DropdownOptions = BaseUnit.filter(index => index.Name === "No" || index.Name === "Kg" || index.Name === "Box")
-        .map(data => ({
-            value: data.id,
-            label: data.Name
-        }));
+    const BaseUnit_DropdownOptions = [
+       
+        ...BaseUnit
+            .filter(index =>
+                index.Name === "No" ||
+                index.Name === "Kg" ||
+                index.Name === "Box"
+            )
+            .map(data => ({
+                value: data.id,
+                label: data.Name
+            })),
+            { value: 0, label: "BaseUnit" }
+    ];
+    
+    
 
     const onselecthandel = (e) => {
         setState((i) => {
