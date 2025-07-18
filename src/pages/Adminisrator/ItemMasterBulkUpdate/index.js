@@ -45,6 +45,7 @@ const ItemMasterBulkUpdate = (props) => {
     const [groupTypeSelect, setGroupTypeSelect] = useState({ value: 1, label: "Primary" });
     const [forceRefresh, setForceRefresh] = useState(false);
     const [tableData, setTableData] = useState([]);
+
     const [selectFieldNameDropOptions, setSelectFieldNameDropOptions] = useState([]);
 
     const [fieldNameDropOptions, setFieldNameDropOptions] = useState([]);
@@ -164,14 +165,14 @@ const ItemMasterBulkUpdate = (props) => {
     }, [SelectFieldName])
 
     useEffect(() => {
-
+        debugger
         if (goButtonData.length > 0 && SelectFieldName.label === "SAPUnit") {
             const updatedGoButtonData = goButtonData.map((i) => {
                 const matchingBaseUnit = BaseUnit.find((index) => Number(i.SAPUnitID) === index.id);
 
                 // If a match is found, update i.SAPUnitID with index.Name
                 if (matchingBaseUnit) {
-                    debugger
+
                     return {
                         ...i,
                         SAPUnit: matchingBaseUnit.Name,
@@ -183,7 +184,7 @@ const ItemMasterBulkUpdate = (props) => {
             setTableData(updatedGoButtonData);
         } else {
             const updatedGoButtonData = goButtonData.map((i) => {
-                debugger
+
                 return {
                     ...i,
                     booleanValue: i.IsMixItem || i.IsCBMItem || i.IsStockProcessItem || i.IsThirdPartyItem
@@ -304,10 +305,10 @@ const ItemMasterBulkUpdate = (props) => {
         return {
             text: `New ${SelectFieldName.label === undefined ? "Value" : SelectFieldName.label}`,
             dataField: "Newvalue",
-            formatExtraData: { forceRefresh, dropdownOptions: selectFieldNameDropOptions, tableData: tableData },
-            formatter: (cellContent, row, key, { dropdownOptions, tableData }) => {
+            formatExtraData: { forceRefresh, dropdownOptions: selectFieldNameDropOptions, },
+            formatter: (cellContent, row, key, { dropdownOptions, }) => {
                 if (row.GroupRow || row.SubGroupRow) { return }
-
+                debugger
                 return (
                     <>
                         {SelectFieldName.DataType === "dropdown" ?
@@ -318,7 +319,7 @@ const ItemMasterBulkUpdate = (props) => {
                                             key={row.Newvalue}
                                             value={row.DropdownSetValue}
                                             options={dropdownOptions}
-                                            onChange={(event) => AllDropdownHandler(event, row, tableData)}
+                                            onChange={(event) => AllDropdownHandler(event, row,)}
                                         />
                                     </FormGroup>
                                 </Col>
@@ -334,7 +335,7 @@ const ItemMasterBulkUpdate = (props) => {
                                                     className="form-check-input"
                                                     defaultChecked={row.booleanValue}
                                                     onChange={(event) => {
-                                                        row["updatedBooleanValue"] = event.target.checked
+                                                        row["booleanValue"] = event.target.checked
                                                     }}
                                                 />
                                             </div>
@@ -453,19 +454,17 @@ const ItemMasterBulkUpdate = (props) => {
     }
 
     const SaveHandler = (event) => {
-
         event.preventDefault();
-
         try {
             const updatedData = [];
 
             tableData.forEach(i => {
 
-                if (i.Newvalue || i.updatedBooleanValue === true || i.updatedBooleanValue === false) {
+                if (i.Newvalue || i.booleanValue === true || i.booleanValue === false) {
                     const arr = {
                         ItemName: i.ItemName,
                         ItemID: i.id,
-                        Value1: i.Newvalue ? i.Newvalue : i.updatedBooleanValue,
+                        Value1: i.Newvalue ? i.Newvalue : i.booleanValue,
                         Value2: i.NewValue_2,
                         GroupTypeID: groupTypeSelect.value,
                         CreatedBy: _cfunc.loginUserID()
