@@ -1,6 +1,6 @@
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import { getFixedNumber } from '../../../../../components/Common/CommonFunction';
+import { getFixedNumber, loginUserDetails, } from '../../../../../components/Common/CommonFunction';
 import { numberWithCommas } from '../../../../../Reports/Report_common_function';
 
 
@@ -10,7 +10,8 @@ const SaleSummaryThermalPrintReport = (tableData) => {
 
     const PayMentMode_rows = PayMentMode_Rows(tableData);
 
-
+    const address = loginUserDetails();
+debugger
 
 
 
@@ -25,6 +26,7 @@ const SaleSummaryThermalPrintReport = (tableData) => {
     tempDoc.text('Sale Summary Report', 40, 13, { align: 'center' });
     tempDoc.text(`${tableData.SupplierName}`, 40, 26, { align: 'center' });
     tempDoc.text(`${tableData.GSTIN}`, 40, 39, { align: 'center' });
+
 
     tempDoc.autoTable({
         startY: 49,
@@ -62,12 +64,34 @@ const SaleSummaryThermalPrintReport = (tableData) => {
     doc.text('Sale Summary Report', 40, 13, { align: 'center' });
     doc.text(`${tableData.SupplierName}`, 40, 26, { align: 'center' });
     doc.text(`${tableData.GSTIN}`, 40, 39, { align: 'center' });
+    
     doc.setFontSize(12);
-    doc.text(`${tableData.Date}`, 40, 49, { align: 'center' });
+    doc.text(`${tableData.Date}`, 40, 46, { align: 'center' });
+
+    doc.autoTable({
+        startY: 50,
+        margin: { left: 5, right: 5 , },
+        body: [
+          [{ content: `${address.PartyAddress }`, }]
+        ],
+        styles: {
+          fontSize: 9,
+          halign: 'center',
+          cellPadding: 1,
+          textColor: [0, 0, 0]
+        
+        },
+        theme: 'plain'
+      });
+
+     
+      
+    //   const afterAddressY = doc.autoTable.previous.finalY;
 
 
     // Step 4: Render actual table
     doc.autoTable({
+        // startY: afterAddressY  + , 
         startY: 59,
         margin: { left: 5, right: 5 },
         theme: 'grid',
@@ -199,7 +223,7 @@ export const Rows_1 = (data) => {
     data["TotalItemlength"] = TotalItemlength;
     const uniqueMap = new Map();
     Object.values(groupedItems).forEach((element, key) => {
-        debugger
+       
         if (!uniqueMap.has(element.id)) {
             uniqueMap.set(element.id, element.RoundOffAmount);
         }
@@ -282,7 +306,7 @@ export const Rows_1 = (data) => {
             `Span`,
         ]);
     }
-    debugger
+
 
     return returnArr;
 }

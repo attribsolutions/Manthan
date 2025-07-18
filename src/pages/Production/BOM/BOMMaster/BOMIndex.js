@@ -625,6 +625,7 @@ const BOMMaster = (props) => {
         Comment: "",
         IsActive: true,
         IsVDCItem: false,
+        IsMixItem: 0,
     }
 
     const [state, setState] = useState(initialFiledFunc(fileds))
@@ -706,7 +707,7 @@ const BOMMaster = (props) => {
                 setItemUnitOnEditData(ItemUnits)
                 // setItemUnitOptions(ItemUnits)
                 setEditData(hasEditVal);
-                const { id, BomDate, Item, ItemName, Unit, UnitName, EstimatedOutputQty, Comment, IsActive, IsVDCItem } = hasEditVal
+                const { id, BomDate, Item, ItemName, Unit, UnitName, EstimatedOutputQty, Comment, IsActive, IsVDCItem, IsMixItem } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 hasValid.id.valid = true;
                 hasValid.BomDate.valid = true;
@@ -716,7 +717,9 @@ const BOMMaster = (props) => {
                 hasValid.Comment.valid = true;
                 hasValid.IsActive.valid = true;
                 hasValid.IsVDCItem.valid = true;
+                hasEditVal.IsMixItem.valid = true;
 
+                values.IsMixItem = IsMixItem;
                 values.id = id
                 values.BomDate = BomDate;
                 values.EstimatedOutputQty = EstimatedOutputQty;
@@ -806,10 +809,16 @@ const BOMMaster = (props) => {
         }
     }, [pageField])
 
-    const ItemDropdown_Options = Items.map((index) => ({
-        value: index.id,
-        label: index.Name,
-    }));
+
+    const ItemDropdown_Options = Items
+        .filter(item => item.IsMixItem === 1)
+        .map(item => ({
+            value: item.id,
+            label: item.Name,
+        }));
+
+
+
 
     // function PermissionFunction() {
     //     
@@ -862,6 +871,7 @@ const BOMMaster = (props) => {
                     Comment: values.Comment,
                     IsActive: values.IsActive,
                     Item: values.ItemName.value,
+                    IsMixItem: values.IsMixItem,
                     Unit: values.UnitName.value,
                     CreatedBy: _cfunc.loginUserID(),
                     Company: _cfunc.loginCompanyID(),
