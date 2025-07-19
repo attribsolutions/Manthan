@@ -606,6 +606,7 @@ const BOMMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
     const currentDate_ymd = _cfunc.date_ymd_func();
+    const IsSweetAndSnacks = _cfunc.IsSweetAndSnacksCompany();
 
     const [EditData, setEditData] = useState({});
     const [modalCss, setModalCss] = useState(false);
@@ -811,7 +812,7 @@ const BOMMaster = (props) => {
 
 
     const ItemDropdown_Options = Items
-        .filter(item => item.IsMixItem === 1)
+        .filter(item => item.IsMixItem === 1 && !IsSweetAndSnacks)
         .map(item => ({
             value: item.id,
             label: item.Name,
