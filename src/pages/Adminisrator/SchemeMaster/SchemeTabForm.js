@@ -10,7 +10,6 @@ import {
     Input,
 
 } from "reactstrap";
-import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import {
     Breadcrumb_inputName,
@@ -24,18 +23,14 @@ import {
     comAddPageFieldFunc,
     initialFiledFunc,
     onChangeDate,
-    onChangeSelect,
     onChangeText,
-    resetFunction
 } from "../../../components/Common/validationFunction";
 import {
     breadcrumbReturnFunc,
     metaTagLabel,
 } from "../../../components/Common/CommonFunction";
 import * as pageId from "../../../routes/allPageID";
-import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
-import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { getCommonPartyDrodownOptionAction } from "../../../store/Utilites/PartyDrodown/action";
@@ -43,27 +38,29 @@ import { getSchemeTypelist } from "../../../store/Administrator/SchemeRedux/acti
 
 
 
-const SchemeMaster = forwardRef(({ props }, ref) => {
+
+const SchemeMaster = forwardRef(({ props, Validation }, ref) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const { location } = history
+    const { BillAbove, FromPeriod, SchemeName, SchemeValue, ToPeriod, QRPrefix, VoucherLimit, SchemeValueUpto, SchemeQuantity } = Validation
 
 
     const fileds = {
         SchemeName: "",
         SchemeValue: "",
-        ValueIn: "",
+        ValueIn: "RS",
         FromPeriod: _cfunc.currentDate_ymd,
         ToPeriod: _cfunc.currentDate_ymd,
         Item: "",
-        VoucherLimit: "",
+        VoucherLimit: null,
         QRPrefix: "",
-        IsActive: null,
+        IsActive: true,
         SchemeTypeID: "",
         BillAbove: "",
         Message: "",
-        OverLappingScheme: null,
+        OverLappingScheme: false,
         SchemeDetails: "",
         SchemeValueUpto: "",
         SchemeQuantity: "",
@@ -108,7 +105,7 @@ const SchemeMaster = forwardRef(({ props }, ref) => {
         updateValue: (newVal) => setState(newVal)
     }));
 
-    const hasShowloction = location.hasOwnProperty("rowData")
+    const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const values = { ...state.values }
@@ -160,11 +157,12 @@ const SchemeMaster = forwardRef(({ props }, ref) => {
     useEffect(() => {
 
         if ((hasShowloction || hasShowModal)) {
-
+            
             let hasEditVal = null
             if (hasShowloction) {
                 setPageMode(location.pageMode)
-                hasEditVal = location.rowData
+                hasEditVal = location.editValue
+
             }
             else if (hasShowModal) {
                 hasEditVal = props.editValue
@@ -177,7 +175,7 @@ const SchemeMaster = forwardRef(({ props }, ref) => {
                     SchemeTypeID, BillAbove, Message, OverLappingScheme, SchemeTypeName,
                     SchemeDetails, SchemeValueUpto, PartyDetails, UsageTime, UsageType, SchemeQuantity
                 } = hasEditVal[0]
-                debugger
+
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.ToPeriod.valid = true;
@@ -194,7 +192,6 @@ const SchemeMaster = forwardRef(({ props }, ref) => {
                 hasValid.OverLappingScheme.valid = true;
                 hasValid.SchemeDetails.valid = true;
                 hasValid.SchemeQuantity.valid = true;
-
 
 
                 values.ToPeriod = ToPeriod
@@ -268,6 +265,7 @@ const SchemeMaster = forwardRef(({ props }, ref) => {
                                                             name="SchemeName"
                                                             id="SchemeName"
                                                             value={values.SchemeName}
+                                                            disabled={SchemeName?.isDisabled}
                                                             type="text"
                                                             className={isError.SchemeName.length > 0 ? "is-invalid form-control" : "form-control"}
                                                             placeholder="Please Enter Scheme Name"
@@ -289,6 +287,7 @@ const SchemeMaster = forwardRef(({ props }, ref) => {
                                                         <C_DatePicker
                                                             name="FromPeriod"
                                                             value={values.FromPeriod}
+                                                            isDisabled={FromPeriod?.isDisabled}
                                                             options={{
                                                                 altInput: true,
                                                                 altFormat: "d-m-Y",
@@ -309,6 +308,7 @@ const SchemeMaster = forwardRef(({ props }, ref) => {
                                                         <C_DatePicker
                                                             name="ToPeriod"
                                                             value={values.ToPeriod}
+                                                            isDisabled={ToPeriod?.isDisabled}
                                                             options={{
                                                                 altInput: true,
                                                                 altFormat: "d-m-Y",
@@ -370,10 +370,7 @@ const SchemeMaster = forwardRef(({ props }, ref) => {
                                                             </label>
                                                         </div>
                                                     </FormGroup>
-
-
                                                 </Row>
-
                                                 <Row className="mt-1">
                                                     <FormGroup className="mb-1 col col-sm-2 ">
                                                         <Label htmlFor="validationCustom01">{fieldLabel.SchemeValue} </Label>
@@ -381,9 +378,10 @@ const SchemeMaster = forwardRef(({ props }, ref) => {
                                                             name="SchemeValue"
                                                             id="SchemeValue"
                                                             value={values.SchemeValue}
+                                                            disabled={SchemeValue.isDisabled}
                                                             type="text"
                                                             className={isError.SchemeValue.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Upload Sale Record Count"
+                                                            placeholder="Please Enter Scheme Value"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -403,9 +401,10 @@ const SchemeMaster = forwardRef(({ props }, ref) => {
                                                             name="BillAbove"
                                                             id="BillAbove"
                                                             value={values.BillAbove}
+                                                            disabled={BillAbove.isDisabled}
                                                             type="text"
                                                             className={isError.BillAbove.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Server Sequence"
+                                                            placeholder="Please Enter Bill Above"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -417,7 +416,7 @@ const SchemeMaster = forwardRef(({ props }, ref) => {
                                                         )}
                                                     </FormGroup>
 
-                                                    <Col md="1">  </Col>
+                                                    {/* <Col md="1">  </Col>
 
                                                     <FormGroup className="mb-2 col col-sm-2 ">
                                                         <Label htmlFor="validationCustom01">{fieldLabel.SchemeTypeID} </Label>
@@ -438,10 +437,32 @@ const SchemeMaster = forwardRef(({ props }, ref) => {
                                                         {isError.SchemeTypeID.length > 0 && (
                                                             <span className="invalid-feedback">{isError.SchemeTypeID}</span>
                                                         )}
-                                                    </FormGroup>
+                                                    </FormGroup> */}
 
                                                     <Col md="1">  </Col>
 
+
+                                                    <FormGroup className="mb-2 col col-sm-2">
+                                                        <Label htmlFor="validationCustom01">{fieldLabel.SchemeQuantity} </Label>
+                                                        <Input
+                                                            name="SchemeQuantity"
+                                                            id="SchemeQuantity"
+                                                            value={values.SchemeQuantity}
+                                                            disabled={SchemeQuantity.isDisabled}
+                                                            type="text"
+                                                            className={isError.SchemeQuantity.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                            placeholder="Please Enter Scheme Quantity"
+                                                            autoComplete='off'
+                                                            onChange={(event) => {
+                                                                onChangeText({ event, state, setState })
+
+                                                            }}
+                                                        />
+                                                        {isError.SchemeQuantity.length > 0 && (
+                                                            <span className="invalid-feedback">{isError.SchemeQuantity}</span>
+                                                        )}
+                                                    </FormGroup>
+                                                    <Col md="1">  </Col>
                                                     <FormGroup className="mb-2  col-sm-2 align-items-start">
                                                         <Label htmlFor="ValueIn" style={{ width: "140px", paddingTop: "0.35rem" }}>
                                                             {fieldLabel.OverLappingScheme}
@@ -452,6 +473,7 @@ const SchemeMaster = forwardRef(({ props }, ref) => {
                                                                 id="OverLappingScheme_id_true"
                                                                 className="btn-check"
                                                                 autoComplete="off"
+                                                                disabled={true}
                                                                 checked={values.OverLappingScheme === true}
                                                                 onChange={() =>
                                                                     setState(prev => ({
@@ -472,6 +494,7 @@ const SchemeMaster = forwardRef(({ props }, ref) => {
                                                                 id="OverLappingScheme_id_false"
                                                                 className="btn-check"
                                                                 autoComplete="off"
+                                                                disabled={true}
                                                                 checked={values.OverLappingScheme === false}
                                                                 onChange={() =>
                                                                     setState(prev => ({
@@ -497,6 +520,7 @@ const SchemeMaster = forwardRef(({ props }, ref) => {
                                                         <Input
                                                             name="VoucherLimit"
                                                             id="VoucherLimit"
+                                                            disabled={VoucherLimit.isDisabled}
                                                             value={values.VoucherLimit}
                                                             className={isError.VoucherLimit.length > 0 ? "is-invalid form-control" : "form-control"}
                                                             placeholder="Please Enter Voucher Limit"
@@ -519,6 +543,7 @@ const SchemeMaster = forwardRef(({ props }, ref) => {
                                                             name="QRPrefix"
                                                             id="QRPrefix"
                                                             value={values.QRPrefix}
+                                                            disabled={QRPrefix?.isDisabled}
                                                             type="text"
                                                             className={isError.QRPrefix.length > 0 ? "is-invalid form-control" : "form-control"}
                                                             placeholder="Please Enter QR Prefix"
@@ -541,6 +566,7 @@ const SchemeMaster = forwardRef(({ props }, ref) => {
                                                             name="SchemeValueUpto"
                                                             id="SchemeValueUpto"
                                                             value={values.SchemeValueUpto}
+                                                            disabled={SchemeValueUpto.isDisabled}
                                                             type="text"
                                                             className={isError.SchemeValueUpto.length > 0 ? "is-invalid form-control" : "form-control"}
                                                             placeholder="Please Enter Scheme Value Upto"
@@ -607,26 +633,8 @@ const SchemeMaster = forwardRef(({ props }, ref) => {
 
 
                                                 <Row className="mt-1">
-                                                    <FormGroup className="mb-2 col col-sm-2">
-                                                        <Label htmlFor="validationCustom01">{fieldLabel.SchemeQuantity} </Label>
-                                                        <Input
-                                                            name="SchemeQuantity"
-                                                            id="SchemeQuantity"
-                                                            value={values.SchemeQuantity}
-                                                            type="text"
-                                                            className={isError.SchemeQuantity.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Scheme Value Upto"
-                                                            autoComplete='off'
-                                                            onChange={(event) => {
-                                                                onChangeText({ event, state, setState })
 
-                                                            }}
-                                                        />
-                                                        {isError.SchemeQuantity.length > 0 && (
-                                                            <span className="invalid-feedback">{isError.SchemeQuantity}</span>
-                                                        )}
-                                                    </FormGroup>
-                                                    <Col md="1">  </Col>
+
                                                     <FormGroup className="mb-2 col col-8">
                                                         <Label htmlFor="validationCustom01">{fieldLabel.SchemeDetails} </Label>
                                                         <Input
