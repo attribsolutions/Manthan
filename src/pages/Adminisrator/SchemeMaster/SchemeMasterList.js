@@ -212,7 +212,7 @@ const SchemeMasterList = () => {
 
   const goButtonHandler = () => {
     let config = {};
-    debugger
+    
     const jsonBody = JSON.stringify({
       FromDate: fromdate,
       ToDate: todate,

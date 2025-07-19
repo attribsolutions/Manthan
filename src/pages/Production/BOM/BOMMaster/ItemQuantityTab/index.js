@@ -32,19 +32,15 @@ function ItemTab(props) {
     }));
 
 
-    // const ItemDropdown_Options = Items
-    //     .filter(item => (item.IsMixItem === 0) )
-    //     .map(item => ({
-    //         value: item.id,
-    //         label: item.Name,
-    //     }));
 
-    const ItemDropdown_Options = Items
-        .filter(item => (item.IsMixItem === 0 && !IsSweetAndSnacks))
-        .map(item => ({
-            value: item.id,
-            label: item.Name,
-        }));
+    const filteredItems = IsSweetAndSnacks
+        ? Items
+        : Items?.filter(item => item.IsMixItem === 0);
+
+    const ItemDropdown_Options = filteredItems?.map(item => ({
+        value: item.id,
+        label: item.Name,
+    }));
 
 
     function ContentItem_Handler(e) {

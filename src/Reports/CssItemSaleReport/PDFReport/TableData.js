@@ -45,7 +45,7 @@ export const Rows = (data) => {
             isNaN(element.Quantity) ? "0" : `${element.Quantity}`,
             `${element.UnitName}`,
             isNaN(element.BasicAmount) ? "0" : `${element.BasicAmount}`,
-            isNaN(element.GSTPersentage) ? "0" : `${element.GSTPersentage}`,
+            isNaN(element.GSTRate) ? "0" : `${element.GSTRate}`,
             isNaN(element.CGST) ? "0" : `${element.CGST}`,
             isNaN(element.SGST) ? "0" : `${element.SGST}`,
             isNaN(element.IGST) ? "0" : `${element.IGST}`,
