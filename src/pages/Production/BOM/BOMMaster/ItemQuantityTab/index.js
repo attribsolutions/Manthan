@@ -15,6 +15,7 @@ import { customAlert } from '../../../../../CustomAlert/ConfirmDialog';
 import { alertMessages } from '../../../../../components/Common/CommonErrorMsg/alertMsg';
 import { C_Select } from '../../../../../CustomValidateForm';
 import * as mode from "../../../../../routes/PageMode";
+import { IsSweetAndSnacksCompany } from '../../../../../components/Common/CommonFunction';
 
 function ItemTab(props) {
 
@@ -23,12 +24,23 @@ function ItemTab(props) {
     const [unitSelect, setUnitSelect] = useState('');
     const [ItemUnitOptions, setItemUnitOptions] = useState([]);
 
+    const IsSweetAndSnacks = IsSweetAndSnacksCompany();
+
     const { Items, ItemListloading } = useSelector((state) => ({
         Items: state.ItemMastersReducer.ItemList,
         ItemListloading: state.ItemMastersReducer.loading,
     }));
+
+
+    // const ItemDropdown_Options = Items
+    //     .filter(item => (item.IsMixItem === 0) )
+    //     .map(item => ({
+    //         value: item.id,
+    //         label: item.Name,
+    //     }));
+
     const ItemDropdown_Options = Items
-        .filter(item => item.IsMixItem === 0)
+        .filter(item => (item.IsMixItem === 0 && !IsSweetAndSnacks))
         .map(item => ({
             value: item.id,
             label: item.Name,
