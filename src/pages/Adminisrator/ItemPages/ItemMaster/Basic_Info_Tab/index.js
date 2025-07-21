@@ -9,6 +9,8 @@ import { unitConversionInitial } from '../../ItemMaster/itemIndex'
 const BasicInfoTabForm = ({ state, setState, settable, pageField }) => {
 
     const dispatch = useDispatch();
+    // const [unitTableData, setUnitTableData] = useState([]);
+
 
     const [searchResults, setSearchResults] = React.useState([]);
 
@@ -71,9 +73,14 @@ const BasicInfoTabForm = ({ state, setState, settable, pageField }) => {
     }
 
     function BaseUnitOnchange(hasSelect, evn) {
-        onChangeSelect({ hasSelect, evn, state, setState })
-        settable([{ ...unitConversionInitial, IsBase: true, Conversion: 1, Unit: hasSelect }]);
+        onChangeSelect({ hasSelect, evn, state, setState });
+    
+       
+        if (state.values.BaseUnitName?.value !== hasSelect.value) {
+            settable([{ ...unitConversionInitial, IsBase: true, Conversion: 1, Unit: hasSelect }]);
+        }
     }
+    
 
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function (event) {
