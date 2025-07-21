@@ -10,6 +10,7 @@ import { CInput, decimalRegx_3dit } from '../../../../../CustomValidateForm';
 export default function UnitConverstion(props) {
     const { pageMode, formValue, TableData = [], BaseUnit = [] } = props.state;
     const { settable, setFormValue } = props;
+   
 
     // Map BaseUnit to dropdown options
     const BaseUnit_DropdownOptions = BaseUnit.map((data) => ({
@@ -20,13 +21,14 @@ export default function UnitConverstion(props) {
     // Initialize table data if in create mode
     useEffect(() => {
         if (pageMode !== mode.edit && pageMode !== mode.view) {
-            const initialEvent = formValue.values.BaseUnitName;
-
-            if (Object.keys(initialEvent).length > 0) {
-                baseunitOnchange(initialEvent);
+            const selectedBase = formValue.values.BaseUnitName;
+            if (Object.keys(selectedBase).length > 0 && TableData.length === 0) {
+                baseunitOnchange(selectedBase);
             }
         }
     }, [pageMode, formValue.values.BaseUnitName]);
+    
+    
 
     // Handle Base Unit change
     function baseunitOnchange(event) {
@@ -44,13 +46,14 @@ export default function UnitConverstion(props) {
             required: restRequired,
         };
         setFormValue(updatedFormValue);
-
-        // Adding the base unit to the table
+    
+        // Only update TableData if BaseUnit is changed
+        const currentBaseId = formValue.values.BaseUnitName?.value;
+        if (event.value === currentBaseId) return;
+    
         const baseUnitRow = { ...unitConversionInitial, Unit: event, Conversion: 1, IsBase: true, id: 1 };
-
-        // Check the base unit and add additional units if they are not the base unit
         const additionalUnits = [];
-
+    
         if (event.value !== 1) {
             additionalUnits.push({ ...unitConversionInitial, Unit: { value: 1, label: 'No' }, Conversion: 1, IsBase: false, id: 2 });
         }
@@ -60,10 +63,10 @@ export default function UnitConverstion(props) {
         if (event.value !== 4) {
             additionalUnits.push({ ...unitConversionInitial, Unit: { value: 4, label: 'Box' }, Conversion: 1, IsBase: false, id: 4 });
         }
-        // Setting the table with the base unit and the additional units
+    
         settable([baseUnitRow, ...additionalUnits]);
     }
-
+    
     // Add new row handler
     function addRow_Handler(ID) {
         let newRow = { ...unitConversionInitial, id: ID + 1 };
@@ -169,6 +172,7 @@ export default function UnitConverstion(props) {
                         <Row>
                             <Col>
                                 <CInput
+                                
                                     type="text"
                                     id={`txtConversion${key}`}
                                     placeholder="Select"
