@@ -104,23 +104,13 @@ const SchemeMaster = (props) => {
     const [ItemData, setItemData] = useState([]);
 
     const [ItemTabledata, setItemTabledata] = useState([]);
-    const [PartySelect, setPartySelect] = useState([]);
+    const [PartySelect, setPartySelect] = useState(allLabelWithZero);
 
     const [PartyTabledata, setPartyTabledata] = useState([]);
-
-
-
-
-
-
-
-
-
 
     const [schemeType, setSchemeType] = useState(null)
 
     const [schemeTypeValidation, setSchemeTypeValidation] = useState(null)
-
 
 
 
@@ -162,6 +152,7 @@ const SchemeMaster = (props) => {
         dispatch(getSchemeTypelist());
         dispatch(getCommonPartyDrodownOptionAction())
         dispatch(get_Group_By_GroupType_ForDropDown(5))
+        AddPartyhandler()
         return () => {
             dispatch(saveSchemeMaster_Success({ Status: false }));
             dispatch(editSchemeIDSuccess({ Status: false }));
@@ -184,12 +175,14 @@ const SchemeMaster = (props) => {
             const allItems = ItemData.flatMap(group => group.Items || []);
             setItemDropDown_Option(allItems.map(i => ({
                 ...i,
-                Quantity: "",
+                Quantity: 0,
                 applicable: false,
                 not_applicable: false,
                 effective: false,
                 value: i.ItemID,
                 label: i.ItemName,
+                DiscountValue: 0,
+                DiscountType: "%"
             })));
 
         } else if (groupDropdownSelect.value !== 0 && (subGroupDropdownSelect.value && subGroupDropdownSelect.value !== 0)) {
@@ -198,12 +191,14 @@ const SchemeMaster = (props) => {
                 .flatMap(g => g.Items || []);
             setItemDropDown_Option(subGroupItems.map(i => ({
                 ...i,
-                Quantity: "",
+                Quantity: 0,
                 applicable: false,
                 not_applicable: false,
                 effective: false,
                 value: i.ItemID,
                 label: i.ItemName,
+                DiscountValue: 0,
+                DiscountType: "%"
             })));
         } else if (groupDropdownSelect.value !== 0) {
             const groupItems = ItemData
@@ -211,12 +206,14 @@ const SchemeMaster = (props) => {
                 .flatMap(g => g.Items || []);
             setItemDropDown_Option(groupItems.map(i => ({
                 ...i,
-                Quantity: "",
+                Quantity: 0,
                 applicable: false,
                 not_applicable: false,
                 effective: false,
                 value: i.ItemID,
                 label: i.ItemName,
+                DiscountValue: 0,
+                DiscountType: "%"
             })));
         }
     }, [groupDropdownSelect, subGroupDropdownSelect, ItemData]);
@@ -292,6 +289,14 @@ const SchemeMaster = (props) => {
             setactiveTab(tab)
         }
     }
+
+    const PartyList_Options = PartyDropDown.map((item) => ({
+        value: item.id,
+        label: item.Name,
+        IsPartySelect: false,
+
+    }));
+    PartyList_Options.unshift(allLabelWithZero)
 
     const SchemeType_Options = SchemeType.map((index) => ({
         value: index.id,
@@ -422,6 +427,7 @@ const SchemeMaster = (props) => {
                     SchemeQuantity: SchemeData.values.SchemeQuantity,
                     SchemeTypeID: schemeType.value,
                     BillEffect: 1,
+                    SchemeDetails: SchemeData.values.SchemeDetails,
                     PartyDetails: PartyData
                         .filter(i => i.IsPartySelect) // only include items where IsPartySelect is true
                         .map(i => ({
@@ -439,6 +445,7 @@ const SchemeMaster = (props) => {
                                 DiscountValue: i.DiscountValue,
                                 Quantity: i.Quantity || 0,
                             }));
+
                         let Item = {}
 
                         if (i.effective === true) {
@@ -500,10 +507,22 @@ const SchemeMaster = (props) => {
 
 
     const AddPartyhandler = () => {
-        if (ItemSelect.value === 0) {
-            setPartyTabledata(PartyDropDown)
+
+        if (PartySelect.value === 0) {
+            setPartyTabledata(PartyList_Options.filter(i => i.value !== 0))
         } else {
-            setPartyTabledata([PartySelect])
+            setPartyTabledata(prev => {
+                const alreadyExists = prev.some(item => item.value === PartySelect.value);
+                if (alreadyExists) {
+                    customAlert({
+                        Type: 4,
+                        Message: `${PartySelect.label} ${alertMessages.partyAlreadyExist}`,
+                    })
+                    return prev; // don't add duplicate
+                }
+                return [...prev, PartySelect];  // add new item
+            });
+            // setPartyTabledata([PartySelect])
         }
     }
 
@@ -574,7 +593,7 @@ const SchemeMaster = (props) => {
                                                 <Col sm="8">
                                                     <C_Select
                                                         value={PartySelect}
-                                                        options={PartyDropDown}
+                                                        options={PartyList_Options}
                                                         onChange={(e) => { setPartySelect(e) }}
 
                                                         classNamePrefix="dropdown"
@@ -750,15 +769,29 @@ const SchemeMaster = (props) => {
 
                                 <TabContent activeTab={activeTab} className="p-3 text-muted">
                                     <TabPane tabId="1">
-                                        <SchemeTabForm ref={SchemeTabRef} props={props} Validation={schemeTypeValidation} pageMode={pageMode} />
+                                        <SchemeTabForm ref={SchemeTabRef}
+                                            props={props}
+                                            Validation={schemeTypeValidation}
+                                            pageMode={pageMode} />
                                     </TabPane>
 
                                     <TabPane tabId="2">
-                                        <SchemeItemTabForm ref={SchemeItemTabRef} props={props} Validation={schemeTypeValidation} GroupSelect={groupDropdownSelect} SubGroupSelect={subGroupDropdownSelect} pageMode={pageMode} ItemTabledata={ItemTabledata} />
+                                        <SchemeItemTabForm ref={SchemeItemTabRef}
+                                            props={props}
+                                            Addhandler={Addhandler}
+                                            pageMode={pageMode}
+                                            ItemTabledata={ItemTabledata} />
                                     </TabPane>
 
                                     <TabPane tabId="3">
-                                        <SchemePartyTabForm ref={SchemePartyTabRef} props={props} Validation={schemeTypeValidation} pageMode={pageMode} PartyTabledata={PartyTabledata} />
+                                        <SchemePartyTabForm
+                                            ref={SchemePartyTabRef}
+                                            props={props}
+                                            Validation={schemeTypeValidation}
+                                            pageMode={pageMode}
+                                            PartyTabledata={PartyTabledata}
+                                            AddPartyhandler={AddPartyhandler}
+                                        />
                                     </TabPane>
 
                                 </TabContent>

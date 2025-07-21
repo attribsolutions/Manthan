@@ -5,7 +5,7 @@ import GlobalCustomTable from '../../../GlobalCustomTable';
 import { useHistory } from "react-router-dom";
 import { mode } from '../../../routes';
 
-const SchemePartyTabForm = forwardRef(({ props }, ref) => {
+const SchemePartyTabForm = forwardRef(({ props, PartyTabledata, AddPartyhandler }, ref) => {
 
     const history = useHistory();
     const { location } = history
@@ -15,16 +15,14 @@ const SchemePartyTabForm = forwardRef(({ props }, ref) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [update, forceUpdate] = useState(0);
 
-    const [tableData, setTableData] = useState([]);
+    const [tableData, setTableData] = useState(PartyTabledata);
+    
     const [selectAll, setSelectAll] = useState({
         IsPartySelect: false,
 
     });
 
 
-    const { PartyDropDown } = useSelector((state) => ({
-        PartyDropDown: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
-    }));
 
 
 
@@ -35,16 +33,13 @@ const SchemePartyTabForm = forwardRef(({ props }, ref) => {
 
 
     useEffect(() => {
-        if (pageMode === mode.defaultsave) {
-            const PartyList_Options = PartyDropDown.map((item) => ({
-                value: item.id,
-                label: item.Name,
-                IsPartySelect: false,
 
-            }));
-            setTableData(PartyList_Options)
+        // AddPartyhandler()
+        if (pageMode === mode.defaultsave) {
+            setTableData(PartyTabledata)
         }
-    }, [PartyDropDown])
+
+    }, [PartyTabledata])
 
 
     useEffect(() => {
