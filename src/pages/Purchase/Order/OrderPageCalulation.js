@@ -101,8 +101,8 @@ export const orderCalculateFunc = (row, IsComparGstIn) => {
 
 
 
-export function Franchies_Order_Calculate_Func(row, index1, IsComparGstIn,) {
-
+export function Franchies_Order_Calculate_Func(row, IsComparGstIn,) {
+  debugger
   const discountBasedOnRate = true
 
   const qty = Number(row.Quantity) || 0;
@@ -136,10 +136,22 @@ export function Franchies_Order_Calculate_Func(row, index1, IsComparGstIn,) {
     taxableRate = parseFloat((rate * 100 / (100 + gstPercentage)).toFixed(2));
   }
 
-  const cgst = parseFloat((taxableAmount * (gstPercentage / 2) / 100).toFixed(2));
-  const sgst = cgst;
-  const igst = 0; // Assuming local billing, hence IGST is 0
-  const gstAmount = cgst + sgst;
+
+
+  let CGST_Amount = 0;
+  let SGST_Amount = 0;
+  let IGST_Amount = 0;
+  let IGST_Percentage = 0;
+  let SGST_Percentage = 0;
+  let CGST_Percentage = 0;
+
+
+  CGST_Amount = parseFloat((taxableAmount * (gstPercentage / 2) / 100).toFixed(2));
+  SGST_Amount = CGST_Amount;
+  IGST_Amount = 0; // Assuming local billing, hence IGST is 0
+  SGST_Percentage = gstPercentage / 2
+  CGST_Percentage = SGST_Percentage
+  const gstAmount = CGST_Amount + SGST_Amount;
 
   // Final amount after applying GST
   let itemFinalAmount = taxableAmount + gstAmount;
@@ -159,20 +171,36 @@ export function Franchies_Order_Calculate_Func(row, index1, IsComparGstIn,) {
   }
 
 
+
+  if (IsComparGstIn) {  //compare Supplier and Customer are Same State by GSTIn Number
+    let isSameSate = compareGSTINState(IsComparGstIn.GSTIn_1, IsComparGstIn.GSTIn_2, IsComparGstIn?.IsSEZ)
+    if (isSameSate) {// iF isSameSate = true ===not same GSTIn
+      CGST_Amount = 0;
+      SGST_Amount = 0;
+      IGST_Amount = roundFixed(gstAmount, 2);
+      IGST_Percentage = gstPercentage;
+      SGST_Percentage = 0;
+      CGST_Percentage = 0;
+    }
+  }
+
+
+
+
+
   return {
     // discountBaseAmt: Number(discountBaseAmt.toFixed(2)),
     disCountAmt: discountAmount.toFixed(2),
     roundedTotalAmount: itemFinalAmount.toFixed(0),
-    basicAmount: taxableAmount.toFixed(2),
-    CGST_Amount: cgst.toFixed(2),
-    SGST_Amount: sgst.toFixed(2),
-    IGST_Amount: igst.toFixed(2),
+    basicAmount: roundFixed(taxableAmount),
+    CGST_Amount: roundFixed(CGST_Amount, 2),
+    SGST_Amount: roundFixed(SGST_Amount, 2),
+    IGST_Amount: roundFixed(IGST_Amount, 2),
     roundedGstAmount: gstAmount.toFixed(2),
-    IGST_Amount: gstAmount.toFixed(2),
-    CGST_Percentage: gstPercentage / 2,
-    SGST_Percentage: gstPercentage / 2,
-    IGST_Percentage: igst,
-    GST_Percentage: gstPercentage
+    CGST_Percentage: roundFixed(CGST_Percentage, 2),
+    SGST_Percentage: roundFixed(CGST_Percentage, 2),
+    IGST_Percentage: roundFixed(IGST_Percentage, 2),
+    GST_Percentage: roundFixed(gstPercentage, 2)
 
   };
 }

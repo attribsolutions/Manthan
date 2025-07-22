@@ -152,7 +152,7 @@ const SchemeMaster = (props) => {
         dispatch(getSchemeTypelist());
         dispatch(getCommonPartyDrodownOptionAction())
         dispatch(get_Group_By_GroupType_ForDropDown(5))
-        AddPartyhandler()
+       
         return () => {
             dispatch(saveSchemeMaster_Success({ Status: false }));
             dispatch(editSchemeIDSuccess({ Status: false }));
@@ -348,10 +348,6 @@ const SchemeMaster = (props) => {
     }, [postMsg])
 
 
-
-
-
-
     useEffect(() => {
 
         if (pageField) {
@@ -361,10 +357,12 @@ const SchemeMaster = (props) => {
     }, [pageField])
 
     const Group_Handler = (event) => {
+
         setGroupDropdownSelect(event);
         dispatch(get_Sub_Group_By_Group_ForDropDown(event.value))
         setSubGroupDropdownSelect(allLabelWithZero);
         setItemSelect(allLabelWithZero)
+
     };
 
     const SubGroup_Handler = (event) => {
@@ -690,6 +688,7 @@ const SchemeMaster = (props) => {
                                                 type="button"
                                                 spinnerColor="white"
                                                 className="btn btn-info  mr"
+                                                forceDisabled={pageMode === mode.edit}
                                                 title="Change Scheme Type"
                                                 onClick={() => setSchemeTypeValidation(null)}
                                             >

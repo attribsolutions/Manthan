@@ -334,7 +334,7 @@ const SchemeItemTabForm = forwardRef(({ props, ItemTabledata, Addhandler }, ref)
 
         <>
             <GlobalCustomTable
-                keyField={"id"}
+                keyField={"value"}
                 data={ItemData}
                 columns={columns}
                 paginationEnabled={25}

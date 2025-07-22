@@ -6,6 +6,7 @@ import {
   listpageConcatDateAndTime,
   loginSystemSetting,
   loginUserDetails,
+  loginUserGSTIN,
   loginUserID,
   roundToDecimalPlaces,
   strToBool,
@@ -476,7 +477,7 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
 
 function* gobutton_invoiceAdd_genFunc({ config }) {
   const { subPageMode, path, pageMode, customer, errorMsg, OrderID } = config;
-
+  debugger
   try {
 
     let response;
@@ -508,7 +509,7 @@ function* gobutton_invoiceAdd_genFunc({ config }) {
             stock.GSTPercentage = item.GSTPercentage; // Assign GSTPercentage correctly
             stock.GST = item.GSTPercentage; // Assign GST directly from the item,
             stock.Qty = item.Quantity
-            Franchies_invoice_Calculate_Func(stock, item);
+            Franchies_invoice_Calculate_Func(stock, item, { GSTIn_1: order?.CustomerGSTIN, GSTIn_2: loginUserGSTIN(), IsSEZ: order?.IsSEZ });
           });
         });
       });

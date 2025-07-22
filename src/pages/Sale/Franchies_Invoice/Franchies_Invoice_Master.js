@@ -388,7 +388,7 @@ const Franchies_Invoice_Master = (props) => {
 
             // Perform calculations based on the updated values for each item
             updatedOrderItemTable.forEach((index1) => {
-                DiscountCaculationForFranchies(index1, subPageMode);
+                DiscountCaculationForFranchies(index1, { GSTIn_1: values.Customer.CustomerGSTIN, GSTIn_2: _cfunc.loginUserGSTIN(), IsSEZ: values?.Customer?.IsSEZ });
             });
             totalAmountCalcuationFunc(updatedOrderItemTable);
             // Set the updated array as the new orderItemTable
@@ -433,7 +433,7 @@ const Franchies_Invoice_Master = (props) => {
                             autoComplete="off"
                             defaultValue={index1.Quantity}
                             onChange={(event) => {
-                                orderQtyOnChange(event, index1, subPageMode);
+                                orderQtyOnChange(event, index1, { GSTIn_1: values.Customer.CustomerGSTIN, GSTIn_2: _cfunc.loginUserGSTIN(), IsSEZ: values?.Customer?.IsSEZ });
                                 totalAmountCalcuationFunc(tableList);
                             }}
                         />
@@ -454,7 +454,7 @@ const Franchies_Invoice_Master = (props) => {
                                     "BaseUnitQuantityNoUnit": i.BaseUnitQuantityNoUnit,
                                 }))}
                                 onChange={(event) => {
-                                    orderQtyUnit_SelectOnchange(event, index1, subPageMode);
+                                    orderQtyUnit_SelectOnchange(event, index1, { GSTIn_1: values.Customer.CustomerGSTIN, GSTIn_2: _cfunc.loginUserGSTIN(), IsSEZ: values?.Customer?.IsSEZ });
                                     totalAmountCalcuationFunc(tableList);
                                 }}
                             ></Select>
@@ -542,7 +542,7 @@ const Franchies_Invoice_Master = (props) => {
             classes: () => "invoice-discount-row",
             formatter: (cellContent, index1, key, formatExtraData) => {
                 let { tableList } = formatExtraData;
-
+                debugger
                 if (!index1.DiscountType) { index1.DiscountType = discountTypeAll.value }
 
                 const defaultDiscountTypelabel =
@@ -567,7 +567,7 @@ const Franchies_Invoice_Master = (props) => {
                                             setChangeAllDiscount(false);
                                             index1.DiscountType = e.value;
                                             index1.Discount = '';
-                                            DiscountCaculationForFranchies(index1);
+                                            DiscountCaculationForFranchies(index1, { GSTIn_1: values.Customer.CustomerGSTIN, GSTIn_2: _cfunc.loginUserGSTIN(), IsSEZ: values?.Customer?.IsSEZ });
                                             totalAmountCalcuationFunc(tableList);
                                         }}
                                     />
@@ -605,7 +605,7 @@ const Franchies_Invoice_Master = (props) => {
 
                                             index1.Discount = e.target.value;
                                             setChangeAllDiscount(false);
-                                            DiscountCaculationForFranchies(index1);
+                                            DiscountCaculationForFranchies(index1, { GSTIn_1: values.Customer.CustomerGSTIN, GSTIn_2: _cfunc.loginUserGSTIN(), IsSEZ: values?.Customer?.IsSEZ });
                                             totalAmountCalcuationFunc(tableList);
                                         }}
 
@@ -616,7 +616,7 @@ const Franchies_Invoice_Master = (props) => {
                         <div className="bottom-div">
                             <span className="theme-font text-muted">Amount:</span>
                             <samp className='text-black' id={`item-TotalAmount-${index1.id}`}>
-                                {_cfunc.amountCommaSeparateFunc((index1.ItemTotalAmount).toFixed(2) || 0)}
+                                {(index1?.ItemTotalAmount && _cfunc.amountCommaSeparateFunc((index1?.ItemTotalAmount).toFixed(2)) || 0)}
                             </samp>
                         </div>
                     </>

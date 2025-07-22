@@ -32,7 +32,7 @@ const GlobalCustomTable = ({
 
 
     const debounceHandleSearch = _debounce((val) => {
-
+        debugger
         setCurrentPage(1); // Update currentPage when data changes
         setSearchText(val);
     }, 300);
@@ -148,7 +148,7 @@ const GlobalCustomTable = ({
                             {...paginationTableProps}
                             bootstrap4
                         />
-                       {isPaginationTotalStandalone && <PaginationTotalStandalone
+                        {isPaginationTotalStandalone && <PaginationTotalStandalone
                             {...paginationProps}
                         />}
                         {paginationEnabled && <div className=" pagination pagination-rounded justify-content-end" style={{ marginTop: "-20px", marginBottom: "40px" }}>

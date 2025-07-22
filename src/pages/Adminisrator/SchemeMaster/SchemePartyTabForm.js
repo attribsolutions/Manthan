@@ -15,8 +15,8 @@ const SchemePartyTabForm = forwardRef(({ props, PartyTabledata, AddPartyhandler 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [update, forceUpdate] = useState(0);
 
-    const [tableData, setTableData] = useState(PartyTabledata);
-    
+    const [tableData, setTableData] = useState([]);
+
     const [selectAll, setSelectAll] = useState({
         IsPartySelect: false,
 
@@ -34,7 +34,6 @@ const SchemePartyTabForm = forwardRef(({ props, PartyTabledata, AddPartyhandler 
 
     useEffect(() => {
 
-        // AddPartyhandler()
         if (pageMode === mode.defaultsave) {
             setTableData(PartyTabledata)
         }
