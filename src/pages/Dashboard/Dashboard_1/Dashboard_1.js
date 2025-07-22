@@ -22,11 +22,11 @@ import { DashboardLoader, PageLoadingSpinner } from '../../../components/Common/
 import MobileRetailerApprove from './MobileRetailerApprove';
 import DemandListForDashboard from './demand';
 import WorkOrderForDashboard from './WorkOrder';
-import DailyItemSaleView from '../FrenchiesesDashboard/DailyItemSaleView';
+
 import Pie from '../FrenchiesesDashboard/pie';
-import SERVER_HOST_PATH, { ERP_LINK } from '../../../helpers/_serverPath';
-import { encodeToHash, formatDate, GetDailySaleData } from '../FrenchiesesDashboard/Function';
-import DatePicker from 'react-flatpickr';
+import  { ERP_LINK } from '../../../helpers/_serverPath';
+import { formatDate, GetDailySaleData } from '../FrenchiesesDashboard/Function';
+
 import { C_DatePicker } from '../../../CustomValidateForm';
 import PosExeVersionDetails from '../FrenchiesesDashboard/PosExeVersionDetails';
 
@@ -54,7 +54,7 @@ const Dashboard_1 = (props) => {
     const {
         getDashboard,
         userAccess,
-        orderApprovalMsg,
+       
         GRNListLoading,
         pageField,
         SalesReturnListloading,

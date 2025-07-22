@@ -41,7 +41,7 @@ export default function InvoiceForGRN() {
 
     let TableListWithNonDeleteRecord = []
     if (IsCompanySweetAndSnacks) {
-        TableListWithNonDeleteRecord = [...IBInvoiceList, ...tableList]
+        TableListWithNonDeleteRecord = [...IBInvoiceList, ...tableList].filter(item => item.inward === 0);
     } else {
         TableListWithNonDeleteRecord = tableList.filter(i => i.IsRecordDeleted === false);
     }
@@ -106,7 +106,7 @@ export default function InvoiceForGRN() {
 
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
-            debugger
+
             history.push({
                 pathname: GRNitem.path,
                 page_Mode: GRNitem.page_Mode,
@@ -124,7 +124,7 @@ export default function InvoiceForGRN() {
                 grnRef.push({
                     Invoice: ele.id,
                     Order: null,
-                    Invoice_NO: ele.FullInvoiceNumber,
+                    Invoice_NO: ele.FullInvoiceNumber || ele.FullChallanNumber,
                     Inward: true,
                     Challan: ele.POType === "Challan" ? ele.id : '',
                     GRN_From: IsCompanySweetAndSnacks ? url.IB_INVOICE_FOR_GRN : ""
@@ -213,27 +213,29 @@ export default function InvoiceForGRN() {
                                 className=" fas fa-file-invoice font-size-17"
                             ></span>
                         }
+
                     </Button>}
 
-                    {hasRole("RoleAccess_IsPrint") && < Button
-                        type="button"
-                        id={`btn-print-${rowData.id}`}
-                        className={printBtnCss}
-                        style={{ marginLeft: "9px" }}
-                        title="Print Invoice"
-                        onClick={() => {
-                            const btnId = `btn-print-${rowData.id}`
-                            !listBtnLoading && printBtnHandler(rowData, btnId)
-                        }}
-                    >
-                        {(listBtnLoading === `btn-print-${rowData.id}`) ?
-                            <Spinner style={{ height: "16px", width: "16px" }} color="white" />
-                            : <span
+                    {hasRole("RoleAccess_IsPrint") && rowData.Inward === 0 && (
+                        < Button
+                            type="button"
+                            id={`btn-print-${rowData.id}`}
+                            className={printBtnCss}
+                            style={{ marginLeft: "9px" }}
+                            title="Print Invoice"
+                            onClick={() => {
+                                const btnId = `btn-print-${rowData.id}`
+                                !listBtnLoading && printBtnHandler(rowData, btnId)
+                            }}
+                        >
+                            {(listBtnLoading === `btn-print-${rowData.id}`) ?
+                                <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                                : <span
 
-                                className="bx bx-printer font-size-16"
-                            ></span>
-                        }
-                    </Button>}
+                                    className="bx bx-printer font-size-16"
+                                ></span>
+                            }
+                        </Button>)}
                 </>)
             }
         },
@@ -243,38 +245,37 @@ export default function InvoiceForGRN() {
         order: 'desc'
     }];
 
+
+
     return (
+
+
         <ToolkitProvider
             keyField="Invoice"
-            data={TableListWithNonDeleteRecord}
+            data={TableListWithNonDeleteRecord} // use filtered data here
             columns={pagesListColumns}
             search
         >
             {toolkitProps => (
                 <React.Fragment>
-                    {/* <div className="table-container"> */}
-                    <SimpleBar className="" style={{ maxHeight: "352px" }}>
-
+                    <SimpleBar style={{ maxHeight: "352px" }}>
                         <BootstrapTable
                             keyField={"Invoice"}
                             bordered={true}
                             striped={false}
                             defaultSorted={defaultSorted}
-                            noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
+                            noDataIndication={<div className="text-danger text-center">Record Not available</div>}
                             classes={"table align-middle table-nowrap table-hover"}
                             headerWrapperClasses={"thead-light"}
-
                             {...toolkitProps.baseProps}
-
                         />
                         {globalTableSearchProps(toolkitProps.searchProps)}
-                        {/* </div> */}
-                    </SimpleBar >
+                    </SimpleBar>
                     <C_Report />
                 </React.Fragment>
             )}
-
         </ToolkitProvider>
+
     )
 }
 
