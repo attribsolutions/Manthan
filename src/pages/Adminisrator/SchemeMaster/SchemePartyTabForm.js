@@ -22,6 +22,9 @@ const SchemePartyTabForm = forwardRef(({ props, PartyTabledata, AddPartyhandler 
 
     });
 
+    useEffect(() => {
+        AddPartyhandler()
+    }, [])
 
 
 
@@ -32,13 +35,20 @@ const SchemePartyTabForm = forwardRef(({ props, PartyTabledata, AddPartyhandler 
     }));
 
 
+
+
     useEffect(() => {
 
         if (pageMode === mode.defaultsave) {
             setTableData(PartyTabledata)
         }
 
+
+
     }, [PartyTabledata])
+
+
+
 
 
     useEffect(() => {

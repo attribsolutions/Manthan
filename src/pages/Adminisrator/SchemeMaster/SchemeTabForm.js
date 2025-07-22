@@ -144,13 +144,6 @@ const SchemeMaster = forwardRef(({ props, Validation }, ref) => {
 
 
 
-    const SchemeType_Options = SchemeType.map((index) => ({
-        value: index.id,
-        label: index.SchemeTypeName,
-    }));
-
-
-
 
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time

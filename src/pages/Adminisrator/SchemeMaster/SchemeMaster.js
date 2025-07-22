@@ -152,7 +152,7 @@ const SchemeMaster = (props) => {
         dispatch(getSchemeTypelist());
         dispatch(getCommonPartyDrodownOptionAction())
         dispatch(get_Group_By_GroupType_ForDropDown(5))
-       
+
         return () => {
             dispatch(saveSchemeMaster_Success({ Status: false }));
             dispatch(editSchemeIDSuccess({ Status: false }));
@@ -285,9 +285,7 @@ const SchemeMaster = (props) => {
     }
 
     const toggle1 = tab => {
-        if (activeTab !== tab) {
-            setactiveTab(tab)
-        }
+        if (activeTab !== tab) { setactiveTab(tab) }
     }
 
     const PartyList_Options = PartyDropDown.map((item) => ({
@@ -377,7 +375,6 @@ const SchemeMaster = (props) => {
         const ItemData = getItemData()
         const PartyData = getPartyData()
         const setSchemeData = SchemeTabRef.current.updateValue;
-
 
         if (PartyData.length > 0 && ItemData.length > 0) {
             SchemeData.hasValid.Party.valid = true
@@ -767,22 +764,22 @@ const SchemeMaster = (props) => {
                                 </Nav>
 
                                 <TabContent activeTab={activeTab} className="p-3 text-muted">
-                                    <TabPane tabId="1">
+                                    {activeTab === "1" && <TabPane tabId="1">
                                         <SchemeTabForm ref={SchemeTabRef}
                                             props={props}
                                             Validation={schemeTypeValidation}
                                             pageMode={pageMode} />
-                                    </TabPane>
+                                    </TabPane>}
 
-                                    <TabPane tabId="2">
+                                    {activeTab === "2" && <TabPane tabId="2">
                                         <SchemeItemTabForm ref={SchemeItemTabRef}
                                             props={props}
                                             Addhandler={Addhandler}
                                             pageMode={pageMode}
                                             ItemTabledata={ItemTabledata} />
-                                    </TabPane>
+                                    </TabPane>}
 
-                                    <TabPane tabId="3">
+                                    {activeTab === "3" && <TabPane tabId="3">
                                         <SchemePartyTabForm
                                             ref={SchemePartyTabRef}
                                             props={props}
@@ -791,7 +788,7 @@ const SchemeMaster = (props) => {
                                             PartyTabledata={PartyTabledata}
                                             AddPartyhandler={AddPartyhandler}
                                         />
-                                    </TabPane>
+                                    </TabPane>}
 
                                 </TabContent>
                             </>}

@@ -328,7 +328,12 @@ function* orderList_GoBtn_GenFunc({ config }) {
       } else if (i.InvoiceCreated === true) {
         i.Status = "Invoice Created"
         if ((subPageMode === url.ORDER_LIST_4) && (isSweetAndSnacksCompany)) {
-          i.forceMakeBtnHide = false
+          if (i?.IsOrderClose) {
+            i.forceMakeBtnHide = true
+            i.Status = "Close"
+          } else {
+            i.forceMakeBtnHide = false
+          }
           i.forceExtraSelectDissabled = true;
         }
       }
@@ -367,6 +372,8 @@ function* orderList_GoBtn_GenFunc({ config }) {
       if (!(i.InvoiceCreated === true) && (i.IsConfirm === true)) {
         i.forceMakeBtnHide = false
       }
+
+
 
       //**********************************order Aproval button Show Condition ********************************************************** */
 
