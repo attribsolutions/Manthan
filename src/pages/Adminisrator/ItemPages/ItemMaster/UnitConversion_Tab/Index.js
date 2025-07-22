@@ -9,8 +9,9 @@ import { CInput, decimalRegx_3dit } from '../../../../../CustomValidateForm';
 
 export default function UnitConverstion(props) {
     const { pageMode, formValue, TableData = [], BaseUnit = [] } = props.state;
+
     const { settable, setFormValue } = props;
-   
+
 
     // Map BaseUnit to dropdown options
     const BaseUnit_DropdownOptions = BaseUnit.map((data) => ({
@@ -20,6 +21,7 @@ export default function UnitConverstion(props) {
 
     // Initialize table data if in create mode
     useEffect(() => {
+
         if (pageMode !== mode.edit && pageMode !== mode.view) {
             const selectedBase = formValue.values.BaseUnitName;
             if (Object.keys(selectedBase).length > 0 && TableData.length === 0) {
@@ -27,8 +29,8 @@ export default function UnitConverstion(props) {
             }
         }
     }, [pageMode, formValue.values.BaseUnitName]);
-    
-    
+
+
 
     // Handle Base Unit change
     function baseunitOnchange(event) {
@@ -46,14 +48,14 @@ export default function UnitConverstion(props) {
             required: restRequired,
         };
         setFormValue(updatedFormValue);
-    
+
         // Only update TableData if BaseUnit is changed
         const currentBaseId = formValue.values.BaseUnitName?.value;
         if (event.value === currentBaseId) return;
-    
+
         const baseUnitRow = { ...unitConversionInitial, Unit: event, Conversion: 1, IsBase: true, id: 1 };
         const additionalUnits = [];
-    
+
         if (event.value !== 1) {
             additionalUnits.push({ ...unitConversionInitial, Unit: { value: 1, label: 'No' }, Conversion: 1, IsBase: false, id: 2 });
         }
@@ -63,10 +65,10 @@ export default function UnitConverstion(props) {
         if (event.value !== 4) {
             additionalUnits.push({ ...unitConversionInitial, Unit: { value: 4, label: 'Box' }, Conversion: 1, IsBase: false, id: 4 });
         }
-    
+
         settable([baseUnitRow, ...additionalUnits]);
     }
-    
+
     // Add new row handler
     function addRow_Handler(ID) {
         let newRow = { ...unitConversionInitial, id: ID + 1 };
@@ -138,7 +140,7 @@ export default function UnitConverstion(props) {
     const tbodyfunction = () => {
 
         return TableData.map((index, key) => {
-
+            
             if (formValue.values.BaseUnitName.value === index.Unit.value) {
                 index.IsShowUnit = true
                 index["isDisabled"] = true;
@@ -148,7 +150,7 @@ export default function UnitConverstion(props) {
             } else {
                 index["isDisabled"] = false;
             }
-            debugger;
+            ;
             const isRestrictedUnit = ["No", "Kg", "Box"].includes(index.Unit.label);
             return (
                 <tr key={index.id}>
@@ -172,7 +174,7 @@ export default function UnitConverstion(props) {
                         <Row>
                             <Col>
                                 <CInput
-                                
+
                                     type="text"
                                     id={`txtConversion${key}`}
                                     placeholder="Select"

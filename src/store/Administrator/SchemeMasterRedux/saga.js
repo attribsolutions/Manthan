@@ -46,6 +46,7 @@ function* Get_Scheme_List_GenFunc({ config }) {
         ...item,
         PartyTypeID: PartyTypeID,
         isEditButtonDisabled: !item.IsSchemeActive,
+        forceDeleteHide: !item.IsSchemeActive,
         SchemePeriod: `${date_dmy_func(item?.FromPeriod)} - ${date_dmy_func(item?.ToPeriod)}`,
       }
     })

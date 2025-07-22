@@ -5,6 +5,7 @@ import GlobalCustomTable from '../../../GlobalCustomTable';
 import { mode } from '../../../routes';
 
 
+
 const SchemeItemTabForm = forwardRef(({ props, ItemTabledata, Addhandler }, ref) => {
 
     const history = useHistory();
@@ -21,14 +22,18 @@ const SchemeItemTabForm = forwardRef(({ props, ItemTabledata, Addhandler }, ref)
         effective: false
     });
 
+    useEffect(() => {
+        Addhandler()
+    }, [])
 
 
     useEffect(() => {
-        Addhandler()
+
         if (pageMode === mode.defaultsave) {
             setItemData(ItemTabledata)
         }
     }, [ItemTabledata])
+
 
     useImperativeHandle(ref, () => ({
         getValue: () => ItemData,
@@ -55,7 +60,10 @@ const SchemeItemTabForm = forwardRef(({ props, ItemTabledata, Addhandler }, ref)
                 setItemData(ItemDetails.map(i => ({
                     ...i,
                     label: i.ItemName,
-                    value: i.ItemID
+                    value: i.ItemID,
+                    applicable: i?.Aplicable,
+                    not_applicable: i?.NotAplicable,
+                    effective: i?.Effective
                 })))
 
             }
@@ -233,7 +241,7 @@ const SchemeItemTabForm = forwardRef(({ props, ItemTabledata, Addhandler }, ref)
             // hidden: SchemeItemTab.Quantityhidden,
 
             formatter: (_, row) => {
-                debugger
+
                 if (!(row.effective)) {
                     row["Quantity"] = 0
                 }
@@ -331,7 +339,6 @@ const SchemeItemTabForm = forwardRef(({ props, ItemTabledata, Addhandler }, ref)
     ];
 
     return (
-
         <>
             <GlobalCustomTable
                 keyField={"value"}

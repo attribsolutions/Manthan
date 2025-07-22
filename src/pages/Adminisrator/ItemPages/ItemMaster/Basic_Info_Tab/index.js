@@ -74,13 +74,28 @@ const BasicInfoTabForm = ({ state, setState, settable, pageField }) => {
 
     function BaseUnitOnchange(hasSelect, evn) {
         onChangeSelect({ hasSelect, evn, state, setState });
-    
-       
+
+
+        const additionalUnits = [];
+
+        if (hasSelect.value !== 1) {
+            additionalUnits.push({ ...unitConversionInitial, Unit: { value: 1, label: 'No' }, Conversion: 1, IsBase: false, id: 2 });
+        }
+        if (hasSelect.value !== 2) {
+            additionalUnits.push({ ...unitConversionInitial, Unit: { value: 2, label: 'Kg' }, Conversion: 1, IsBase: false, id: 3 });
+        }
+        if (hasSelect.value !== 4) {
+            additionalUnits.push({ ...unitConversionInitial, Unit: { value: 4, label: 'Box' }, Conversion: 1, IsBase: false, id: 4 });
+        }
+
         if (state.values.BaseUnitName?.value !== hasSelect.value) {
-            settable([{ ...unitConversionInitial, IsBase: true, Conversion: 1, Unit: hasSelect }]);
+            settable([
+                { ...unitConversionInitial, IsBase: true, Conversion: 1, Unit: hasSelect },
+                ...additionalUnits
+            ]);
         }
     }
-    
+
 
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function (event) {
