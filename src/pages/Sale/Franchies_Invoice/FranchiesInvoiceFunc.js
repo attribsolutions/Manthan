@@ -1,4 +1,4 @@
-import { amountCommaSeparateFunc, CommonConsole, compareGSTINState, loginUserName, roundToDecimalPlaces } from "../../../components/Common/CommonFunction";
+import { amountCommaSeparateFunc, CommonConsole, compareGSTINState, loginUserName, roundFixed, roundToDecimalPlaces } from "../../../components/Common/CommonFunction";
 import SERVER_HOST_PATH from "../../../helpers/_serverPath";
 
 export const postWithBasicAuth = async ({
@@ -46,19 +46,19 @@ export const postWithBasicAuth = async ({
     }
 };
 
-export function orderQtyOnChange(event, index1) {
-    debugger
+export function orderQtyOnChange(event, index1, IsComparGstIn) {
+    
     let inputValue = event.target.value;
 
     event.target.value = inputValue;
     index1.Quantity = inputValue
     index1.StockDetails.forEach(index2 => {
         index2.Qty = inputValue
-        Franchies_invoice_Calculate_Func(index2, index1);
+        Franchies_invoice_Calculate_Func(index2, index1, IsComparGstIn);
     })
 }
 
-export function orderQtyUnit_SelectOnchange(event, index1) {
+export function orderQtyUnit_SelectOnchange(event, index1, IsComparGstIn) {
 
     index1.default_UnitDropvalue = event;
     index1.ConversionUnit = event.ConversionUnit;
@@ -68,7 +68,7 @@ export function orderQtyUnit_SelectOnchange(event, index1) {
         const _hasRate = ((event.BaseUnitQuantity / event.BaseUnitQuantityNoUnit) * index1.Rate);
         index2.Rate = roundToDecimalPlaces(_hasRate, 2);//max 2 decimal 
         document.getElementById(`stockItemRate-${index1.id}`).innerText = amountCommaSeparateFunc(index2.Rate);
-        Franchies_invoice_Calculate_Func(index2, index1);
+        Franchies_invoice_Calculate_Func(index2, index1, IsComparGstIn);
     })
 };
 
@@ -80,7 +80,7 @@ export function RoundCalculationFunc(data) {
     const totalAmount = (NetAmount + DiscountTotalAmount); // Subtract and ensure 2 decimal places
     const RoundedAmount = Math.round(NetAmount); // Nearest integer
     const RoundOffAmount = (NetAmount - RoundedAmount); // Difference rounded to 2 decimal places
-    debugger
+    
     return {
         "DiscountAmount": Number(Number(DiscountTotalAmount).toFixed(2)),
         "TotalAmount": Number(Number(totalAmount).toFixed(2)),
@@ -90,13 +90,13 @@ export function RoundCalculationFunc(data) {
     }
 }
 
-export const DiscountCaculationForFranchies = (index1) => {
+export const DiscountCaculationForFranchies = (index1, IsComparGstIn) => {
 
     let totalAmount = 0;
 
     index1.StockDetails.forEach(index2 => {
         if (Number(index2.Qty) > 0) {
-            const calculate = Franchies_invoice_Calculate_Func(index2, index1);
+            const calculate = Franchies_invoice_Calculate_Func(index2, index1, IsComparGstIn);
             totalAmount += Number(calculate.ItemTotalAmount);
         }
     });
@@ -109,7 +109,7 @@ export const DiscountCaculationForFranchies = (index1) => {
 }
 
 export function Franchies_invoice_Calculate_Func(row, index1, IsComparGstIn,) {
-    debugger
+    
     const discountBasedOnRate = true
     const qty = (Number(row.Qty)) || 0;
     const initialRate = Number(row.MRP) || 0;
@@ -191,15 +191,15 @@ export function Franchies_invoice_Calculate_Func(row, index1, IsComparGstIn,) {
     return {
         // discountBaseAmt: Number(discountBaseAmt.toFixed(2)),
         disCountAmt: discountAmount.toFixed(2),
-        ItemTotalAmount: itemFinalAmount.toFixed(2),
-        taxableAmount: taxableAmount.toFixed(2),
-        CGST_Amount: cgst.toFixed(2),
-        SGST_Amount: sgst.toFixed(2),
-        IGST_Amount: igst.toFixed(2),
-        GST_Amount: gstAmount.toFixed(2),
-        CGST_Percentage: CGST_Percentage.toFixed(2),
-        SGST_Percentage: SGST_Percentage.toFixed(2),
-        IGST_Percentage: IGST_Percentage.toFixed(2),
+        ItemTotalAmount: Number(roundFixed(itemFinalAmount, 2)),
+        taxableAmount: Number(roundFixed(taxableAmount, 2)),
+        CGST_Amount: Number(roundFixed(cgst, 2)),
+        SGST_Amount: Number(roundFixed(sgst, 2)),
+        IGST_Amount: Number(roundFixed(igst, 2)),
+        GST_Amount: (roundFixed(gstAmount, 2)),
+        CGST_Percentage: Number(roundFixed(CGST_Percentage, 2)),
+        SGST_Percentage: Number(roundFixed(SGST_Percentage)),
+        IGST_Percentage: Number(roundFixed(IGST_Percentage, 2)),
 
     };
 }

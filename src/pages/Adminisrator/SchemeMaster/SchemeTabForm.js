@@ -55,7 +55,7 @@ const SchemeMaster = forwardRef(({ props, Validation }, ref) => {
         ToPeriod: _cfunc.currentDate_ymd,
         Item: "",
         VoucherLimit: null,
-        QRPrefix: "",
+        QRPrefix: null,
         IsActive: true,
         SchemeTypeID: "",
         BillAbove: "",
@@ -157,7 +157,7 @@ const SchemeMaster = forwardRef(({ props, Validation }, ref) => {
     useEffect(() => {
 
         if ((hasShowloction || hasShowModal)) {
-            
+
             let hasEditVal = null
             if (hasShowloction) {
                 setPageMode(location.pageMode)
@@ -325,7 +325,7 @@ const SchemeMaster = forwardRef(({ props, Validation }, ref) => {
                                                     <Col md="1">  </Col>
 
                                                     <FormGroup className="mb-2 col-sm-2 align-items-start">
-                                                        <Label htmlFor="ValueIn" style={{ width: "90px", paddingTop: "0.35rem" }}>
+                                                        <Label htmlFor="ValueIn">
                                                             {fieldLabel.ValueIn}
                                                         </Label>
                                                         <div className="btn-group col-xxl-12" role="group" aria-label="Value type">
@@ -463,7 +463,7 @@ const SchemeMaster = forwardRef(({ props, Validation }, ref) => {
                                                         )}
                                                     </FormGroup>
                                                     <Col md="1">  </Col>
-                                                    <FormGroup className="mb-2  col-sm-2 align-items-start">
+                                                    {false && <FormGroup className="mb-2  col-sm-2 align-items-start">
                                                         <Label htmlFor="ValueIn" style={{ width: "140px", paddingTop: "0.35rem" }}>
                                                             {fieldLabel.OverLappingScheme}
                                                         </Label>
@@ -510,7 +510,7 @@ const SchemeMaster = forwardRef(({ props, Validation }, ref) => {
                                                                 No
                                                             </label>
                                                         </div>
-                                                    </FormGroup>
+                                                    </FormGroup>}
                                                 </Row>
 
 
@@ -633,8 +633,6 @@ const SchemeMaster = forwardRef(({ props, Validation }, ref) => {
 
 
                                                 <Row className="mt-1">
-
-
                                                     <FormGroup className="mb-2 col col-8">
                                                         <Label htmlFor="validationCustom01">{fieldLabel.SchemeDetails} </Label>
                                                         <Input

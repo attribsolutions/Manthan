@@ -122,7 +122,7 @@ const FranchiseSaleWithBillCount = (props) => {
                     return {
                         ...entry,
                         Bills: totalBills,
-                        GrandTotal: totalGrand.toFixed(2)
+                        GrandTotal: Number(totalGrand.toFixed(2))
                     };
                 });
                 debugger
@@ -145,6 +145,10 @@ const FranchiseSaleWithBillCount = (props) => {
         setApiResponse([]);
     }
 
+    const defaultSorted = [{
+        dataField: 'GrandTotal',
+        order: 'desc'
+    }];
     const columns = [
         {
             dataField: "Name",
@@ -157,6 +161,7 @@ const FranchiseSaleWithBillCount = (props) => {
         {
             dataField: "GrandTotal",
             text: "Bill Amount",
+            sort: true
         },
 
         {
@@ -279,6 +284,7 @@ const FranchiseSaleWithBillCount = (props) => {
                 <GlobalCustomTable
                     keyField="id"
                     data={tableData}
+                    defaultSorted={defaultSorted}
                     columns={columns}
                     bordered
                 />

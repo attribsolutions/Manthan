@@ -1,14 +1,11 @@
 import { forwardRef, useImperativeHandle, useState, useEffect } from 'react'
-import { Card, CardBody, Col, Label, Button, Input } from 'reactstrap'
-
+import { Input } from 'reactstrap'
 import { useHistory } from "react-router-dom";
 import GlobalCustomTable from '../../../GlobalCustomTable';
 import { mode } from '../../../routes';
-import { loginCompanyID } from '../../../components/Common/CommonFunction';
-import { get_SubGroup_Group } from '../../../helpers/backend_helper';
-import { event } from 'jquery';
 
-const SchemeItemTabForm = forwardRef(({ props, GroupSelect, SubGroupSelect, Validation, ItemTabledata }, ref) => {
+
+const SchemeItemTabForm = forwardRef(({ props, ItemTabledata, Addhandler }, ref) => {
 
     const history = useHistory();
     const { location } = history
@@ -17,13 +14,7 @@ const SchemeItemTabForm = forwardRef(({ props, GroupSelect, SubGroupSelect, Vali
 
     const [update, forceUpdate] = useState(0);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-
-    const [ItemData, setItemData] = useState(ItemTabledata);
-    const [FilteredItems, setFilteredItems] = useState([]);
-
-
-    debugger
-
+    const [ItemData, setItemData] = useState([]);
     const [selectAll, setSelectAll] = useState({
         applicable: false,
         not_applicable: false,
@@ -31,62 +22,18 @@ const SchemeItemTabForm = forwardRef(({ props, GroupSelect, SubGroupSelect, Vali
     });
 
 
-    useEffect(async () => {
-   
-        setItemData(ItemTabledata)
-     
+
+    useEffect(() => {
+        Addhandler()
+        if (pageMode === mode.defaultsave) {
+            setItemData(ItemTabledata)
+        }
     }, [ItemTabledata])
 
-    // useEffect(() => {
-
-    //     if (GroupSelect.value === 0 && SubGroupSelect.value === 0) {
-    //         const allItems = ItemData.flatMap(group => group.Items || []);
-    //         setFilteredItems(allItems.map(i => ({
-    //             ...i,
-
-    //             Quantity: "",
-    //             applicable: false,
-    //             not_applicable: false,
-    //             effective: false
-    //         })));
-
-    //     } else if (GroupSelect.value !== 0 && (SubGroupSelect.value && SubGroupSelect.value !== 0)) {
-    //         const subGroupItems = ItemData
-    //             .filter(g => g.SubGroupID === SubGroupSelect.value)
-    //             .flatMap(g => g.Items || []);
-    //         setFilteredItems(subGroupItems.map(i => ({
-    //             ...i,
-
-    //             Quantity: "",
-    //             applicable: false,
-    //             not_applicable: false,
-    //             effective: false
-
-    //         })));
-    //     } else if (GroupSelect.value !== 0) {
-    //         const groupItems = ItemData
-    //             .filter(g => g.GroupID === GroupSelect.value)
-    //             .flatMap(g => g.Items || []);
-    //         setFilteredItems(groupItems.map(i => ({
-    //             ...i,
-
-    //             Quantity: "",
-    //             applicable: false,
-    //             not_applicable: false,
-    //             effective: false
-
-    //         })));
-
-    //     }
-    // }, [GroupSelect, SubGroupSelect, ItemData]);
-
-
-
     useImperativeHandle(ref, () => ({
-        getValue: () => FilteredItems,
-        updateValue: (newVal) => setFilteredItems(newVal)
+        getValue: () => ItemData,
+        updateValue: (newVal) => setItemData(newVal)
     }));
-
 
     useEffect(() => {
 
@@ -104,8 +51,8 @@ const SchemeItemTabForm = forwardRef(({ props, GroupSelect, SubGroupSelect, Vali
             if (hasEditVal) {
                 const { ItemDetails
                 } = hasEditVal[0]
-                debugger
-                setFilteredItems(ItemDetails.map(i => ({
+
+                setItemData(ItemDetails.map(i => ({
                     ...i,
                     label: i.ItemName,
                     value: i.ItemID
@@ -115,18 +62,15 @@ const SchemeItemTabForm = forwardRef(({ props, GroupSelect, SubGroupSelect, Vali
         }
     }, [location]);
 
-
-
-
     const AplicableheaderCheckboxChange = (isAplicable) => {
 
-        const updatedData = FilteredItems.map(row => ({
+        const updatedData = ItemData.map(row => ({
             ...row,
             applicable: isAplicable,
             not_applicable: false
         }));
 
-        setFilteredItems(updatedData);
+        setItemData(updatedData);
 
         setSelectAll(prev => ({
             ...prev,
@@ -136,15 +80,13 @@ const SchemeItemTabForm = forwardRef(({ props, GroupSelect, SubGroupSelect, Vali
 
     };
 
-
-
     const Not_AplicableheaderCheckboxChange = (isNotAplicable) => {
-        const updatedData = FilteredItems.map(row => ({
+        const updatedData = ItemData.map(row => ({
             ...row,
             not_applicable: isNotAplicable,
             applicable: false,
         }));
-        setFilteredItems(updatedData);
+        setItemData(updatedData);
         setSelectAll(prev => ({
             ...prev,
             not_applicable: isNotAplicable,
@@ -153,18 +95,16 @@ const SchemeItemTabForm = forwardRef(({ props, GroupSelect, SubGroupSelect, Vali
     };
 
     const effectiveheaderCheckboxChange = (isEffective) => {
-        const updatedData = FilteredItems.map(row => ({
+        const updatedData = ItemData.map(row => ({
             ...row,
             effective: isEffective
         }));
-        setFilteredItems(updatedData);
+        setItemData(updatedData);
         setSelectAll(prev => ({
             ...prev,
             effective: isEffective
         }));
     };
-
-
 
     const columns = [
         {
@@ -194,7 +134,7 @@ const SchemeItemTabForm = forwardRef(({ props, GroupSelect, SubGroupSelect, Vali
                     </div>
                 )
             },
-            formatter: (cell, row, rowIndex, FilteredItems) => {
+            formatter: (cell, row, rowIndex, ItemData) => {
 
                 return (
                     <Input
@@ -293,8 +233,9 @@ const SchemeItemTabForm = forwardRef(({ props, GroupSelect, SubGroupSelect, Vali
             // hidden: SchemeItemTab.Quantityhidden,
 
             formatter: (_, row) => {
+                debugger
                 if (!(row.effective)) {
-                    row["Quantity"] = ""
+                    row["Quantity"] = 0
                 }
                 return (
                     <Input
@@ -324,8 +265,8 @@ const SchemeItemTabForm = forwardRef(({ props, GroupSelect, SubGroupSelect, Vali
             formatExtraData: update,
             formatter: (_, row) => {
                 if (!(row.effective)) {
-                    row["DiscountValue"] = ""
-                    row["DiscountType"] = ""
+                    row["DiscountValue"] = 0
+                    row["DiscountType"] = "%"
                 }
 
                 return (
@@ -393,7 +334,7 @@ const SchemeItemTabForm = forwardRef(({ props, GroupSelect, SubGroupSelect, Vali
 
         <>
             <GlobalCustomTable
-                keyField={"id"}
+                keyField={"value"}
                 data={ItemData}
                 columns={columns}
                 paginationEnabled={25}

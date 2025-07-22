@@ -1227,23 +1227,24 @@ export const pageFooter_A5 = (doc, data) => {
     const TotalGST = totalCGST + totalSGST;
 
     const isIGST = compareGSTINState(data.CustomerGSTIN, data.SupplierGSTIN, data?.IsSEZ)
+    debugger
     if (isIGST || data.isAmerica) {
         doc.setFontSize(8)
-        doc.text(`Total Basic:`, 434, 300,)
-        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 568, 300, 'right')
+        doc.text(`Total Basic:`, 434, 340,)
+        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 568, 340, 'right')
 
-        doc.text(`Total Disc:`, 434, 752,)
-        doc.text(`${numberWithCommas(Number(totalDiscount).toFixed(2))}`, 568, 752, 'right')
+        doc.text(`Total Disc:`, 434, 350,)
+        doc.text(`${numberWithCommas(Number(totalDiscount).toFixed(2))}`, 568, 350, 'right')
 
-        doc.text(`Total IGST:`, 434, 762,)
-        doc.text(`${numberWithCommas(Number(totalIGST).toFixed(2))}`, 568, 762, 'right')
+        doc.text(`Total IGST:`, 434, 360,)
+        doc.text(`${numberWithCommas(Number(totalIGST).toFixed(2))}`, 568, 360, 'right')
 
-        doc.text(`Total GST:`, 434, 772,)
-        doc.text(` ${numberWithCommas(Number(totalIGST).toFixed(2))}`, 568, 772, 'right')
+        doc.text(`Total GST:`, 434, 370,)
+        doc.text(` ${numberWithCommas(Number(totalIGST).toFixed(2))}`, 568, 370, 'right')
 
         if (loginUserIsFranchisesRole()) {
-            doc.text(`Advance Amount:`, 434, 782,)
-            doc.text(` ${numberWithCommas(Number(data.AdvanceAmount).toFixed(2))}`, 568, 782, 'right')
+            doc.text(`Advance Amount:`, 434, 380,)
+            doc.text(` ${numberWithCommas(Number(data.AdvanceAmount).toFixed(2))}`, 568, 380, 'right')
         }
 
 

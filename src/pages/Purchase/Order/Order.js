@@ -715,6 +715,7 @@ const Order = (props) => {
         FSSAINo: i.FSSAINo,
         IsTCSParty: i.IsTCSParty,
         ISCustomerPAN: i.PAN,
+        IsSEZ: i.IsSEZ
 
     }))
 
@@ -897,7 +898,7 @@ const Order = (props) => {
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, key, { tableList }) => {
                 if (row.GroupRow || row.SubGroupRow) { return }
-                debugger
+
                 if (!row.UnitName) {
                     row["Unit_id"] = 0;
                     row["UnitName"] = 'null';
@@ -1407,7 +1408,7 @@ const Order = (props) => {
     ];
 
     function supplierOnchange(e) {
-
+        debugger
         const validationMessage = _cfunc.validateOrder(page_id, deliverydate);  // Get the validation message
 
         if (validationMessage !== "") {
@@ -1493,9 +1494,9 @@ const Order = (props) => {
 
         let calculate = {} //order calculation function 
         if (IsFranchisesRole && subPageMode === url.ORDER_4) {
-            calculate = Franchies_Order_Calculate_Func(row)
+            calculate = Franchies_Order_Calculate_Func(row, { GSTIn_1: supplierSelect.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN(), IsSEZ: supplierSelect?.IsSEZ })
         } else {
-            calculate = orderCalculateFunc(row) //order calculation function 
+            calculate = orderCalculateFunc(row, { GSTIn_1: supplierSelect.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN(), IsSEZ: supplierSelect?.IsSEZ }) //order calculation function 
         }
         row["Amount"] = calculate.roundedTotalAmount
 
@@ -1757,10 +1758,10 @@ const Order = (props) => {
 
             // Function to handle value changes in order items
             function processValueChanged({ item, isEdit, isDelete }) {
-                debugger
+
                 let calculated = {}
                 if (IsFranchisesRole && subPageMode === url.ORDER_4) {
-                    calculated = Franchies_Order_Calculate_Func(item, { GSTIn_1: supplierSelect.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() })
+                    calculated = Franchies_Order_Calculate_Func(item, { GSTIn_1: supplierSelect.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN(), IsSEZ: supplierSelect?.IsSEZ })
                 } else {
                     calculated = orderCalculateFunc(item, { GSTIn_1: supplierSelect.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN(), IsSEZ: supplierSelect?.IsSEZ });
                 }
