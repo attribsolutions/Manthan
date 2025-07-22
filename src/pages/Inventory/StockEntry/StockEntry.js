@@ -629,6 +629,7 @@ const StockEntry = (props) => {
             "RateValue": index.defaultRate.label,
             "BatchDate": index.BatchDate,
             "BatchCode": index.BatchCode,
+            "ItemId": index.ItemId,
             "BatchCodeID": 0,
             "ClientID": 0
         });
@@ -767,9 +768,12 @@ const StockEntry = (props) => {
                 GST: item.defaultGST.label,
                 BatchCode: item.BatchCode,
                 BatchDate: item.BatchDate,
+                ItemId:item.ItemId,
 
             };
+           
         });
+        
 
         let column = [...pagesListColumns, {
             text: "Group Name",
@@ -791,7 +795,7 @@ const StockEntry = (props) => {
     }
 
     const PDFDownloadhandler = () => {
-
+debugger
         let config = {}
         TableArr["Closingdate"] = values.Date
         config["Data"] = TableArr
