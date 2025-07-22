@@ -99,10 +99,11 @@ const GRN_ADD_1 = (props) => {
     const [grnItemList, setgrnItemList] = useState([]);
     const [openPOdrp, setOpenPOdrp] = useState(false);
     const [openPOdata, setOpenPOdata] = useState([]);
-    debugger
+   
     const [roundoffAmount, setRoundoffAmount] = useState(0);
 
     const [invoiceNo, setInvoiceNo] = useState('');
+ 
 
     const [PostingDate, setPostingDate] = useState(currentDate_ymd);
 
@@ -203,7 +204,7 @@ const GRN_ADD_1 = (props) => {
 
 
     useEffect(() => {
-        debugger
+        
         if ((AccontingGRN.Status === true) && (AccontingGRN.StatusCode === 200)) {
             if (ratePostJsonBody.length > 0 && subPageMode === url.ACCOUNTING_GRN) {
                 dispatch(saveRateMaster(JSON.stringify(ratePostJsonBody)));
@@ -316,7 +317,7 @@ const GRN_ADD_1 = (props) => {
     }
 
     useEffect(() => {
-
+debugger
         if ((items.Status === true) && (items.StatusCode === 200)) {
             const grnItems = items.Data
             if ((grnItems.GRNReferences[0]?.GRN_From === url.IB_INVOICE_FOR_GRN)) { /// If GRN from IB GRN List then this 
@@ -479,7 +480,7 @@ const GRN_ADD_1 = (props) => {
     }, [history.location.state])
 
     useEffect(() => {
-        debugger
+    
         if ((hasShowloction || hasShowModal)) {
             let hasEditVal = null
             if (hasShowloction) {
@@ -492,6 +493,7 @@ const GRN_ADD_1 = (props) => {
             }
 
             if (hasEditVal) {
+             
                 setEditData(hasEditVal);
                 const { GRNItems = [], GRNReferences = [], InvoiceNumber, GrandTotal, } = hasEditVal;
                 GRNReferences[0]["Full_OrderNumber"] = GRNReferences[0]?.Order?.FullOrderNumber
@@ -1071,7 +1073,7 @@ const GRN_ADD_1 = (props) => {
     ];
 
     const DeleteHandler = (row, ledgerDetailList) => {
-        debugger
+       
         const Data = ledgerDetailList.filter((item) => item.id !== row.id);
 
         const ledgerAmount = Data.reduce((acc, ele) => acc + Number(ele.Taxable_Amount), 0)
@@ -1371,7 +1373,7 @@ const GRN_ADD_1 = (props) => {
 
 
     const ledgerAddHandler = () => {
-        debugger
+      
         if (!ledgerSelect) {
             customAlert({
                 Type: 3,
@@ -1473,6 +1475,7 @@ const GRN_ADD_1 = (props) => {
                     BatchCode: i.BatchCode,
                     ItemExpiryDate: i.ItemExpiryDate,
                     GST: i.GST,
+                   
                     CGST: calculated.CGST_Amount,
                     SGST: calculated.SGST_Amount,
                     IGST: calculated.IGST_Amount,
