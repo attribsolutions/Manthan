@@ -759,6 +759,7 @@ const StockEntry = (props) => {
         const StockItem_Array = TableArr.map(item => {
             const [ItemName] = item.ItemName.split('-');
             return {
+                ItemId:item.ItemId,
                 GroupName: item.GroupName,
                 SubGroupName: item.SubGroupName,
                 ItemName: ItemName,
@@ -768,7 +769,7 @@ const StockEntry = (props) => {
                 GST: item.defaultGST.label,
                 BatchCode: item.BatchCode,
                 BatchDate: item.BatchDate,
-                ItemId:item.ItemId,
+              
 
             };
            
