@@ -161,6 +161,8 @@ const GRNList = (props) => {
 
         return () => {
             dispatch(_act.AccountingGRNSuccess({ Status: false }))
+            dispatch(_act.GRNPrintSuccess({ Status: false }))
+
         }
 
     }, [history.location]);
