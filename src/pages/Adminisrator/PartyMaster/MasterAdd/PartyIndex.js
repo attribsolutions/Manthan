@@ -105,6 +105,8 @@ const PartyMaster = (props) => {
 	const [isMobileRetailer, setIsMobileRetailer] = useState(false);
 
 	const [editCreatedBy, seteditCreatedBy] = useState("");
+	const [hasValid, setHasValid] = useState({});
+
 
 	const {
 		postMsg,
@@ -227,7 +229,7 @@ const PartyMaster = (props) => {
 					}
 
 					if (hasEditVal) {
-					
+
 						setEditData(hasEditVal);
 						dispatch(Breadcrumb_inputName(hasEditVal.Name))
 						seteditCreatedBy(hasEditVal.CreatedBy);
@@ -255,7 +257,7 @@ const PartyMaster = (props) => {
 							})),
 
 							PAN: hasEditVal.PAN,
-							IsSEZ: hasEditVal.IsSEZ , 
+							IsSEZ: hasEditVal.IsSEZ,
 							Email: hasEditVal.Email,
 							AlternateContactNo: hasEditVal.AlternateContactNo,
 							CountryName: hasEditVal.Country === null ? {
@@ -294,7 +296,7 @@ const PartyMaster = (props) => {
 							},
 							GSTIN: hasEditVal.GSTIN,
 							isActive: location.IsMobileRetailer ? true : hasEditVal.isActive,
-							
+
 
 
 						};
@@ -460,21 +462,44 @@ const PartyMaster = (props) => {
 	}
 
 	const SaveHandler = (event) => {
+		debugger
 		const formData = new FormData(); // Create a new FormData object
 		event.preventDefault();
 		const btnId = event.target.id;
 
 		let baseTabDetail = baseTabRef.current.getCurrentState()
 		let priceListSelect = baseTabRef.current.getPriceListSelect()
+
+
+		// isError[name] = "";
+		// hasValid[name].valid = true
 		let setBaseTabDetail = baseTabRef.current.setCurrentState
 		let addressTabDetail = addressTabRef.current.getCurrentState()
 		let prefixValue = prefixTabRef.current.getCurrentState().values
 		let addressTabIsAddressEnter = addressTabRef.current.IsAddressEnter()
 
-		const validBasetab = formValid(baseTabDetail, setBaseTabDetail)
 
 		let isError = addressTabIsAddressEnter.isError
 		let values = addressTabIsAddressEnter.values
+
+
+		
+
+
+		const validBasetab = formValid(baseTabDetail, setBaseTabDetail)
+		debugger
+
+
+		
+		if (priceListSelect?.value) {
+			baseTabDetail.isError.PriceList = "";
+			baseTabDetail.hasValid.PriceList.valid = true;
+		}
+		
+		
+		
+		
+		
 
 		if (
 			(values.PartyAddress.length > 0) &&
@@ -581,8 +606,9 @@ const PartyMaster = (props) => {
 				});
 				return;
 			}
-
+			debugger
 			const jsonBody = JSON.stringify({
+
 				"Name": baseValue.Name,
 				"ShortName": baseValue.ShortName,
 				"PriceList": priceListSelect.value,
@@ -604,7 +630,7 @@ const PartyMaster = (props) => {
 				"SubCluster": baseValue.SubCluster.value,
 				"GSTIN": baseValue.GSTIN,
 				"isActive": baseValue.isActive,
-				"IsSEZ": baseValue.IsSEZ ,
+				"IsSEZ": baseValue.IsSEZ,
 				"CreatedBy": loginUserID(),
 				"UpdatedBy": loginUserID(),
 				"IsApprovedParty": isMobileRetailer && false,

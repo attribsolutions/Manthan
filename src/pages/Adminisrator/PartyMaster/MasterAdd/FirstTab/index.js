@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useImperativeHandle, forwardRef } from 'react'
+import React, { useState, useEffect, useImperativeHandle, forwardRef, useRef } from 'react'
 import Select from "react-select"
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Card, CardBody, Col, FormGroup, Input, Label, Row } from 'reactstrap'
 import { comAddPageFieldFunc, initialFiledFunc, onChangeCheckbox, onChangeSelect, onChangeText } from '../../../../../components/Common/validationFunction'
 import { Breadcrumb_inputName } from '../../../../../store/actions'
 import { getDistrictOnState } from '../../../../../store/Administrator/PartyRedux/action'
-import { priceListByPartyAction, priceListByPartyActionSuccess } from '../../../../../store/Administrator/PriceList/action'
+import { priceListByPartyAction, } from '../../../../../store/Administrator/PriceList/action'
 import PriceDropOptions from './PriceDropOptions'
 import PartyType from '../../../PartyTypes/PartyType'
 import * as url from "../../../../../routes/route_url";
@@ -52,6 +52,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const [priceListSelect, setPriceListSelect] = useState({ value: '' });
+    debugger
     const [partyType_AddMasterAccess, setPartyType_AddMasterAccess] = useState(false)
     const [city_AddMasterAccess, setCity_AddMasterAccess] = useState(false)
 
@@ -59,6 +60,11 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
     const [partyTypeDisabled, setPartyTypeDisabled] = useState(false)
     const [supplierDisabled, setSupplierDisabled] = useState(false)
+
+    const baseTabRef = useRef(null);
+
+
+
 
     const { values } = state;
     const { isError } = state;
@@ -127,7 +133,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
     }, [userAccess])
 
     // Common Party Dropdown useEffect
-    debugger
+
     useEffect(() => {
 
         if (commonPartyDropSelect.value <= 0) {
@@ -275,6 +281,25 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
     }, [loginPartyType, PartyTypes, SupplierRedux])
 
+
+   
+
+
+    useEffect(() => {
+        if (priceListSelect?.value) {
+            setState(prev => {
+                const updatedState = { ...prev };
+                updatedState.isError.PriceList = "";
+                updatedState.hasValid.PriceList.valid = true;
+                return updatedState;
+            });
+        }
+    }, [priceListSelect]);
+
+
+
+
+
     const PartyTypeDropdown_Options = PartyTypes.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -363,6 +388,12 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         })
     }
 
+
+
+
+
+
+
     const priceListOnClick = function () {
 
         const hasNone = document.getElementById("price-drop").style;
@@ -380,6 +411,12 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
         window.open("https://services.gst.gov.in/services/searchtp");
     }
+
+
+
+
+
+
 
     const FirstTab = (
         <div id={"base-tabe-area"}>
@@ -603,14 +640,20 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                         disabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
                                         placeholder="Select..."
                                         onClick={priceListOnClick}
+
                                     >
                                     </Input>
 
                                     <PriceDropOptions
                                         data={priceListByPartyType}
                                         priceList={priceListSelect}
-                                        setPriceSelect={setPriceListSelect} />
-                                    {/* {(isError.PriceList.length > 0 && (priceListSelect.value === "" || priceListSelect.label === "")) && (
+                                        setPriceSelect={setPriceListSelect}
+                                    />
+                                    {isError.PriceList && isError.PriceList.length > 0 && (
+                                        <span className="text-danger f-8"><small>{isError.PriceList}</small></span>
+                                    )}
+
+                                    {/* {isError.PriceList.length > 0 && (
                                         <span className="text-danger f-8"><small>{isError.PriceList}</small></span>
                                     )} */}
                                 </FormGroup>
@@ -946,7 +989,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                     </FormGroup>
                                 </Col>
                             }
-                 
+
 
                             {(subPageMode === url.FRANCHISE_CUSTOMER_MASTER) &&
                                 <Col md="3">
