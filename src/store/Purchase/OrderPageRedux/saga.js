@@ -330,7 +330,6 @@ function* orderList_GoBtn_GenFunc({ config }) {
         if ((subPageMode === url.ORDER_LIST_4) && (isSweetAndSnacksCompany)) {
           if (i?.IsOrderClose) {
             i.forceMakeBtnHide = true
-            i.Status = "Close"
           } else {
             i.forceMakeBtnHide = false
           }

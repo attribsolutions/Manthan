@@ -441,7 +441,7 @@ const CommonPurchaseList = (props) => {
 
 
   const ExtraSelectColumn = () => {  // ======================== for List Page Action Button ================================
-    debugger
+    
     if ((selectCheckParams.isExtraSelectShow)) {
 
       return {
