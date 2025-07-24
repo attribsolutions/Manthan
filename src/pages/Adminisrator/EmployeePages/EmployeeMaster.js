@@ -55,12 +55,13 @@ import { getEmployeeTypelist } from "../../../store/Administrator/EmployeeTypeRe
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import EmployeeTypesMaster from "../EmployeeTypes/EmployeeTypesMaster";
 import AddMaster from "./Drodown";
-import PartyMaster from "../PartyMaster/MasterAdd/PartyIndex";
+
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import CityMaster from "../CityPages/CityMaster";
 import { getStateESuccess } from "../../../store/Administrator/EmployeeRedux/action";
 import { getEmployeeTypelistSuccess } from "../../../store/Administrator/EmployeeTypeRedux/action";
 import { GenralMasterSubType } from "../../../helpers/backend_helper";
+import FranchisePartyMaster from "../PartyMaster/FranchisePartyMaster";
 
 const AddEmployee = (props) => {
 
@@ -94,6 +95,7 @@ const AddEmployee = (props) => {
   const [employeeType_AddAccess, setEmployeeType_AddAccess] = useState(false)
   const [partyMaster_AddAccess, setPartyMaster_AddAccess] = useState(false)
   const [cityMaster_AddAccess, setCityMaster_AddAccess] = useState(false)
+  const [franchiseMaster_AddAccess, setFranchiseMaster_AddAccess] = useState(false)
 
   const [Designation, setDesignation] = useState([])
 
@@ -185,8 +187,8 @@ const AddEmployee = (props) => {
       if (index.id === pageId.EMPLOYEETYPE) {
         return setEmployeeType_AddAccess(true)
       }
-      if (index.id === pageId.PARTY) {
-        return setPartyMaster_AddAccess(true)
+      if (index.id === pageId.FRANCHISE_PARTY_MASTER) {
+        return setFranchiseMaster_AddAccess(true)
       }
       if (index.id === pageId.CITY) {
         return setCityMaster_AddAccess(true)
@@ -816,10 +818,10 @@ const AddEmployee = (props) => {
                           </FormGroup>
                         </Col>
 
-                        {partyMaster_AddAccess ? <Col md="1" className=" mt-3">
+                        {franchiseMaster_AddAccess ? <Col md="1" className=" mt-3">
                           <AddMaster
-                            masterModal={PartyMaster}
-                            masterPath={url.PARTY}
+                            masterModal={FranchisePartyMaster}
+                            masterPath={url.FRANCHISE_PARTY_MASTER}
                           />
                         </Col> : <Col md="1"></Col>
                         }

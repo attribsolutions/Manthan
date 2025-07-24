@@ -118,12 +118,21 @@ const LABEL_COLORS = {
 
 const listColomnformatter = (cell, row, pagefield) => {
   if (pagefield.ControlID === "Status") {
-    const labels = [];
+
+    const style = {
+      marginBottom: "5px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      textAlign: "center"
+    }
     debugger
+    const labels = [];
+
     //  Show "Order Confirm" ONLY if InvoiceCreated !== true
     if (row.IsConfirm === true && row.InvoiceCreated !== true) {
       labels.push(
-        <div className={`label ${LABEL_COLORS["Order Confirm"]}`} style={{ marginBottom: "5px" }}>
+        <div className={`label ${LABEL_COLORS["Order Confirm"]}`} style={style}>
           Order Confirm
         </div>
       );
@@ -133,15 +142,19 @@ const listColomnformatter = (cell, row, pagefield) => {
     // Avoid duplicate "Order Confirm" label
     if (LABEL_COLORS[row.Status] && !(row.Status === "Order Confirm" && row.IsConfirm === true)) {
       labels.push(
-        <div className={`label ${LABEL_COLORS[row.Status]}`} style={{ marginBottom: "5px" }}>
-          {row.Status}
-          {row.Status === "Invoice Created" && (
-            <span className="badge bg-info ms-2" style={{ fontSize: "11px", cursor: "pointer" }} title={`Invoice Count`}>
-              {row.InvoiceCount > 1 ? `${row.InvoiceCount} ` : ""}
-
-            </span>
-          )}
-        </div>
+        <>
+          <div className={`label ${LABEL_COLORS[row.Status]}`} style={style}>
+            {row.Status}
+            {row.Status === "Invoice Created" && (
+              <span className="badge bg-info ms-2" style={{ fontSize: "11px", cursor: "pointer" }} title={`Invoice Count`}>
+                {row.InvoiceCount > 1 ? `${row.InvoiceCount} ` : ""}
+              </span>
+            )}
+          </div>
+          {row.IsOrderClose && <div className={`label ${LABEL_COLORS["Close"]}`} style={style}>
+            Order Close
+          </div>}
+        </>
       );
     }
 

@@ -6,12 +6,15 @@ export const formValid = ({ isError, required, hasValid, fieldLabel, values }, s
     Object.keys(required).forEach((lab) => {
 
         if (!(hasValid[lab].valid)) {
+           
             isError[lab] = hasValid[lab].inValidMsg
             isValid = false
             setState({ isError, hasValid, required, fieldLabel, values })
         }
     });
+  
     return isValid
+
 };
 
 export const formValChange = ({ event, state, setState }) => {
