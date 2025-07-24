@@ -1,24 +1,22 @@
-import React, { useEffect, useRef, useState, } from "react";
+import React, { useEffect, useMemo, useRef, useState, } from "react";
 import {
-    Card,
-    CardBody,
-    CardHeader,
+
     Col,
     Container,
     FormGroup,
     Label,
     Row,
-    Input,
+
     Nav,
     NavItem,
     NavLink,
     TabContent,
     TabPane,
-    Button,
+
 } from "reactstrap";
-import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import {
+
     Breadcrumb_inputName,
     commonPageField,
     commonPageFieldSuccess,
@@ -32,9 +30,6 @@ import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
-    onChangeDate,
-    onChangeSelect,
-    onChangeText,
     resetFunction
 } from "../../../components/Common/validationFunction";
 import { C_Button, SaveButton } from "../../../components/Common/CommonButton";
@@ -57,7 +52,7 @@ import SchemeTabForm from "./SchemeTabForm";
 import SchemeItemTabForm from "./SchemeItemTabForm";
 import SchemePartyTabForm from "./SchemePartyTabForm";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
-import { C_ItemSelect, C_Select } from "../../../CustomValidateForm";
+import { C_Select } from "../../../CustomValidateForm";
 import { allLabelWithZero } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 import { Validation } from "./data";
 import { get_SubGroup_Group } from "../../../helpers/backend_helper";
@@ -76,25 +71,26 @@ const SchemeMaster = (props) => {
     const fileds = {
         SchemeName: "",
         SchemeValue: "",
-        ValueIn: "",
+        ValueIn: "%",
         FromPeriod: _cfunc.currentDate_ymd,
         ToPeriod: _cfunc.currentDate_ymd,
         Item: "",
         VoucherLimit: null,
         QRPrefix: "",
-        IsActive: null,
+        IsActive: true,
         SchemeTypeID: "",
         BillAbove: "",
         Message: "",
         OverLappingScheme: false,
         SchemeDetails: "",
         SchemeValueUpto: "",
+        SchemeQuantity: "",
         Party: "",
         SchemeId: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    const [pageMode, setPageMode] = useState(mode.defaultsave);
+    const [pageMode, setPageMode] = useState();
     const [userPageAccessState, setUserAccState] = useState('');
     const [activeTab, setactiveTab] = useState("1")
     const [groupDropdownSelect, setGroupDropdownSelect] = useState(allLabelWithZero);
@@ -102,14 +98,11 @@ const SchemeMaster = (props) => {
     const [ItemDropDown_Option, setItemDropDown_Option] = useState([allLabelWithZero]);
     const [ItemSelect, setItemSelect] = useState(allLabelWithZero);
     const [ItemData, setItemData] = useState([]);
-
     const [ItemTabledata, setItemTabledata] = useState([]);
-    const [PartySelect, setPartySelect] = useState(allLabelWithZero);
-
     const [PartyTabledata, setPartyTabledata] = useState([]);
 
+    const [PartySelect, setPartySelect] = useState(allLabelWithZero);
     const [schemeType, setSchemeType] = useState(null)
-
     const [schemeTypeValidation, setSchemeTypeValidation] = useState(null)
 
 
@@ -155,7 +148,7 @@ const SchemeMaster = (props) => {
 
         return () => {
             dispatch(saveSchemeMaster_Success({ Status: false }));
-            dispatch(editSchemeIDSuccess({ Status: false }));
+
 
         }
     }, []);
@@ -168,6 +161,30 @@ const SchemeMaster = (props) => {
             setItemData(response.Data)
         }
     }, [])
+
+    useEffect(() => {
+
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
+            dispatch(updateSchemeIDSuccess({ Status: false }));
+
+            customAlert({
+                Type: 1,
+                Message: JSON.stringify(updateMsg.Message),
+            })
+            history.push({
+                pathname: url.SCHEME_MASTER_LIST,
+            })
+        }
+
+        else if (updateMsg.Status === true) {
+            dispatch(updateSchemeIDSuccess({ Status: false }));
+
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(updateMsg.Message),
+            })
+        }
+    }, [updateMsg]);
 
     useEffect(() => {
 
@@ -251,17 +268,19 @@ const SchemeMaster = (props) => {
     }, [userAccess])
 
 
-    useEffect(() => {
 
+    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time
+    useEffect(() => {
+        setPageMode(mode.defaultsave)
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
             if (hasShowloction) {
-
                 setPageMode(location.pageMode)
                 hasEditVal = location.editValue
                 setSchemeType({ value: hasEditVal[0].SchemeTypeID, label: hasEditVal[0].SchemeTypeName })
                 setSchemeTypeValidation(Validation[String(hasEditVal[0].SchemeTypeID)])
+
             }
             else if (hasShowModal) {
                 setPageMode(props.pageMode)
@@ -270,31 +289,100 @@ const SchemeMaster = (props) => {
                 setSchemeTypeValidation(Validation[String(hasEditVal[0].SchemeTypeID)])
             }
 
+            if (hasEditVal) {
+                const { SchemeName, SchemeValue, ValueIn, FromPeriod, SchemeId,
+                    ToPeriod, ItemDetails, VoucherLimit, QrPrefix, IsActive,
+                    SchemeTypeID, BillAbove, Message, OverLappingScheme, SchemeTypeName,
+                    SchemeDetails, SchemeValueUpto, PartyDetails, UsageTime, UsageType, SchemeQuantity
+                } = hasEditVal[0]
+
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+
+                hasValid.ToPeriod.valid = true;
+                hasValid.IsActive.valid = true;
+                hasValid.SchemeValue.valid = true;
+                hasValid.ValueIn.valid = true;
+                hasValid.SchemeName.valid = true;
+                hasValid.QRPrefix.valid = true;
+                hasValid.BillAbove.valid = true;
+                hasValid.VoucherLimit.valid = true;
+                hasValid.FromPeriod.valid = true;
+                hasValid.SchemeTypeID.valid = true;
+                hasValid.SchemeValueUpto.valid = true;
+                hasValid.OverLappingScheme.valid = true;
+                hasValid.SchemeDetails.valid = true;
+                hasValid.SchemeQuantity.valid = true;
+
+
+                values.ToPeriod = ToPeriod
+                values.IsActive = IsActive
+                // values.Item = ItemDetails.map(i => ({
+                //     label: i.ItemName,
+                //     value: i.ItemID
+                // }));
+                // values.Party = PartyDetails.map(i => ({
+                //     label: i.PartyName,
+                //     value: i.PartyID
+                // }));
+                values.SchemeValue = SchemeValue
+                values.SchemeId = SchemeId
+                values.ValueIn = ValueIn
+                values.QRPrefix = QrPrefix
+                values.SchemeName = SchemeName
+                values.BillAbove = BillAbove
+                values.UsageTime = UsageTime
+                values.UsageType = UsageType
+                values.VoucherLimit = VoucherLimit
+                values.IsActive = IsActive
+                values.FromPeriod = FromPeriod
+                values.Message = Message
+                values.SchemeQuantity = SchemeQuantity
+                values.SchemeTypeID = {
+                    label: SchemeTypeName,
+                    value: SchemeTypeID
+                }
+                values.SchemeValueUpto = SchemeValueUpto
+                values.OverLappingScheme = OverLappingScheme
+                values.SchemeDetails = SchemeDetails
+
+                setState({ values, fieldLabel, hasValid, required, isError })
+                setItemTabledata(ItemDetails.map(i => ({
+                    ...i,
+                    label: i.ItemName,
+                    value: i.ItemID,
+                    applicable: i.applicable === 1,
+                    not_applicable: i.not_applicable === 1,
+                    effective: i.effective === 1
+                })))
+
+                setPartyTabledata(PartyDetails.map(i => ({
+                    label: i.PartyName,
+                    value: i.PartyID,
+                    IsPartySelect: true,
+
+                })))
+                dispatch(editSchemeIDSuccess({ Status: false }));
+                dispatch(Breadcrumb_inputName(SchemeName))
+            }
         }
     }, [location]);
 
-    const getItemData = () => {
-        return SchemeItemTabRef.current.getValue();
-    }
-    const getSchemeData = () => {
-        return SchemeTabRef.current.getValue();
-    }
 
-    const getPartyData = () => {
-        return SchemePartyTabRef.current.getValue();
-    }
+
 
     const toggle1 = tab => {
         if (activeTab !== tab) { setactiveTab(tab) }
     }
 
-    const PartyList_Options = PartyDropDown.map((item) => ({
-        value: item.id,
-        label: item.Name,
-        IsPartySelect: false,
+    const PartyList_Options = useMemo(() => {
+        const options = PartyDropDown.map(item => ({
+            value: item.id,
+            label: item.Name,
+            IsPartySelect: false,
+        }));
 
-    }));
-    PartyList_Options.unshift(allLabelWithZero)
+        return [allLabelWithZero, ...options]; // add only once
+    }, [PartyDropDown]);
 
     const SchemeType_Options = SchemeType.map((index) => ({
         value: index.id,
@@ -371,16 +459,13 @@ const SchemeMaster = (props) => {
     const SaveHandler = (event) => {
         event.preventDefault();
         const btnId = event.target.id
-        const SchemeData = getSchemeData()
-        const ItemData = getItemData()
-        const PartyData = getPartyData()
-        const setSchemeData = SchemeTabRef.current.updateValue;
+        const SchemeData = state
 
-        if (PartyData.length > 0 && ItemData.length > 0) {
+        if (PartyTabledata.length > 0 && ItemTabledata.length > 0) {
             SchemeData.hasValid.Party.valid = true
             SchemeData.hasValid.Item.valid = true
         }
-        if (PartyData.length === 0) {
+        if (PartyTabledata.length === 0) {
             customAlert({
                 Type: 4,
                 Message: alertMessages.selectParty,
@@ -388,7 +473,7 @@ const SchemeMaster = (props) => {
             return
         }
 
-        if (ItemData.length === 0 && !(schemeTypeValidation?.SchemeItemTab?.hidden)) {
+        if (ItemTabledata.length === 0 && !(schemeTypeValidation?.SchemeItemTab?.hidden)) {
             customAlert({
                 Type: 4,
                 Message: alertMessages.selectItemName,
@@ -403,7 +488,7 @@ const SchemeMaster = (props) => {
         };
 
         try {
-            if (formValid(SchemeData, setSchemeData)) {
+            if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
 
                 const jsonBody = JSON.stringify({
@@ -423,13 +508,13 @@ const SchemeMaster = (props) => {
                     SchemeTypeID: schemeType.value,
                     BillEffect: 1,
                     SchemeDetails: SchemeData.values.SchemeDetails,
-                    PartyDetails: PartyData
+                    PartyDetails: PartyTabledata
                         .filter(i => i.IsPartySelect) // only include items where IsPartySelect is true
                         .map(i => ({
                             PartyID: i.value
                         })),
 
-                    ItemDetails: ItemData.filter(i => i.applicable || i.not_applicable).flatMap(i => {
+                    ItemDetails: ItemTabledata.filter(i => i.applicable || i.not_applicable).flatMap(i => {
                         const baseItem = Object.keys(statusMap)
                             .filter(statusKey => i[statusKey] === true)
                             .map(statusKey => ({
@@ -493,18 +578,67 @@ const SchemeMaster = (props) => {
     }
 
     const Addhandler = () => {
+        debugger
         if (ItemSelect.value === 0) {
-            setItemTabledata(ItemDropDown_Option)
+            // setItemTabledata(ItemDropDown_Option)
+
+            setItemTabledata(prev => {
+                const validOptionValues = new Set(ItemDropDown_Option.map(item => item.value));
+                const filteredExisting = prev.filter(item => validOptionValues.has(item.value));
+                const existingValues = new Set(filteredExisting.map(item => item.value));
+                const newItems = ItemDropDown_Option.filter(item => !existingValues.has(item.value));
+
+                return [...filteredExisting, ...newItems];
+            });
         } else {
-            setItemTabledata([ItemSelect])
+
+            setItemTabledata(prev => {
+                const alreadyExists = prev.some(item => item.value === ItemSelect.value);
+                if (alreadyExists) {
+                    customAlert({
+                        Type: 4,
+                        Message: `${ItemSelect.label} ${alertMessages.ItemNameAlreadyExists}`,
+                    })
+                    return prev; // don't add duplicate
+                }
+                return [...prev, ItemSelect];  // add new item
+            });
+
         }
+
     }
+
+    useEffect(() => {
+
+        if (pageMode === mode.defaultsave) {
+            setItemTabledata(ItemDropDown_Option)
+        }
+    }, [ItemDropDown_Option, pageMode])
+
+    useEffect(() => {
+        if (pageMode === mode.defaultsave) {
+            if (PartyTabledata.length > 0) {
+                setPartyTabledata(PartyTabledata)
+            } else {
+                setPartyTabledata(PartyList_Options.filter(i => i.value !== 0))
+
+
+            }
+        }
+
+    }, [PartyDropDown, pageMode])
+
 
 
     const AddPartyhandler = () => {
 
         if (PartySelect.value === 0) {
-            setPartyTabledata(PartyList_Options.filter(i => i.value !== 0))
+            setPartyTabledata(prev => {
+                const existingValues = new Set(prev.map(item => item.value));
+                const newItems = PartyList_Options
+                    .filter(i => i.value !== 0 && !existingValues.has(i.value));
+                return [...prev, ...newItems];
+            });
         } else {
             setPartyTabledata(prev => {
                 const alreadyExists = prev.some(item => item.value === PartySelect.value);
@@ -517,8 +651,9 @@ const SchemeMaster = (props) => {
                 }
                 return [...prev, PartySelect];  // add new item
             });
-            // setPartyTabledata([PartySelect])
+
         }
+
     }
 
 
@@ -768,7 +903,11 @@ const SchemeMaster = (props) => {
                                         <SchemeTabForm ref={SchemeTabRef}
                                             props={props}
                                             Validation={schemeTypeValidation}
-                                            pageMode={pageMode} />
+                                            pageMode={pageMode}
+                                            setState={setState}
+                                            state={state}
+                                        />
+
                                     </TabPane>}
 
                                     {activeTab === "2" && <TabPane tabId="2">
@@ -776,7 +915,9 @@ const SchemeMaster = (props) => {
                                             props={props}
                                             Addhandler={Addhandler}
                                             pageMode={pageMode}
-                                            ItemTabledata={ItemTabledata} />
+                                            setState={setItemTabledata}
+                                            state={ItemTabledata}
+                                        />
                                     </TabPane>}
 
                                     {activeTab === "3" && <TabPane tabId="3">
@@ -785,7 +926,8 @@ const SchemeMaster = (props) => {
                                             props={props}
                                             Validation={schemeTypeValidation}
                                             pageMode={pageMode}
-                                            PartyTabledata={PartyTabledata}
+                                            setState={setPartyTabledata}
+                                            state={PartyTabledata}
                                             AddPartyhandler={AddPartyhandler}
                                         />
                                     </TabPane>}

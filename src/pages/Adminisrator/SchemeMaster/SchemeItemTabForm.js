@@ -6,8 +6,8 @@ import { mode } from '../../../routes';
 
 
 
-const SchemeItemTabForm = forwardRef(({ props, ItemTabledata, Addhandler }, ref) => {
-
+const SchemeItemTabForm = forwardRef(({ props, setState, state }, ref) => {
+    
     const history = useHistory();
     const { location } = history
     const hasShowloction = location.hasOwnProperty("editValue")
@@ -15,70 +15,59 @@ const SchemeItemTabForm = forwardRef(({ props, ItemTabledata, Addhandler }, ref)
 
     const [update, forceUpdate] = useState(0);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [ItemData, setItemData] = useState([]);
     const [selectAll, setSelectAll] = useState({
         applicable: false,
         not_applicable: false,
         effective: false
     });
 
-    useEffect(() => {
-        Addhandler()
-    }, [])
 
 
-    useEffect(() => {
-
-        if (pageMode === mode.defaultsave) {
-            setItemData(ItemTabledata)
-        }
-    }, [ItemTabledata])
 
 
-    useImperativeHandle(ref, () => ({
-        getValue: () => ItemData,
-        updateValue: (newVal) => setItemData(newVal)
-    }));
+    // useImperativeHandle(ref, () => ({
+    //     getValue: () => state,
+    //     updateValue: (newVal) => setState(newVal)
+    // }));
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        if ((hasShowloction || hasShowModal)) {
+    //     if ((hasShowloction || hasShowModal)) {
 
-            let hasEditVal = null
-            if (hasShowloction) {
-                hasEditVal = location.editValue
-                setPageMode(location.pageMode)
-            }
-            else if (hasShowModal) {
-                hasEditVal = props.editValue
-                setPageMode(props.location.pageMode)
-            }
-            if (hasEditVal) {
-                const { ItemDetails
-                } = hasEditVal[0]
+    //         let hasEditVal = null
+    //         if (hasShowloction) {
+    //             hasEditVal = location.editValue
+    //             setPageMode(location.pageMode)
+    //         }
+    //         else if (hasShowModal) {
+    //             hasEditVal = props.editValue
+    //             setPageMode(props.location.pageMode)
+    //         }
+    //         if (hasEditVal) {
+    //             const { ItemDetails
+    //             } = hasEditVal[0]
 
-                setItemData(ItemDetails.map(i => ({
-                    ...i,
-                    label: i.ItemName,
-                    value: i.ItemID,
-                    applicable: i?.Aplicable,
-                    not_applicable: i?.NotAplicable,
-                    effective: i?.Effective
-                })))
-
-            }
-        }
-    }, [location]);
+    //             setState(ItemDetails.map(i => ({
+    //                 ...i,
+    //                 label: i.ItemName,
+    //                 value: i.ItemID,
+    //                 applicable: i.applicable === 1,
+    //                 not_applicable: i.not_applicable === 1,
+    //                 effective: i.effective === 1
+    //             })))
+    //         }
+    //     }
+    // }, [location]);
 
     const AplicableheaderCheckboxChange = (isAplicable) => {
 
-        const updatedData = ItemData.map(row => ({
+        const updatedData = state.map(row => ({
             ...row,
             applicable: isAplicable,
             not_applicable: false
         }));
 
-        setItemData(updatedData);
+        setState(updatedData);
 
         setSelectAll(prev => ({
             ...prev,
@@ -89,12 +78,12 @@ const SchemeItemTabForm = forwardRef(({ props, ItemTabledata, Addhandler }, ref)
     };
 
     const Not_AplicableheaderCheckboxChange = (isNotAplicable) => {
-        const updatedData = ItemData.map(row => ({
+        const updatedData = state.map(row => ({
             ...row,
             not_applicable: isNotAplicable,
             applicable: false,
         }));
-        setItemData(updatedData);
+        setState(updatedData);
         setSelectAll(prev => ({
             ...prev,
             not_applicable: isNotAplicable,
@@ -103,11 +92,11 @@ const SchemeItemTabForm = forwardRef(({ props, ItemTabledata, Addhandler }, ref)
     };
 
     const effectiveheaderCheckboxChange = (isEffective) => {
-        const updatedData = ItemData.map(row => ({
+        const updatedData = state.map(row => ({
             ...row,
             effective: isEffective
         }));
-        setItemData(updatedData);
+        setState(updatedData);
         setSelectAll(prev => ({
             ...prev,
             effective: isEffective
@@ -142,7 +131,7 @@ const SchemeItemTabForm = forwardRef(({ props, ItemTabledata, Addhandler }, ref)
                     </div>
                 )
             },
-            formatter: (cell, row, rowIndex, ItemData) => {
+            formatter: (cell, row, rowIndex, state) => {
 
                 return (
                     <Input
@@ -342,7 +331,7 @@ const SchemeItemTabForm = forwardRef(({ props, ItemTabledata, Addhandler }, ref)
         <>
             <GlobalCustomTable
                 keyField={"value"}
-                data={ItemData}
+                data={state}
                 columns={columns}
                 paginationEnabled={25}
                 id="table_Arrow"

@@ -39,36 +39,36 @@ import { getSchemeTypelist } from "../../../store/Administrator/SchemeRedux/acti
 
 
 
-const SchemeMaster = forwardRef(({ props, Validation }, ref) => {
-
+const SchemeMaster = forwardRef(({ props, Validation, state, setState }, ref) => {
+    
     const dispatch = useDispatch();
     const history = useHistory();
     const { location } = history
     const { BillAbove, FromPeriod, SchemeName, SchemeValue, ToPeriod, QRPrefix, VoucherLimit, SchemeValueUpto, SchemeQuantity } = Validation
 
 
-    const fileds = {
-        SchemeName: "",
-        SchemeValue: "",
-        ValueIn: "RS",
-        FromPeriod: _cfunc.currentDate_ymd,
-        ToPeriod: _cfunc.currentDate_ymd,
-        Item: "",
-        VoucherLimit: null,
-        QRPrefix: null,
-        IsActive: true,
-        SchemeTypeID: "",
-        BillAbove: "",
-        Message: "",
-        OverLappingScheme: false,
-        SchemeDetails: "",
-        SchemeValueUpto: "",
-        SchemeQuantity: "",
-        Party: "",
-        SchemeId: ""
-    }
+    // const fileds = {
+    //     SchemeName: "",
+    //     SchemeValue: "",
+    //     ValueIn: "RS",
+    //     FromPeriod: _cfunc.currentDate_ymd,
+    //     ToPeriod: _cfunc.currentDate_ymd,
+    //     Item: "",
+    //     VoucherLimit: null,
+    //     QRPrefix: null,
+    //     IsActive: true,
+    //     SchemeTypeID: "",
+    //     BillAbove: "",
+    //     Message: "",
+    //     OverLappingScheme: false,
+    //     SchemeDetails: "",
+    //     SchemeValueUpto: "",
+    //     SchemeQuantity: "",
+    //     Party: "",
+    //     SchemeId: ""
+    // }
 
-    const [state, setState] = useState(() => initialFiledFunc(fileds))
+    // const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
@@ -146,83 +146,83 @@ const SchemeMaster = forwardRef(({ props, Validation }, ref) => {
 
 
 
-    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time
-    useEffect(() => {
+    // // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time
+    // useEffect(() => {
 
-        if ((hasShowloction || hasShowModal)) {
+    //     if ((hasShowloction || hasShowModal)) {
 
-            let hasEditVal = null
-            if (hasShowloction) {
-                setPageMode(location.pageMode)
-                hasEditVal = location.editValue
+    //         let hasEditVal = null
+    //         if (hasShowloction) {
+    //             setPageMode(location.pageMode)
+    //             hasEditVal = location.editValue
 
-            }
-            else if (hasShowModal) {
-                hasEditVal = props.editValue
-                setPageMode(props.pageMode)
-            }
+    //         }
+    //         else if (hasShowModal) {
+    //             hasEditVal = props.editValue
+    //             setPageMode(props.pageMode)
+    //         }
 
-            if (hasEditVal) {
-                const { SchemeName, SchemeValue, ValueIn, FromPeriod, SchemeId,
-                    ToPeriod, ItemDetails, VoucherLimit, QrPrefix, IsActive,
-                    SchemeTypeID, BillAbove, Message, OverLappingScheme, SchemeTypeName,
-                    SchemeDetails, SchemeValueUpto, PartyDetails, UsageTime, UsageType, SchemeQuantity
-                } = hasEditVal[0]
+    //         if (hasEditVal) {
+    //             const { SchemeName, SchemeValue, ValueIn, FromPeriod, SchemeId,
+    //                 ToPeriod, ItemDetails, VoucherLimit, QrPrefix, IsActive,
+    //                 SchemeTypeID, BillAbove, Message, OverLappingScheme, SchemeTypeName,
+    //                 SchemeDetails, SchemeValueUpto, PartyDetails, UsageTime, UsageType, SchemeQuantity
+    //             } = hasEditVal[0]
 
-                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+    //             const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
-                hasValid.ToPeriod.valid = true;
-                hasValid.IsActive.valid = true;
-                hasValid.SchemeValue.valid = true;
-                hasValid.ValueIn.valid = true;
-                hasValid.SchemeName.valid = true;
-                hasValid.QRPrefix.valid = true;
-                hasValid.BillAbove.valid = true;
-                hasValid.VoucherLimit.valid = true;
-                hasValid.FromPeriod.valid = true;
-                hasValid.SchemeTypeID.valid = true;
-                hasValid.SchemeValueUpto.valid = true;
-                hasValid.OverLappingScheme.valid = true;
-                hasValid.SchemeDetails.valid = true;
-                hasValid.SchemeQuantity.valid = true;
+    //             hasValid.ToPeriod.valid = true;
+    //             hasValid.IsActive.valid = true;
+    //             hasValid.SchemeValue.valid = true;
+    //             hasValid.ValueIn.valid = true;
+    //             hasValid.SchemeName.valid = true;
+    //             hasValid.QRPrefix.valid = true;
+    //             hasValid.BillAbove.valid = true;
+    //             hasValid.VoucherLimit.valid = true;
+    //             hasValid.FromPeriod.valid = true;
+    //             hasValid.SchemeTypeID.valid = true;
+    //             hasValid.SchemeValueUpto.valid = true;
+    //             hasValid.OverLappingScheme.valid = true;
+    //             hasValid.SchemeDetails.valid = true;
+    //             hasValid.SchemeQuantity.valid = true;
 
 
-                values.ToPeriod = ToPeriod
-                values.IsActive = IsActive
-                values.Item = ItemDetails.map(i => ({
-                    label: i.ItemName,
-                    value: i.ItemID
-                }));
-                values.Party = PartyDetails.map(i => ({
-                    label: i.PartyName,
-                    value: i.PartyID
-                }));
-                values.SchemeValue = SchemeValue
-                values.SchemeId = SchemeId
-                values.ValueIn = ValueIn
-                values.QRPrefix = QrPrefix
-                values.SchemeName = SchemeName
-                values.BillAbove = BillAbove
-                values.UsageTime = UsageTime
-                values.UsageType = UsageType
-                values.VoucherLimit = VoucherLimit
-                values.IsActive = IsActive
-                values.FromPeriod = FromPeriod
-                values.Message = Message
-                values.SchemeQuantity = SchemeQuantity
-                values.SchemeTypeID = {
-                    label: SchemeTypeName,
-                    value: SchemeTypeID
-                }
-                values.SchemeValueUpto = SchemeValueUpto
-                values.OverLappingScheme = OverLappingScheme
-                values.SchemeDetails = SchemeDetails
+    //             values.ToPeriod = ToPeriod
+    //             values.IsActive = IsActive
+    //             values.Item = ItemDetails.map(i => ({
+    //                 label: i.ItemName,
+    //                 value: i.ItemID
+    //             }));
+    //             values.Party = PartyDetails.map(i => ({
+    //                 label: i.PartyName,
+    //                 value: i.PartyID
+    //             }));
+    //             values.SchemeValue = SchemeValue
+    //             values.SchemeId = SchemeId
+    //             values.ValueIn = ValueIn
+    //             values.QRPrefix = QrPrefix
+    //             values.SchemeName = SchemeName
+    //             values.BillAbove = BillAbove
+    //             values.UsageTime = UsageTime
+    //             values.UsageType = UsageType
+    //             values.VoucherLimit = VoucherLimit
+    //             values.IsActive = IsActive
+    //             values.FromPeriod = FromPeriod
+    //             values.Message = Message
+    //             values.SchemeQuantity = SchemeQuantity
+    //             values.SchemeTypeID = {
+    //                 label: SchemeTypeName,
+    //                 value: SchemeTypeID
+    //             }
+    //             values.SchemeValueUpto = SchemeValueUpto
+    //             values.OverLappingScheme = OverLappingScheme
+    //             values.SchemeDetails = SchemeDetails
 
-                setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(Breadcrumb_inputName(hasEditVal.RoleMaster))
-            }
-        }
-    }, [location]);
+    //             setState({ values, fieldLabel, hasValid, required, isError })
+    //             dispatch(Breadcrumb_inputName(hasEditVal.RoleMaster))
+    //         }
+    //     }
+    // }, [location]);
 
 
 
