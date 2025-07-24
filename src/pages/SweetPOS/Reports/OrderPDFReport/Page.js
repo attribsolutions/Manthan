@@ -124,7 +124,7 @@ const FrenchiesesOrderReport = (data) => {
                     if (pageNumber === 1) {
                         table.settings.margin.top = lastTablePosition;
                     } else {
-                        table.settings.margin.top = margin.top + 15;
+                        table.settings.margin.top = lastTablePosition;
                     }
 
                     if (nextSection > 1) {
@@ -197,6 +197,8 @@ const FrenchiesesOrderReport = (data) => {
 
                     style.pageHeder1(doc, tableData);
 
+                    style.reportHeder1(doc, tableData)
+                    style.reportHeder3(doc, tableData)
                     style.pageBorder(doc, tableData);
 
                     doc.setFont('helvetica', 'Normal');
