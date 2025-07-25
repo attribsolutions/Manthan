@@ -22,15 +22,10 @@ const StockEntryView = () => {
         try {
 
             if ((viewData_redux.Status === true)) {
-                debugger
                 // setTableArray(viewData_redux.Data)// modify Custom Table Data
-
                 setTableArray(viewData_redux.Data.sort((a, b) => {
                     return parseFloat(b.Quantity) - parseFloat(a.Quantity);
                 }))
-
-
-
                 setModal_view(true);
             }
         } catch (error) { CommonConsole(error) }
@@ -42,7 +37,6 @@ const StockEntryView = () => {
 
     }
 
-    // debugger
     const pagesListColumns = [
 
         {
@@ -62,7 +56,7 @@ const StockEntryView = () => {
             dataField: "Unit",
         },
     ];
-    const nameCount = viewData_redux?.Data?.length || 0;
+
     return (
         <Modal
             isOpen={modal_view}
@@ -73,8 +67,8 @@ const StockEntryView = () => {
                 <CardBody className="c_card_body">
                     <div className="modal-body">
                         <div className="d-flex justify-content-end">
-                            <div style={{marginRight:300}}><h2 className="text-center">Stock Entry Items</h2></div>
-                            <div className="mt-2 me-2" > <span className="  ms-5 " > <b> Item Count:{nameCount} </b></span></div>
+                            <div style={{ marginRight: 300 }}><h2 className="text-center">Stock Entry Items</h2></div>
+                            <div className="mt-2 me-2" > <span className="  ms-5 " > <b> Item Count:{viewData_redux?.ItemCount} </b></span></div>
 
                         </div>
                         <div className="mt-n1">

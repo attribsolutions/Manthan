@@ -14,7 +14,7 @@ import { CardHeader } from 'reactstrap';
 const PosExeVersionDetails = () => {
 
 
-    debugger
+
     const [ExeVersionData, setExeVersionData] = useState({ Latest_EXE_version: "", Latest_Service_Version: "", Data: [] })
 
     const { commonPartyDropSelect } = useSelector((state) => ({

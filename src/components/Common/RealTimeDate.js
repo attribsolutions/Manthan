@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { getServerDate } from "../../helpers/backend_helper";
 
 export function useRealTimeToLocalStorage() {
     useEffect(() => {
@@ -8,63 +9,67 @@ export function useRealTimeToLocalStorage() {
 
         const fetchTime = async () => {
             try {
-                const res = await fetch("https://timeapi.io/api/Time/current/zone?timeZone=Asia/Kolkata");
-                if (!res.ok) throw new Error("Failed to fetch time");
-                const data = await res.json();
+                const res = await getServerDate();
 
-                // Build accurate initial date object
-                const initialTime = new Date(
-                    `${data.year}-${String(data.month).padStart(2, "0")}-${String(data.day).padStart(2, "0")}T${String(data.hour).padStart(2, "0")}:${String(data.minute).padStart(2, "0")}:${String(data.seconds).padStart(2, "0")}`
-                );
+                if (!res || !res.Status || !res.ServerDateTime) {
+                    throw new Error("Invalid server response");
+                }
 
-                // Save base time and base timestamp (ms) in localStorage
-                localStorage.setItem("realTimeBase", initialTime.toISOString());
-                localStorage.setItem("realTimeBaseMs", Date.now().toString());
+                const serverTime = new Date(res.ServerDateTime.replace(" ", "T"));
+                const basePerf = performance.now();
 
-                clearInterval(intervalId); // prevent duplicates
+                // Save base server time and base performance timestamp
+                localStorage.setItem("realTimeBase", serverTime.toISOString());
+                localStorage.setItem("realTimePerfBase", basePerf.toString());
+
+                clearInterval(intervalId); // Avoid duplicate intervals
 
                 intervalId = setInterval(() => {
                     const baseTimeStr = localStorage.getItem("realTimeBase");
-                    const baseMsStr = localStorage.getItem("realTimeBaseMs");
+                    const basePerfStr = localStorage.getItem("realTimePerfBase");
 
-                    if (!baseTimeStr || !baseMsStr) return;
+                    if (!baseTimeStr || !basePerfStr) return;
 
                     const baseTime = new Date(baseTimeStr);
-                    const baseMs = parseInt(baseMsStr);
+                    const basePerf = parseFloat(basePerfStr);
+                    const nowPerf = performance.now();
 
-                    const now = Date.now();
-                    const diff = now - baseMs;
+                    const elapsed = nowPerf - basePerf; // time since fetch in ms
+                    const currentTime = new Date(baseTime.getTime() + elapsed);
 
-                    const currentTime = new Date(baseTime.getTime() + diff);
                     localStorage.setItem("realTime", currentTime.toISOString());
                 }, 1000);
             } catch (err) {
                 console.error("Error fetching real-time:", err);
 
-                // fallback: use device time
+                // Fallback to system time if server time fails
                 const fallbackTime = new Date();
+                const basePerf = performance.now();
+
                 localStorage.setItem("realTimeBase", fallbackTime.toISOString());
-                localStorage.setItem("realTimeBaseMs", Date.now().toString());
+                localStorage.setItem("realTimePerfBase", basePerf.toString());
+                localStorage.setItem("realTimeError", "Unable to fetch real time. Using system time.");
+
+                clearInterval(intervalId);
 
                 intervalId = setInterval(() => {
                     const baseTimeStr = localStorage.getItem("realTimeBase");
-                    const baseMsStr = localStorage.getItem("realTimeBaseMs");
+                    const basePerfStr = localStorage.getItem("realTimePerfBase");
 
-                    if (!baseTimeStr || !baseMsStr) return;
+                    if (!baseTimeStr || !basePerfStr) return;
 
                     const baseTime = new Date(baseTimeStr);
-                    const baseMs = parseInt(baseMsStr);
+                    const basePerf = parseFloat(basePerfStr);
+                    const nowPerf = performance.now();
 
-                    const now = Date.now();
-                    const diff = now - baseMs;
+                    const elapsed = nowPerf - basePerf;
+                    const currentTime = new Date(baseTime.getTime() + elapsed);
 
-                    const currentTime = new Date(baseTime.getTime() + diff);
                     localStorage.setItem("realTime", currentTime.toISOString());
                 }, 1000);
-
-                localStorage.setItem("realTimeError", "Unable to fetch real time. Using system time.");
             }
         };
+
 
         fetchTime();
 

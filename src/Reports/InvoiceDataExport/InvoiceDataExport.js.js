@@ -24,13 +24,11 @@ const InvoiceDataExport = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const currentDate_ymd = _cfunc.date_ymd_func(localStorage.getItem("realTime"));
+    const currentDate_ymd = _cfunc.date_ymd_func((localStorage.getItem("realTime")));
     const isSCMParty = _cfunc.loginIsSCMParty();
-
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-
     }
     const [subPageMode] = useState(history.location.pathname);
     const [state, setState] = useState(() => initialFiledFunc(fileds))

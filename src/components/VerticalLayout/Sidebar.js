@@ -7,8 +7,10 @@ import { withRouter } from "react-router-dom";
 import { withTranslation } from "react-i18next";
 import SidebarContent from "./SidebarContent";
 import ChangeCommonParty from "./chnageParty/changeCommonParty";
+import { useRealTimeToLocalStorage } from "../Common/RealTimeDate";
 
 const Sidebar = props => {
+  useRealTimeToLocalStorage();
   return (
     <React.Fragment>
       <div className="vertical-menu" >
