@@ -26,6 +26,8 @@ export const ITEM_CONSUMPTION_REPORT = 353
 
 export const BATCH_TRACEABILITY = 361
 
+export const PARTY_WISE_ITEM_SALE_REPORT = 362
+
 
 
 

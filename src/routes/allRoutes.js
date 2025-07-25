@@ -280,6 +280,7 @@ import PhonePaySetting from "../pages/Utility/PhonePaySetting/PhonePaySetting.js
 import StockadjustmentReport from "../Reports/StockadjustmentReport/index.js";
 import BatchTraceability from "../Reports/BatchTracebilityReport/BatchTracebilityreport.js";
 import SwiggyZomatoClaim from "../Reports/SwiggyZomatoClaim/SwiggyZomatoClaim.js";
+import PartyWiseItemSaleReport from "../Reports/PartywiseItemSaleReport/PartywiseItemSale.js";
 
 
 
@@ -718,7 +719,7 @@ const userRoutes = [
 
 	{ path: path.SWIGGY_ZOMATO_CLAIM, component: SwiggyZomatoClaim },//not party wise
 
-
+	{ path: path.PARTY_WISE_ITEM_SALE_REPORT, component: PartyWiseItemSaleReport, isPartyWisePage: true },//not party wise
 
 
 	//******************************* Sweet Pos ************************************//

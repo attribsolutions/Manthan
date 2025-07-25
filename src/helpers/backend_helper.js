@@ -1124,6 +1124,7 @@ export const DataExportToSAP_Get_API = () => get(url.GET_DATA_EXPORT_TO_SAP)//Go
 export const Periodic_Grn_Report_Api = ({ jsonBody }) => post(url.PERIODIC_GRN_REPORT, jsonBody)//Go button api
 
 export const Stock_Adjustment_Report_GoButton_API = ({ jsonBody }) => post(url.STOCK_ADJUSTMENT_REPORT, jsonBody)//Go button api
+export const PartyWiseItemSale_API = ({ jsonBody }) => post(url.PARTY_WISE_ITEM_SALE_REPORT, jsonBody)  //  api
 
 
 export {
