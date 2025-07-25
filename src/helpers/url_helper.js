@@ -699,7 +699,7 @@ export const VOUCHER_REDEMPTION_CLAIM = "/MATAVoucherRedeemptionClaimTotalList"
 
 export const SWIGGY_ZOMATO_CLAIM = "/SweetPOS/SwiggyZomatoClaimList"
 
-
+export const PARTY_WISE_ITEM_SALE_REPORT = "/PartyWiseItemSaleReport"
 
 // Claim Tracking Entry
 
