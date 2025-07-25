@@ -62,6 +62,12 @@ export const GET_EMPLOYEE_TYPE = "/EmployeeTypes"
 export const GET_STATE = "/States"
 export const GET_CITY_ON_DISTRICT = '/GetCityOnDistrict'
 
+export const GET_SERVER_DATE = '/CurrentServerDateTime'
+
+
+
+
+
 // export const GET_REGION="/Region"
 export const EMPLOYEE_API_URL = "/Employees"
 export const EMPLOYEE_FILTER_API_URL = "/EmployeesFilter"

@@ -103,6 +103,11 @@ export const Python_FoodERP_postJwtForgetPwd_SendOTP = data => postWithoutToken(
 // postSocialLogin
 export const postSocialLogin = data => post(url.SOCIAL_LOGIN, data)
 
+export const getServerDate = () => get(url.GET_SERVER_DATE)
+
+
+
+
 export const RoleAccessApi_url = (party, employee, company) => get(`${url.ROLE_ACCESS}/${party}/${employee}/${company}`)
 export const post_SuperAdmin = (data) => post(url.SUPER_ADMIN_API, data) //save And Update
 
@@ -581,7 +586,7 @@ export const update_Scheme_List_Api = ({ jsonBody, updateId }) => put(`${url.SCH
 export const save_Scheme_API = ({ jsonBody }) => post(url.SCHEME, jsonBody)// Loading Sheet Post API For Master Page
 
 
-export const Get_Scheme_List = ({jsonBody}) => post(url.SCHEME_LIST, jsonBody); // get api
+export const Get_Scheme_List = ({ jsonBody }) => post(url.SCHEME_LIST, jsonBody); // get api
 
 
 

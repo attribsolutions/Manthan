@@ -73,7 +73,8 @@ function* StockEntryList_API_GenFunc({ config }) { // Save GRN  genrator functio
 function* StockEntryItemView_API_GenFunc({ config }) { // Save GRN  genrator function
     try {
 
-        const response = yield call(apiCall.StockEntryItemList_API, config);
+        let response = yield call(apiCall.StockEntryItemList_API, config);
+        response["ItemCount"] = config?.ItemCount
         yield put(action.GetStockEntryView_Success(response));
     } catch (error) { yield put(action.StockEntryApiErrorAction()) }
 }
