@@ -10,7 +10,11 @@ export const history = createBrowserHistory();
 
 
 function isDateInitial(isdate) {
-  const dateInstance = isdate ? new Date(isdate) : new Date();
+  const dateInstance = isdate
+    ? new Date(isdate)
+    : localStorage.getItem("realTime")
+      ? new Date(localStorage.getItem("realTime"))
+      : new Date();
   const dd = String(dateInstance.getDate()).padStart(2, '0');
   const mm = String(dateInstance.getMonth() + 1).padStart(2, '0');
   const yy = dateInstance.getFullYear();
@@ -22,7 +26,7 @@ function isDateInitial(isdate) {
 }
 
 export const date_ymd_func = (isdate) => { //+++++++++++++++ Current Date by format (yyyy-dd-mm) ++++++++++++++++++++++++++++++++++++
-
+  debugger
   let date = isDateInitial(isdate);
   return (`${date.yy}-${date.mm}-${date.dd}`)
 };
