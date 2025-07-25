@@ -240,12 +240,12 @@ const TransactionLog = () => {
     }, [JsonData])
 
     useEffect(() => {
-
+        debugger
         if ((btnMode === 2) && (tableData.length > 0)) {
             ExcelReportComponent({
                 excelTableData: tableData,
                 excelFileName: 'Transaction Log',
-                customKeyColumns: { tableData: tableColumns, isButton: true },
+                customKeyColumns: { tableData: tableColumns, isButton: false },
             });
 
         }
@@ -431,8 +431,8 @@ const TransactionLog = () => {
                         </FormGroup>
                     </Col>
                     <Col sm="3" >
-                        <Row style={{ display: "flex", justifyContent: "space-between", marginTop:"10px" }}>
-                            <Col sm="1" style={{marginLeft:"175px"}} >
+                        <Row style={{ display: "flex", justifyContent: "space-between", marginTop: "10px" }}>
+                            <Col sm="1" style={{ marginLeft: "175px" }} >
                                 <Go_Button
                                     loading={btnMode === 1 && goBtnloading}
                                     onClick={() => goButtonHandler(1)} />
