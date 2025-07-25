@@ -54,7 +54,7 @@ function initialState(props) {
 
 	let page_Id = '';
 	let listPath = ''
-	let sub_Mode = props.location.pathname;
+	let sub_Mode = props?.location?.pathname;
 
 	if (sub_Mode === url.PARTY) {
 		page_Id = pageId.PARTY;
@@ -462,7 +462,7 @@ const PartyMaster = (props) => {
 	}
 
 	const SaveHandler = (event) => {
-		debugger
+	
 		const formData = new FormData(); // Create a new FormData object
 		event.preventDefault();
 		const btnId = event.target.id;
@@ -483,23 +483,23 @@ const PartyMaster = (props) => {
 		let values = addressTabIsAddressEnter.values
 
 
-		
+
 
 
 		const validBasetab = formValid(baseTabDetail, setBaseTabDetail)
 		debugger
 
 
-		
+
 		if (priceListSelect?.value) {
 			baseTabDetail.isError.PriceList = "";
 			baseTabDetail.hasValid.PriceList.valid = true;
 		}
-		
-		
-		
-		
-		
+
+
+
+
+
 
 		if (
 			(values.PartyAddress.length > 0) &&

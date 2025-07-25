@@ -155,6 +155,7 @@ import PosServiceSettingReducer from "./Utilites/PosServiesSettingRedux/reducer"
 import PhonePaySettingReducer from "./Utilites/PhonePaySettingRedux/reducer"
 import Stock_Adjustment_Report_Reducer from "./Report/StockAdjustMentRedux/reducer"
 import SwiggyZomatoClaimReducer from "./Report/SwiggyZomatoRedux/reducer"
+import PartyWiseItemSaleReportReducer from "./Report/PartywiseItemSaleRedux/reducer"
 
 const rootReducer = combineReducers({
 	Layout,
@@ -286,7 +287,8 @@ const rootReducer = combineReducers({
 	PosServiceSettingReducer,
 	PhonePaySettingReducer,
 	Stock_Adjustment_Report_Reducer,
-	SwiggyZomatoClaimReducer
+	SwiggyZomatoClaimReducer,
+	PartyWiseItemSaleReportReducer,
 
 })
 export default rootReducer

@@ -60,6 +60,7 @@ const FranchisePartyMaster = (props) => {
 
 
   const [state, setState] = useState(() => initialFiledFunc(fileds))
+  debugger
   const [isMobileRetailer, setIsMobileRetailer] = useState(false);
 
   const [RedirectPath, setRedirectPath] = useState("");
@@ -70,6 +71,7 @@ const FranchisePartyMaster = (props) => {
   const [addressDetails, setAddressDetails] = useState([{ Address: '', PIN: '', RowID: 0, IsDefault: false }]);
 
   const [pageMode, setPageMode] = useState(mode.defaultsave);
+
   const [userPageAccessState, setUserAccState] = useState(11);
   const [editCreatedBy, seteditCreatedBy] = useState("");
 
@@ -98,10 +100,9 @@ const FranchisePartyMaster = (props) => {
     SupplierRedux,
     districtDropDownLoading,
     cityDropDownLoading,
-    countryList,
-    commonPartyDropSelect,
+
     pageField,
-    editData,
+
     userAccess,
     saveBtnloading,
     priceListByPartyType,
@@ -398,6 +399,7 @@ const FranchisePartyMaster = (props) => {
         modifiedState.isError.PIN = "";
       }
       if (formValid(state, setState)) {
+        debugger
         btnIsDissablefunc({ btnId, state: true });
 
 
@@ -612,6 +614,23 @@ const FranchisePartyMaster = (props) => {
   }
 
 
+
+
+  if (priceListSelect?.value) {
+    state.isError.PriceList = "";
+    state.hasValid.PriceList.valid = true;
+  }
+
+  useEffect(() => {
+    if (priceListSelect?.value) {
+      setState(prev => {
+        const updatedState = { ...prev };
+        updatedState.isError.PriceList = "";
+        updatedState.hasValid.PriceList.valid = true;
+        return updatedState;
+      });
+    }
+  }, [priceListSelect]);
 
 
 
@@ -957,6 +976,10 @@ const FranchisePartyMaster = (props) => {
                           data={priceListByPartyType}
                           priceList={priceListSelect}
                           setPriceSelect={setPriceListSelect} />
+                        {isError.PriceList && isError.PriceList.length > 0 && (
+                          <span className="text-danger f-8"><small>{isError.PriceList}</small></span>
+                        )}
+
                       </FormGroup>
                     </Col>
                     <Col md={4}>
