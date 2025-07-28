@@ -56,7 +56,9 @@ const FrenchiesesOrderReport = (data) => {
             }
 
             pageHeder(doc, tableData);
+            style.pageHeder1(doc)
             style.reportHeder3(doc, tableData);
+            style.pageBorder(doc)
             const lastTablePosition = tableData.initial_y;
             let startY = lastTablePosition;
             let currentSection = 1;
@@ -191,20 +193,19 @@ const FrenchiesesOrderReport = (data) => {
 
             doc.setFont('helvetica', 'Normal');
 
-            if ((data.length - 1) === tableIndex) {
+            // style.pageHeder1(doc, tableData);
+            if ((tableData.length - 1) === tableIndex) {
                 for (let i = 0; i <= pageCount; i++) {
                     doc.setPage(i);
-
-                    style.pageHeder1(doc, tableData);
-
-                    style.reportHeder1(doc, tableData)
+                    // style.reportHeder1(doc, tableData)
+                    // style.pageHeder1(doc, tableData);
                     style.reportHeder3(doc, tableData)
                     style.pageBorder(doc, tableData);
 
                     doc.setFont('helvetica', 'Normal');
                     doc.setFontSize(10);
 
-                    doc.text('Print Date: ' + String(currentDate_dmy) + ' Time: ' + String(CurrentTime()), 30, 834);
+                    doc.text('Print Date: ' + String(currentDate_dmy) + ' Time: ' + String(CurrentTime()), 30, 828);
                     // doc.text('Page ' + String(i) + ' of ' + String(pageCount), 500, 828);
                 }
             }

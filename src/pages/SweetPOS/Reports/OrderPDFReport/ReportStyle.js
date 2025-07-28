@@ -33,11 +33,11 @@ export const reportHeder1 = (doc, data) => {
     doc.text('Shipping Address', 440, 75)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 63, 30, 63)  //Image below line  1
-    doc.line(570, 16, 30, 16);//horizontal line 2
+    // doc.line(570, 16, 30, 16);//horizontal line 2
     doc.line(570, 80, 30, 80);//horizontal line 3
-    doc.line(30, 789, 30, 16);//vertical left 1
+    // doc.line(30, 789, 30, 16);//vertical left 1
 
-    doc.line(570, 789, 570, 16);//vertical left 2
+    // doc.line(570, 789, 570, 16);//vertical left 2
 
     //Header Table Style 
     var BilledByStyle = {
