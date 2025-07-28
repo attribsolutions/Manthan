@@ -216,7 +216,7 @@ export default function InvoiceForGRN() {
 
                     </Button>}
 
-                    {hasRole("RoleAccess_IsPrint") && rowData.Inward === 0 && (
+                    {hasRole("RoleAccess_IsPrint") && (
                         < Button
                             type="button"
                             id={`btn-print-${rowData.id}`}
