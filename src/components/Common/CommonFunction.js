@@ -7,7 +7,7 @@ import $ from 'jquery';
 import CBMERP_BG from "../../assets/images/CBMERP_BG.jpg"
 import CBMERP_LOGO from "../../assets/images/CBMERP_LOGO.png"
 import FOODERP_BG from "../../assets/images/FOODERP_BG.jpg"
-import FOODERP_LOGO from "../../assets/images/FOODERP_LOGO.png"
+import FOODERP_LOGO from "../../assets/images/foodERP_logo.png"
 import SASERP_LOGO from "../../assets/images/SASERP_LOGO.png"
 import SAS_BG from "../../assets/images/SAS_BG.jpg"
 
