@@ -1,6 +1,6 @@
 
-import cbm_logo from "../../../assets/images/cbm_logo.png"
-import { currentDate_dmy, CurrentTime } from "../../../components/Common/CommonFunction";
+
+import { currentDate_dmy, CurrentTime, GET_ERP_IMG } from "../../../components/Common/CommonFunction";
 import * as table from './TableData'
 let initial_y = 0
 
@@ -14,7 +14,7 @@ export const pageBorder = (doc) => {
 }
 
 export const pageHeder = (doc) => {
-    doc.addImage(cbm_logo, 'PNG', 33, 1, 95, 80, null, 'FAST')
+    doc.addImage(GET_ERP_IMG().Logo, 'PNG', 33, 1, 95, 80, null, 'FAST')
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(18)
@@ -241,7 +241,7 @@ export const tableBody = (doc, Row_Data) => {
 
 
 export const tableBodyWithUnit = (doc, Row_Data) => {
-    
+
     let PriviousrowSpanCount = "";
     let previousSupplierName = "";
     var options = {
@@ -333,7 +333,7 @@ export const tableBodyWithUnit = (doc, Row_Data) => {
     };
 
 
-    
+
     doc.autoTable(table.columnsWithUnit, table.RowsWithUnit(Row_Data, doc), options);
 
 

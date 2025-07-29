@@ -1,6 +1,4 @@
 
-import reportHederPng from "../../assets/images/reportHeder.png"
-import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import { date_dmy_func, convertOnlyTimefunc, CurrentTime, currentDate_dmy } from "../../components/Common/CommonFunction";
 import * as table from './TableData'
 

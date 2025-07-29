@@ -1,8 +1,8 @@
 
 import * as table from './TableData'
 import { numberWithCommas } from "../Report_common_function";
-import { date_dmy_func, convertOnlyTimefunc, currentDate_dmy, CurrentTime, compareGSTINState, loginUserIsFranchisesRole, IsSweetAndSnacksCompany } from "../../components/Common/CommonFunction";
-import cbm_logo from "../../assets/images/cbm_logo.png"
+import { date_dmy_func, convertOnlyTimefunc, currentDate_dmy, CurrentTime, compareGSTINState, loginUserIsFranchisesRole, IsSweetAndSnacksCompany, GET_ERP_IMG } from "../../components/Common/CommonFunction";
+
 
 
 export const pageBorder = (doc) => {
@@ -20,7 +20,7 @@ const isSweetAndSnacksCompany = IsSweetAndSnacksCompany()
 
 export const pageHeder = (doc, data) => {
     if (!isSweetAndSnacksCompany) {
-        doc.addImage(cbm_logo, 'PNG', 33, 3, 52, 55, null, 'FAST')
+        doc.addImage(GET_ERP_IMG().Logo, 'PNG', 33, 3, 52, 55, null, 'FAST')
     }
     doc.setFont('Tahoma')
     doc.setFont(undefined, 'bold')

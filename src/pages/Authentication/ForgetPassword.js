@@ -22,9 +22,10 @@ import {
 } from "../../store/actions"
 
 // import images
-import logo from "../../assets/images/cbm_logo.png"
+
 import CarouselPage from "./CarouselPage"
 import resetImage from "../../assets/images/resetpassword.png"
+import { GET_ERP_IMG } from "../../components/Common/CommonFunction"
 
 const ForgetPasswordPage = props => {
   const dispatch = useDispatch();
@@ -92,7 +93,7 @@ const ForgetPasswordPage = props => {
   function handleValidSubmit(event, values) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const isEmail = !values.email.match(emailRegex)
-    
+
     if (values.email === "" || isEmail) {
       dispatch(userForgetPassword_sendOTP_Error("Invalid Email"));
       return
@@ -141,7 +142,7 @@ const ForgetPasswordPage = props => {
   };
 
   function handleKeyDown(event) {
-    
+
     // Check if the pressed key is a space
     if (event.key === " ") {
       // Check if the input contains only spaces
@@ -170,7 +171,7 @@ const ForgetPasswordPage = props => {
                       <div style={{ cursor: "context-menu" }} className="logo logo-dark">
                         <span className="logo-txt">FoodERP 2.0</span>
                       </div>
-                      <img src={logo} alt="" height="150" style={{height:"175px"}} />
+                      <img src={GET_ERP_IMG().Logo} alt="" height="150" style={{ height: "175px" }} />
 
                     </div>
                     {

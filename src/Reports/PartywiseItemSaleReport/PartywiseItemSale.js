@@ -6,38 +6,39 @@ import { C_Button } from "../../components/Common/CommonButton";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import {  commonPageField, commonPageFieldSuccess, Get_Items_Drop_Down,  } from "../../store/actions";
+import { commonPageField, commonPageFieldSuccess, Get_Items_Drop_Down, getpdfReportdata, } from "../../store/actions";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import C_Report from "../../components/Common/C_Report";
 import { getCommonPartyDrodownOptionAction } from "../../store/Utilites/PartyDrodown/action";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
-import { PartyWiseItemSaleReport_GoButton_API, PartyWiseItemSaleReport_GoButton_API_Success } from "../../store/Report/PartywiseItemSaleRedux/action";
-
+import { PartyWiseItemSaleReport_GoButton_API_Success } from "../../store/Report/PartywiseItemSaleRedux/action";
+import { ItemSaleReport_GoBtn_API } from "../../helpers/backend_helper";
+import * as report from '../../Reports/ReportIndex'
 
 const PartyWiseItemSaleReport = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-    const [fromDate, setFromDate] = useState(currentDate_ymd)
+    const [fromDate, setFromDate] = useState("2025-04-01")
     const [toDate, setToDate] = useState(currentDate_ymd)
-   
-    const [Item, setItem] = useState("");
-   
+
+    const [Item, setItem] = useState([{ label: "Dharwadi Pedha", value: 1348 }]);
+
 
     const [userPageAccessState, setUserAccState] = useState('');
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
-   
+
     const {
         userAccess,
         GoBtnLoading,
         ItemDropDown,
         commonPartyDropSelect,
         ItemDropDownloading,
-      
+
     } = useSelector((state) => ({
         GoButtonData: state.PartyWiseItemSaleReportReducer.ItemConsumption,
         GoBtnLoading: state.PartyWiseItemSaleReportReducer.listBtnLoading,
@@ -49,7 +50,7 @@ const PartyWiseItemSaleReport = (props) => {
 
     }));
 
-   
+
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.PARTY_WISE_ITEM_SALE_REPORT));
@@ -57,7 +58,7 @@ const PartyWiseItemSaleReport = (props) => {
 
         return () => {
             dispatch(commonPageFieldSuccess(null));
-        
+
         }
     }, []);
 
@@ -81,7 +82,7 @@ const PartyWiseItemSaleReport = (props) => {
 
     useEffect(() => {
         if (commonPartyDropSelect.value > 0) {
-            
+
         } else {
             partySelectOnChangeHandler();
         }
@@ -89,13 +90,13 @@ const PartyWiseItemSaleReport = (props) => {
 
     function partySelectOnChangeHandler() {
         PartyWiseItemSaleReport_GoButton_API_Success([]);
-      
+
     }
     const ItemList_Options = ItemDropDown.map((index) => ({
         value: index.Item,
         label: index.ItemName,
     }));
- 
+
 
     useEffect(() => {
         dispatch(Get_Items_Drop_Down({
@@ -106,15 +107,15 @@ const PartyWiseItemSaleReport = (props) => {
                 IsSCMCompany: _cfunc.loginIsSCMCompany(),
                 CompanyGroup: _cfunc.loginCompanyGroup(),
                 PartyID: _cfunc.loginSelectedPartyID(),
-                
+
             })
         }));
     }, []);
 
-   
-    function goButtonHandler(goBtnMode) {
 
-        if (Item === "") {
+    function goButtonHandler(goBtnMode) {
+        debugger
+        if (Item.length === 0) {
             customAlert({
                 Type: 4,
                 Message: alertMessages.selectItemName,
@@ -126,12 +127,19 @@ const PartyWiseItemSaleReport = (props) => {
             const jsonBody = JSON.stringify({
                 FromDate: fromDate,
                 ToDate: toDate,
+                PartyType: _cfunc.loginPartyTypeID(),
                 Party: _cfunc.loginSelectedPartyID(),
-                ItemID: Item.value,
-            })
-            const config = { jsonBody, goBtnMode };
-            dispatch(PartyWiseItemSaleReport_GoButton_API(config))
+                Employee: _cfunc.loginEmployeeID(),
+                ItemID: Item.map(inx => inx.value).join(','),
+                CompanyID: _cfunc.loginCompanyID()
 
+            });
+            const config = {
+                jsonBody,
+                goBtnMode,
+                ReportType: report.Period_Wise_Item_Sale
+            };
+            dispatch(getpdfReportdata(ItemSaleReport_GoBtn_API, config))
         } catch (error) { _cfunc.CommonConsole(error) }
     }
 
@@ -180,8 +188,8 @@ const PartyWiseItemSaleReport = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
-                       
-                        <Col sm={3} className="">
+
+                        <Col sm={4} className="">
                             <FormGroup className=" row mt-2" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px", marginRight: "20px" }}>Item</Label>
@@ -191,6 +199,7 @@ const PartyWiseItemSaleReport = (props) => {
                                         name="ItemName"
                                         value={Item}
                                         isSearchable={true}
+                                        isMulti={true}
                                         isLoading={ItemDropDownloading}
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
@@ -205,8 +214,8 @@ const PartyWiseItemSaleReport = (props) => {
                         </Col>
 
 
-                        <Col sm={5} className=" d-flex justify-content-end" >
-                     
+                        <Col sm={4} className=" d-flex justify-content-end" >
+
                             <C_Button
                                 type="button"
                                 spinnerColor="white"

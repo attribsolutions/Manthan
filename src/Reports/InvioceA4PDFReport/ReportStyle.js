@@ -1,8 +1,6 @@
 
-import { CurrentTime, IsSweetAndSnacksCompany, compareGSTINState, currentDate_dmy, date_dmy_func, loginUserAdminRole, loginUserIsFranchisesRole } from "../../components/Common/CommonFunction";
+import { CurrentTime, GET_ERP_IMG, IsSweetAndSnacksCompany, compareGSTINState, currentDate_dmy, date_dmy_func, loginUserAdminRole, loginUserIsFranchisesRole } from "../../components/Common/CommonFunction";
 import { numberWithCommas } from "../Report_common_function";
-import cbm_logo from "../../assets/images/cbm_logo.png"
-
 import * as table from './TableData'
 
 let initial_y = 0
@@ -53,13 +51,12 @@ export const pageHeder = (doc, data) => {
 export const reportHeder1 = (doc, data) => {
 
     if (isSweetAndSnacksCompany) {
-        doc.addImage(cbm_logo, 'PNG', 33, 17, 80, 46, null, 'FAST')
+        doc.addImage(GET_ERP_IMG().Logo, 'PNG', 33, 17, 80, 46, null, 'FAST')
     } else {
 
-        doc.addImage(cbm_logo, 'PNG', 33, 1, 95, 80, null, 'FAST')
+        doc.addImage(GET_ERP_IMG().Logo, 'PNG', 33, 1, 95, 80, null, 'FAST')
     }
 
-    // doc.addImage(cbm_logo, 'PNG', 33, 1, 95, 80, null, 'FAST')
 
 
     let Y1 = 0
@@ -271,7 +268,7 @@ export const reportHeder1 = (doc, data) => {
                 doc.setFontSize(8)
                 doc.setFont(undefined, 'bold')
                 doc.text('PO No: ', x, y)
-              
+
             };
             if (rowIdx === 1 && colIdx === 0) {
 

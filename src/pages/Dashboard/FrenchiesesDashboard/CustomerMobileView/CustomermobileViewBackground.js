@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState, } from "react";
 import { Card, Input } from "reactstrap";
-import cbm_logo from "../../../../assets/images/cbm_logo.png"
 
 import "./button.css"
 import { CustomerMobileView } from "../Function";
+import { GET_ERP_IMG } from "../../../../components/Common/CommonFunction";
 
 
 
@@ -13,17 +13,15 @@ export const CustomermobileViewBackground = (props) => {
     const [CustomerMobileNumber, setCustomerMobileNumber] = useState("");
     const [error, setError] = useState('');
     const [Response, setResponse] = useState("");
-    const [showContent, setShowContent] = useState(false);
-    const [display, setDisplay] = useState('');
     const buttonRef = useRef(null); // Reference to the Send button
-    const [intervalId, setIntervalId] = useState(null);
+
 
 
     const SaveHandler = async () => {
         const [Mac_ID, Party] = props.Details.split("&");
         console.log(Mac_ID); // "64:51:06:3F:5F:D2"
         console.log(Party); // "60722
-        
+
         setResponse("")
         if (!validateMobileNumber(CustomerMobileNumber)) {
             setError('Please enter a valid 10-digit mobile number.');
@@ -152,6 +150,7 @@ export const CustomermobileViewBackground = (props) => {
                 <div
                     className="bg-overlay auth-bg"
                     style={{
+                        backgroundImage: `url(${GET_ERP_IMG().BackgroundImage})`,
                         position: 'absolute',
                         top: 0,
                         left: 0,
@@ -201,7 +200,7 @@ export const CustomermobileViewBackground = (props) => {
                 <div style={{ zIndex: 2, textAlign: 'center', }}>
                     {/* Image */}
                     <img
-                        src={cbm_logo}
+                        src={GET_ERP_IMG().Logo}
                         alt="CBM Logo"
                         style={{
                             width: '200px',
