@@ -157,7 +157,7 @@ const BOMMaster = (props) => {
                 hasValid.Comment.valid = true;
                 hasValid.IsActive.valid = true;
                 hasValid.IsVDCItem.valid = true;
-                hasEditVal.IsMixItem.valid = true;
+                hasValid.IsMixItem.valid = true;
 
                 values.IsMixItem = IsMixItem;
                 values.id = id
