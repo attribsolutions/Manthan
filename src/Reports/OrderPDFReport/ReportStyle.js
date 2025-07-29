@@ -1,9 +1,8 @@
 
-import cbm_logo from "../../assets/images/cbm_logo.png"
 
 import * as table from './TableData'
-import { toWords, numberWithCommas } from "../Report_common_function";
-import { CurrentTime, IsSweetAndSnacksCompany, compareGSTINState, convertOnlyTimefunc, currentDate_dmy, date_dmy_func, loginSystemSetting, loginUserIsFranchisesRole } from "../../components/Common/CommonFunction";
+import { numberWithCommas } from "../Report_common_function";
+import { CurrentTime, GET_ERP_IMG, IsSweetAndSnacksCompany, compareGSTINState, convertOnlyTimefunc, currentDate_dmy, date_dmy_func, loginSystemSetting, loginUserIsFranchisesRole } from "../../components/Common/CommonFunction";
 import { url } from "../../routes";
 let initial_y = 0
 const isSweetAndSnacksCompany = IsSweetAndSnacksCompany()
@@ -36,10 +35,10 @@ export const pageHeder = (doc, data) => {
 
 
     if (isSweetAndSnacksCompany) {
-        doc.addImage(cbm_logo, 'PNG', 35, 17, 60, 46, null, 'FAST')
+        doc.addImage(GET_ERP_IMG().Logo, 'PNG', 35, 17, 75, 46, null, 'FAST')
     } else {
 
-        doc.addImage(cbm_logo, 'PNG', 33, 1, 95, 80, null, 'FAST')
+        doc.addImage(GET_ERP_IMG().Logo, 'PNG', 33, 1, 95, 80, null, 'FAST')
     }
 
 

@@ -9,12 +9,12 @@ import {
   RoleAccessUpdateSuccess,
   roleAceessActionSuccess
 } from "../../store/actions"
-import logo from "../../assets/images/cbm_logo.png"
 import CarouselPage from "./CarouselPage"
 import { useLayoutEffect } from "react"
 import { Go_Button } from "../../components/Common/CommonButton"
 import { C_Select } from "../../CustomValidateForm"
 import { afterloginOneTimeAPI } from "../../components/Common/AfterLoginApiFunc"
+import { GET_ERP_IMG } from "../../components/Common/CommonFunction"
 
 const SelectDivisionPage = () => {
   const dispatch = useDispatch()
@@ -93,11 +93,31 @@ const SelectDivisionPage = () => {
                       <Link to="/dashboard" className="d-block auth-logo">
                         <span className="logo-txt">FoodERP 2.0</span>
                       </Link>
-                      <img src={logo} alt="" height="150" style={{height:"175px"}} />
+
+                      {/* ✅ Centered Logo Box */}
+                      <div
+                        style={{
+                          width: "100%",
+                          height: "140px",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center"
+                        }}
+                      >
+                        <img
+                          src={GET_ERP_IMG().Logo}
+                          alt="Logo"
+                          style={{
+                            maxWidth: "100%",
+                            maxHeight: "100%",
+                            borderRadius: "10px",
+                            objectFit: "contain" // ✅ shows full logo without cropping
+                          }}
+                        />
+                      </div>
                     </div>
 
                     <div className="auth-content my-auto">
-
                       <div className="text-center">
                         <h5 className="mb-0">Welcome !</h5>
                         <p className="text-muted mt-2">Select Role to Continue FoodERP 2.0.</p>
@@ -113,18 +133,25 @@ const SelectDivisionPage = () => {
                           }}
                         />
                       </div>
+
                       <div className="text-center">
                         <Go_Button
                           loading={loading}
-                          onClick={() => { goButtonHandller() }}
+                          onClick={() => {
+                            goButtonHandller();
+                          }}
                         />
                       </div>
                     </div>
+
                     <div className="mt-4 mt-md-5 text-center">
-                      <p className="mb-0">© {new Date().getFullYear()}.Developed by Attrib Solution</p>
+                      <p className="mb-0">
+                        © {new Date().getFullYear()}.Developed by Attrib Solution
+                      </p>
                     </div>
                   </div>
                 </div>
+
               </div>
             </Col>
             <CarouselPage />

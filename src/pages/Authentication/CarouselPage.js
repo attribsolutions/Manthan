@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { Carousel, CarouselItem, CarouselIndicators } from "reactstrap";
 
-import img1 from "../../assets/images/bhakarwadi image.jpg";
-import img2 from "../../assets/images/users/avatar-2.jpg";
-import img3 from "../../assets/images/users/avatar-3.jpg";
+import { GET_ERP_IMG } from "../../components/Common/CommonFunction";
 
 const items = [
   {
@@ -12,7 +10,7 @@ const items = [
     // name: "Richard Drews",
     // designation: "Web Designer",
     description:
-    "Established in 1950 is one of the leading manufacturers of Indian Sweets, Snacks and Savouries and Ready to Eat Products with presence in Retail, General Trade, Modern Trade and Export Markets"
+      "Established in 1950 is one of the leading manufacturers of Indian Sweets, Snacks and Savouries and Ready to Eat Products with presence in Retail, General Trade, Modern Trade and Export Markets"
   },
   {
     id: 2,
@@ -20,9 +18,9 @@ const items = [
     // name: "Rosanna French",
     // designation: "Web Developer",
     description:
-    "To become leaders in the Indian Dairy Industry, while retaining our Indian traditions and family values"
+      "To become leaders in the Indian Dairy Industry, while retaining our Indian traditions and family values"
   },
- 
+
 ];
 
 const CarouselPage = () => {
@@ -84,7 +82,7 @@ const CarouselPage = () => {
   return (
     <React.Fragment>
       <div className="col-xxl-9 col-lg-8 col-md-7">
-        <div className="auth-bg pt-md-5 p-4 d-flex">
+        <div className="auth-bg pt-md-5 p-4 d-flex" style={{ backgroundImage: `url(${GET_ERP_IMG().BackgroundImage})` }}>
           <div className="bg-overlay bg-primary"></div>
           <ul className="bg-bubbles">
             <li></li>

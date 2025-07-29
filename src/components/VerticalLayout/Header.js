@@ -15,9 +15,6 @@ import ProfileMenu from "../CommonForBoth/TopbarDropdown/ProfileMenu"
 import RightSidebar from "../CommonForBoth/RightSidebar"
 // import LightDark from "../CommonForBoth/Menus/LightDark";
 
-// import images
-import logoSvg from "../../assets/images/cbm_logo.png"
-
 //i18n
 import { withTranslation } from "react-i18next"
 
@@ -30,7 +27,7 @@ import {
 } from "../../store/actions"
 import { MainSearchBox, } from '../Common/SearchBox/index';
 import { MySearch } from '../Common/SearchBox/MySearch';
-import { IsSweetAndSnacksCompany, loginSystemSetting } from '../Common/CommonFunction';
+import { GET_ERP_IMG, IsSweetAndSnacksCompany, loginSystemSetting } from '../Common/CommonFunction';
 import { Modal } from 'reactstrap';
 import { Notification_Log } from '../../helpers/backend_helper';
 
@@ -130,19 +127,19 @@ const Header = props => {
             <div className="navbar-brand-box" >
               <div style={{ cursor: "context-menu" }} className="logo logo-dark">
                 <span className="logo-sm" >
-                  <img src={logoSvg} alt="" height="40" style={{ height: "56px" }} />
+                  <img src={GET_ERP_IMG().Logo} alt="" height="40" style={{ height: "56px" }} />
                 </span>
                 <span className="logo-lg">
-                  <img src={logoSvg} alt="" height="40" style={{ height: isSweetAndSnacksCompany ? "46" : "56px", borderRadius: "8px" }} /> <span className="logo-txt" style={{ color: 'white' }}>FoodERP 2.0</span>
+                  <img src={GET_ERP_IMG().Logo} alt="" height="40" style={{ height: isSweetAndSnacksCompany ? "46" : "56px", borderRadius: "8px" }} /> <span className="logo-txt" style={{ color: 'white' }}>FoodERP 2.0</span>
                 </span>
               </div>
 
               <Link to="/dashboard" className="logo logo-light">
                 <span className="logo-sm" >
-                  <img src={logoSvg} alt="" height="35" style={{ height: isSweetAndSnacksCompany ? "46" : "56px", borderRadius: "8px" }} />
+                  <img src={GET_ERP_IMG().Logo} alt="" height="35" style={{ height: isSweetAndSnacksCompany ? "46" : "56px", borderRadius: "8px" }} />
                 </span>
                 <span className="logo-lg">
-                  <img src={logoSvg} alt="" height="35" style={{ height: isSweetAndSnacksCompany ? "46" : "56px", borderRadius: "8px" }} /> <span className="logo-txt">FoodERP 2.0</span>
+                  <img src={GET_ERP_IMG().Logo} alt="" height="35" style={{ height: isSweetAndSnacksCompany ? "46" : "56px", borderRadius: "8px" }} /> <span className="logo-txt">FoodERP 2.0</span>
                 </span>
               </Link>
             </div>

@@ -1,25 +1,25 @@
 
 
 import * as table from './TableData'
-import { CurrentTime, IsSweetAndSnacksCompany, currentDate_dmy, date_dmy_func, loginUserDetails } from "../../../components/Common/CommonFunction";
-import cbm_logo from "../../../assets/images/cbm_logo.png"
+import { CurrentTime, GET_ERP_IMG, IsSweetAndSnacksCompany, currentDate_dmy, loginUserDetails } from "../../../components/Common/CommonFunction";
+
 
 
 export const pageBorder = (doc) => {
     doc.setDrawColor('black');
-     doc.line(570, 17, 30, 17);//horizontal line (Top)
-     doc.line(30, 815, 30, 17);//vertical line (left)
-     doc.line(570, 815, 570, 17);//vertical line (Right)
-     doc.line(570, 815, 30, 815);//horizontal line (Bottom)   
+    doc.line(570, 17, 30, 17);//horizontal line (Top)
+    doc.line(30, 815, 30, 17);//vertical line (left)
+    doc.line(570, 815, 570, 17);//vertical line (Right)
+    doc.line(570, 815, 30, 815);//horizontal line (Bottom)   
 }
 export const pageHeder = (doc, data) => {
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
 
     if (IsSweetAndSnacksCompany()) {
-        doc.addImage(cbm_logo, 'PNG', 33, 18, 60, 40, null, 'FAST')
+        doc.addImage(GET_ERP_IMG().Logo, 'PNG', 33, 18, 60, 40, null, 'FAST')
     } else {
-        doc.addImage(cbm_logo, 'PNG', 33, -2, 80, 80, null, 'FAST')
+        doc.addImage(GET_ERP_IMG().Logo, 'PNG', 33, -2, 80, 80, null, 'FAST')
     }
     doc.setFontSize(15)
     doc.text('Material Register', 250, 40,) //Tax invoice Header
@@ -35,12 +35,12 @@ export const reportHeder1 = (doc, data) => {
     doc.line(570, 80, 30, 80);//horizontal line 3
 
 
-  
+
     doc.line(250, 134, 250, 80);//vertical right 2
     doc.line(570, 134, 30, 134);//horizontal line table 
 
 
-     // doc.line(250, 100, 570, 100) //horizontal line Current date upper
+    // doc.line(250, 100, 570, 100) //horizontal line Current date upper
     // doc.line(250, 117, 570, 117) //horizontal line Current date upper
 
 

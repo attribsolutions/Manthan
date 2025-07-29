@@ -14,12 +14,12 @@ import {
   loginUser,
   resetRoleAccessAction,
 } from "../../store/actions"
-import logo from "../../assets/images/cbm_logo.png"
 import CarouselPage from "./CarouselPage"
 import { useLayoutEffect } from "react"
 import { afterloginOneTimeAPI } from "../../components/Common/AfterLoginApiFunc"
 import { useSession } from "../../routes/middleware/SessionContext"
 import { event } from "jquery"
+import { GET_ERP_IMG } from "../../components/Common/CommonFunction"
 
 
 const Login = props => {
@@ -177,21 +177,44 @@ const Login = props => {
                       <div style={{ cursor: "context-menu" }} className="logo logo-dark">
                         <span className="logo-txt">FoodERP 2.0</span>
                       </div>
-                      <img src={logo} alt="" height="150" style={{ height: "175px" }} />
-                      {IsLogin && <Col lg={12}>
-                        <div className="text-center">
 
-                          <div className="maintenance-cog-icon text-primary pt-4">
-                            <i className="mdi mdi-cog spin-right display-3"></i>
-                            <i className="mdi mdi-cog spin-left display-4 cog-icon"></i>
+                      {/* ✅ Centered logo box */}
+                      <div
+                        style={{
+                          width: "100%",
+                          height: "140px",
+                          display: "flex",
+
+                          justifyContent: "center",
+                          alignItems: "center"
+                        }}
+                      >
+                        <img
+                          src={GET_ERP_IMG().Logo}
+                          alt="Logo"
+                          style={{
+                            maxWidth: "100%",
+                            maxHeight: "100%",
+                            borderRadius: "10px",
+                            objectFit: "contain" // ✅ keeps full logo visible
+                          }}
+                        />
+                      </div>
+
+                      {IsLogin && (
+                        <Col lg={12}>
+                          <div className="text-center">
+                            <div className="maintenance-cog-icon text-primary pt-4">
+                              <i className="mdi mdi-cog spin-right display-3"></i>
+                              <i className="mdi mdi-cog spin-left display-4 cog-icon"></i>
+                            </div>
+                            <h3 className="mt-4">This Site is Under Maintenance</h3>
+                            <p>Please check back in sometime.</p>
                           </div>
-                          <h3 className="mt-4">This Site is Under Maintenance</h3>
-                          <p>Please check back in sometime.</p>
-
-                        </div>
-                      </Col>}
-
+                        </Col>
+                      )}
                     </div>
+
                     <div className="auth-content my-auto">
                       <div style={{ cursor: "context-menu" }} className="text-center">
                         <h5 className="mb-0">Welcome !</h5>
@@ -202,7 +225,7 @@ const Login = props => {
                           {loginError}
                         </Alert>
                       ) : null}
-                      <form >
+                      <form>
                         <div className="mb-3">
                           <div className="d-flex align-items-start">
                             <div className="flex-grow-1">
@@ -217,7 +240,9 @@ const Login = props => {
                               value={currentUserName}
                               autoComplete="off"
                               autoFocus={false}
-                              onKeyDown={(event) => { handleKeyDown({ event: event, Type: "UserName" }) }}
+                              onKeyDown={(event) => {
+                                handleKeyDown({ event: event, Type: "UserName" });
+                              }}
                               required
                               onChange={currentUserOnchange}
                               placeholder="Enter User Name"
@@ -239,9 +264,11 @@ const Login = props => {
                                 value={Password}
                                 autoComplete="off"
                                 onChange={PasswordOnchange}
-                                type={showPassword ? 'text' : 'password'}
+                                type={showPassword ? "text" : "password"}
                                 className="form-control"
-                                onKeyDown={(event) => { handleKeyDown({ event: event, Type: "Password" }) }}
+                                onKeyDown={(event) => {
+                                  handleKeyDown({ event: event, Type: "Password" });
+                                }}
                                 required
                                 placeholder="Enter Password"
                               />
@@ -251,34 +278,63 @@ const Login = props => {
                                 type="button"
                                 onClick={toggleShowPassword}
                               >
-                                {showPassword ? <i className="mdi mdi-eye-off"></i> : <i className="mdi mdi-eye"></i>}
+                                {showPassword ? (
+                                  <i className="mdi mdi-eye-off"></i>
+                                ) : (
+                                  <i className="mdi mdi-eye"></i>
+                                )}
                               </button>
                             </div>
                           </div>
                         </div>
+
                         <div className=" mb-4">
-
-                          <Link to="/forgot-password" className="fw-semibold">Forgot password?</Link>
-
+                          <Link to="/forgot-password" className="fw-semibold">
+                            Forgot password?
+                          </Link>
                         </div>
+
                         <div className="mb-3">
-                          {loading ?
-                            <button className="btn btn-primary w-100 waves-effect waves-light" autoFocus type="button">
-                              <div className="dot-pulse"> <span> Login</span> &nbsp;
+                          {loading ? (
+                            <button
+                              className="btn btn-primary w-100 waves-effect waves-light"
+                              autoFocus
+                              type="button"
+                            >
+                              <div className="dot-pulse">
+                                {" "}
+                                <span> Login</span> &nbsp;
                                 <div className="bounce1" style={{ background: "white" }}></div>
                                 <div className="bounce2" style={{ background: "white" }}></div>
                                 <div className="bounce3" style={{ background: "white" }}></div>
-                              </div> </button>
-                            : <button className="btn btn-primary w-100 waves-effect waves-light" autoFocus type="submit" id="loginbtn" onClick={SaveHandler} >Login</button>}
-
+                              </div>{" "}
+                            </button>
+                          ) : (
+                            <button
+                              className="btn btn-primary w-100 waves-effect waves-light"
+                              autoFocus
+                              type="submit"
+                              id="loginbtn"
+                              onClick={SaveHandler}
+                            >
+                              Login
+                            </button>
+                          )}
                         </div>
                       </form>
                     </div>
+
                     <div className="mt-4 mt-md-5 text-center">
-                      <p style={{ cursor: "context-menu" }} className="mb-0">© {new Date().getFullYear()}.Developed by Attrib Solution</p>
+                      <p
+                        style={{ cursor: "context-menu" }}
+                        className="mb-0"
+                      >
+                        © {new Date().getFullYear()}.Developed by Attrib Solution
+                      </p>
                     </div>
                   </div>
                 </div>
+
               </div>
             </Col>
             <CarouselPage />

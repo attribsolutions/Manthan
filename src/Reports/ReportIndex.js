@@ -26,6 +26,7 @@ import BillDeleteSummaryReport from "./BillSummaryDeleteReport/PDFReport/Page";
 import ItemConsumptionReport from "./ItemConsumptionReport/Page";
 import BatchTraceabilityReport from "./BatchTracebilityReport/Page";
 import StockadjustmentReport from "./StockadjustmentReport/PDFReport/Page";
+import PeriodWiseItemSale from "./PartywiseItemSaleReport/PeriodWiseItemSalePDRrepot";
 
 export const FrenchiesesOrder = "FrenchiesesOrder"
 export const order1 = "order1"
@@ -59,6 +60,11 @@ export const Item_Consumption_Report = "Item_Consumption_Report"
 export const Stockadjustment_Report = "Stockadjustment_Report"
 
 export const Batch_Traceability_Report = "Batch_Traceability_Report"
+
+export const Period_Wise_Item_Sale = "Period_Wise_Item_Sale"
+
+
+
 
 const generateReport = (resp) => {
 
@@ -150,6 +156,12 @@ const generateReport = (resp) => {
         case Stockadjustment_Report:
             StockadjustmentReport(resp.Data)
             break;
+
+        case Period_Wise_Item_Sale:
+            PeriodWiseItemSale(resp.Data)
+            break;
+
+
         default:
             break;
     }

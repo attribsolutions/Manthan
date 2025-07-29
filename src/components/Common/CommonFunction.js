@@ -4,6 +4,18 @@ import { createBrowserHistory } from 'history';
 import * as mode from "../../routes/PageMode"
 import $ from 'jquery';
 
+import CBMERP_BG from "../../assets/images/CBMERP_BG.jpg"
+import CBMERP_LOGO from "../../assets/images/CBMERP_LOGO.png"
+import FOODERP_BG from "../../assets/images/FOODERP_BG.jpg"
+import FOODERP_LOGO from "../../assets/images/FOODERP_LOGO.png"
+import SASERP_LOGO from "../../assets/images/SASERP_LOGO.png"
+import SAS_BG from "../../assets/images/SAS_BG.jpg"
+
+
+
+
+
+
 
 export const history = createBrowserHistory();
 
@@ -30,6 +42,36 @@ export const date_ymd_func = (isdate) => { //+++++++++++++++ Current Date by for
   let date = isDateInitial(isdate);
   return (`${date.yy}-${date.mm}-${date.dd}`)
 };
+
+
+export const GET_ERP_IMG = () => {
+  const hostname = window.location.hostname;
+  let BackgroundImage = "";
+  let Logo = ""
+  if (hostname.includes("10.1.201.25")) {
+    BackgroundImage = SAS_BG;
+    Logo = SASERP_LOGO;
+  } else if (hostname === "fooderp.chitalesweets.com") {
+    BackgroundImage = SAS_BG;
+    Logo = SASERP_LOGO;
+  } else if (hostname === "cbmfooderp.com") {
+    BackgroundImage = CBMERP_BG;
+    Logo = CBMERP_LOGO;
+  } else if (hostname === "fooderp.in") {
+    BackgroundImage = FOODERP_BG;
+    Logo = FOODERP_LOGO;
+  } else if (hostname.includes("10.4.5.69")) {
+    BackgroundImage = CBMERP_BG;
+    Logo = CBMERP_LOGO;
+  } else if (hostname.includes("10.1.201.27")) {
+    BackgroundImage = SAS_BG;
+    Logo = SASERP_LOGO;
+  } else {
+    BackgroundImage = FOODERP_BG;
+    Logo = FOODERP_LOGO;
+  }
+  return { BackgroundImage, Logo }
+}
 
 
 function Frenchies_isDateInitial(isdate) {
@@ -67,6 +109,9 @@ export function getFileExtensionType(filename) {
   if (documentExtensions.includes(extension)) return 'Document';
   return 'Unknown';
 }
+
+
+
 
 
 export function getMimeTypeFromExtension(filename) {
