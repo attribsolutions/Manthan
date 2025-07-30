@@ -274,8 +274,8 @@ const SchemeItemTabForm = forwardRef(({ props, setState, state }, ref) => {
                             id={`discount-value-${row.ItemID}`}
                             value={row.DiscountValue || ""}
                             type="text"
-                            // disabled={!(row.effective)}
-                            disabled={true}
+                            disabled={!(row.effective)}
+
                             placeholder="Enter Value"
                             autoComplete="off"
                             className="font-size-12"
@@ -291,8 +291,8 @@ const SchemeItemTabForm = forwardRef(({ props, setState, state }, ref) => {
                                 id={`discount-rs-${row.ItemID}`}
                                 className="btn-check"
                                 autoComplete="off"
-                                // disabled={!(row.effective)}
-                                disabled={true}
+                                disabled={!(row.effective)}
+
                                 checked={row.DiscountType === "Rs"}
                                 onChange={() => {
                                     row.DiscountType = "Rs";
