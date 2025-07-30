@@ -376,6 +376,7 @@ const SchemeMaster = (props) => {
 
     const PartyList_Options = useMemo(() => {
         const options = PartyDropDown.map(item => ({
+            ...item,
             value: item.id,
             label: item.Name,
             IsPartySelect: false,
@@ -617,12 +618,11 @@ const SchemeMaster = (props) => {
 
     useEffect(() => {
         if (pageMode === mode.defaultsave) {
+            debugger
             if (PartyTabledata.length > 0) {
                 setPartyTabledata(PartyTabledata)
             } else {
                 setPartyTabledata(PartyList_Options.filter(i => i.value !== 0))
-
-
             }
         }
 

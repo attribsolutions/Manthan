@@ -327,13 +327,13 @@ const SchemeMaster = forwardRef(({ props, Validation, state, setState }, ref) =>
                                                                 id="ValueIn_id_RS"
                                                                 className="btn-check"
                                                                 autoComplete="off"
-                                                                checked={values.ValueIn === "RS"}
+                                                                checked={values.ValueIn === "Rs"}
                                                                 onChange={() =>
                                                                     setState(prev => ({
                                                                         ...prev,
                                                                         values: {
                                                                             ...prev.values,
-                                                                            ValueIn: "RS",
+                                                                            ValueIn: "Rs",
                                                                         },
                                                                     }))
                                                                 }
