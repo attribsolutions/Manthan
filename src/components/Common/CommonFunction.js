@@ -63,6 +63,9 @@ export const GET_ERP_IMG = () => {
   } else if (hostname.includes("10.4.5.69")) {
     BackgroundImage = CBMERP_BG;
     Logo = CBMERP_LOGO;
+  } else if (hostname.includes("10.1.201.68")) {
+    BackgroundImage = CBMERP_BG;
+    Logo = CBMERP_LOGO;
   } else if (hostname.includes("10.1.201.27")) {
     BackgroundImage = SAS_BG;
     Logo = SASERP_LOGO;

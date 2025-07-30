@@ -514,7 +514,7 @@ const SchemeMaster = (props) => {
                             PartyID: i.value
                         })),
 
-                    ItemDetails: ItemTabledata.filter(i => i.applicable || i.not_applicable).flatMap(i => {
+                    ItemDetails: ItemTabledata.filter(i => i.applicable || i.not_applicable || i.effective).flatMap(i => {
                         const baseItem = Object.keys(statusMap)
                             .filter(statusKey => i[statusKey] === true)
                             .map(statusKey => ({
