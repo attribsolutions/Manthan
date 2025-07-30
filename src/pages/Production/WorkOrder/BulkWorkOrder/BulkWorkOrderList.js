@@ -204,7 +204,7 @@ const BulkWorkOrderList = () => {
     useEffect(() => {
         debugger
         if (Bulk_Data.Status === true && Bulk_Data.StatusCode === 200) {
-    
+
             history.push({
                 pathname: url.BULK_WORK_ORDER,
                 state: Bulk_Data.Data
@@ -236,7 +236,8 @@ const BulkWorkOrderList = () => {
                 Party: _cfunc.loginPartyID(),
                 Category: values.Category.value,
                 ItemID: "",
-                IsVDCItem: 0
+                IsVDCItem: 0,
+                Mode: 1
             });
             dispatch(getBOMListPage(jsonBody));
 

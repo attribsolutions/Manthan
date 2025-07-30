@@ -119,7 +119,7 @@ const WorkOrder = (props) => {
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-debugger
+    debugger
     useEffect(() => {
         const page_Id = pageId.WORK_ORDER
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
@@ -296,6 +296,7 @@ debugger
             Party: loginPartyID(),
             ItemID: "",
             IsVDCItem: 1,
+            Mode: 1
         });
         dispatch(getBOMListPage(jsonBody));
     }, [])

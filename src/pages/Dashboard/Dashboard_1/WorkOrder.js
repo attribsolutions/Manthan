@@ -40,7 +40,8 @@ export default function WorkOrderForDashboard() {
             Party: loginSelectedPartyID(),
             ItemID: "",
             Category: 0,
-            IsVDCItem: ""
+            IsVDCItem: "",
+            Mode: 1
         });
         dispatch(getBOMListPage(jsonBody));
     }, [commonPartyDropSelect])
