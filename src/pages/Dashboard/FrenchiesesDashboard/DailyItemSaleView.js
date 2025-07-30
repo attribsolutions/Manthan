@@ -5,7 +5,7 @@ import { Card, CardBody, Col, Label, Row } from 'reactstrap'
 import Pie from './pie'
 
 
-import { amountCommaSeparateFunc, currentDate_dmy, currentDate_ymd, isFutureDate } from '../../../components/Common/CommonFunction'
+import { amountCommaSeparateFunc, date_ymd_func, } from '../../../components/Common/CommonFunction'
 
 
 import { useParams } from 'react-router-dom';
@@ -13,6 +13,7 @@ import { useParams } from 'react-router-dom';
 import { convertTo12Hour, formatDate, GetDailySaleData } from './Function'
 import { C_DatePicker } from '../../../CustomValidateForm';
 import { Go_Button } from '../../../components/Common/CommonButton';
+
 
 const DailyItemSaleView = () => {
 
@@ -23,13 +24,13 @@ const DailyItemSaleView = () => {
     const [loading, setloading] = useState(false);
 
     const [dateRange, setDateRange] = useState({
-        fromDate: currentDate_ymd,
-        toDate: currentDate_ymd,
+        fromDate: date_ymd_func(new Date()),
+        toDate: date_ymd_func(new Date()),
     });
 
     const [CoustomDate, setCoustomDate] = useState({
-        fromDate: currentDate_ymd,
-        toDate: currentDate_ymd,
+        fromDate: date_ymd_func(new Date()),
+        toDate: date_ymd_func(new Date()),
     });
 
 
@@ -270,7 +271,7 @@ const DailyItemSaleView = () => {
                             </div>
                         </div>}
                     </Col>
-                </Row> 
+                </Row>
 
                 {/* <CardBody> */}
                 <span className="badge rounded-pill badge-soft-primary font-size-18 fw-medium"> First Bill :{data?.FirstBillTime ? convertTo12Hour(data?.FirstBillTime) : ""} </span>
