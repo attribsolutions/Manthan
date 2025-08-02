@@ -822,6 +822,7 @@ const AddEmployee = (props) => {
                           <AddMaster
                             masterModal={FranchisePartyMaster}
                             masterPath={url.FRANCHISE_PARTY_MASTER}
+                            RedirectPath={url.EMPLOYEE}
                           />
                         </Col> : <Col md="1"></Col>
                         }
