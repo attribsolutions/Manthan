@@ -41,7 +41,7 @@ const AddMaster = (props) => {
                     isOpen={isOpen}
                     toggle={() => {
                         setIsOpen(false)
-                    }}
+                    }} 
                     size="xl"
                 >
                     <header style={{ "zIndex": "1", "paddingTop": "9px", "marginBottom": "-8px" }}  >

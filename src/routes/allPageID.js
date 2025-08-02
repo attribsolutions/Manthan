@@ -68,6 +68,7 @@ export const ROLEACCESS_lIST = 10
 export const COPY_ROLEACCESS = "/RoleAccessCopyFunctionality"
 
 // *************************** Master Module **********************************//
+export const MINI_ITEM_MASTER = 354
 
 export const ITEM = 25
 export const ITEM_lIST = 26
@@ -456,6 +457,8 @@ export const CSS_ITEM_SALE_REPORT = 344
 
 
 export const ORDER_ITEM_SUPPLIER_REPORT = 301
+
+export const PERIOD_WISE_INVOICE_REPORT = 351
 
 // ***************** Sweet POS *******************
 

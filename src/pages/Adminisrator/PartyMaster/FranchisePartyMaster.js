@@ -100,6 +100,7 @@ const FranchisePartyMaster = (props) => {
     SupplierRedux,
     districtDropDownLoading,
     cityDropDownLoading,
+    SupplierDropDownLoading,
 
     pageField,
 
@@ -120,6 +121,7 @@ const FranchisePartyMaster = (props) => {
     PartyTypes: state.PartyTypeReducer.ListData,
     priceListByPartyType: state.PriceListReducer.priceListByPartyType,
     SupplierRedux: state.CommonAPI_Reducer.SSDD_List,
+    SupplierDropDownLoading: state.CommonAPI_Reducer.SSDD_ListLoading,
     RoutesList: state.RoutesReducer.RoutesList,
     pageField: state.CommonPageFieldReducer.pageField,
     userAccess: state.Login.RoleAccessUpdateData,
@@ -138,26 +140,26 @@ const FranchisePartyMaster = (props) => {
 
 
 
-  useEffect(async () => {
+  useEffect(() => {
+    const redirectPath = props?.RedirectPath || url.PARTY_lIST;
 
-    if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+    if (postMsg.Status === true && postMsg.StatusCode === 200) {
       dispatch(postPartyDataSuccess({ Status: false }));
       customAlert({
         Type: 1,
         Message: postMsg.Message,
-      })
-      history.push({
-        pathname: url.PARTY_lIST
-      })
-    }
-    else if ((postMsg.Status === true)) {
-      dispatch(postPartyDataSuccess({ Status: false }))
+      });
+      props?.isOpenModal(false) // Close modal if it is open
+      history.push({ pathname: redirectPath });
+    } else if (postMsg.Status === true) {
+      dispatch(postPartyDataSuccess({ Status: false }));
       customAlert({
         Type: 4,
         Message: JSON.stringify(postMsg.Message),
-      })
+      });
     }
-  }, [postMsg])
+  }, [postMsg]);
+
 
 
 
@@ -689,30 +691,67 @@ const FranchisePartyMaster = (props) => {
       }
     },
 
+
+
     {
       dataField: 'IsDefault',
       text: 'IsDefault',
       formatter: (cell, row, rowIndex) => {
         if (rowIndex === 0) {
+          // Ensure it's set to true if not already
+          if (IsDefaultRef.current && IsDefaultRef.current.checked === undefined) {
+            IsDefaultRef.current.checked = true;
+          }
+
           return (
-
-
-            <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
+            <Col md={4} style={{ marginTop: '7px' }} className="form-check form-switch form-switch-sm">
               <div className="form-check form-switch form-switch-md mb-3">
-                <Input type="checkbox"
+                <Input
+                  type="checkbox"
                   className="form-check-input"
                   innerRef={IsDefaultRef}
-                  checked={IsDefaultRef?.current?.checked}
+                  defaultChecked={true} // Always checked for first row
                   name="IsDefault"
-                  onChange={(e) => { IsDefaultRef.current.checked = e.target.checked }}
+                  onChange={(e) => {
+                    IsDefaultRef.current.checked = e.target.checked;
+                  }}
                 />
               </div>
             </Col>
           );
         }
-        return cell;
+
+        // All other rows keep existing checkbox values
+        return row.IsDefault ? 'true' : 'false';
       }
     },
+
+
+    // {
+    //   dataField: 'IsDefault',
+    //   text: 'IsDefault',
+    //   formatter: (cell, row, rowIndex) => {
+    //     if (rowIndex === 0) {
+    //       return (
+
+
+    //         <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
+    //           <div className="form-check form-switch form-switch-md mb-3">
+    //             <Input type="checkbox"
+    //               className="form-check-input"
+    //               innerRef={IsDefaultRef}
+    //               checked={IsDefaultRef?.current?.checked}
+
+    //               name="IsDefault"
+    //               onChange={(e) => { IsDefaultRef.current.checked = e.target.checked }}
+    //             />
+    //           </div>
+    //         </Col>
+    //       );
+    //     }
+    //     return cell;
+    //   }
+    // },
 
 
 
@@ -849,6 +888,7 @@ const FranchisePartyMaster = (props) => {
                           id="supplierName"
                           name="Supplier"
                           value={values.Supplier}
+                          isLoading={SupplierDropDownLoading}
                           styles={{
                             menu: provided => ({ ...provided, zIndex: 2 })
                           }}
@@ -1061,18 +1101,12 @@ const FranchisePartyMaster = (props) => {
                               <Input type="checkbox"
                                 className="form-check-input"
                                 checked={values.IsDefault}
+
                                 name="IsDefault"
                                 onChange={(event) => onChangeCheckbox({ event, state, setState })}
                               />
                             </div>
                           </Col>
-
-
-
-
-
-
-
 
                         </Col>
                       </FormGroup>
