@@ -281,6 +281,8 @@ import StockadjustmentReport from "../Reports/StockadjustmentReport/index.js";
 import BatchTraceability from "../Reports/BatchTracebilityReport/BatchTracebilityreport.js";
 import SwiggyZomatoClaim from "../Reports/SwiggyZomatoClaim/SwiggyZomatoClaim.js";
 import PartyWiseItemSaleReport from "../Reports/PartywiseItemSaleReport/PartywiseItemSale.js";
+import PeriodWiseInvoiceReport from "../Reports/PeriodWiseInvoiceReport/PeriodWiseInvoice.js";
+import ItemMasterForm from "../pages/Adminisrator/ItemPages/MiniItemMaster.js";
 
 
 
@@ -322,6 +324,8 @@ const userRoutes = [
 	{ path: path.COMPANYGROUP_lIST, component: CompanyGroupList },//not party wise
 
 	// ******************************* Master Module ******************************//
+
+	{ path: path.MINI_ITEM_MASTER, component: ItemMasterForm, isPartyWisePage: false },//not party wise
 
 	{ path: path.EMPLOYEE, component: AddEmployee, },//not party wise
 	{ path: path.EMPLOYEE_lIST, component: Employee_List },//not party wise
@@ -720,6 +724,8 @@ const userRoutes = [
 	{ path: path.SWIGGY_ZOMATO_CLAIM, component: SwiggyZomatoClaim },//not party wise
 
 	{ path: path.PARTY_WISE_ITEM_SALE_REPORT, component: PartyWiseItemSaleReport, isPartyWisePage: true },//not party wise
+
+	{ path: path.PERIOD_WISE_INVOICE_REPORT, component: PeriodWiseInvoiceReport, isPartyWisePage: false },//not party wise
 
 
 	//******************************* Sweet Pos ************************************//

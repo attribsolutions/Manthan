@@ -125,9 +125,9 @@ function* InvoiceListGenFunc({ config }) {
     const { subPageMode } = config
     let response;
 
-    if ((subPageMode === url.INVOICE_LIST_1) || (subPageMode === url.LOADING_SHEET) || (subPageMode === url.POS_INVOICE_LIST)) {
+    if ((subPageMode === url.INVOICE_LIST_1) || (subPageMode === url.LOADING_SHEET) || (subPageMode === url.POS_INVOICE_LIST || subPageMode === url.PERIOD_WISE_INVOICE_REPORT)) {
       response = yield call(Invoice_1_Get_Filter_API, config);
-    } else if (subPageMode === url.IB_INVOICE_LIST || subPageMode === url.IB_INVOICE_FOR_GRN || subPageMode === url.IB_INWARD_STP) {
+    } else if (subPageMode === url.IB_INVOICE_LIST || subPageMode === url.IB_INVOICE_FOR_GRN || subPageMode === url.IB_INWARD_STP ) {
       response = yield call(IB_Invoice_Get_Filter_API, config);
     }
 

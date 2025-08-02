@@ -29,6 +29,7 @@ export const COPY_ROLEACCESS = "/RoleAccessCopyFunctionality"
 
 // *************************** Master Module **********************************//
 
+export const MINI_ITEM_MASTER = "/Mini_Item_Master"
 
 export const ITEM = "/ItemMaster"
 export const ITEM_lIST = "/ItemList"
@@ -530,3 +531,5 @@ export const STOCK_ADJUSTMENT_REPORT = "/Stock_Adjustment_Report"
 export const SWIGGY_ZOMATO_CLAIM = "/Swiggy_Zomato_Claim"
 
 export const PARTY_WISE_ITEM_SALE_REPORT = "/Party_Wise_Item_Sale_Report"
+
+export const PERIOD_WISE_INVOICE_REPORT = "/Period_Wise_Invoice_Report"

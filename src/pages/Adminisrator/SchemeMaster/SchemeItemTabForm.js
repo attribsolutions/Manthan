@@ -7,7 +7,7 @@ import { mode } from '../../../routes';
 
 
 const SchemeItemTabForm = forwardRef(({ props, setState, state }, ref) => {
-    
+
     const history = useHistory();
     const { location } = history
     const hasShowloction = location.hasOwnProperty("editValue")
@@ -240,7 +240,8 @@ const SchemeItemTabForm = forwardRef(({ props, setState, state }, ref) => {
                         id={`Quantity`}
                         value={row.Quantity || ""}
                         type="text"
-                        disabled={!(row.effective)}
+                        // disabled={!(row.effective)}
+                        disabled={true}
                         placeholder="Enter Quantity"
                         autoComplete="off"
                         className="font-size-12 mt-2"
@@ -274,6 +275,7 @@ const SchemeItemTabForm = forwardRef(({ props, setState, state }, ref) => {
                             value={row.DiscountValue || ""}
                             type="text"
                             disabled={!(row.effective)}
+
                             placeholder="Enter Value"
                             autoComplete="off"
                             className="font-size-12"
@@ -290,9 +292,10 @@ const SchemeItemTabForm = forwardRef(({ props, setState, state }, ref) => {
                                 className="btn-check"
                                 autoComplete="off"
                                 disabled={!(row.effective)}
-                                checked={row.DiscountType === "RS"}
+
+                                checked={row.DiscountType === "Rs"}
                                 onChange={() => {
-                                    row.DiscountType = "RS";
+                                    row.DiscountType = "Rs";
                                     forceUpdate(n => n + 1);
                                 }}
                             />
@@ -305,7 +308,9 @@ const SchemeItemTabForm = forwardRef(({ props, setState, state }, ref) => {
                                 id={`discount-percent-${row.ItemID}`}
                                 className="btn-check"
                                 autoComplete="off"
-                                disabled={!(row.effective)}
+                                // disabled={!(row.effective)}
+                                disabled={true}
+
                                 checked={row.DiscountType === "%"}
                                 onChange={() => {
                                     row.DiscountType = "%";

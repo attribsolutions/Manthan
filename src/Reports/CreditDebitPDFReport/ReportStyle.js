@@ -609,7 +609,7 @@ export const reportFooterForPlainCredit_DebitA4 = (doc, data) => {
 
 
 export const tableBody = (doc, data) => {
-
+    debugger
     var options = {
         didParseCell: (data1) => {
 
@@ -782,14 +782,8 @@ export const tableBody = (doc, data) => {
     doc.setLineWidth(0.5);
 
 
-
-
-
-
-    if ((data.NoteType === "Goods CreditNote")) {
-
+    if ((data.NoteType === "Goods CreditNote") || (data.NoteType === "Goods DebitNote")) {
         doc.autoTable(table.columnsWithCGST_SGST, table.RowsWithCGST_SGST(data), options);
-
     } else {
         return null
     }
