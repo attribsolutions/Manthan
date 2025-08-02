@@ -107,7 +107,7 @@ const BOMList = () => {
             ItemID: Item.value,
             Category: 0,
             IsVDCItem: "",
-            Mode: _cfunc.IsSweetAndSnacksCompany() ? 1 : 2
+            Mode: 1
         });
         dispatch(getBOMListPage(jsonBody));
     }
