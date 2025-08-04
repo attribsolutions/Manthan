@@ -1,11 +1,51 @@
 export function transformGRNtoInvoiceFormat(originalData) {
-    debugger
-    const grn = originalData.Data[0]; // Assuming only one GRN object
 
+    const grn = originalData.Data[0]; // Assuming only one GRN object
     const order = grn.GRNReferences?.[0]?.Order || {};
-    const grnItem = grn.GRNItems?.[0] || {};
-    const orderItem = order.OrderItem?.[0] || {};
     const billingAddress = order.BillingAddress || {};
+
+
+    // Set Print Detail As per Reference 
+
+    let Party = "";
+    let PartyName = "";
+    let PartyGSTIN = "";
+    let Customer = "";
+    let CustomerName = "";
+    let CustomerGSTIN = "";
+    let PartyAddress = "";
+    let CustomerAddress = "";
+    let PartyFSSAINo = "";
+    let CustomerFSSAINo = "";
+
+
+    if (grn.GRNReferences?.[0]?.Order) {   // GRN From vendor order If Not null
+
+        Customer = order.Supplier?.id || null;
+        CustomerName = order.Supplier?.Name || "";
+        CustomerGSTIN = order.Supplier?.GSTIN || "";
+        Party = order.Customer?.id || null;
+        PartyName = order.Customer?.Name || "";
+        PartyGSTIN = order.Customer?.GSTIN || "";
+        PartyAddress = billingAddress.Address || "";
+        CustomerAddress = billingAddress.Address || "";
+        PartyFSSAINo = billingAddress.FSSAINo || "";
+        CustomerFSSAINo = "";
+    } else {
+        debugger
+        Customer = grn.Customer || null;
+        CustomerName = grn.CustomerName || "";
+        CustomerGSTIN = grn.CustomerGSTIN || "";
+        Party = grn.Party || null;
+        PartyName = grn.PartyName || "";
+        PartyGSTIN = grn.PartyGSTIN || "";
+        PartyAddress = grn.PartyAddress || "";
+        CustomerAddress = grn.CustomerAddress || "";
+        PartyFSSAINo = grn.PartyFSSAINo || "";
+        CustomerFSSAINo = "";
+    }
+
+
 
     const transformedData = {
         StatusCode: 200,
@@ -18,22 +58,20 @@ export function transformGRNtoInvoiceFormat(originalData) {
             TCSAmount: "0.00",
             GrandTotal: grn.GrandTotal,
             RoundOffAmount: grn.RoundOffAmount,
-
-            Customer: order.Supplier?.id || null,
-            CustomerName: order.Supplier?.Name || "",
-            CustomerGSTIN: order.Supplier?.GSTIN || "",
+            Customer: Customer,
+            CustomerName: CustomerName,
+            CustomerGSTIN: CustomerGSTIN,
             CustomerMobileNo: "",
-
-            Party: order.Customer?.id || null,
-            PartyName: order.Customer?.Name || "",
-            PartyGSTIN: order.Customer?.GSTIN || "",
+            Party: Party,
+            PartyName: PartyName,
+            PartyGSTIN: PartyGSTIN,
             PartyMobileNo: "",
-            PartyFSSAINo: billingAddress.FSSAINo || "",
-            CustomerFSSAINo: "",
+            PartyFSSAINo: PartyFSSAINo,
+            CustomerFSSAINo: CustomerFSSAINo,
             PartyState: "",
             CustomerState: "",
-            PartyAddress: billingAddress.Address || "",
-            CustomerAddress: billingAddress.Address || "",
+            PartyAddress: PartyAddress,
+            CustomerAddress: CustomerAddress,
 
             DriverName: null,
             VehicleNo: null,
@@ -86,3 +124,6 @@ export function transformGRNtoInvoiceFormat(originalData) {
 
     return transformedData;
 }
+
+
+
