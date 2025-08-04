@@ -26,7 +26,7 @@ export const ITEM_CONSUMPTION_REPORT = 353
 
 export const BATCH_TRACEABILITY = 361
 
-export const PARTY_WISE_ITEM_SALE_REPORT = 362
+export const PARTY_WISE_ITEM_SALE_REPORT = 363
 
 
 
@@ -40,7 +40,7 @@ export const SCHEME_MASTER = 350
 export const STOCK_ADJUSTMENT_REPORT = 359
 
 
- export const SWIGGY_ZOMATO_CLAIM = 362 
+export const SWIGGY_ZOMATO_CLAIM = 362
 
 
 
@@ -458,7 +458,7 @@ export const CSS_ITEM_SALE_REPORT = 344
 
 export const ORDER_ITEM_SUPPLIER_REPORT = 301
 
-export const PERIOD_WISE_INVOICE_REPORT = 351
+export const PERIOD_WISE_INVOICE_REPORT = 364
 
 // ***************** Sweet POS *******************
 

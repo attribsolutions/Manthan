@@ -10,8 +10,6 @@ import { commonPageField, commonPageFieldSuccess, Get_Items_Drop_Down, getpdfRep
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import C_Report from "../../components/Common/C_Report";
 import { getCommonPartyDrodownOptionAction } from "../../store/Utilites/PartyDrodown/action";
-import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 import { PartyWiseItemSaleReport_GoButton_API_Success } from "../../store/Report/PartywiseItemSaleRedux/action";
 import { ItemSaleReport_GoBtn_API } from "../../helpers/backend_helper";
 import * as report from '../../Reports/ReportIndex'
@@ -35,7 +33,6 @@ const PartyWiseItemSaleReport = (props) => {
 
     const {
         userAccess,
-        GoBtnLoading,
         ItemDropDown,
         commonPartyDropSelect,
         ItemDropDownloading,
@@ -43,7 +40,6 @@ const PartyWiseItemSaleReport = (props) => {
 
     } = useSelector((state) => ({
         GoButtonData: state.PartyWiseItemSaleReportReducer.ItemConsumption,
-        GoBtnLoading: state.PartyWiseItemSaleReportReducer.listBtnLoading,
         ItemDropDownloading: state.StockEntryReducer.ItemDropDownloading,
         ItemDropDown: state.StockEntryReducer.ItemDropDown,
         printBtnLoading: state.PdfReportReducers.printAllBtnLoading,

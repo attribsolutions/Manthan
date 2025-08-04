@@ -9,6 +9,7 @@ import {
   loginUserDetails,
   loginUserGSTIN,
   loginUserID,
+  roundFixed,
   roundToDecimalPlaces,
   strToBool,
 } from "../../../components/Common/CommonFunction";
@@ -306,7 +307,7 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
 
   if (isSweetAndSnacksCompany && isTrayEnterQuantity) {
     response.Data.OrderItemDetails = response.Data.OrderItemDetails.map(index1 => {
-      debugger
+
       const isUnitIDPresent = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
       const isMCunitID = index1.UnitDetails.find(findEle => findEle.DeletedMCUnitsUnitID === index1.DeletedMCUnitsUnitID);
       const defaultunit = isUnitIDPresent !== undefined ? isUnitIDPresent : isMCunitID;
@@ -392,9 +393,8 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
         const msg2 = `Short Stock Quantity ${(Number(diffrence)).toFixed(3)}`;
         index1.StockInvalidMsg = index1.ItemTotalStock === 0 ? msg1 : msg2;
       }
-
       return index1;
-    });
+    }).filter(index1 => roundFixed(index1.InvoiceQuantity, 3) !== roundFixed(index1.BaseUnitQuantity, 3));;
   } else {
     response.Data.OrderItemDetails = response.Data.OrderItemDetails.map(index1 => {
 
