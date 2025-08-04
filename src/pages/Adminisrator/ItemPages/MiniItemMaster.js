@@ -11,25 +11,26 @@ import {
     Table
 } from 'reactstrap';
 import Select from 'react-select';
-import DatePicker from 'react-flatpickr';
-import { C_DatePicker, C_Select, CInput, decimalRegx_3dit } from '../../../CustomValidateForm';
-import BootstrapTable from 'react-bootstrap-table-next';
 
-import { commonPageField, commonPageFieldSuccess, get_Category_By_CategoryType_ForDropDownAPI, get_CategoryTypes_ForDropDown, get_Group_By_GroupType_ForDropDown, get_Sub_Group_By_Group_ForDropDown, get_Sub_Group_By_Group_ForDropDown_Success, getBaseUnit_ForDropDown, getCategoryTypelist } from '../../../store/actions';
-import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect } from '../../../components/Common/validationFunction';
-import { breadcrumbReturnFunc, getSettingBasedPartyTypeID, loginCompanyID, loginRoleID, loginSystemSetting, metaTagLabel } from '../../../components/Common/CommonFunction';
+import { C_Select, CInput, decimalRegx_3dit } from '../../../CustomValidateForm';
+import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess, get_Category_By_CategoryType_ForDropDownAPI, get_CategoryTypes_ForDropDown, get_Group_By_GroupType_ForDropDown, get_Sub_Group_By_Group_ForDropDown, get_Sub_Group_By_Group_ForDropDown_Success, getBaseUnit_ForDropDown, getCategoryTypelist, saveItemMasterAction, SaveItemMasterActionSuccess } from '../../../store/actions';
+import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect, onChangeText, resetFunction } from '../../../components/Common/validationFunction';
+import { breadcrumbReturnFunc, btnIsDissablefunc, currentDate_ymd, getSettingBasedPartyTypeID, loginCompanyID, loginRoleID, loginSystemSetting, loginUserID, metaTagLabel } from '../../../components/Common/CommonFunction';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { MetaTags } from 'react-meta-tags';
-import { pageId } from '../../../routes';
+import { mode, pageId, url } from '../../../routes';
 import { unitConversionInitial } from './ItemMaster/itemIndex';
 import { GeneralMasterSubType } from '../../../store/Administrator/GeneralRedux/action';
 import { priceListByPartyAction } from '../../../store/Administrator/PriceList/action';
 import { getPartyListAPI } from '../../../store/Administrator/PartyRedux/action';
 import { getPartyTypelist } from '../../../store/Administrator/PartyTypeRedux/action';
-import { customAlert } from '../../../CustomAlert/ConfirmDialog';
+
 import { getGroupTypeslist } from '../../../store/Administrator/GroupTypeRedux/action';
 import { Tbody, Thead } from 'react-super-responsive-table';
+import { SaveButton } from '../../../components/Common/CommonButton';
+import { saveMsgUseEffect } from '../../../components/Common/CommonUseEffect';
+import { customAlert } from '../../../CustomAlert/ConfirmDialog';
 
 
 const ItemMasterForm = (props) => {
@@ -38,7 +39,11 @@ const ItemMasterForm = (props) => {
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty("editValue")
 
+
     const fileds = {
+        HSNCode: "",
+        GST: "",
+        MRP: "",
         Name: "",
         ShortName: "",
         ShelfLife: "",
@@ -57,49 +62,32 @@ const ItemMasterForm = (props) => {
         IsMixItem: false,
         settable: [],
         BaseUnit: [],
+        PartyType: { value: null, label: "All" }, // Default value for PartyType
+        GroupType: { value: null, label: "Select" },
+        SubGroup: { value: null, label: "Select" },
+        Group: { value: null, label: "Select" },
+        ItemShelfLife: [],
+
     }
-    const [formData, setFormData] = useState({
-        name: '',
-        barcode: '',
-        shelfLife: null,
-        baseUnit: null,
-        categoryType: null,
-        category: null,
-    });
+
     const [userPageAccessState, setUserAccState] = useState('');
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-
     const [baseUnit, setBaseUnit] = useState([]);
 
-    const [partyName, setPartyName] = useState("");
-    const [MRP, setMRP] = useState("");
-
-    const [HSNCode, setHSNCode] = useState('');
-    const [GST, setGST] = useState('');
-
-    const [PartyType, setPartyType] = useState({ value: null, label: "All" });
-    const [priceListSelect, setPriceListSelect] = useState({ value: '' });
-
-    const [rows, setRows] = useState([]);
-
-
-
-    const [groupTypeDropdownSelect, setGroupTypeDropdownSelect] = useState("");
-    const [groupDropdownSelect, setGroupDropdownSelect] = useState("");
-    const [subGroupDropdownSelect, setSubGroupDropdownSelect] = useState("");
 
     const { values } = state;
     const { isError } = state;
     const { fieldLabel } = state;
 
     const {
+        postMsg,
         CategoryTypeList,
         pageField,
         BaseUnit,
         userAccess,
         CategoryList,
         PartyTypes,
-        GroupType, GroupList, SubGroupList, groupDropDownLoading, subgroupDropDownLoading,
+        GroupType, GroupList, SubGroupList, groupDropDownLoading, subgroupDropDownLoading, saveBtnloading,
     } = useSelector((state) => ({
         PartyTypes: state.PartyTypeReducer.ListData,
         BaseUnit: state.ItemMastersReducer.BaseUnit,
@@ -107,8 +95,9 @@ const ItemMasterForm = (props) => {
         CategoryTypeList: state.categoryTypeReducer.categoryTypeListData,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
+        postMsg: state.ItemMastersReducer.postMsg,
 
-
+        saveBtnloading: state.ItemMastersReducer.saveBtnloading,
         GroupType: state.GroupTypeReducer.GroupType,
         GroupList: state.ItemMastersReducer.GroupList,
         SubGroupList: state.ItemMastersReducer.SubGroupList,
@@ -116,12 +105,6 @@ const ItemMasterForm = (props) => {
         subgroupDropDownLoading: state.ItemMastersReducer.subgroupDropDownLoading,
 
     }));
-
-
-
-
-
-
 
 
     useEffect(() => {
@@ -140,6 +123,60 @@ const ItemMasterForm = (props) => {
         dispatch(GeneralMasterSubType(jsonBody));
 
     }, []);
+
+
+
+
+
+
+    // useEffect(() => {
+    //     if (postMsg.Status === true && postMsg.StatusCode === 200) {
+    //         try {
+    //             dispatch(SaveItemMasterActionSuccess({ Status: false }));
+    //         } catch (error) {
+    //             console.error("An error occurred while fetching:", error);
+    //         }
+
+    //         if (mode.dropdownAdd) {
+    //             customAlert({
+    //                 Type: 1,
+    //                 Message: postMsg.Message,
+    //             });
+    //         } else {
+    //             const promise = customAlert({
+    //                 Type: 1,
+    //                 Message: postMsg.Message,
+    //             });
+
+    //             if (promise) {
+    //                 history.push({
+    //                     pathname: url.ITEM_lIST,
+    //                 });
+    //             }
+    //         }
+    //     } else if (postMsg.Status === true) {
+    //         dispatch(SaveItemMasterActionSuccess({ Status: false }));
+    //         customAlert({
+    //             Type: 4,
+    //             Message: JSON.stringify(postMsg.Message),
+    //         });
+    //     }
+    // }, [postMsg]);
+
+
+
+    useEffect(() => saveMsgUseEffect({
+        postMsg,
+        history,
+        dispatch,
+        postSuccss: SaveItemMasterActionSuccess,
+        resetFunc: { fileds, state, setState },
+        listPath: url.ITEM_lIST
+    }), [postMsg]);
+
+
+
+
 
 
 
@@ -175,31 +212,7 @@ const ItemMasterForm = (props) => {
         }
     }, [pageField])
 
-
-
-
-
-    const handleInputChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
-    const handleSelectChange = (field, selectedOption) => {
-        setFormData({ ...formData, [field]: selectedOption });
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log("Submitted Data:", formData);
-    };
-    //********************************************************************************************************
-
-
-
-
-
-
     // ********************************************************* Base Unit Dropdown Options  **********************************
-
 
 
     function BaseUnitOnchange(hasSelect, evn) {
@@ -208,13 +221,13 @@ const ItemMasterForm = (props) => {
         const additionalUnits = [];
 
         if (hasSelect.value !== 1) {
-            additionalUnits.push({ ...unitConversionInitial, Unit: { value: 1, label: 'No' }, Conversion: 1, IsBase: false, id: 2, });
+            additionalUnits.push({ ...unitConversionInitial, Unit: { value: 1, label: 'No' }, Conversion: 1, IsBase: false, id: 2, IsShowUnit: true, });
         }
         if (hasSelect.value !== 2) {
-            additionalUnits.push({ ...unitConversionInitial, Unit: { value: 2, label: 'Kg' }, Conversion: 1, IsBase: false, id: 3, });
+            additionalUnits.push({ ...unitConversionInitial, Unit: { value: 2, label: 'Kg' }, Conversion: 1, IsBase: false, id: 3, IsShowUnit: true, });
         }
         if (hasSelect.value !== 4) {
-            additionalUnits.push({ ...unitConversionInitial, Unit: { value: 4, label: 'Box' }, Conversion: 1, IsBase: false, id: 4, });
+            additionalUnits.push({ ...unitConversionInitial, Unit: { value: 4, label: 'Box' }, Conversion: 1, IsBase: false, id: 4, IsShowUnit: true, });
         }
 
 
@@ -225,14 +238,13 @@ const ItemMasterForm = (props) => {
                 Conversion: 1,
                 Unit: hasSelect,
                 id: 1,
-
+                IsShowUnit: true,
             };
 
             const newRows = [baseRow, ...additionalUnits];
             setBaseUnit(newRows);
         }
     }
-
 
     const BaseUnit_DropdownOptions = BaseUnit.map((data) => ({
         value: data.id,
@@ -241,19 +253,6 @@ const ItemMasterForm = (props) => {
 
 
     // ***********************************************************Category Type Dropdown Options*********************************
-
-
-    function CategoryType_Handler(hasSelect, evn,) {
-        onChangeSelect({ hasSelect, evn, state, setState })
-        dispatch(get_Category_By_CategoryType_ForDropDownAPI(hasSelect.value))
-
-        setState((i) => {
-            const a = { ...i }
-            a.values.Category = [];
-            a.hasValid.Category.valid = false
-            return { ...a }
-        })
-    }
 
     const CategoryTypeList_DropdownOptions = CategoryTypeList.map((data) => ({
         value: data.id,
@@ -311,25 +310,7 @@ const ItemMasterForm = (props) => {
     PartyTypeDropdown_Options.unshift({ value: null, label: "All" });
 
 
-    function partyTypeOnChange(hasSelect, evn) {
-
-        onChangeSelect({ hasSelect, evn, state, setState })
-        setPriceListSelect({ label: '' })
-        dispatch(priceListByPartyAction(hasSelect.value))
-    }
-    function partyTypeOnChange(selectedOption) {
-        setPartyType(selectedOption); // set selected value
-        setPriceListSelect({ label: '' });
-        // dispatch(priceListByPartyAction(selectedOption.value));
-    }
-    //********************************************** MRP ***************************************/
-    const MRPHandler = (event) => {
-        setMRP(event.target.value);
-    };
-
     //********************************************** Group dropdwon***************************************/
-
-
 
     const GroupType_DropdownOptions = GroupType.map((index) => ({
         value: index.id,
@@ -347,50 +328,42 @@ const ItemMasterForm = (props) => {
         label: index.Name,
     }));
 
-    const GroupType_Handler = (event) => {
-        setGroupTypeDropdownSelect(event);
-        dispatch(get_Group_By_GroupType_ForDropDown(event.value));
+
+
+    const GroupType_Handler = (hasSelect, evn,) => {
+
+        onChangeSelect({ hasSelect, evn, state, setState })
+
+        dispatch(get_Group_By_GroupType_ForDropDown(hasSelect.value));
         dispatch(get_Sub_Group_By_Group_ForDropDown_Success([]));
-        setGroupDropdownSelect([]);
-        setSubGroupDropdownSelect([]);
+
+
+
     };
 
+    const Group_Handler = (hasSelect, evn,) => {
+        onChangeSelect({ hasSelect, evn, state, setState })
+        dispatch(get_Sub_Group_By_Group_ForDropDown(hasSelect.value))
+        dispatch(get_Sub_Group_By_Group_ForDropDown_Success([]));
 
 
-    // const Group_Handler = (event) => {
-
-    //     const found = props.tableData.find(element => {
-    //         return element.Group == event.value
-    //     });
-    //     if (found == undefined) {
-    //         setGroupDropdownSelect(event);
-    //         dispatch(get_Sub_Group_By_Group_ForDropDown(event.value))
-    //         setSubGroupDropdownSelect([]);
-    //     }
-    //     else {
-    //         customAlert({
-    //             Type: 4,
-    //             Status: true,
-    //             Message: `${event.label} Is Already Selected...!`,
-    //         })
-    //     }
-    // };
-
-    const Group_Handler = (event) => {
-        setGroupDropdownSelect(event);
-        dispatch(get_Sub_Group_By_Group_ForDropDown(event.value));
-        setSubGroupDropdownSelect([]);
     };
 
+    function CategoryType_Handler(hasSelect, evn,) {
+        onChangeSelect({ hasSelect, evn, state, setState })
+        dispatch(get_Category_By_CategoryType_ForDropDownAPI(hasSelect.value))
 
+        setState((i) => {
+            const a = { ...i }
+            a.values.Category = [];
+            a.hasValid.Category.valid = false
+            return { ...a }
+        })
+    }
 
-    const SubGroup_Handler = (event) => {
-        setSubGroupDropdownSelect(event);
-    };
 
     //********************************************** table  ***************************************/
-    const TableData = [];
-    // const {  formValue={}, TableData = [] } = props.state;
+
 
     const { settable, setFormValue } = props;
 
@@ -398,11 +371,6 @@ const ItemMasterForm = (props) => {
         settable((prevTableData) => prevTableData.filter((row) => row.id !== Id));
     }
 
-    // Add new row handler
-    // function addRow_Handler(ID) {
-    //     let newRow = { ...unitConversionInitial, id: ID + 1 };
-    //     settable((prevTableData) => [...prevTableData, newRow]);
-    // }
 
     function addRow_Handler() {
         const lastRow = baseUnit[baseUnit.length - 1];
@@ -410,7 +378,7 @@ const ItemMasterForm = (props) => {
 
         const newRow = {
             ...unitConversionInitial,
-            IsShowUnit: true,
+
             id: newId,
             isNew: true,  // <-- identify manually added rows
             IsShowUnit: true,
@@ -425,65 +393,340 @@ const ItemMasterForm = (props) => {
         setBaseUnit(updated);
     }
 
+    // **********************************************************************  ShowUnit_onChange  ****************************************
+
+    function ShowUnit_onChange(checked, index) {
+        setBaseUnit((prev) =>
+            prev.map((row, i) =>
+                i === index ? { ...row, IsShowUnit: checked } : row
+            )
+        );
+    }
 
 
+    // **********************************************************************  baseUnit2_onChange  ****************************************
+    function baseUnit2_onChange(type, index) {
+        setBaseUnit(prevTableData =>
+            prevTableData.map((row, i) => {
 
-    // function ShowUnit_onChange(event, type = '', Id) {
+                if (i === index) {
+                    return {
+                        ...row,
+                        IsShowUnit: true,
+                        [type]: true
+                    };
+                } else {
 
-    //     settable((prevTableData) =>
-    //         prevTableData.map((row) => {
-    //             if ((!row.IsShowUnit)) {
-    //                 row.IsShowUnit = false
-    //             }
-    //             if (row.Unit.value === Id) {
-    //                 row.IsShowUnit = event;
+                    return {
+                        ...row,
+                        [type]: false
+                    };
+                }
+            })
+        );
+    }
 
-    //             }
-
-    //             return row;
-    //         })
-    //     );
-    // }
-
-    function ShowUnit_onChange(checked, type = '', UnitId) {
-        settable((prevTableData) =>
-            prevTableData.map((row) => {
-                if (row.Unit?.value === UnitId) {
-                    return { ...row, IsShowUnit: checked };
+    function handleConversionChange(e, index) {
+        const { value } = e.target;
+        setBaseUnit(prev =>
+            prev.map((row, i) => {
+                if (i === index) {
+                    return {
+                        ...row,
+                        Conversion: value
+                    };
                 }
                 return row;
             })
         );
     }
 
+    // **********************************************************************  SaveHandler  ****************************************
 
-    function baseUnit2_onChange(event, type = '', Id) {
-        settable((prevTableData) =>
-            prevTableData.map((row) => {
-                if (type === 'POUnit' && row.id !== Id) {
-                    row.POUnit = false;
-                }
-                if (type === 'SOUnit' && row.id !== Id) {
-                    row.SOUnit = false;
-                }
-    
-                if (row.id === Id) {
-                    row[type] = event;
-    
-                    // Auto-check ShowUnit when POUnit or SOUnit is selected
-                    if (type === 'POUnit' || type === 'SOUnit') {
-                        row.IsShowUnit = event;
-                    }
-                }
-    
-                return { ...row }; // return a new object to trigger re-render
-            })
-        );
-    }
-    
 
+
+    // const SaveHandler = (event) => {
+    //     debugger
+    //     event.preventDefault();
+    //     const btnId = event.target.id;
+    //     btnIsDissablefunc({ btnId, state: true });
+
+    //     const currentDate = currentDate_ymd;
+    //     const Company = loginCompanyID();
+    //     const CreatedBy = loginUserID();
+    //     const UpdatedBy = loginUserID();
+    //    debugger
+
+
+    //     try {
+    //         if (formValid(state, setState)) {
+
+    //             const payload = {
+    //                 Name: values.Name,
+    //                 BarCode: values.BarCode,
+    //                 BaseUnitID: values.BaseUnitName?.value,
+    //                 ShelfLife: values.ShelfLife,
+    //                 MRP: values.MRP,
+    //                 HSNCode: values.HSNCode,
+    //                 GST: values.GST,
+    //                 CategoryType: values.CategoryType?.value,
+    //                 Category: values.Category,
+    //                 PartyType: values.PartyType?.value,
+
+    //                 ShortName: values.Name,
+    //                 SAPItemCode: null,
+
+    //                 IsCBMItem: false,
+    //                 isActive: true,
+    //                 IsSCM: false,
+    //                 IsMixItem: false,
+
+    //                 Company: Company,
+    //                 BrandName: "",
+    //                 Tag: "",
+    //                 Sequence: "",
+
+    //                 CreatedBy: CreatedBy,
+    //                 UpdatedBy: UpdatedBy,
+
+    //                 Breadth: "",
+    //                 Grammage: "",
+    //                 Height: "",
+    //                 Length: "",
+    //                 StoringCondition: values.StoringCondition || "",
+
+    //                 ItemCategoryDetails: [
+    //                     {
+    //                         CategoryType: values.CategoryType.value,
+    //                         Category: values.Category.value,
+    //                     }
+    //                 ],
+
+    //                 ItemUnitDetails: [
+    //                     ...baseUnit.map((row, index) => {
+
+    //                         return {
+    //                             id: row.id,
+    //                             BaseUnitQuantity: row.Conversion,
+    //                             UnitID: row.Unit.value,
+    //                             IsBase: row.IsBase,
+    //                             SODefaultUnit: row.SOUnit,
+    //                             PODefaultUnit: row.POUnit,
+    //                             IsShowUnit: row.IsShowUnit,
+    //                         };
+    //                     })
+    //                 ],
+    //                 ItemImagesDetails: [],
+    //                 ItemMRPDetails: [
+    //                     {
+    //                         Division: "",
+    //                         DivisionName: "",
+    //                         PartyName: "",
+    //                         Party: "",
+    //                         EffectiveDate:currentDate,
+    //                         MRP: values.MRP,
+    //                         PartyType: values.PartyType,
+    //                         PartyTypeName: values.PartyType.label,
+    //                         CreatedBy: CreatedBy,
+    //                         UpdatedBy: UpdatedBy,
+    //                         Company: Company,
+    //                         IsDeleted: 0,
+    //                         CommonID: 0,
+    //                         IsAdd: true,
+    //                         id: 1
+    //                     }
+    //                 ],
+    //                 ItemMarginDetails: [],
+    //                 ItemGSTHSNDetails: [
+    //                     {
+    //                         CommonID: 0,
+    //                         Company: Company,
+    //                         CreatedBy: CreatedBy,
+    //                         EffectiveDate: currentDate,
+    //                         GSTPercentage: values.GST,
+    //                         HSNCode: values.HSNCode,
+    //                         id: null,
+    //                         IsAdd: true,
+    //                         IsDeleted: 0,
+    //                         UpdatedBy: UpdatedBy,
+    //                     }],
+    //                 ItemGroupDetails: [
+    //                     {
+    //                         Group: values.Group.value,
+    //                         GroupName: values.Group.label,
+    //                         GroupType: values.GroupType.value,
+    //                         GroupTypeName: values.GroupType.label,
+    //                         id: 1,
+    //                         SubGroup: values.SubGroup.value,
+    //                         SubGroupName: values.SubGroup.label,
+    //                     }
+    //                 ],
+    //                 ItemShelfLife: [
+    //                     {
+    //                         Days: values.ShelfLife,
+    //                         CreatedBy: CreatedBy,
+    //                         UpdatedBy: UpdatedBy,
+    //                         IsAdd: true
+    //                     }
+    //                 ],
+
+    //                 ItemDivisionDetails: values.Division?.map(i => ({
+    //                     Party: i.value
+    //                 })) || []
+    //             };
+
+    //             const jsonBody = JSON.stringify(payload);
+
+    //             dispatch(saveItemMasterAction({ jsonBody, btnId }));
+    //         }
+    //     } catch (e) {
+    //         console.error("SaveHandler Error:", e);
+    //         btnIsDissablefunc({ btnId, state: false });
+    //     }
+    // };
+
+
+    const SaveHandler = (event) => {
+        debugger
+        event.preventDefault();
+        const btnId = event.target.id;
+        btnIsDissablefunc({ btnId, state: true });
+
+        try {
+            if (formValid(state, setState)) {
+
+
+                const payload = {
+                    Name: values.Name,
+                    BarCode: values.BarCode,
+                    BaseUnitID: values.BaseUnitName?.value,
+                    ShelfLife: values.ShelfLife,
+                    MRP: values.MRP,
+                    HSNCode: values.HSNCode,
+                    GST: values.GST,
+
+
+
+                    ShortName: values.Name,
+                    SAPItemCode: null,
+
+                    IsCBMItem: false,
+                    isActive: true,
+                    IsSCM: false,
+                    IsMixItem: false,
+
+                    Company: loginCompanyID(),
+                    BrandName: "",
+                    Tag: "",
+                    Sequence: "",
+
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID(),
+
+                    Breadth: "",
+                    Grammage: "",
+                    Height: "",
+                    Length: "",
+                    StoringCondition: values.StoringCondition || "",
+
+
+                    ItemCategoryDetails: values.Category.map((index) => ({
+                        CategoryType: values.CategoryType.value,
+                        Category: index.value
+                    })),
+
+                    ItemUnitDetails: [
+                        ...baseUnit.map((row, index) => {
+
+                            return {
+                                id: row.id,
+                                BaseUnitQuantity: row.Conversion,
+                                UnitID: row.Unit.value,
+                                IsBase: row.IsBase,
+                                SODefaultUnit: row.SOUnit,
+                                PODefaultUnit: row.POUnit,
+                                IsShowUnit: row.IsShowUnit,
+                            };
+                        })
+                    ],
+
+                    ItemImagesDetails: [],
+                    ItemMRPDetails: [
+                        {
+                            Division: "",
+                            DivisionName: "",
+                            PartyName: "",
+                            Party: "",
+                            EffectiveDate: currentDate_ymd,
+                            MRP: values.MRP,
+                            PartyType: values.PartyType.value,
+                            PartyTypeName: values.PartyType.label,
+                            CreatedBy: loginUserID(),
+                            UpdatedBy: loginUserID(),
+                            Company: loginCompanyID(),
+                            IsDeleted: 0,
+                            CommonID: 0,
+                            IsAdd: true,
+                            id: 1
+                        }
+                    ],
+                    ItemMarginDetails: [],
+                    ItemGSTHSNDetails: [
+                        {
+                            CommonID: 0,
+                            Company: loginCompanyID(),
+                            CreatedBy: loginUserID(),
+                            EffectiveDate: currentDate_ymd,
+                            GSTPercentage: values.GST,
+                            HSNCode: values.HSNCode,
+                            id: null,
+                            IsAdd: true,
+                            IsDeleted: 0,
+                            UpdatedBy: loginUserID(),
+                        }],
+                    ItemGroupDetails: [
+                        {
+                            Group: values.Group.value,
+                            GroupName: values.Group.label,
+                            GroupType: values.GroupType.value,
+                            GroupTypeName: values.GroupType.label,
+                            id: 1,
+                            SubGroup: values.SubGroup.value,
+                            SubGroupName: values.SubGroup.label,
+                        }
+                    ],
+                    ItemShelfLife: [
+                        {
+                            Days: values.ShelfLife,
+                            CreatedBy: loginUserID(),
+                            UpdatedBy: loginUserID(),
+                            IsAdd: true
+                        }
+                    ],
+
+                    ItemDivisionDetails: values.Division?.map(i => ({
+                        Party: i.value
+                    })) || []
+                };
+
+                const jsonBody = JSON.stringify(payload);
+
+                dispatch(saveItemMasterAction({ jsonBody, btnId }));
+            }
+        } catch (e) {
+            console.error("SaveHandler Error:", e);
+            btnIsDissablefunc({ btnId, state: false });
+        }
+    };
+
+
+
+
+
+    // **********************************************************************  tbodyfunction  ****************************************
     const tbodyfunction = () => {
-        return baseUnit.map((row, index) => (
+
+        return baseUnit.map((row, index, key) => (
             <tr key={row.id}>
                 <td>
                     <Row>
@@ -505,11 +748,12 @@ const ItemMasterForm = (props) => {
                         <Col>
                             <CInput
                                 type="text"
-                                placeholder="Select"
-                                isDisabled={true}
+                                placeholder="Enter conversion"
+                                id={`txtConversion${index}`}
+                                cpattern={decimalRegx_3dit}
                                 autoComplete="off"
                                 value={row.Conversion}
-
+                                onChange={(e) => handleConversionChange(e, index)}
                             />
                         </Col>
                     </Row>
@@ -518,7 +762,7 @@ const ItemMasterForm = (props) => {
                     <Input
                         type="radio"
                         checked={row.POUnit}
-                        onChange={(e) => baseUnit2_onChange(e.target.checked, "POUnit", row.id)}
+                        onChange={() => baseUnit2_onChange("POUnit", index)}
                     />
                 </td>
 
@@ -526,16 +770,18 @@ const ItemMasterForm = (props) => {
                     <Input
                         type="radio"
                         checked={row.SOUnit}
-                        onChange={(e) => baseUnit2_onChange(e.target.checked, "SOUnit", row.id)}
+                        onChange={() => baseUnit2_onChange("SOUnit", index)}
                     />
                 </td>
+
+
                 <td>
                     <Input
                         type="checkbox"
-                        checked={row.IsShowUnit}
-                        disabled={row.isDisabled}
+                        defaultChecked={row.IsShowUnit}
+                        disabled={row.POUnit || row.SOUnit}  //  disable if PO or SO selected
 
-                        onChange={(e) => ShowUnit_onChange(e.target.checked, "ShowUnit", index.Unit.value)}
+                        onChange={(e) => ShowUnit_onChange(e.target.checked, index)}
                     />
                 </td>
 
@@ -575,67 +821,49 @@ const ItemMasterForm = (props) => {
                         <Row className="d-flex align-items-start">
                             {/* LEFT SIDE */}
                             <Col md={6} className="d-flex flex-column">
-                                <Card className="c_card_body p-2 h-100" style={{ flex: 1, height: '100%' }}>
+                                <Card className="c_card_body p-3 h-100" style={{ flex: 1, height: '100%' }}>
                                     <Row>
                                         <Col md={6}>
                                             <FormGroup>
-                                                <Label>Name</Label>
+                                                <Label htmlFor="validationCustom01"> {fieldLabel.Name} </Label>
+
                                                 <Input
                                                     type="text"
-                                                    name="name"
+                                                    name="Name"
                                                     className="mb-1"
                                                     placeholder="Enter item name"
-                                                    value={formData.name}
-                                                    onChange={handleInputChange}
+                                                    value={values.Name}
+                                                    onChange={(event) => {
+                                                        onChangeText({ event, state, setState })
+                                                        dispatch(Breadcrumb_inputName(event.target.value))
+                                                    }}
                                                 />
+                                                {isError.Name.length > 0 && (
+                                                    <span className="text-danger f-8">
+                                                        <small>{isError.Name}</small>
+                                                    </span>
+                                                )}
                                             </FormGroup>
                                         </Col>
 
                                         <Col md={6}>
                                             <FormGroup>
-                                                <Label>Barcode</Label>
+                                                <Label htmlFor="validationCustom01"> {fieldLabel.BarCode} </Label>
                                                 <Input
                                                     type="text"
-                                                    name="barcode"
+                                                    name="BarCode"
                                                     className="mb-1"
                                                     placeholder="Enter barcode"
-                                                    value={formData.barcode}
-                                                    onChange={handleInputChange}
-                                                />
-                                            </FormGroup>
-                                        </Col>
-                                    </Row>
+                                                    value={values.BarCode}
+                                                    onChange={(event) => {
+                                                        onChangeText({ event, state, setState })
 
-                                    <Row>
-                                        <Col md={6}>
-                                            <FormGroup>
-                                                <Label>Shelf Life</Label>
-                                                <Input
-                                                    type="text"
-                                                    name="shelfLife"
-                                                    className="mb-1"
-                                                    placeholder="Enter shelf life"
-                                                    value={formData.shelfLife}
-                                                    onChange={handleInputChange}
-                                                />
-                                            </FormGroup>
-                                        </Col>
+                                                    }}
 
-                                        <Col md={6}>
-                                            <FormGroup>
-                                                <Label>{fieldLabel.BaseUnitName || "Base Unit"}</Label>
-                                                <Select
-                                                    name="BaseUnitName"
-                                                    value={values.BaseUnitName}
-                                                    isSearchable
-                                                    className="react-dropdown"
-                                                    classNamePrefix="dropdown"
-                                                    options={BaseUnit_DropdownOptions}
-                                                    onChange={BaseUnitOnchange}
                                                 />
-                                                {isError.BaseUnitName.length > 0 && (
+                                                {isError.BarCode.length > 0 && (
                                                     <span className="text-danger f-8">
-                                                        <small>{isError.BaseUnitName}</small>
+                                                        <small>{isError.BarCode}</small>
                                                     </span>
                                                 )}
                                             </FormGroup>
@@ -645,7 +873,29 @@ const ItemMasterForm = (props) => {
                                     <Row>
                                         <Col md={6}>
                                             <FormGroup>
-                                                <Label>{fieldLabel.CategoryType || "Category Type"}</Label>
+                                                <Label htmlFor="validationCustom01"> {fieldLabel.ShelfLife} </Label>
+                                                <Input
+                                                    type="text"
+                                                    name="ShelfLife"
+                                                    className="mb-1"
+                                                    placeholder="Enter shelf life"
+                                                    value={values.ShelfLife}
+                                                    onChange={(event) => {
+                                                        onChangeText({ event, state, setState })
+
+                                                    }}
+                                                />
+                                                {isError.ShelfLife.length > 0 && (
+                                                    <span className="text-danger f-8">
+                                                        <small>{isError.ShelfLife}</small>
+                                                    </span>
+                                                )}
+                                            </FormGroup>
+                                        </Col>
+
+                                        <Col md={6}>
+                                            <FormGroup>
+                                                <Label htmlFor="validationCustom01"> {fieldLabel.CategoryType} </Label>
                                                 <Select
                                                     name="CategoryType"
                                                     value={values.CategoryType}
@@ -662,21 +912,23 @@ const ItemMasterForm = (props) => {
                                                 )}
                                             </FormGroup>
                                         </Col>
+                                    </Row>
+
+                                    <Row>
+                                       
 
                                         <Col md={6}>
                                             <FormGroup>
-                                                <Label>{fieldLabel.Category || "Category"}</Label>
+                                                <Label htmlFor="validationCustom01"> {fieldLabel.Category} </Label>
                                                 <Select
                                                     name="Category"
                                                     value={values.Category}
-                                                    isMulti
+                                                    isMulti={true}
                                                     isSearchable
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
                                                     options={CategoryList_DropdownOptions}
-                                                    onChange={(hasSelect, evn) => {
-                                                        onChangeSelect({ hasSelect, evn, state, setState });
-                                                    }}
+                                                    onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                                 />
                                                 {isError.Category.length > 0 && (
                                                     <span className="text-danger f-8">
@@ -691,30 +943,44 @@ const ItemMasterForm = (props) => {
                                     <Row className="align-items-end">
                                         <Col md={6}>
                                             <FormGroup>
-                                                <Label>PartyType</Label>
+                                                <Label htmlFor="validationCustom01"> {fieldLabel.PartyType} </Label>
                                                 <Select
                                                     name="PartyType"
-                                                    value={PartyType}
+                                                    value={values.PartyType}
                                                     isSearchable
                                                     options={PartyTypeDropdown_Options}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
                                                     styles={{ menu: (provided) => ({ ...provided, zIndex: 2 }) }}
-                                                    onChange={partyTypeOnChange}
+                                                    onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                                 />
+                                                {isError.PartyType.length > 0 && (
+                                                    <span className="text-danger f-8">
+                                                        <small>{isError.PartyType}</small>
+                                                    </span>
+                                                )}
                                             </FormGroup>
                                         </Col>
 
                                         <Col md={6}>
                                             <FormGroup>
-                                                <Label>MRP</Label>
+                                                <Label htmlFor="validationCustom01"> {fieldLabel.MRP} </Label>
                                                 <Input
+                                                    name="MRP"
                                                     type="text"
                                                     id="txtMRP0"
-                                                    value={MRP}
+                                                    value={values.MRP}
                                                     placeholder="Please Enter MRP"
-                                                    onChange={MRPHandler}
+                                                    onChange={(event) => {
+                                                        onChangeText({ event, state, setState })
+
+                                                    }}
                                                 />
+                                                {isError.MRP.length > 0 && (
+                                                    <span className="text-danger f-8">
+                                                        <small>{isError.MRP}</small>
+                                                    </span>
+                                                )}
                                             </FormGroup>
                                         </Col>
                                     </Row>
@@ -724,29 +990,47 @@ const ItemMasterForm = (props) => {
                                     <Row className="align-items-end">
                                         <Col md={6}>
                                             <FormGroup>
-                                                <Label>GST</Label>
+                                                <Label htmlFor="validationCustom01"> {fieldLabel.GST} </Label>
                                                 <Input
+                                                    name="GST"
                                                     type="text"
                                                     id="txtGST0"
-                                                    value={GST}
+                                                    value={values.GST}
                                                     placeholder="Please Enter GST"
                                                     autoComplete="off"
-                                                    onChange={(e) => setGST(e.target.value)}
+                                                    onChange={(event) => {
+                                                        onChangeText({ event, state, setState })
+
+                                                    }}
                                                 />
+                                                {isError.GST.length > 0 && (
+                                                    <span className="text-danger f-8">
+                                                        <small>{isError.GST}</small>
+                                                    </span>
+                                                )}
                                             </FormGroup>
                                         </Col>
 
                                         <Col md={6}>
                                             <FormGroup>
-                                                <Label>HSNCode</Label>
+                                                <Label htmlFor="validationCustom01"> {fieldLabel.HSNCode} </Label>
                                                 <Input
-                                                    type="text"
+                                                    type="HSNCode"
+                                                    name="HSNCode"
                                                     id="txtHSNCode0"
-                                                    value={HSNCode}
+                                                    value={values.HSNCode}
                                                     placeholder="Please Enter HSNCode"
                                                     autoComplete="off"
-                                                    onChange={(e) => setHSNCode(e.target.value)}
+                                                    onChange={(event) => {
+                                                        onChangeText({ event, state, setState })
+
+                                                    }}
                                                 />
+                                                {isError.HSNCode.length > 0 && (
+                                                    <span className="text-danger f-8">
+                                                        <small>{isError.HSNCode}</small>
+                                                    </span>
+                                                )}
                                             </FormGroup>
                                         </Col>
                                     </Row>
@@ -765,45 +1049,84 @@ const ItemMasterForm = (props) => {
                                         <Row className="align-items-end">
                                             <Col md={4}>
                                                 <FormGroup>
-                                                    <Label>Group Type</Label>
+                                                    <Label htmlFor="validationCustom01"> {fieldLabel.GroupType} </Label>
                                                     <Select
-                                                        value={groupTypeDropdownSelect}
+                                                        name="GroupType"
+                                                        value={values.GroupType}
                                                         options={GroupType_DropdownOptions}
+
                                                         onChange={GroupType_Handler}
                                                         styles={{ menu: (provided) => ({ ...provided, zIndex: 2 }) }}
                                                     />
+                                                    {isError.GroupType.length > 0 && (
+                                                        <span className="text-danger f-8">
+                                                            <small>{isError.GroupType}</small>
+                                                        </span>
+                                                    )}
                                                 </FormGroup>
                                             </Col>
 
                                             <Col md={4}>
                                                 <FormGroup>
-                                                    <Label>Group</Label>
+                                                    <Label htmlFor="validationCustom01"> {fieldLabel.Group} </Label>
                                                     <C_Select
-                                                        value={groupDropdownSelect}
+                                                        name="Group"
+                                                        value={values.Group}
                                                         options={Group_DropdownOptions}
                                                         onChange={Group_Handler}
                                                         isLoading={groupDropDownLoading}
                                                         styles={{ menu: (provided) => ({ ...provided, zIndex: 2 }) }}
                                                     />
+                                                    {isError.Group.length > 0 && (
+                                                        <span className="text-danger f-8">
+                                                            <small>{isError.Group}</small>
+                                                        </span>
+                                                    )}
                                                 </FormGroup>
                                             </Col>
 
                                             <Col md={4}>
                                                 <FormGroup>
-                                                    <Label>Sub Group</Label>
+                                                    <Label htmlFor="validationCustom01"> {fieldLabel.SubGroup} </Label>
                                                     <C_Select
-                                                        value={subGroupDropdownSelect}
+                                                        name="SubGroup"
+                                                        value={values.SubGroup}
                                                         options={SubGroup_DropdownOptions}
                                                         isLoading={subgroupDropDownLoading}
-                                                        onChange={SubGroup_Handler}
+                                                        onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                                         styles={{ menu: (provided) => ({ ...provided, zIndex: 2 }) }}
                                                     />
+                                                    {isError.SubGroup.length > 0 && (
+                                                        <span className="text-danger f-8">
+                                                            <small>{isError.SubGroup}</small>
+                                                        </span>
+                                                    )}
                                                 </FormGroup>
                                             </Col>
                                         </Row>
                                     </Card>
 
-                                    <Card>
+                                    <Card className="c_card_body p-3">
+                                        <Col md={6}>
+                                            <FormGroup className='m-2'>
+                                                <Label htmlFor="validationCustom01"> {fieldLabel.BaseUnitName} </Label>
+                                                <Select
+                                                    name="BaseUnitName"
+                                                    value={values.BaseUnitName}
+                                                    isSearchable
+                                                    className="react-dropdown"
+                                                    classNamePrefix="dropdown"
+                                                    options={BaseUnit_DropdownOptions}
+                                                    onChange={BaseUnitOnchange}
+                                                    styles={{ menu: (provided) => ({ ...provided, zIndex: 2 }) }}
+                                                />
+                                                {isError.BaseUnitName.length > 0 && (
+                                                    <span className="text-danger f-8">
+                                                        <small>{isError.BaseUnitName}</small>
+                                                    </span>
+                                                )}
+                                            </FormGroup>
+                                        </Col>
                                         <div className="mt-2" style={{ overflowX: 'auto' }}>
                                             <Table className="table table-bordered mb-0">
                                                 <Thead>
@@ -818,9 +1141,20 @@ const ItemMasterForm = (props) => {
                                                         <th className="col-sm-2">Action</th>
                                                     </tr>
                                                 </Thead>
-                                                <Tbody>{tbodyfunction()}</Tbody>
+                                                <Tbody>
+                                                    {baseUnit.length === 0 ? (
+                                                        <tr>
+                                                            <td colSpan="6">
+                                                                <div className="text-danger text-center">Unit Not available</div>
+                                                            </td>
+                                                        </tr>
+                                                    ) : (
+                                                        tbodyfunction()
+                                                    )}
+                                                </Tbody>
                                             </Table>
                                         </div>
+
                                     </Card>
 
                                 </Row>
@@ -831,10 +1165,15 @@ const ItemMasterForm = (props) => {
 
                         {/* GST SECTION */}
 
+                        <SaveButton
+                            loading={saveBtnloading}
+                            pageMode={mode.defaultsave}
+                            onClick={SaveHandler}
+                            userAcc={userPageAccessState}
 
-                        {/* <Button className="mt-3 " color="primary" type="submit">
-                            Submit
-                        </Button> */}
+                            module={"Item"}
+                        />
+
                     </Row>
                 </CardBody>
 
