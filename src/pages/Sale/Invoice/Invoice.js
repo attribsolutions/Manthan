@@ -510,163 +510,167 @@ const Invoice = (props) => {
 
 
 
-            formatter: (cellContent, index1, keys_, { tableList = [] }) => (
-                <>
-                    {!_cfunc.strToBool(systemSetting.IsTrayEnterQuantity) && <>
-                        <div>
-                            <Input
-                                type="text"
+            formatter: (cellContent, index1, keys_, { tableList = [] }) => {
+                debugger
+                return (
+                    <>
+                        {!_cfunc.strToBool(systemSetting.IsTrayEnterQuantity) && <>
+                            <div>
+                                <Input
+                                    type="text"
 
-                                id={`OrderQty-${index1.id}`}
-                                placeholder="Enter quantity"
-                                className="right-aligned-placeholder mb-1"
-                                style={{
-                                    border: index1.StockInValid ? '2px solid red' : "1px solid #ced4da"
-                                }}
-                                key={`OrderQty-${index1.id}`}
-                                autoComplete="off"
-                                defaultValue={index1.Quantity}
-                                onChange={(event) => {
-                                    orderQtyOnChange(event, index1,);
-                                    totalAmountCalcuationFunc(tableList);
-                                    const el = document.getElementById("TotalTray_ID");
-                                    if (el) {
-                                        el.innerText = tableList.reduce((sum, item) => sum + (item.TrayQuantity || 0), 0);
-                                    }
+                                    id={`OrderQty-${index1.id}`}
+                                    placeholder="Enter quantity"
+                                    className="right-aligned-placeholder mb-1"
+                                    style={{
+                                        border: index1.StockInValid ? '2px solid red' : "1px solid #ced4da"
+                                    }}
+                                    key={`OrderQty-${index1.id}`}
+                                    autoComplete="off"
+                                    defaultValue={index1.Quantity}
+                                    onChange={(event) => {
+                                        debugger
+                                        orderQtyOnChange(event, index1,);
+                                        totalAmountCalcuationFunc(tableList);
+                                        const el = document.getElementById("TotalTray_ID");
+                                        if (el) {
+                                            el.innerText = tableList.reduce((sum, item) => sum + (item.TrayQuantity || 0), 0);
+                                        }
 
 
-                                }}
-                            />
-                        </div>
-                        <div>
-                            <div id="select">
+                                    }}
+                                />
+                            </div>
+                            <div>
+                                <div id="select">
+                                    <Select
+                                        classNamePrefix="select2-selection"
+                                        id={"ddlUnit"}
+                                        isDisabled={pageMode === mode.edit && true}
+                                        defaultValue={index1.default_UnitDropvalue}
+                                        options={index1.UnitDetails.map(i => ({
+                                            "label": i.UnitName,
+                                            "value": i.UnitID,
+                                            "ConversionUnit": i.ConversionUnit,
+                                            "Unitlabel": i.UnitName,
+                                            "BaseUnitQuantity": i.BaseUnitQuantity,
+                                            "BaseUnitQuantityNoUnit": i.BaseUnitQuantityNoUnit,
+                                        }))}
+                                        onChange={(event) => {
+                                            orderQtyUnit_SelectOnchange(event, index1);
+                                            totalAmountCalcuationFunc(tableList);
+                                        }}
+                                    ></Select>
+                                </div>
+                            </div></>
+                        }
+
+                        {_cfunc.strToBool(systemSetting.IsTrayEnterQuantity) && <>
+                            <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
+                                <Input
+                                    type="text"
+                                    id={`OrderQty-${index1.id}`}
+                                    placeholder="Enter quantity"
+                                    className="right-aligned-placeholder"
+                                    style={{
+                                        border: index1.StockInValid ? "2px solid red" : "1px solid #ced4da",
+                                        width: "40%",
+                                    }}
+                                    key={`OrderQty-${index1.id}`}
+                                    autoComplete="off"
+                                    defaultValue={index1.Quantity}
+                                    onChange={(event) => {
+                                        orderQtyOnChange(event, index1);
+                                        totalAmountCalcuationFunc(tableList);
+                                        const el = document.getElementById("TotalTray_ID");
+                                        if (el) {
+                                            el.innerText = tableList.reduce((sum, item) => sum + (item.TrayQuantity || 0), 0);
+                                        }
+                                    }}
+                                />
                                 <Select
                                     classNamePrefix="select2-selection"
                                     id={"ddlUnit"}
-                                    isDisabled={pageMode === mode.edit && true}
+                                    isDisabled={true}
                                     defaultValue={index1.default_UnitDropvalue}
                                     options={index1.UnitDetails.map(i => ({
-                                        "label": i.UnitName,
-                                        "value": i.UnitID,
-                                        "ConversionUnit": i.ConversionUnit,
-                                        "Unitlabel": i.UnitName,
-                                        "BaseUnitQuantity": i.BaseUnitQuantity,
-                                        "BaseUnitQuantityNoUnit": i.BaseUnitQuantityNoUnit,
+                                        label: i.UnitName,
+                                        value: i.UnitID,
+                                        ConversionUnit: i.ConversionUnit,
+                                        Unitlabel: i.UnitName,
+                                        BaseUnitQuantity: i.BaseUnitQuantity,
+                                        BaseUnitQuantityNoUnit: i.BaseUnitQuantityNoUnit,
                                     }))}
                                     onChange={(event) => {
                                         orderQtyUnit_SelectOnchange(event, index1);
                                         totalAmountCalcuationFunc(tableList);
                                     }}
-                                ></Select>
+                                    styles={{
+                                        container: (provided) => ({
+                                            ...provided,
+                                            width: "40%",
+                                        }),
+                                        control: (provided) => ({
+                                            ...provided,
+                                            minHeight: "30px", // Ensuring alignment
+                                            height: "38px",
+                                        }),
+                                        valueContainer: (provided) => ({
+                                            ...provided,
+                                            height: "30px",
+                                            padding: "0px 8px",
+                                        }),
+                                        input: (provided) => ({
+                                            ...provided,
+                                            margin: "0px",
+                                        }),
+                                        indicatorsContainer: (provided) => ({
+                                            ...provided,
+                                            height: "30px",
+                                        }),
+                                    }}
+                                />
                             </div>
-                        </div></>
-                    }
-
-                    {_cfunc.strToBool(systemSetting.IsTrayEnterQuantity) && <>
-                        <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
-                            <Input
-                                type="text"
-                                id={`OrderQty-${index1.id}`}
-                                placeholder="Enter quantity"
-                                className="right-aligned-placeholder"
-                                style={{
-                                    border: index1.StockInValid ? "2px solid red" : "1px solid #ced4da",
-                                    width: "40%",
-                                }}
-                                key={`OrderQty-${index1.id}`}
-                                autoComplete="off"
-                                defaultValue={index1.Quantity}
-                                onChange={(event) => {
-                                    orderQtyOnChange(event, index1);
-                                    totalAmountCalcuationFunc(tableList);
-                                    const el = document.getElementById("TotalTray_ID");
-                                    if (el) {
-                                        el.innerText = tableList.reduce((sum, item) => sum + (item.TrayQuantity || 0), 0);
-                                    }
-                                }}
-                            />
-                            <Select
-                                classNamePrefix="select2-selection"
-                                id={"ddlUnit"}
-                                isDisabled={true}
-                                defaultValue={index1.default_UnitDropvalue}
-                                options={index1.UnitDetails.map(i => ({
-                                    label: i.UnitName,
-                                    value: i.UnitID,
-                                    ConversionUnit: i.ConversionUnit,
-                                    Unitlabel: i.UnitName,
-                                    BaseUnitQuantity: i.BaseUnitQuantity,
-                                    BaseUnitQuantityNoUnit: i.BaseUnitQuantityNoUnit,
-                                }))}
-                                onChange={(event) => {
-                                    orderQtyUnit_SelectOnchange(event, index1);
-                                    totalAmountCalcuationFunc(tableList);
-                                }}
-                                styles={{
-                                    container: (provided) => ({
-                                        ...provided,
+                            <div style={{ borderBottom: "1px solid #ddd", margin: "5px -11px 5px -11px", }}></div>
+                            <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
+                                <div className="theme-font " style={{ width: "40%" }}>
+                                    <span className="text-muted">Tray Quantity:</span>
+                                </div>
+                                <Input
+                                    type="text"
+                                    id={`TrayQty-${index1.id}`}
+                                    placeholder="Enter quantity"
+                                    className="right-aligned-placeholder"
+                                    style={{
+                                        border: index1.StockInValid ? "2px solid red" : "1px solid #ced4da",
                                         width: "40%",
-                                    }),
-                                    control: (provided) => ({
-                                        ...provided,
-                                        minHeight: "30px", // Ensuring alignment
-                                        height: "38px",
-                                    }),
-                                    valueContainer: (provided) => ({
-                                        ...provided,
-                                        height: "30px",
-                                        padding: "0px 8px",
-                                    }),
-                                    input: (provided) => ({
-                                        ...provided,
-                                        margin: "0px",
-                                    }),
-                                    indicatorsContainer: (provided) => ({
-                                        ...provided,
-                                        height: "30px",
-                                    }),
-                                }}
-                            />
-                        </div>
-                        <div style={{ borderBottom: "1px solid #ddd", margin: "5px -11px 5px -11px", }}></div>
-                        <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
-                            <div className="theme-font " style={{ width: "40%" }}>
-                                <span className="text-muted">Tray Quantity:</span>
+                                    }}
+                                    key={`TrayQty-${index1.id}`}
+                                    autoComplete="off"
+                                    defaultValue={index1.TrayQuantity}
+                                    onChange={(event) => {
+                                        index1.TrayQuantity = _cfunc.getFixedNumber(event.target.value)
+                                        const el = document.getElementById("TotalTray_ID");
+                                        if (el) {
+                                            el.innerText = tableList.reduce((sum, item) => sum + (item.TrayQuantity || 0), 0);
+                                        }
+                                    }}
+                                />
                             </div>
-                            <Input
-                                type="text"
-                                id={`TrayQty-${index1.id}`}
-                                placeholder="Enter quantity"
-                                className="right-aligned-placeholder"
-                                style={{
-                                    border: index1.StockInValid ? "2px solid red" : "1px solid #ced4da",
-                                    width: "40%",
-                                }}
-                                key={`TrayQty-${index1.id}`}
-                                autoComplete="off"
-                                defaultValue={index1.TrayQuantity}
-                                onChange={(event) => {
-                                    index1.TrayQuantity = _cfunc.getFixedNumber(event.target.value)
-                                    const el = document.getElementById("TotalTray_ID");
-                                    if (el) {
-                                        el.innerText = tableList.reduce((sum, item) => sum + (item.TrayQuantity || 0), 0);
-                                    }
-                                }}
-                            />
-                        </div>
-                        <div style={{ borderBottom: "1px solid #ddd", margin: "5px -11px 5px -11px", }}></div> </>}
+                            <div style={{ borderBottom: "1px solid #ddd", margin: "5px -11px 5px -11px", }}></div> </>}
 
-                    <div className="theme-font">
-                        <span className="text-muted">Order-Qty :</span>
-                        <samp>{index1.OrderQty}</samp>&nbsp;&nbsp;
-                        <samp>{index1.UnitName}</samp>
-                    </div>
-                    <div>
-                        <samp className="theme-font text-muted" >Available stock :</samp>
-                        <label className="text-black">{_cfunc.roundToDecimalPlaces(index1.ItemTotalStock, 3)}</label>
-                    </div>
-                </>
-            ),
+                        <div className="theme-font">
+                            <span className="text-muted">Order-Qty :</span>
+                            <samp>{index1.OrderQty}</samp>&nbsp;&nbsp;
+                            <samp>{index1.UnitName}</samp>
+                        </div>
+                        <div>
+                            <samp className="theme-font text-muted" >Available stock :</samp>
+                            <label className="text-black">{_cfunc.roundToDecimalPlaces(index1.ItemTotalStock, 3)}</label>
+                        </div>
+                    </>
+                )
+            },
         },
         //***************StockDetails********************************************************************* */
         {

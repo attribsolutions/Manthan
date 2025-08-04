@@ -3,6 +3,7 @@ import {
   CommonConsole,
   IsSweetAndSnacksCompany,
   amountCommaSeparateFunc,
+  getFixedNumber,
   listpageConcatDateAndTime,
   loginSystemSetting,
   loginUserDetails,
@@ -127,7 +128,7 @@ function* InvoiceListGenFunc({ config }) {
 
     if ((subPageMode === url.INVOICE_LIST_1) || (subPageMode === url.LOADING_SHEET) || (subPageMode === url.POS_INVOICE_LIST || subPageMode === url.PERIOD_WISE_INVOICE_REPORT)) {
       response = yield call(Invoice_1_Get_Filter_API, config);
-    } else if (subPageMode === url.IB_INVOICE_LIST || subPageMode === url.IB_INVOICE_FOR_GRN || subPageMode === url.IB_INWARD_STP ) {
+    } else if (subPageMode === url.IB_INVOICE_LIST || subPageMode === url.IB_INVOICE_FOR_GRN || subPageMode === url.IB_INWARD_STP) {
       response = yield call(IB_Invoice_Get_Filter_API, config);
     }
 
@@ -305,7 +306,7 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
 
   if (isSweetAndSnacksCompany && isTrayEnterQuantity) {
     response.Data.OrderItemDetails = response.Data.OrderItemDetails.map(index1 => {
-
+      debugger
       const isUnitIDPresent = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
       const isMCunitID = index1.UnitDetails.find(findEle => findEle.DeletedMCUnitsUnitID === index1.DeletedMCUnitsUnitID);
       const defaultunit = isUnitIDPresent !== undefined ? isUnitIDPresent : isMCunitID;
@@ -317,7 +318,7 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
       index1.OrderQty = index1.Quantity;//initialize
 
       const isBaseUnit = index1.UnitDetails.find(findEle => findEle.IsBase);
-      index1.Quantity = roundToDecimalPlaces(index1.BaseUnitQuantity, 3);  //initialize // Round to 3 decimal places
+      index1.Quantity = (roundToDecimalPlaces(index1.BaseUnitQuantity, 3) - roundToDecimalPlaces(index1.InvoiceQuantity, 3));  //initialize // Round to 3 decimal places
 
 
       index1.default_UnitDropvalue = {//initialize
@@ -335,7 +336,13 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
       index1.IsCustomerPAN = ISCustomerPAN //initialize
 
 
-      index1["TrayQuantity"] = index1.OrderQty
+      // index1["TrayQuantity"] = index1.OrderQty
+
+
+      index1["TrayQuantity"] = Math.ceil(getFixedNumber(index1.Quantity, 2) / getFixedNumber(index1.ConversionUnit, 2))
+
+
+
 
 
 
@@ -394,7 +401,7 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
       const isUnitIDPresent = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
       const isMCunitID = index1.UnitDetails.find(findEle => findEle.DeletedMCUnitsUnitID === index1.DeletedMCUnitsUnitID);
       const defaultunit = isUnitIDPresent !== undefined ? isUnitIDPresent : isMCunitID;
-      debugger
+
       if (defaultunit === undefined) {
         customAlert({ Type: 3, Message: `${index1.ItemName} - Default Unit not found` });
         return;
@@ -477,7 +484,7 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
 
 function* gobutton_invoiceAdd_genFunc({ config }) {
   const { subPageMode, path, pageMode, customer, errorMsg, OrderID } = config;
-  debugger
+
   try {
 
     let response;
@@ -532,7 +539,7 @@ function* gobutton_invoiceAdd_genFunc({ config }) {
       value: CustomerID,
       AdvanceAmount: AdvanceAmount,
     }
-    debugger
+
     response["path"] = path
     response["page_Mode"] = pageMode
     response["customer"] = cunstomerDetail

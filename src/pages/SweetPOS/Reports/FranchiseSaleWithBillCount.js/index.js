@@ -122,7 +122,8 @@ const FranchiseSaleWithBillCount = (props) => {
                     return {
                         ...entry,
                         Bills: totalBills,
-                        GrandTotal: Number(totalGrand.toFixed(2))
+                        GrandTotal: Number(totalGrand.toFixed(2)),
+                        recordsAmountTotal: Number(totalGrand.toFixed(2))
                     };
                 });
                 debugger
@@ -287,6 +288,14 @@ const FranchiseSaleWithBillCount = (props) => {
                     defaultSorted={defaultSorted}
                     columns={columns}
                     bordered
+                    noDataIndication={
+                        <div className="text-danger text-center table-cursor-pointer">
+                            Record Not available
+                        </div>
+                    }
+                    onDataSizeChange={({ dataCount, filteredData = [] }) => {
+                        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${_cfunc.TotalAmount_Func(filteredData)}`));
+                    }}
                 />
 
 

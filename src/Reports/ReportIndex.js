@@ -27,6 +27,7 @@ import ItemConsumptionReport from "./ItemConsumptionReport/Page";
 import BatchTraceabilityReport from "./BatchTracebilityReport/Page";
 import StockadjustmentReport from "./StockadjustmentReport/PDFReport/Page";
 import PeriodWiseItemSale from "./PartywiseItemSaleReport/PeriodWiseItemSalePDRrepot";
+import { PeriodWiseInvoiceReport } from "./PeriodWiseInvoiceReport/PeriodWiseInvoicePDF";
 
 export const FrenchiesesOrder = "FrenchiesesOrder"
 export const order1 = "order1"
@@ -62,6 +63,9 @@ export const Stockadjustment_Report = "Stockadjustment_Report"
 export const Batch_Traceability_Report = "Batch_Traceability_Report"
 
 export const Period_Wise_Item_Sale = "Period_Wise_Item_Sale"
+
+export const Period_Wise_Invoice_Report = "Period_Wise_Invoice_Report"
+
 
 
 
@@ -160,6 +164,11 @@ const generateReport = (resp) => {
         case Period_Wise_Item_Sale:
             PeriodWiseItemSale(resp.Data)
             break;
+        case Period_Wise_Invoice_Report:
+            PeriodWiseInvoiceReport(resp.Data)
+            break;
+
+
 
 
         default:
