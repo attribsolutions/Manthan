@@ -451,7 +451,7 @@ const PartyItems = (props) => {
 			}
 		}
 
-		if (selectedItems.length === 0) {
+		if (selectedItems.length === 0 && !(_cfunc.IsSweetAndSnacksCompany())) {
 			customAlert({
 				Type: 4,
 				Message: "Select Atleast One Item",
@@ -552,73 +552,73 @@ const PartyItems = (props) => {
 							</CardHeader>
 
 							<CardBody style={{ backgroundColor: "#whitesmoke" }}>
-							{partyItemListLoading ? 
+								{partyItemListLoading ?
 									<div className="text-center my-4">
 										<Spinner color="primary" />
 										<div>Loading Items...</div>
-									</div>:
+									</div> :
 									<>
-								<ChannelTypeDropdown />
-								{filterdItemWise_tableData.length > 0 ? (
-									<>
-										{filterdItemWise_tableData.map((i, key) => (
-											<div key={i.group}>
-												<Label
-													style={{
-														background: "#efefef",
-														padding: "7px 10px 0px 8px",
-														borderRadius: "3px",
-													}}
-												>
-													<h6> Group : {i.group ? i.group : `No Group Assign`}</h6>
-												</Label>
-												<div className="table">
-													<BootstrapTable
-														keyField={"Item"}
-														key={`table-key-${i.group}-${key}`}
-														data={i.items}
-														columns={tableColumns}
-														Item="table_Arrow"
-														selectRow={
-															tableSelectCheckConfig({
-																// selectAllCheck({
-																rowSelected: rowSelected(i.items),
-																disabledWithMsg: subPageMode == url.PARTYITEM && "In-stock",
-																keyField: "Item",
-																bgColor: '',
-																selectedDisabled: nonSelectedRow(i.items),
-																tableData: i.items,
-																nonSelectable: nonSelectedRow(i.items),
-															})}
+										<ChannelTypeDropdown />
+										{filterdItemWise_tableData.length > 0 ? (
+											<>
+												{filterdItemWise_tableData.map((i, key) => (
+													<div key={i.group}>
+														<Label
+															style={{
+																background: "#efefef",
+																padding: "7px 10px 0px 8px",
+																borderRadius: "3px",
+															}}
+														>
+															<h6> Group : {i.group ? i.group : `No Group Assign`}</h6>
+														</Label>
+														<div className="table">
+															<BootstrapTable
+																keyField={"Item"}
+																key={`table-key-${i.group}-${key}`}
+																data={i.items}
+																columns={tableColumns}
+																Item="table_Arrow"
+																selectRow={
+																	tableSelectCheckConfig({
+																		// selectAllCheck({
+																		rowSelected: rowSelected(i.items),
+																		disabledWithMsg: subPageMode == url.PARTYITEM && "In-stock",
+																		keyField: "Item",
+																		bgColor: '',
+																		selectedDisabled: nonSelectedRow(i.items),
+																		tableData: i.items,
+																		nonSelectable: nonSelectedRow(i.items),
+																	})}
 
-														// cellEdit={cellEditFactory({ mode: 'click', blurToSave: true })}
-														noDataIndication={
-															<div className="text-danger text-center ">
-																Items Not available
-															</div>
-														}
-														classes={"table align-middle table-nowrap table-hover"}
-													/>
-												</div>
-											</div>
-										))}
+																// cellEdit={cellEditFactory({ mode: 'click', blurToSave: true })}
+																noDataIndication={
+																	<div className="text-danger text-center ">
+																		Items Not available
+																	</div>
+																}
+																classes={"table align-middle table-nowrap table-hover"}
+															/>
+														</div>
+													</div>
+												))}
+											</>
+										) : (
+											<>
+												<BootstrapTable
+													keyField={"Item"}
+													data={[]}
+													columns={tableColumns}
+													noDataIndication={
+														<div className="text-danger text-center ">
+															Items Not available
+														</div>
+													}
+												/>
+											</>
+										)}
 									</>
-								) : (
-									<>
-										<BootstrapTable
-											keyField={"Item"}
-											data={[]}
-											columns={tableColumns}
-											noDataIndication={
-												<div className="text-danger text-center ">
-													Items Not available
-												</div>
-											}
-										/>
-									</>
-								)}
-								</>
-							}
+								}
 								<SaveButtonDraggable>
 									<SaveButton
 										loading={saveBtnloading}
