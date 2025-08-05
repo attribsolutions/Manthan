@@ -1,83 +1,211 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import { date_dmy_func, GET_ERP_IMG, getFixedNumber, loginUserDetails } from "../../components/Common/CommonFunction";
 
-const PeriodWiseItemSale = () => {
-    const data = [
-        { date: "2025-07-01", itemName: "Balushahi", partyName: "Chitale Bandhu (Anand)", quantity: 20 },
-        { date: "2025-07-05", itemName: "Balushahi", partyName: "Chitale Bandhu (Bajirao Road)", quantity: 10 },
-        { date: "2025-07-15", itemName: "Dharwadi Pedha", partyName: "Chitale Bandhu (Anand)", quantity: 30 },
-        { date: "2025-07-27", itemName: "Dharwadi Pedha", partyName: "Chitale Bandhu (Khadki)", quantity: 42 },
-        { date: "2025-07-31", itemName: "Dharwadi Pedha", partyName: "Chitale Bandhu (Market Yard)", quantity: 50 },
-    ];
+const PeriodWiseItemSale = (data) => {
 
-    const doc = new jsPDF('l', 'pt', 'a4');
-    const margin = 10;
+
+    const doc = new jsPDF('p', 'pt', 'a4');
+    const margin = 27;
 
     // 🔹 Draw outer border
     function drawBorder() {
-        const pageWidth = doc.internal.pageSize.width;
-        const pageHeight = doc.internal.pageSize.height;
-        doc.setLineWidth(1.2);
-        doc.rect(margin, margin, pageWidth - margin * 2, pageHeight - margin * 2);
+        doc.setDrawColor('black');
+        doc.line(569, 17, 27, 17);    // Top
+        doc.line(27, 815, 27, 17);    // Left
+        doc.line(569, 815, 569, 17);  // Right
+        doc.line(569, 815, 27, 815);  // Bottom   
     }
 
-    // 🔹 Header text
-    function pageHeader() {
-        doc.setFontSize(16);
-        doc.text("CHITALE SWEETS & SNACKS PVT. LTD.", margin + 15, margin + 30);
+    // 🔹 Header
+    const pageHeader = (doc) => {
+        doc.addFont("Arial", 'Normal');
+        doc.setFont('Arial');
 
-        doc.setFontSize(9);
-        doc.text("Shed No. 44, 427/44, Gultekadi Industrial Estate, Pune 411037", margin + 15, margin + 45);
+        doc.addImage(GET_ERP_IMG().Logo, 'PNG', 33, 18, 60, 40, null, 'FAST');
 
-        doc.setFontSize(13);
-        doc.text("Partywise Item Sale Details Report", margin + 15, margin + 65);
+        doc.setFontSize(15);
+        doc.text('Item Sale Report', 250, 40);
 
-        doc.setFontSize(9);
-        doc.text("Date: 01/07/2025 To : 31/07/2025", margin + 15, margin + 80);
-    }
+        doc.setFont('Tahoma');
+        doc.setFontSize(11);
+        doc.setFont(undefined, 'bold');
 
-    // 🔹 Table
+        const UserDetails = loginUserDetails();
+
+        var options3 = {
+            didDrawCell: (data1) => {
+                const rowIdx = data1.row.index;
+                const colIdx = data1.column.index;
+                if (rowIdx === 0 && colIdx === 0) {
+                    let x = data1.cursor.x + 2;
+                    let y = data1.cursor.y + 10;
+                    doc.setFontSize(9);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('Party: ', x, y);
+                }
+                if (rowIdx === 1 && colIdx === 0) {
+                    let x = data1.cursor.x + 2;
+                    let y = data1.cursor.y + 10;
+                    doc.setFontSize(9);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('Party Address: ', x, y);
+                }
+                if (rowIdx === 2 && colIdx === 0) {
+                    let x = data1.cursor.x + 2;
+                    let y = data1.cursor.y + 10;
+                    doc.setFontSize(9);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('Date: ', x, y);
+                }
+            },
+            margin: { top: 25, left: 27, right: 27 },
+            theme: 'grid',
+            styles: { fontSize: 8 },
+            showHead: 'always',
+            bodyStyles: {
+                columnWidth: 'wrap',
+                textColor: [30, 30, 30],
+                cellPadding: 3,
+                fontSize: 9,
+                lineColor: [0, 0, 0]
+            },
+            columnStyles: {
+                0: { valign: "top", columnWidth: 542, halign: 'left' }
+            },
+            startY: 65
+        };
+
+        const Column = [""];
+        const Row = [
+            [`                   ${UserDetails.PartyName}`],
+            [`                          ${UserDetails.PartyAddress}`],
+            [`                       ${date_dmy_func()}- ${date_dmy_func()}`],
+        ];
+
+        doc.autoTable(Column, Row, options3);
+    };
+
+    // 🔹 Table — ITEM ROW (spanning) + PARTY ROWS (no totals)
     function reportBody() {
-        // ✅ Build header rows for 31 days
         const headerTop = ["Party-RowSpan_2", ...Array.from({ length: 16 }, (_, i) => (i + 1).toString()), "Unit"];
-        const headerBottom = ["", ...Array.from({ length: 15 }, (_, i) => (i + 17).toString()), "Total"];
+        const headerBottom = ["", ...Array.from({ length: 15 }, (_, i) => (i + 17).toString()), "", "Total"];
 
-        // ✅ Group Data
-        const grouped = {};
-        data.forEach(({ date, itemName, partyName, quantity }) => {
-            const day = new Date(date).getDate();
-            const key = `${itemName}|${partyName}`;
-            if (!grouped[key]) {
-                grouped[key] = { itemName, partyName, quantities: {} };
+        // ✅ Group by item
+        const groupedByItem = {};
+        data.forEach(({ InvoiceDate, ItemName, CustomerName, BaseItemUnitQuantity, BaseItemUnitName }) => {
+            debugger
+            const day = new Date(InvoiceDate).getDate();
+            if (!groupedByItem[ItemName]) {
+                groupedByItem[ItemName] = {};
             }
-            grouped[key].quantities[day] = (grouped[key].quantities[day] || 0) + quantity;
+            if (!groupedByItem[ItemName][CustomerName]) {
+                groupedByItem[ItemName][CustomerName] = { CustomerName, BaseItemUnitName, quantities: {} };
+            }
+
+
+
+            groupedByItem[ItemName][CustomerName].quantities[day] =
+                (groupedByItem[ItemName][CustomerName].quantities[day] || 0) + BaseItemUnitQuantity;
         });
 
-        // ✅ Build Table Rows (2 per item)
         const tableBody = [];
-        Object.values(grouped).forEach(row => {
-            const totalQty = Object.values(row.quantities).reduce((a, b) => a + b, 0).toFixed(2);
 
-            // Row 1 → Days 1–16 + Unit
-            const row1 = [`${row.partyName}-RowSpan_2`];
-            for (let i = 1; i <= 16; i++) row1.push(row.quantities[i] || "");
-            row1.push("Kg");
 
-            // Row 2 → Days 17–31 + Total
-            const row2 = [""];
-            for (let i = 17; i <= 31; i++) row2.push(row.quantities[i] || "");
-            row2.push(totalQty);
-            tableBody.push(row1);
-            tableBody.push(row2);
+
+
+        Object.entries(groupedByItem).forEach(([ItemName, parties]) => {
+
+            // 🔵 ITEM ROW FIRST — spans all columns
+            const itemRow = new Array(19).fill("");
+            itemRow[0] = `${ItemName}-ItemRow`;
+            tableBody.push(itemRow);
+
+            // ✅ Keep track of day-wise totals for this item
+            let itemTotalsByDay = {};
+            let grandTotalForItem = 0;
+
+            const partyEntries = Object.values(parties);
+
+            partyEntries.forEach((row, index) => {
+                const totalQty = Object.values(row.quantities).reduce((a, b) => a + b, 0);
+
+                // Row 1 → Days 1–16 + Unit
+                const row1 = [`${row.CustomerName}-RowSpan_2`];
+                for (let i = 1; i <= 16; i++) {
+                    const qty = row.quantities[i] || "";
+                    row1.push((getFixedNumber(qty, 2)));
+
+                    // 🔢 Add to day-wise total
+                    if (qty) itemTotalsByDay[i] = (itemTotalsByDay[i] || 0) + qty;
+                }
+
+                row1.push(row.BaseItemUnitName);
+
+                // Row 2 → Days 17–31 + Total
+                const row2 = [""];
+                for (let i = 17; i <= 32; i++) {
+
+                    const qty = row.quantities[i] || "";
+                    row2.push((getFixedNumber(qty, 2)));
+
+                    // 🔢 Add to day-wise total
+                    if (qty) itemTotalsByDay[i] = (itemTotalsByDay[i] || 0) + qty;
+                }
+                row2.push(totalQty.toFixed(2));
+
+                // ✅ Push party rows
+                tableBody.push(row1);
+                tableBody.push(row2);
+
+                // ✅ Add separator row only if NOT last party
+                if (index < partyEntries.length - 1) {
+                    const row3 = ["..."];
+                    for (let i = 17; i <= 32; i++) {
+                        row3.push("...");
+                    }
+                    tableBody.push(row3);
+                }
+
+                // 🔢 Add to grand total
+                grandTotalForItem += totalQty;
+            });
+
+            // ✅ 📍 Add **one more row3** before TOTAL row
+            const beforeTotalRow = ["..."];
+            for (let i = 17; i <= 32; i++) {
+                beforeTotalRow.push("...");
+            }
+            tableBody.push(beforeTotalRow);
+
+            // ✅ 📊 ITEM TOTAL ROW (day-wise total across all parties)
+            const totalRow1 = [`Total-RowSpan_2`];
+
+            // ➡ Days 1–16
+            for (let i = 1; i <= 16; i++) {
+                totalRow1.push(itemTotalsByDay[i] ? itemTotalsByDay[i].toFixed(2) : "");
+            }
+            totalRow1.push("Kg");
+
+            const totalRow2 = ["Total"];
+            // ➡ Days 17–31
+            for (let i = 17; i <= 32; i++) {
+                totalRow2.push(itemTotalsByDay[i] ? itemTotalsByDay[i].toFixed(2) : "");
+            }
+            totalRow2.push(grandTotalForItem.toFixed(2));
+
+            // ✅ Add Total Rows to table
+            tableBody.push(totalRow1);
+            tableBody.push(totalRow2);
         });
 
-        // ✅ Draw the table
+
         doc.autoTable({
             head: [headerTop, headerBottom],
             body: tableBody,
-            startY: margin + 95,
+            startY: doc.previousAutoTable.finalY,
             theme: "grid",
-            margin: { left: margin, right: margin },
+            margin: { left: margin, right: margin, top: 115 },
             styles: {
                 fontSize: 9,
                 halign: "center",
@@ -86,20 +214,55 @@ const PeriodWiseItemSale = () => {
             },
 
             didParseCell: (data1) => {
-                if (data1.row.cells[0].raw === "Party-RowSpan_2") {
-                    debugger
-                    data1.row.cells[0].rowSpan = 2
+                // ✅ PARTY cell spans 2 rows
+                if (data1.row.cells[0].raw.includes("-RowSpan_2")) {
+                    data1.row.cells[0].text[0] = data1.row.cells[0].raw.replace("-RowSpan_2", "");
+                    data1.row.cells[0].rowSpan = 2;
+                }
+
+
+                if (data1.row.cells[0].raw.includes("Total")) {
+                    data1.cell.styles.fontStyle = "bold";
+                    data1.cell.styles.fontSize = 7;
+                }
+
+                if (data1.row.cells[0].raw.includes("...")) {
+                    data1.row.cells[0].colSpan = 18;
+                    data1.row.cells[0].styles.cellPadding = 0.5;
+                    data1.row.cells[0].styles.fontSize = 1;
+                    data1.cell.styles.fillColor = [220, 220, 220]; // light blue
+                }
+
+                // ✅ ITEM ROW spans across all columns
+                if (data1.row.cells[0].raw.includes("-ItemRow")) {
+                    data1.row.cells[0].text[0] = data1.row.cells[0].raw.replace("-ItemRow", "");
+                    data1.row.cells[0].colSpan = 18;
+                    data1.row.cells[0].styles.fontSize = 8
+                    data1.cell.styles.fontStyle = "bold";
+                    data1.cell.styles.halign = "left";
                 }
             },
-            headStyles: {
-                fillColor: [230, 230, 230],
-                textColor: 20,
-                fontStyle: "bold",
-                lineWidth: 0.7
+            headerStyles: {
+                cellPadding: 3,
+                lineWidth: 0.3,
+                valign: 'top',
+                fontStyle: 'bold',
+                halign: 'center',
+                fillColor: "white",
+                textColor: "black",
+                fontSize: 7,
+                lineColor: "black"
+            },
+            bodyStyles: {
+                textColor: [30, 30, 30],
+                cellPadding: 3,
+                fontSize: 7,
+                // columnWidth: 'wrap',
+                lineColor: [0, 0, 0],
             },
             columnStyles: {
-                0: { cellWidth: 90, halign: "left" },
-                17: { cellWidth: 60, halign: "center" } // last column (Unit/Total)
+                0: { cellWidth: 70, halign: "left" },
+                17: { cellWidth: 30, halign: "center" }
             }
         });
     }
@@ -110,20 +273,18 @@ const PeriodWiseItemSale = () => {
         for (let i = 1; i <= pageCount; i++) {
             doc.setPage(i);
             doc.setFontSize(9);
-            doc.text(`Page ${i} of ${pageCount}`,
-                doc.internal.pageSize.width - margin - 80,
-                doc.internal.pageSize.height - margin - 10
-            );
+            drawBorder(doc);
+            pageHeader(doc);
+
         }
     }
 
     // 🏗️ Build PDF
-    drawBorder();
-    pageHeader();
-    reportBody();
-    pageFooter();
+    drawBorder(doc);
+    // pageHeader(doc);
+    reportBody(doc);
+    pageFooter(doc);
 
-    // ✅ Open PDF in a new tab
     const pdfUrl = URL.createObjectURL(doc.output('blob'));
     window.open(pdfUrl);
 };

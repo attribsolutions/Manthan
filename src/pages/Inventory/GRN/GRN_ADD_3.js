@@ -12,7 +12,6 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useHistory } from "react-router-dom";
 import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess, postSelect_Field_for_dropdown } from "../../../store/actions";
-import { orderCalculateFunc } from "../../Purchase/Order/OrderPageCalulation";
 import { C_Button, SaveButton } from "../../../components/Common/CommonButton";
 import { editGRNIdSuccess, hideInvoiceForGRFAction, hideInvoiceForGRFActionSuccess, makeGRN_Mode_1ActionSuccess, saveGRNAction, saveGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
 import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
@@ -28,7 +27,6 @@ import DatePicker from "react-flatpickr";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
-
 
 
 const GRNAdd3 = (props) => {
@@ -213,19 +211,15 @@ const GRNAdd3 = (props) => {
             if (hasEditVal) {
 
                 setEditData(hasEditVal);
-
+                debugger
                 const { GRNItems = [], GRNReferences = [], InvoiceNumber } = hasEditVal;
 
-                let ChallanNo1 = ''
 
-                GRNReferences.forEach(ele => {
-                    ChallanNo1 = ChallanNo1.concat(`${ele.ChallanNo},`)
-                });
-                ChallanNo1 = ChallanNo1.replace(/,*$/, '');
 
                 setInvoiceNo(InvoiceNumber)
-                setGrnDetail(ChallanNo1);
+                setGrnDetail(hasEditVal);
                 setGrnItemTableList(GRNItems)
+                setInvoiceDate(hasEditVal.InvoiceDate)
                 dispatch(editGRNIdSuccess({ Status: false }))
                 dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
                 seteditCreatedBy(hasEditVal.CreatedBy)

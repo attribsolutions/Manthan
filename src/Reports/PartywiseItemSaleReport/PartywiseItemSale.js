@@ -15,6 +15,7 @@ import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 import { PartyWiseItemSaleReport_GoButton_API_Success } from "../../store/Report/PartywiseItemSaleRedux/action";
 import { ItemSaleReport_GoBtn_API } from "../../helpers/backend_helper";
 import * as report from '../../Reports/ReportIndex'
+import { allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const PartyWiseItemSaleReport = (props) => {
 
@@ -24,7 +25,7 @@ const PartyWiseItemSaleReport = (props) => {
     const [fromDate, setFromDate] = useState("2025-04-01")
     const [toDate, setToDate] = useState(currentDate_ymd)
 
-    const [Item, setItem] = useState([{ label: "Dharwadi Pedha", value: 1348 }]);
+    const [Item, setItem] = useState([allLabelWithZero]);
 
 
     const [userPageAccessState, setUserAccState] = useState('');
@@ -38,12 +39,14 @@ const PartyWiseItemSaleReport = (props) => {
         ItemDropDown,
         commonPartyDropSelect,
         ItemDropDownloading,
+        printBtnLoading
 
     } = useSelector((state) => ({
         GoButtonData: state.PartyWiseItemSaleReportReducer.ItemConsumption,
         GoBtnLoading: state.PartyWiseItemSaleReportReducer.listBtnLoading,
         ItemDropDownloading: state.StockEntryReducer.ItemDropDownloading,
         ItemDropDown: state.StockEntryReducer.ItemDropDown,
+        printBtnLoading: state.PdfReportReducers.printAllBtnLoading,
         commonPartyDropSelect: state.CommonPartyDropdownReducer,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
@@ -97,6 +100,8 @@ const PartyWiseItemSaleReport = (props) => {
         label: index.ItemName,
     }));
 
+    ItemList_Options.unshift(allLabelWithZero)
+
 
     useEffect(() => {
         dispatch(Get_Items_Drop_Down({
@@ -115,14 +120,6 @@ const PartyWiseItemSaleReport = (props) => {
 
     function goButtonHandler(goBtnMode) {
         debugger
-        if (Item.length === 0) {
-            customAlert({
-                Type: 4,
-                Message: alertMessages.selectItemName,
-            })
-            return
-        }
-
         try {
             const jsonBody = JSON.stringify({
                 FromDate: fromDate,
@@ -130,7 +127,10 @@ const PartyWiseItemSaleReport = (props) => {
                 PartyType: _cfunc.loginPartyTypeID(),
                 Party: _cfunc.loginSelectedPartyID(),
                 Employee: _cfunc.loginEmployeeID(),
-                ItemID: Item.map(inx => inx.value).join(','),
+                ItemID: (Item[0].value === 0) ? ItemList_Options
+                    .filter(inx => inx.value !== 0)
+                    .map(inx => inx.value)
+                    .join(',') : Item.map(inx => inx.value).join(','),
                 CompanyID: _cfunc.loginCompanyID()
 
             });
@@ -219,7 +219,7 @@ const PartyWiseItemSaleReport = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={GoBtnLoading === "Print"}
+                                loading={printBtnLoading}
                                 className="btn btn-primary m-3 mr"
                                 onClick={() => goButtonHandler("Print")}
                             >

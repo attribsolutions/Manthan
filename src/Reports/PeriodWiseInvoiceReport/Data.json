@@ -1,0 +1,284 @@
+{
+    "StatusCode": 200,
+    "Status": true,
+    "Data": [
+        {
+            "id": 403124,
+            "InvoiceDate": "2025-04-14",
+            "InvoiceNumber": 88,
+            "FullInvoiceNumber": "25-26/CBM/0088",
+            "TCSAmount": "22.00",
+            "GrandTotal": "22445.00",
+            "RoundOffAmount": "-0.32",
+            "Customer": 11580,
+            "CustomerName": "Uma Dairy Enterprise (Old)",
+            "CustomerGSTIN": "27AGNPT2114M1ZZ",
+            "CustomerMobileNo": "8591999567",
+            "Party": 14,
+            "PartyName": "Everest Agency",
+            "PartyState": "Maharashtra",
+            "CustomerState": "Maharashtra",
+            "PartyFSSAINo": "11520009000092",
+            "CustomerFSSAINo": "21521036000257",
+            "PartyAddress": [
+                {
+                    "id": 10,
+                    "Address": "Govind Prakash Bldg M.P.Road Gavanpada Mulund East Mumbai-400081",
+                    "FSSAINo": "11520009000092",
+                    "FSSAIExipry": "2027-02-15",
+                    "PIN": "400081",
+                    "IsDefault": true,
+                    "fssaidocument": "",
+                    "fssaidocumenturl": null,
+                    "Party": 14
+                }
+            ],
+            "CustomerAddress": [
+                {
+                    "id": 11604,
+                    "Address": "Shop No. 6, Shriram Arcade, Near Govandi Station, Greater Mumbai, Maharashtra - 400088",
+                    "FSSAINo": "21521036000257",
+                    "FSSAIExipry": "2026-08-31",
+                    "PIN": "400088",
+                    "IsDefault": true,
+                    "fssaidocumenturl": null,
+                    "Party": 11580
+                }
+            ],
+            "PartyGSTIN": "27AABFE6113D1ZZ",
+            "PartyMobileNo": "9769935182",
+            "CreatedOn": "2025-04-14T14:33:04.710486",
+            "DriverName": "KAUSTUBH PARADKAR",
+            "VehicleNo": "MH04JK0998",
+            "InvoiceItems": [
+                {
+                    "Item": 92,
+                    "ItemName": "Mini Khoa Poli N-4",
+                    "Quantity": "5.000",
+                    "MRP": 2639,
+                    "MRPValue": "120.00",
+                    "Rate": "90.72",
+                    "TaxType": "GST",
+                    "PrimaryUnitName": "No",
+                    "UnitName": "",
+                    "BaseUnitQuantity": "5.000",
+                    "GST": 92,
+                    "GSTPercentage": "5.00",
+                    "MarginValue": null,
+                    "BasicAmount": "453.60",
+                    "GSTAmount": "22.68",
+                    "CGST": "11.34",
+                    "SGST": "11.34",
+                    "IGST": "0.00",
+                    "CGSTPercentage": "2.50",
+                    "SGSTPercentage": "2.50",
+                    "IGSTPercentage": "0.00",
+                    "Amount": "476.28",
+                    "HSNCode": "21069099",
+                    "BatchCode": "05DD2025",
+                    "BatchDate": "2025-04-05",
+                    "DiscountType": "2",
+                    "Discount": "0.00",
+                    "DiscountAmount": "0.00"
+                },
+                {
+                    "Item": 274,
+                    "ItemName": "Mini Puran Poli 4 N",
+                    "Quantity": "5.000",
+                    "MRP": 2638,
+                    "MRPValue": "100.00",
+                    "Rate": "74.28",
+                    "TaxType": "GST",
+                    "PrimaryUnitName": "No",
+                    "UnitName": "",
+                    "BaseUnitQuantity": "5.000",
+                    "GST": 232,
+                    "GSTPercentage": "5.00",
+                    "MarginValue": null,
+                    "BasicAmount": "371.40",
+                    "GSTAmount": "18.58",
+                    "CGST": "9.29",
+                    "SGST": "9.29",
+                    "IGST": "0.00",
+                    "CGSTPercentage": "2.50",
+                    "SGSTPercentage": "2.50",
+                    "IGSTPercentage": "0.00",
+                    "Amount": "389.98",
+                    "HSNCode": "21069099",
+                    "BatchCode": "03DD2025",
+                    "BatchDate": "2025-04-02",
+                    "DiscountType": "2",
+                    "Discount": "0.00",
+                    "DiscountAmount": "0.00"
+                }
+            ],
+            "InvoicesReferences": [
+                {
+                    "Invoice": 403124,
+                    "Order": 438369,
+                    "FullOrderNumber": "PO38",
+                    "Description": null
+                }
+            ],
+            "InvoiceUploads": [
+                {
+                    "AckNo": "122526234677663",
+                    "Irn": "d61c9d96bb9fe1622e2c2d87bbeba112cf0f6d43e25383f5c1ab40dc37da75bd",
+                    "QRCodeUrl": "https://router.mastersindia.co/api/v1/einvoice/qrcode/YXByX2p1bl8yMDI1LTI2-67fcd51f4afd4646492e5eb9/",
+                    "EInvoicePdf": "https://router.mastersindia.co/api/v1/einvoice/pdf/YXByX2p1bl8yMDI1LTI2-67fcd51f4afd4646492e5eb9/",
+                    "EwayBillNo": null,
+                    "EwayBillUrl": null,
+                    "EInvoiceIsCancel": false,
+                    "EwayBillIsCancel": false
+                }
+            ],
+            "BankData": [
+                {
+                    "BankName": "TJSB Sahakari Bank Limited",
+                    "BranchName": "Mulund East",
+                    "IFSC": "TJSB0000106",
+                    "AccountNo": "106140200000081"
+                }
+            ]
+        },
+        {
+            "id": 403124,
+            "InvoiceDate": "2025-04-14",
+            "InvoiceNumber": 88,
+            "FullInvoiceNumber": "25-26/CBM/0088",
+            "TCSAmount": "22.00",
+            "GrandTotal": "22445.00",
+            "RoundOffAmount": "-0.32",
+            "Customer": 11580,
+            "CustomerName": "Uma Dairy Enterprise (Old)",
+            "CustomerGSTIN": "27AGNPT2114M1ZZ",
+            "CustomerMobileNo": "8591999567",
+            "Party": 14,
+            "PartyName": "Everest Agency",
+            "PartyState": "Maharashtra",
+            "CustomerState": "Maharashtra",
+            "PartyFSSAINo": "11520009000092",
+            "CustomerFSSAINo": "21521036000257",
+            "PartyAddress": [
+                {
+                    "id": 10,
+                    "Address": "Govind Prakash Bldg M.P.Road Gavanpada Mulund East Mumbai-400081",
+                    "FSSAINo": "11520009000092",
+                    "FSSAIExipry": "2027-02-15",
+                    "PIN": "400081",
+                    "IsDefault": true,
+                    "fssaidocument": "",
+                    "fssaidocumenturl": null,
+                    "Party": 14
+                }
+            ],
+            "CustomerAddress": [
+                {
+                    "id": 11604,
+                    "Address": "Shop No. 6, Shriram Arcade, Near Govandi Station, Greater Mumbai, Maharashtra - 400088",
+                    "FSSAINo": "21521036000257",
+                    "FSSAIExipry": "2026-08-31",
+                    "PIN": "400088",
+                    "IsDefault": true,
+                    "fssaidocumenturl": null,
+                    "Party": 11580
+                }
+            ],
+            "PartyGSTIN": "27AABFE6113D1ZZ",
+            "PartyMobileNo": "9769935182",
+            "CreatedOn": "2025-04-14T14:33:04.710486",
+            "DriverName": "KAUSTUBH PARADKAR",
+            "VehicleNo": "MH04JK0998",
+            "InvoiceItems": [
+                {
+                    "Item": 92,
+                    "ItemName": "Mini Khoa Poli N-4",
+                    "Quantity": "5.000",
+                    "MRP": 2639,
+                    "MRPValue": "120.00",
+                    "Rate": "90.72",
+                    "TaxType": "GST",
+                    "PrimaryUnitName": "No",
+                    "UnitName": "",
+                    "BaseUnitQuantity": "5.000",
+                    "GST": 92,
+                    "GSTPercentage": "5.00",
+                    "MarginValue": null,
+                    "BasicAmount": "453.60",
+                    "GSTAmount": "22.68",
+                    "CGST": "11.34",
+                    "SGST": "11.34",
+                    "IGST": "0.00",
+                    "CGSTPercentage": "2.50",
+                    "SGSTPercentage": "2.50",
+                    "IGSTPercentage": "0.00",
+                    "Amount": "476.28",
+                    "HSNCode": "21069099",
+                    "BatchCode": "05DD2025",
+                    "BatchDate": "2025-04-05",
+                    "DiscountType": "2",
+                    "Discount": "0.00",
+                    "DiscountAmount": "0.00"
+                },
+                {
+                    "Item": 274,
+                    "ItemName": "Mini Puran Poli 4 N",
+                    "Quantity": "5.000",
+                    "MRP": 2638,
+                    "MRPValue": "100.00",
+                    "Rate": "74.28",
+                    "TaxType": "GST",
+                    "PrimaryUnitName": "No",
+                    "UnitName": "",
+                    "BaseUnitQuantity": "5.000",
+                    "GST": 232,
+                    "GSTPercentage": "5.00",
+                    "MarginValue": null,
+                    "BasicAmount": "371.40",
+                    "GSTAmount": "18.58",
+                    "CGST": "9.29",
+                    "SGST": "9.29",
+                    "IGST": "0.00",
+                    "CGSTPercentage": "2.50",
+                    "SGSTPercentage": "2.50",
+                    "IGSTPercentage": "0.00",
+                    "Amount": "389.98",
+                    "HSNCode": "21069099",
+                    "BatchCode": "03DD2025",
+                    "BatchDate": "2025-04-02",
+                    "DiscountType": "2",
+                    "Discount": "0.00",
+                    "DiscountAmount": "0.00"
+                }
+            ],
+            "InvoicesReferences": [
+                {
+                    "Invoice": 403124,
+                    "Order": 438369,
+                    "FullOrderNumber": "PO38",
+                    "Description": null
+                }
+            ],
+            "InvoiceUploads": [
+                {
+                    "AckNo": "122526234677663",
+                    "Irn": "d61c9d96bb9fe1622e2c2d87bbeba112cf0f6d43e25383f5c1ab40dc37da75bd",
+                    "QRCodeUrl": "https://router.mastersindia.co/api/v1/einvoice/qrcode/YXByX2p1bl8yMDI1LTI2-67fcd51f4afd4646492e5eb9/",
+                    "EInvoicePdf": "https://router.mastersindia.co/api/v1/einvoice/pdf/YXByX2p1bl8yMDI1LTI2-67fcd51f4afd4646492e5eb9/",
+                    "EwayBillNo": null,
+                    "EwayBillUrl": null,
+                    "EInvoiceIsCancel": false,
+                    "EwayBillIsCancel": false
+                }
+            ],
+            "BankData": [
+                {
+                    "BankName": "TJSB Sahakari Bank Limited",
+                    "BranchName": "Mulund East",
+                    "IFSC": "TJSB0000106",
+                    "AccountNo": "106140200000081"
+                }
+            ]
+        }
+    ]
+}

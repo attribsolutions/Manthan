@@ -5,7 +5,7 @@ import { numberWithCommas } from "../Report_common_function";
 import { CurrentTime, GET_ERP_IMG, IsSweetAndSnacksCompany, compareGSTINState, convertOnlyTimefunc, currentDate_dmy, date_dmy_func, loginSystemSetting, loginUserIsFranchisesRole } from "../../components/Common/CommonFunction";
 import { url } from "../../routes";
 let initial_y = 0
-const isSweetAndSnacksCompany = IsSweetAndSnacksCompany()
+
 
 
 export const pageBorder = (doc) => {
@@ -32,7 +32,7 @@ export const pageBorder_A5 = (doc) => {
 
 
 export const pageHeder = (doc, data) => {
-
+    const isSweetAndSnacksCompany = IsSweetAndSnacksCompany()
 
     if (isSweetAndSnacksCompany) {
         doc.addImage(GET_ERP_IMG().Logo, 'PNG', 35, 17, 75, 46, null, 'FAST')
@@ -354,6 +354,7 @@ export const reportHeder3 = (doc, data) => {
 
 }
 export const tableBody = (doc, data) => {
+    const isSweetAndSnacksCompany = IsSweetAndSnacksCompany()
     const { OrderItem = [] } = data
     var options = {
         didParseCell: (data1) => {
@@ -374,6 +375,10 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[11].styles.fillColor = [211, 211, 211]
             }
 
+
+            if (((data1.row.cells[2].raw === "MRP") || (data1.row.cells[2].raw === "0.00")) && isSweetAndSnacksCompany) {
+                data1.row.cells[1].colSpan = 2
+            }
 
             if (data1.row.cells[8].raw === "isaddition") {
                 data1.row.cells[0].colSpan = 2
@@ -571,7 +576,7 @@ export const tableBodyWithIGST = (doc, data) => {
     //Body table  Css
     var options = {
         didParseCell: (data1) => {
-
+            const isSweetAndSnacksCompany = IsSweetAndSnacksCompany()
             if (data1.row.cells[8].raw === "isaddition") {
                 data1.row.cells[0].colSpan = 2
                 data1.row.cells[2].colSpan = 2
@@ -605,6 +610,10 @@ export const tableBodyWithIGST = (doc, data) => {
 
 
 
+            }
+
+            if (((data1.row.cells[2].raw === "MRP") || (data1.row.cells[2].raw === "0.00")) && isSweetAndSnacksCompany) {
+                data1.row.cells[1].colSpan = 2
             }
             if (data1.row.cells[0].raw === "HSN Item Name") {
 
