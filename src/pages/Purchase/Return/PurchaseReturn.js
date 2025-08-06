@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
     Col,
     FormGroup,
@@ -44,6 +44,7 @@ import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable"
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction } from "../../../store/Inventory/StockEntryRedux/action";
 import GlobalCustomTable from "../../../GlobalCustomTable";
+import { getVehicleList, getVehicleListSuccess } from "../../../store/Administrator/VehicleRedux/action";
 
 
 const PurchaseReturn = (props) => {
@@ -62,7 +63,8 @@ const PurchaseReturn = (props) => {
         ItemName: "",
         InvoiceNumber: "",
         BatchCode: "",
-        Comment: ""
+        Comment: "",
+        VehicleNo: "",
     }
 
     const [state, setState] = useState(initialFiledFunc(fileds))
@@ -73,6 +75,7 @@ const PurchaseReturn = (props) => {
     const [ButtonCondition, setButtonCondition] = useState({ isEnable: false, isEnablePriviousAlert: false });
     const [alertDate, setAlertDate] = useState({ ActualDate: "", WarningDate: "", Coustomerid: [], Supplierid: [], date: [], SelectedCustomerId: null })
 
+    const [editInvoiceData, setEditInvoiceData] = useState('')
 
 
 
@@ -109,8 +112,10 @@ const PurchaseReturn = (props) => {
         addBtnLoading,
         commonPartyDropSelect,
         StockEnteryForFirstYear,
-        StockEnteryForBackdated
+        StockEnteryForBackdated,
+        VehicleNumber,
     } = useSelector((state) => ({
+        VehicleNumber: state.VehicleReducer.VehicleList,
         StockEnteryForFirstYear: state.StockEntryReducer.StockEnteryForFirstYear,
         StockEnteryForBackdated: state.StockEntryReducer.StockEnteryForBackdated,
         addButtonData: state.SalesReturnReducer.addButtonData,
@@ -133,6 +138,9 @@ const PurchaseReturn = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.PURCHASE_RETURN))
         dispatch(BreadcrumbShowCountlabel(`Count:${0} currency_symbol ${0}`))
+        dispatch(getVehicleListSuccess([]));
+        dispatch(getVehicleList())
+        
     }, []);
 
     // Common Party Dropdown useEffect
@@ -241,6 +249,7 @@ const PurchaseReturn = (props) => {
                     history.push({ pathname: url.PURCHASE_RETURN_LIST })
                 }
             }
+            setEditInvoiceData();
         }
         else if (postMsg.Status === true) {
             dispatch(saveSalesReturnMaster_Success({ Status: false }))
@@ -405,7 +414,27 @@ const PurchaseReturn = (props) => {
     }, [alertDate])
 
 
+    useLayoutEffect(() => {
 
+        if ((VehicleNumber.length > 0) && editInvoiceData !== '' && pageMode == mode.edit) {
+            const foundVehicle = VehicleNumber.find(i => editInvoiceData.Data.Vehicle === i.id);
+
+            setState((i) => {
+                const obj = { ...i }
+                if (foundVehicle !== undefined) {
+                    obj.values.VehicleNo = { value: foundVehicle.id, label: foundVehicle.VehicleNumber };
+                    obj.hasValid.VehicleNo.valid = true;
+                }
+                return obj
+            })
+        }
+    }, [VehicleNumber, editInvoiceData, pageMode]);
+
+
+    const VehicleNumber_Options = VehicleNumber.map((index) => ({
+        value: index.id,
+        label: index.VehicleNumber,
+    }));
 
     const itemList = ItemList.map((index) => ({
         value: index.Item,
@@ -1059,6 +1088,7 @@ const PurchaseReturn = (props) => {
                             "ItemName": index.ItemName,
                             "Unit": index.Unit,
                             "BatchCode": ele.BatchCode,
+                           
                             "Quantity": Number(ele.Qty).toFixed(3),
                             "BatchDate": ele.BatchDate,
                             "BatchID": ele.id,
@@ -1103,6 +1133,7 @@ const PurchaseReturn = (props) => {
             formData.append('ReturnDate', values.ReturnDate);
             formData.append('ReturnReason', '');
             formData.append('BatchCode', values.BatchCode);
+            formData.append('VehicleNo', values.VehicleNo.value);
             formData.append('Customer', commonPartyDropSelect.value);
 
             formData.append('Party', values.Customer.value);
@@ -1120,6 +1151,13 @@ const PurchaseReturn = (props) => {
 
         } catch (e) { _cfunc.CommonConsole(e) }
     };
+
+
+
+
+
+
+
 
     if (!(userPageAccessState === '')) {
         return (
@@ -1145,11 +1183,11 @@ const PurchaseReturn = (props) => {
                     <div className="px-2 c_card_filter header text-black mb-1" >
 
                         <Row>
-                            <Col sm="6">
+                            <Col sm="5">
                                 <FormGroup className="row mt-2" >
                                     <Label className="col-sm-1 p-2"
                                         style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReturnDate}  </Label>
-                                    <Col sm="7">
+                                    <Col sm="5">
                                         <C_DatePicker
                                             name='ReturnDate'
                                             value={values.ReturnDate}
@@ -1159,11 +1197,11 @@ const PurchaseReturn = (props) => {
                                 </FormGroup>
                             </Col >
 
-                            <Col sm="6">
+                            <Col sm="5">
                                 <FormGroup className=" row mt-2 " >
                                     <Label className="col-sm-1 p-2"
                                         style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Customer} </Label>
-                                    <Col sm="7">
+                                    <Col sm="5">
                                         <C_Select
                                             id="Customer "
                                             name="Customer"
@@ -1185,14 +1223,32 @@ const PurchaseReturn = (props) => {
 
                                 </FormGroup>
                             </Col >
+                            <Col sm="2">
+                                <FormGroup className=" row mt-1 " >
+                                    <Label className="col-sm-1 p-2"
+                                        style={{ width: "115px", marginRight: "0.4cm" }}>IsSaleableStock</Label>
+                                    <Col sm="5">
+                                        <Input
+                                            style={{ marginRight: "0.4cm", marginTop: "10px", width: "15px", height: "15px" }}
+                                            type="checkbox"
+                                            disabled={TableArr.length > 0 && true}
+                                            defaultChecked={isSaleableStock}
+                                            onChange={(event) => { setIsSaleableStock(event.target.checked) }}
+                                        />
+
+                                    </Col>
+
+                                </FormGroup>
+                            </Col >
+
                         </Row>
 
                         <Row>
-                            <Col sm="6">
+                            <Col sm="5">
                                 <FormGroup className=" row mt-1 " >
                                     <Label className="col-sm-1 p-2"
                                         style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ItemName} </Label>
-                                    <Col sm="7">
+                                    <Col sm="5">
                                         <C_Select
                                             id="ItemName "
                                             name="ItemName"
@@ -1211,11 +1267,11 @@ const PurchaseReturn = (props) => {
                                 </FormGroup>
                             </Col >
 
-                            <Col sm="6">
+                            <Col sm="5">
                                 <FormGroup className=" row mt-1 " >
                                     <Label className="col-sm-1 p-2"
                                         style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Comment} </Label>
-                                    <Col sm="7">
+                                    <Col sm="5">
                                         <Input
                                             name="Comment"
                                             id="Comment"
@@ -1238,11 +1294,11 @@ const PurchaseReturn = (props) => {
                         </Row>
 
                         <Row>
-                            <Col sm="6">
+                            <Col sm="5">
                                 <FormGroup className=" row mt-1 " >
                                     <Label className="col-sm-1 p-2"
                                         style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.BatchCode}</Label>
-                                    <Col sm="7">
+                                    <Col sm="5">
                                         <Input
                                             name="BatchCode"
                                             value={values.BatchCode}
@@ -1274,24 +1330,39 @@ const PurchaseReturn = (props) => {
                                 </FormGroup>
                             </Col >
 
+                            <Col sm="5">
+                                    <FormGroup className="mb- row mt-2 " >
+                                        <Label className="col-sm-5 p-2 me-5"
+                                            style={{ width: "70px" }}>{fieldLabel.VehicleNo}VehicleNo </Label>
+                                        <Col sm="5" className="ms-3">
+                                            <Select
+                                                name="VehicleNo"
+                                                value={values.VehicleNo}
+                                                isSearchable={true}
+                                                id={'VehicleNoselect'}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                options={VehicleNumber_Options}
+                                                onChange={(hasSelect, evn) => {
+                                                    onChangeSelect({ hasSelect, evn, state, setState })
+                                                }}
+                                                styles={{ menu: provided => ({ ...provided, zIndex: 3 }) }}
+                                            />
+                                            {isError.VehicleNo.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.VehicleNo}</small></span>
+                                            )}
+                                        </Col>
+                                        {/* {(Vehicle_AddAccess) &&
+                                            <Col md="1" className="mt-md-n2">
+                                                <AddMaster
+                                                    masterModal={VehicleMaster}
+                                                    masterPath={url.VEHICLE}
+                                                />
+                                            </Col>} */}
+                                    </FormGroup>
+                                </Col>
 
-                            <Col sm="6">
-                                <FormGroup className=" row mt-1 " >
-                                    <Label className="col-sm-1 p-2"
-                                        style={{ width: "115px", marginRight: "0.4cm" }}>IsSaleableStock</Label>
-                                    <Col sm="7">
-                                        <Input
-                                            style={{ marginRight: "0.4cm", marginTop: "10px", width: "15px", height: "15px" }}
-                                            type="checkbox"
-                                            disabled={TableArr.length > 0 && true}
-                                            defaultChecked={isSaleableStock}
-                                            onChange={(event) => { setIsSaleableStock(event.target.checked) }}
-                                        />
-
-                                    </Col>
-
-                                </FormGroup>
-                            </Col >
+                          
                         </Row>
 
                     </div>

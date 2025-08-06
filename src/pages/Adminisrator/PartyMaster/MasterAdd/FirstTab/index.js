@@ -17,6 +17,7 @@ import CityMaster from '../../../CityPages/CityMaster'
 import { C_Select } from '../../../../../CustomValidateForm'
 import { GetRoutesList, GetRoutesListSuccess } from '../../../../../store/Administrator/RoutesRedux/actions'
 import { Get_Subcluster_On_cluster_API } from '../../../../../helpers/backend_helper'
+import * as _cfunc from "../../../../../components/Common/CommonFunction";
 
 const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
@@ -52,7 +53,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const [priceListSelect, setPriceListSelect] = useState({ value: '' });
-    debugger
+  
     const [partyType_AddMasterAccess, setPartyType_AddMasterAccess] = useState(false)
     const [city_AddMasterAccess, setCity_AddMasterAccess] = useState(false)
 
@@ -60,6 +61,9 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
     const [partyTypeDisabled, setPartyTypeDisabled] = useState(false)
     const [supplierDisabled, setSupplierDisabled] = useState(false)
+
+    const IsMannagementParty = !_cfunc.loginUserIsFranchisesRole() && _cfunc.loginIsSCMParty();
+   
 
     const baseTabRef = useRef(null);
 
@@ -282,7 +286,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
     }, [loginPartyType, PartyTypes, SupplierRedux])
 
 
-   
+
 
 
     useEffect(() => {
@@ -661,8 +665,8 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                             </Col>
                             <Col md="1">  </Col>
 
-                            {!(subPageMode === url.RETAILER_MASTER) &&// SUPLIER dropdown  show only (Party Master) mode
-                                < Col md="3">
+                            {IsMannagementParty && subPageMode !== url.RETAILER_MASTER && (
+                                <Col md="3">
                                     <FormGroup className="mb-3">
                                         <Label> {fieldLabel.Supplier} </Label>
                                         <Col sm={12}>
@@ -670,7 +674,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                                 id="supplierName"
                                                 name="Supplier"
                                                 value={values.Supplier}
-                                                isDisabled={(subPageMode === url.PARTY_SELF_EDIT || supplierDisabled) && true}
+                                                isDisabled={(subPageMode === url.PARTY_SELF_EDIT || supplierDisabled)}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={SupplierOptions}
@@ -685,7 +689,8 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
-                            }
+                            )}
+
                         </Row>
                         <Row>
                             <Col md="3">
