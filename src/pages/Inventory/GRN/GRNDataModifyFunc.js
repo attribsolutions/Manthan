@@ -17,6 +17,10 @@ export function transformGRNtoInvoiceFormat(originalData) {
     let CustomerAddress = "";
     let PartyFSSAINo = "";
     let CustomerFSSAINo = "";
+    let CustomerState = "";
+    let PartyState = "";
+    let PartyMobileNo = "";
+    let CustomerMobileNo = "";
 
 
     if (grn.GRNReferences?.[0]?.Order) {   // GRN From vendor order If Not null
@@ -30,9 +34,13 @@ export function transformGRNtoInvoiceFormat(originalData) {
         PartyAddress = billingAddress.Address || "";
         CustomerAddress = billingAddress.Address || "";
         PartyFSSAINo = billingAddress.FSSAINo || "";
-        CustomerFSSAINo = "";
+        CustomerFSSAINo = billingAddress.FSSAINo || "";
+        CustomerState = billingAddress.CustomerState || "";
+        PartyState = billingAddress.CustomerState || "";
+        PartyMobileNo = billingAddress.PartyMobileNo || "";
+        CustomerMobileNo = billingAddress.CustomerMobileNo || "";
     } else {
-        debugger
+
         Customer = grn.Customer || null;
         CustomerName = grn.CustomerName || "";
         CustomerGSTIN = grn.CustomerGSTIN || "";
@@ -42,7 +50,11 @@ export function transformGRNtoInvoiceFormat(originalData) {
         PartyAddress = grn.PartyAddress || "";
         CustomerAddress = grn.CustomerAddress || "";
         PartyFSSAINo = grn.PartyFSSAINo || "";
-        CustomerFSSAINo = "";
+        CustomerFSSAINo = grn.CustomerFSSAINo;
+        CustomerState = grn.CustomerState || "";
+        PartyState = grn.CustomerState || "";
+        PartyMobileNo = grn.PartyMobileNo || "";
+        CustomerMobileNo = grn.CustomerMobileNo || "";
     }
 
 
@@ -61,15 +73,15 @@ export function transformGRNtoInvoiceFormat(originalData) {
             Customer: Customer,
             CustomerName: CustomerName,
             CustomerGSTIN: CustomerGSTIN,
-            CustomerMobileNo: "",
+            CustomerMobileNo: CustomerMobileNo,
             Party: Party,
             PartyName: PartyName,
             PartyGSTIN: PartyGSTIN,
-            PartyMobileNo: "",
+            PartyMobileNo: PartyMobileNo,
             PartyFSSAINo: PartyFSSAINo,
             CustomerFSSAINo: CustomerFSSAINo,
-            PartyState: "",
-            CustomerState: "",
+            PartyState: PartyState,
+            CustomerState: CustomerState,
             PartyAddress: PartyAddress,
             CustomerAddress: CustomerAddress,
 
