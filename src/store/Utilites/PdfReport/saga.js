@@ -14,7 +14,7 @@ function* getpdfData_GenFunc({ urlpath, config }) {
 
     response["ReportType"] = config.ReportType
     response.Data["ReportType"] = config.ReportType
-    if (Array.isArray(response.Data)) {
+    if (Array.isArray(response.Data) && (response.Data.length > 0)) {
       // response.Data[0] = {};
       // response.Data[0] = response.Data;
 

@@ -8,19 +8,16 @@ import { initialFiledFunc } from "../../components/Common/validationFunction";
 import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker, } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { mode, pageId, url, } from "../../routes/index"
+import { mode, pageId, } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-
-import * as report from '../../Reports/ReportIndex'
 import C_Report from "../../components/Common/C_Report";
 import Select, { components } from 'react-select';
-
-import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getpdfReportdataSuccess, invoiceListGoBtnfilter, } from "../../store/actions";
-import { divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall, VendorSupplierCustomer } from "../../helpers/backend_helper";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getpdfReportdata, invoiceListGoBtnfilter, } from "../../store/actions";
+import { divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall, MultipleInvoice_API, VendorSupplierCustomer } from "../../helpers/backend_helper";
 import { allLabelWithBlank, } from "../../components/Common/CommonErrorMsg/HarderCodeData";
+import * as report from '../../Reports/ReportIndex'
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-
-import data from "./Data.json"
+import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 
 const PeriodWiseInvoiceReport = (props) => {
 
@@ -31,53 +28,40 @@ const PeriodWiseInvoiceReport = (props) => {
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        division: [allLabelWithBlank],
-        customer: [allLabelWithBlank]
+        division: "",
+        customer: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [userPageAccessState, setUserAccState] = useState('');
-
     const [DivisionOptions, setDivisionOptions] = useState([]);
-
     const [Customer, setCustomer] = useState([]);
-
-    const [commaSeparatedIDs, setCommaSeparatedIDs] = useState('');
-
 
     const reducers = useSelector(
         (state) => ({
-            tableList: state.InvoiceReducer.Invoicelist,
-            tableData: state.Css_Item_sale_Reducer.Css_Item_Sale_ReportGobtn,
             GoBtnLoading: state.Css_Item_sale_Reducer.goBtnLoading,
             userAccess: state.Login.RoleAccessUpdateData,
+            pdfdata: state.PdfReportReducers.pdfdata,
             pageField: state.CommonPageFieldReducer.pageField,
             commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect,
             vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
+            goBtnLoading: state.PdfReportReducers.goBtnLoading,
             customer: state.CommonAPI_Reducer.customer,
         })
     );
 
-    const { userAccess, tableData, GoBtnLoading, tableList } = reducers;
-    const { Data = [], Type } = tableData
-
-
-
-
+    const { userAccess, pdfdata, goBtnLoading } = reducers;
+    const values = { ...state.values }
+    const location = { ...history.location }
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
 
 
     useEffect(async () => {
         dispatch(commonPageFieldSuccess(null));
-
         dispatch(commonPageField(pageId.PERIOD_WISE_INVOICE_REPORT));
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
-
-
         const resp = await divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall(_cfunc.loginEmployeeID())
-
-
-
         if (resp.Status === true && resp.StatusCode === 200) {
             const data = resp.Data.map((i) => ({
                 value: i.Party_id,
@@ -85,23 +69,20 @@ const PeriodWiseInvoiceReport = (props) => {
             }))
             setDivisionOptions(data)
         }
-
-        // dispatch(GetCustomer());
-
-
         return () => {
             dispatch(commonPageFieldSuccess(null));
-
         }
     }, []);
+    useEffect(() => {
+        debugger
+        if ((pdfdata.Status === true) && (pdfdata.StatusCode === 204)) {
+            customAlert({
+                Type: 3,
+                Message: pdfdata.Message,
+            });
 
-
-
-    const values = { ...state.values }
-
-    // Featch Modules List data  First Rendering
-    const location = { ...history.location }
-    const hasShowModal = props.hasOwnProperty(mode.editValue)
+        }
+    }, [pdfdata])
 
     // userAccess useEffect
     useEffect(() => {
@@ -120,43 +101,6 @@ const PeriodWiseInvoiceReport = (props) => {
     }, [userAccess])
 
 
-    // 
-
-    useEffect(() => {
-
-        if (reducers.tableList && Array.isArray(reducers.tableList) && reducers.tableList.length > 0) {
-            const ids = reducers.tableList.map(item => item.id).join(',');
-            setCommaSeparatedIDs(ids);
-            console.log("Comma Separated Invoice IDs:", ids);
-        }
-    }, [reducers.tableList]);
-
-
-
-
-    useEffect(() => {
-        debugger
-        try {
-            if (reducers.tableList.length === 0) {
-                data["ReportType"] = report.Period_Wise_Invoice_Report;
-                dispatch(getpdfReportdataSuccess(data))
-                // dispatch(Css_Item_Sale_Gobtn_Success([]));
-            }
-            else if ((tableData.Status === true) && (tableData.StatusCode === 204)) {
-                customAlert({
-                    Type: 3,
-                    Message: tableData.Message,
-                })
-                // dispatch(Css_Item_Sale_Gobtn_Success([]));
-                return
-            }
-        }
-        catch (e) { }
-
-    }, [reducers.tableList]);
-
-
-
 
     function fromdateOnchange(e, date) {
         setState((i) => {
@@ -165,7 +109,6 @@ const PeriodWiseInvoiceReport = (props) => {
             a.hasValid.FromDate.valid = true
             return a
         })
-        // dispatch(Css_Item_Sale_Gobtn_Success([]));
 
     }
 
@@ -176,19 +119,14 @@ const PeriodWiseInvoiceReport = (props) => {
             a.hasValid.ToDate.valid = true
             return a
         })
-        // dispatch(Css_Item_Sale_Gobtn_Success([]));
-
     }
 
 
-
     const divisionOnchange = async (e) => {
-
         if (!e || e.value === '') {
             setCustomer([]);
         } else {
             const PartyID = e.value;
-
             const jsonBody = {
                 PartyID,
                 Company: _cfunc.loginCompanyID(),
@@ -200,7 +138,6 @@ const PeriodWiseInvoiceReport = (props) => {
                 setCustomer(Resp.Data);
             }
         }
-
         setState((i) => {
             const a = { ...i }
             a.values.division = e;
@@ -209,51 +146,52 @@ const PeriodWiseInvoiceReport = (props) => {
         });
     };
 
-
-
-
-
     const customerOnchange = (e) => {
         let selected = e;
-
         if (!selected || selected.value === '') {
             selected = allLabelWithBlank;
         }
-
         setState((i) => {
             const a = { ...i }
             a.values.customer = selected;
             a.hasValid.customer.valid = true;
             return a;
         });
-
         dispatch(invoiceListGoBtnfilter([]));
     }
 
 
-    function goButtonHandler(BtnID) {
+    function goButtonHandler() {
         debugger
 
+        if (values.customer === "") {
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(alertMessages.customerIsRequired),
+            });
+            return
+        }
+
+        if (values.division === "") {
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(alertMessages.divisionSelectionIsRequired),
+            });
+            return
+        }
         try {
-            debugger
-            const filtersBody = JSON.stringify({
+            const jsonBody = JSON.stringify({
+                LoadingSheetID: 0,
                 FromDate: values.FromDate,
                 ToDate: values.ToDate,
-                Customer: values.customer.value, // Ensure we send a string
-                Party: values.division.value, // Ensure we send a string
-                IBType: "",
-                DashBoardMode: 0
+                Customer: values.customer.value,
+                Party: values.division.value,
             });
-
-            const subPageMode = url.PERIOD_WISE_INVOICE_REPORT
-
-            dispatch(invoiceListGoBtnfilter({ subPageMode, filtersBody, btnId: BtnID }));
+            dispatch(getpdfReportdata(MultipleInvoice_API, { jsonBody, ReportType: report.Period_Wise_Invoice_Report }))
         } catch (error) {
             _cfunc.CommonConsole(error);
         }
     }
-
-
 
     const CustomMultiValueLabel = props => {
         return (
@@ -284,7 +222,6 @@ const PeriodWiseInvoiceReport = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
-
                         <Col sm={2} className="">
                             <FormGroup className=" row mt-2 " >
                                 <Label className="col-sm-4 p-2"
@@ -298,7 +235,6 @@ const PeriodWiseInvoiceReport = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
-
                         <Col sm={3} className="">
                             <FormGroup className=" row mt-2" >
                                 <Label className="col-sm-4 p-2"
@@ -308,7 +244,7 @@ const PeriodWiseInvoiceReport = (props) => {
                                         name="division"
                                         value={values.division}
                                         isSearchable={true}
-                                        isMulti={false}
+                                        // isMulti={false}
                                         components={{ MultiValueLabel: CustomMultiValueLabel }}
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
@@ -321,7 +257,6 @@ const PeriodWiseInvoiceReport = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
-
                         <Col sm={3} className="">
                             <FormGroup className=" row mt-2" >
                                 <Label className="col-sm-4 p-2"
@@ -330,10 +265,9 @@ const PeriodWiseInvoiceReport = (props) => {
                                     <Select
                                         name="customer"
                                         value={values.customer}
-                                        isMulti={false}
+                                        // isMulti={false}
                                         isSearchable={true}
                                         components={{ MultiValueLabel: CustomMultiValueLabel }}
-
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
                                         styles={{
@@ -351,13 +285,11 @@ const PeriodWiseInvoiceReport = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
-
-
                         <Col sm={2} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={(GoBtnLoading && Type === "Print") && true}
+                                loading={goBtnLoading}
                                 className="btn btn-primary m-3 mr"
                                 onClick={() => goButtonHandler("Print")}
                             >
@@ -366,13 +298,8 @@ const PeriodWiseInvoiceReport = (props) => {
                         </Col>
                     </Row>
                 </div>
-
-
-
-
             </div>
             <C_Report />
-
         </React.Fragment >
     )
 }
