@@ -13,7 +13,7 @@ import {
     commonPageField,
     commonPageFieldSuccess,
 } from "../../../store/actions";
-import { C_Select } from "../../../CustomValidateForm";
+
 import {
     ItemSupplierList_Action,
     ItemSupplierList_Success,
@@ -21,7 +21,7 @@ import {
     ItemWiseUpdate_Save_Success
 } from "../../../store/Administrator/ItemWiseUpdateRedux/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import GlobalCustomTable from "../../../GlobalCustomTable"
 import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";

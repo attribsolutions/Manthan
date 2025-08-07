@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { CommonConsole } from "../../../components/Common/CommonFunction";
 import { postViewGst_Success } from "../../../store/actions";
 import { useState } from "react";
-import { DetailsSection, ModalCount } from "../../../components/Common/ModalCount";
+import { DetailsSection,} from "../../../components/Common/ModalCount";
 
 const GSTView = (Props) => {
 

@@ -17,7 +17,7 @@ import {
   update_ImportFiledAdd_Success
 } from "../../../../store/Administrator/ImportFieldAddRedux/action";
 import { loginCompanyID } from "../../../../components/Common/CommonFunction";
-import { Listloader, PageLoadingSpinner } from "../../../../components/Common/CommonButton";
+import { PageLoadingSpinner } from "../../../../components/Common/CommonButton";
 
 const ImportFieldAddList = () => {
 

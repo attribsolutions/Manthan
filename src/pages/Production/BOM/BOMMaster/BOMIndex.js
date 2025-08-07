@@ -34,7 +34,7 @@ import {
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
-import { C_DatePicker, C_Select } from "../../../../CustomValidateForm";
+import { C_DatePicker, C_Select, CInput, decimalRegx_3dit } from "../../../../CustomValidateForm";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
@@ -265,24 +265,27 @@ const BOMMaster = (props) => {
 
 
     function Items_Dropdown_Handler(e) {
-        debugger
-        setItemTabDetails([])
-        let Item = Items.filter((index) => {
-            return index.id === e.value
-        })
-        let ItemUnits = Item[0]?.UnitDetails.map((data) => ({
+        setItemTabDetails([]);
+
+        const selectedItem = Items.find(item => item.id === e.value);
+
+        const ItemUnits = selectedItem?.UnitDetails.map((data) => ({
             value: data.UnitID,
             label: data.UnitName
-        }))
+        }));
 
-        setItemUnitOptions(ItemUnits)
+        setItemUnitOptions(ItemUnits);
+
+        // Select first/default unit
+        const defaultUnit = ItemUnits && ItemUnits.length > 0 ? ItemUnits[0] : "";
 
         setState((i) => {
-            i.values.UnitName = "";
-            i.hasValid.UnitName.valid = false
-            return i
-        })
+            i.values.UnitName = defaultUnit; //  Automatically set unit
+            i.hasValid.UnitName.valid = !!defaultUnit;
+            return { ...i };
+        });
     }
+
 
     const SaveHandler = async (event) => {
 
@@ -410,7 +413,7 @@ const BOMMaster = (props) => {
                                     <FormGroup className="mb-2 row mt-2">
                                         <Label className="mt-2" style={{ width: "115px" }} >{fieldLabel.EstimatedOutputQty} </Label>
                                         <Col sm="7">
-                                            <Input
+                                            <CInput
                                                 style={{ textAlign: "right" }}
                                                 name="EstimatedOutputQty"
                                                 value={values.EstimatedOutputQty}
@@ -419,6 +422,7 @@ const BOMMaster = (props) => {
                                                 className={isError.EstimatedOutputQty.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter EstimatedOutputQty"
                                                 autoComplete='off'
+                                                cpattern={decimalRegx_3dit}
                                                 onChange={(event) => {
                                                     onChangeText({ event, state, setState })
                                                 }}
@@ -437,16 +441,16 @@ const BOMMaster = (props) => {
                                             <Select
                                                 name="UnitName"
                                                 value={values.UnitName}
-                                                isDisabled={pageMode === mode.view}
-                                                isSearchable={true}
+                                                isDisabled={true} 
+                                                isSearchable={false}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
                                                 options={pageMode === mode.edit ? ItemUnitOnEditData : ItemUnitOptions}
-                                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                             />
+
                                             {isError.UnitName.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.UnitName}</small></span>
                                             )}

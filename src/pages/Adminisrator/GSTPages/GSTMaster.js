@@ -21,7 +21,6 @@ import {
     commonPageFieldSuccess,
     deleteGSTId_ForMaster,
     deleteGSTId_ForMaster_Success,
-    getGSTList,
     goButtonForGST_Master,
     goButtonForGST_Master_Success,
     saveGSTMaster,
