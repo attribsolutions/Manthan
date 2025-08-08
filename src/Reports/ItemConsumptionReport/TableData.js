@@ -1,4 +1,4 @@
-import { convertOnlyTimefunc, date_dmy_func, getFixedNumber, loginUserDetails } from "../../components/Common/CommonFunction";
+import { loginUserDetails } from "../../components/Common/CommonFunction";
 import { numberWithCommas } from "../Report_common_function";
 
 
@@ -12,8 +12,6 @@ export const columns = [
 
 
 
-
-
 export const PageHedercolumns = [
     "Billed by",
     "Billed to",
@@ -21,7 +19,7 @@ export const PageHedercolumns = [
 ]
 
 export const Rows = (data) => {
-    debugger;
+   
     const returnArr = [];
     let totalProductionQty = 0;
     let totalUsedQty = 0;
@@ -37,13 +35,19 @@ export const Rows = (data) => {
     };
 
     function ReceiveQuantity() {
+        const space = "          "; // 5 regular spaces (~20px approx in monospace font)
+    
         return [
-            `Receive/Tranfer Quantity : ${data.RecieveQuantity} ${data?.RawMaterialUnit}`,
-            "Receive",
-            "",
-
+            `Receive/Tranfer Quantity : ${data.RecieveQuantity} ${data?.RawMaterialUnit}${space}` +
+            `IB Receive Quantity : ${data.IBRecieveQuantity} ${data?.RawMaterialUnit}${space}` +
+            `IB Sale Quantity : ${data.IBSaleQty} ${data?.RawMaterialUnit}`,
+            "Open",
+            ""
         ];
-    };
+    }
+    
+    
+    
 
 
     function ClosingBalance() {
@@ -100,7 +104,7 @@ export const Rows = (data) => {
 
 
 export const ReportHederRows = (data) => {
-    debugger
+   
     const UserDetails = loginUserDetails()
     var reportArray = [
         [`                   :${UserDetails.PartyAddress}`, ` `,],

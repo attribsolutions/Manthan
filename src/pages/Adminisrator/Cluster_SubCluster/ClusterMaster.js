@@ -29,7 +29,7 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { editClusterIDSuccess, getClusterlist, saveClusterMaster, saveClusterMaster_Success, updateClusterID, updateClusterIDSuccess } from "../../../store/Administrator/ClusterRedux/action";
-import Select from "react-select";
+
 
 const ClusterMaster = (props) => {
 

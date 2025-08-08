@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Col, Input, Table, } from 'reactstrap';
 import { Tbody, Thead } from 'react-super-responsive-table';
 import * as mode from "../../../../../routes/PageMode";
+import { CInput, decimalRegx_3dit } from '../../../../../CustomValidateForm';
 
 function BOMTable(props) {
 
@@ -48,15 +49,16 @@ function BOMTable(props) {
         <td>{info.ItemName}</td>
         <td>
           <div className='text-center' style={{ width: "150px" }}>
-            <Input type="text"
+            <CInput type="text"
               key={info.id}
               style={{ width: '140px', textAlign: 'center' }}
               disabled={ props.pageMode === mode.view}
               className="text-end"
               defaultValue={info.Quantity}
               onChange={(event) => handleChange(event, info)}
+              cpattern={decimalRegx_3dit}
             >
-            </Input>
+            </CInput>
           </div>
         </td>
         <td>{info.UnitName}</td>

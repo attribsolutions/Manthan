@@ -4,7 +4,6 @@ import {
     Button,
     Col,
     FormGroup,
-    Input,
     Label,
     Row
 } from 'reactstrap';
@@ -13,7 +12,7 @@ import { useSelector } from 'react-redux';
 import BOMTable from './Table';
 import { customAlert } from '../../../../../CustomAlert/ConfirmDialog';
 import { alertMessages } from '../../../../../components/Common/CommonErrorMsg/alertMsg';
-import { C_Select } from '../../../../../CustomValidateForm';
+import { C_Select, CInput, decimalRegx_3dit } from '../../../../../CustomValidateForm';
 import * as mode from "../../../../../routes/PageMode";
 import { IsSweetAndSnacksCompany } from '../../../../../components/Common/CommonFunction';
 
@@ -23,9 +22,8 @@ function ItemTab(props) {
     const [Quantity, setQuantity] = useState('');
     const [unitSelect, setUnitSelect] = useState('');
     const [ItemUnitOptions, setItemUnitOptions] = useState([]);
-
     const IsSweetAndSnacks = IsSweetAndSnacksCompany();
-
+    
     const { Items, ItemListloading } = useSelector((state) => ({
         Items: state.ItemMastersReducer.ItemList,
         ItemListloading: state.ItemMastersReducer.loading,
@@ -44,65 +42,88 @@ function ItemTab(props) {
 
 
     function ContentItem_Handler(e) {
+        setContentItemSelect(e);
 
-        setUnitSelect('')
-        setContentItemSelect(e)
-        let Item = Items.filter((index) => {
-            return index.id === e.value
-        })
-        let ItemUnits = Item[0]?.UnitDetails.map((data) => ({
+        const selectedItem = Items.find(index => index.id === e.value);
+
+        const ItemUnits = selectedItem?.UnitDetails.map((data) => ({
             value: data.UnitID,
             label: data.UnitName
-        }))
-        setItemUnitOptions(ItemUnits)
+        }));
+
+        setItemUnitOptions(ItemUnits);
+
+        //  Automatically set first unit as selected
+        const defaultUnit = ItemUnits && ItemUnits.length > 0 ? ItemUnits[0] : '';
+        setUnitSelect(defaultUnit);
     }
+
 
     const Unit_Handler = (event) => {
         setUnitSelect(event);
     };
-    const addRowsHandler = () => {
-        const invalidMsg1 = []
 
-        if ((contentItemSelect === "")) {
-            invalidMsg1.push(alertMessages.contentItemQtyIsReq)
-        }
-        if (Quantity === "") {
-            invalidMsg1.push(alertMessages.itemQtyIsReq)
-        };
-        if ((unitSelect === "")) {
-            invalidMsg1.push(alertMessages.unitIsRequired)
-        };
+  const addRowsHandler = () => {
+    const invalidMsg1 = [];
 
-        if ((contentItemSelect === "")
-            || (unitSelect === "")
-            || (Quantity === "")
-        ) {
-            customAlert({
-                Type: 4,
-                Status: true,
-                Message: JSON.stringify(invalidMsg1),
-                RedirectPath: false,
-                PermissionAction: false,
-            })
-
-            return;
-        }
-        const val = {
-            Item: contentItemSelect.value,
-            ItemName: contentItemSelect.label,
-            Unit: unitSelect.value,
-            UnitName: unitSelect.label,
-            Quantity: Quantity,
-        };
-
-        const totalTableData = props.tableData.length;
-        val.id = totalTableData + 1;
-        const updatedTableData = [...props.tableData];
-        updatedTableData.push(val);
-        props.func(updatedTableData)
-        clearState();
-
+    if (contentItemSelect === "") {
+        invalidMsg1.push(alertMessages.contentItemQtyIsReq);
     }
+    if (Quantity === "") {
+        invalidMsg1.push(alertMessages.itemQtyIsReq);
+    }
+    if (unitSelect === "") {
+        invalidMsg1.push(alertMessages.unitIsRequired);
+    }
+
+    if (
+        contentItemSelect === "" ||
+        unitSelect === "" ||
+        Quantity === ""
+    ) {
+        customAlert({
+            Type: 4,
+            Status: true,
+            Message: JSON.stringify(invalidMsg1),
+            RedirectPath: false,
+            PermissionAction: false,
+        });
+        return;
+    }
+
+    // Check if item already exists in table
+    const isItemExists = props.tableData.some(
+        (item) => item.Item === contentItemSelect.value,
+       
+    );
+
+    if (isItemExists) {
+        customAlert({
+            Type: 4,
+            Status: true,
+            Message: "Item already exists in the table.",
+            RedirectPath: false,
+            PermissionAction: false,
+        });
+        return;
+    }
+
+    const val = {
+        Item: contentItemSelect.value,
+        ItemName: contentItemSelect.label,
+        Unit: unitSelect.value,
+        UnitName: unitSelect.label,
+        Quantity: Quantity,
+    };
+
+    const totalTableData = props.tableData.length;
+    val.id = totalTableData + 1;
+
+    const updatedTableData = [...props.tableData, val];
+    props.func(updatedTableData);
+    clearState();
+};
+
     const clearState = () => {
         setContentItemSelect('');
         setQuantity('');
@@ -153,13 +174,14 @@ function ItemTab(props) {
                             <FormGroup className="mb-2 row mt-2 ">
                                 <Label className="mt-2" style={{ width: "115px" }}> Item Quantity </Label>
                                 <Col sm={7}>
-                                    <Input
+                                    <CInput
                                         type="text"
                                         className='text-end'
                                         disabled={props.pageMode === mode.view}
                                         value={Quantity}
                                         placeholder="Please Enter Quantity"
                                         autoComplete="off"
+                                        cpattern={decimalRegx_3dit}
                                         onChange={handleChange}
                                     />
 
@@ -175,11 +197,12 @@ function ItemTab(props) {
                                         styles={{
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
-                                        isDisabled={props.pageMode === mode.view}
+                                        isDisabled={true}
                                         value={unitSelect}
                                         options={ItemUnitOptions}
                                         onChange={Unit_Handler}
                                     />
+
 
                                 </Col>
 

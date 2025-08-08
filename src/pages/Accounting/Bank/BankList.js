@@ -13,7 +13,7 @@ import {
     saveBankMaster_Success,
     updateBankIDSuccess
 } from "../../../store/Accounting/BankRedux/action";
-import { Listloader, PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 
 const BankList = () => {

@@ -18,30 +18,24 @@ import {
     commonPageField,
     commonPageFieldSuccess,
     editGroupIDSuccess,
-    saveGroupMaster,
-    saveGroupMaster_Success,
     updateGroupIDSuccess
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
-    formValid,
     initialFiledFunc,
-    onChangeSelect,
-
     resetFunction
 } from "../../../components/Common/validationFunction";
-import { getGroupTypeslist } from "../../../store/Administrator/GroupTypeRedux/action";
+
 import { SaveButton } from "../../../components/Common/CommonButton";
 import {
-    btnIsDissablefunc,
+ 
     CommonConsole,
     IsSweetAndSnacksCompany,
     loginCompanyID,
     loginPartyName,
     loginSelectedPartyID,
-    loginUserDetails,
     loginUserID,
     metaTagLabel
 } from "../../../components/Common/CommonFunction";
@@ -50,7 +44,6 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { saveMsgUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 import { getpartysetting_API, savePartySetting, savePartySettingMaster_Success } from "../../../store/Administrator/PartySetting/action";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
-import { async } from "q";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 
