@@ -2,7 +2,7 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
-import { amountCommaSeparateFunc, listpageConcatDateAndTime, date_dmy_func } from "../../../components/Common/CommonFunction";
+import { amountCommaSeparateFunc, listpageConcatDateAndTime, date_dmy_func, loginUserID } from "../../../components/Common/CommonFunction";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 // Bank list Dropdown API
@@ -130,8 +130,31 @@ function* Upload_Return_GenFunc({ config }) {   // update API
     } catch (error) { yield put(action.SalesReturnApiErrorAction()) }
 }
 
+function* Return_Uploade_EwayBill_GenFunc({ config }) {
+    config["UserID"] = loginUserID()
+    debugger
+    try {
+      const response = yield call(apiCall.Return_EwayBill_Uploade_Get_API, config)
+      yield put(action.Return_Uploaded_EwayBill_Action__Succcess(response));
+    } catch (error) {
+      yield put(action.SalesReturnApiErrorAction())
+    }
+  }
+
+  function* Return_Cancle_EwayBillGenFunc({ config }) {
+    config["UserID"] = loginUserID()
+    try {
+      const response = yield call(apiCall.Return_EwayBill_Cancel_Get_API, config)
+      yield put(action.Return_Cancel_EwayBill_Success(response));
+    } catch (error) {
+      yield put(action.SalesReturnApiErrorAction())
+    }
+  }
+
 
 function* SalesReturnSaga() {
+    yield takeLatest(actionType.RETURN_CANCEL_EWAYBILL, Return_Cancle_EwayBillGenFunc)
+    yield takeLatest(actionType.RETURN_UPLOADED_EWAYBILL_ACTION, Return_Uploade_EwayBill_GenFunc)
     yield takeLatest(actionType.INVOICE_NUMBER, Invoice_No_List_GenFunc)
     yield takeLatest(actionType.SAVE_SALES_RETURN_MASTER, save_SalesReturn_GenFunc)
     yield takeLatest(actionType.SALES_RETURN_LIST_API, SalesReturn_List_GenFun)

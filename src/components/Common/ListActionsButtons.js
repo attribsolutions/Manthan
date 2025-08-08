@@ -3,7 +3,7 @@ import * as mode from "../../routes/PageMode"
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { date_dmy_func, loginSystemSetting, loginUserDetails, loginUserID, loginUserIsFranchisesRole } from "./CommonFunction"
 import '../../assets/searchBox/searchBox.scss'
-import { Cancel_Credit_Debit_EInvoiceAction, Cancel_EInvoiceAction, Cancel_EwayBillAction, Uploaded_Credit_Debit_EInvoiceAction, Uploaded_EInvoiceAction, Uploaded_EwayBillAction } from "../../store/actions";
+import { Cancel_Credit_Debit_EInvoiceAction, Cancel_EInvoiceAction, Cancel_EwayBillAction, Return_Cancel_EwayBill, Return_Uploaded_EwayBill_Action, Uploaded_Credit_Debit_EInvoiceAction, Uploaded_EInvoiceAction, Uploaded_EwayBillAction } from "../../store/actions";
 import { url } from "../../routes";
 import { alertMessages } from "./CommonErrorMsg/alertMsg";
 
@@ -528,25 +528,44 @@ export const listPageActionsButtonFunc = (props) => {
 };
 
 // ************************* E-Way Bill Button *****************************************************
-export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_ActionsBtnFunc, deleteName, userAccState }) => {
+export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_ActionsBtnFunc, deleteName, userAccState ,subPageMode}) => {
 
     const { listBtnLoading } = reducers;
 
     function Uploaded_EwayBillHandler(btnId, rowData) {
+       debugger
         try {
             let config = { btnId, RowId: rowData.id, UserID: loginUserID(), Invoice_Identifier_ID: rowData.Identify_id };
-            dispatch(Uploaded_EwayBillAction(config));
+
+            if (subPageMode === url.SALES_RETURN_LIST || subPageMode === url.PURCHASE_RETURN_LIST) {
+                 dispatch(Return_Uploaded_EwayBill_Action(config));
+            }
+            else {
+                dispatch(Uploaded_EwayBillAction(config));
+            }
+
+           
         } catch (error) { }
+
     }
 
     async function Cancel_EwayBillHandler(btnId, rowData) {
+        debugger
         try {
             let alertRepsponse = await customAlert({
                 Type: 8,
                 Message: `Are you sure you want to Cancel EwayBill : "${rowData[deleteName]}"`,
             })
+            let config ={ btnId, RowId: rowData.id, UserID: loginUserID(), Invoice_Identifier_ID: rowData.Identify_id }
             if (alertRepsponse) {
-                dispatch(Cancel_EwayBillAction({ btnId, RowId: rowData.id, UserID: loginUserID(), Invoice_Identifier_ID: rowData.Identify_id }));
+
+                if (subPageMode === url.SALES_RETURN_LIST || subPageMode === url.PURCHASE_RETURN_LIST) {
+                    dispatch(Return_Cancel_EwayBill(config));
+               }
+               else{
+
+                dispatch(Cancel_EwayBillAction(config));
+            }
             }
 
         } catch (error) { }

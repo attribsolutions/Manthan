@@ -27,16 +27,13 @@ import { url, mode, pageId } from "../../../routes/index"
 import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
-import { saveSalesReturnMaster, InvoiceNumber, InvoiceNumberSuccess, saveSalesReturnMaster_Success, SalesReturnAddBtn_Action, SalesReturnAddBtn_Action_Succcess } from "../../../store/Sales/SalesReturnRedux/action";
+import { saveSalesReturnMaster, InvoiceNumber, InvoiceNumberSuccess, saveSalesReturnMaster_Success, SalesReturnAddBtn_Action, SalesReturnAddBtn_Action_Succcess, Return_Uploaded_EwayBill_Action } from "../../../store/Sales/SalesReturnRedux/action";
 import "./purchaseReturn.scss";
 import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
 import { decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
 import { goButtonPartyItemAddPage, goButtonPartyItemAddPageSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
 import { innerStockCaculation, returnQtyOnChange, return_discountCalculate_Func, stockQtyOnChange } from "./PurchaseReturnCalculation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
-import BootstrapTable from "react-bootstrap-table-next";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { Tbody, Thead } from "react-super-responsive-table";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import { deltBtnCss } from "../../../components/Common/ListActionsButtons";
@@ -53,6 +50,7 @@ const PurchaseReturn = (props) => {
     const history = useHistory()
     const currentDate_ymd = _cfunc.date_ymd_func();
     const { SaleableItemReasonID = '' } = _cfunc.loginSystemSetting();
+    const systemSetting = _cfunc.loginSystemSetting();
 
     const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
@@ -64,7 +62,7 @@ const PurchaseReturn = (props) => {
         InvoiceNumber: "",
         BatchCode: "",
         Comment: "",
-        VehicleNo: "",
+        VehicleNo: { value: "", label: "Select..." },
     }
 
     const [state, setState] = useState(initialFiledFunc(fileds))
@@ -227,12 +225,41 @@ const PurchaseReturn = (props) => {
         }
     }, [imageTable])
 
-    useEffect(() => {
+    useEffect( async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            debugger
             dispatch(saveSalesReturnMaster_Success({ Status: false }))
             setTableArr([])
             setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(Breadcrumb_inputName(''))
+
+
+            if ((systemSetting?.AutoEwayBill === "1" && (Number(systemSetting?.AutoEwayBillminAmount) < (postMsg?.GrandTotal))) ) {
+                let config = { UserID: _cfunc.loginUserID(), RowId: postMsg?.TransactionID };
+                const Resp = await Return_Uploaded_EwayBill_Action(config)
+                if (Resp.Status === true && Resp.StatusCode === 204) {
+                    customAlert({
+                        Type: 11,
+                        Message: JSON.stringify(postMsg.Message),
+                        Title: "Applicable for Auto E-wayBill.",
+                        TitleMessage: JSON.stringify(Resp.Message),
+                        ActionButton: "OK",
+                        Icon: "mdi mdi-check-all",
+                        color: "success",
+                    });
+                    return
+                }
+            } else {
+                let alterRepont = customAlert({
+                    Type: 1,
+                    Message: postMsg.Message,
+                })
+                if (alterRepont) {
+                    history.push({ pathname: url.PURCHASE_RETURN_LIST })
+                }
+                return
+            }
+
 
             if (pageMode === mode.dropdownAdd) {
                 customAlert({
@@ -1052,6 +1079,8 @@ const PurchaseReturn = (props) => {
                 });
                 return;
             }
+          
+        
 
             if (filterData.length === 0) {
                 customAlert({
@@ -1133,9 +1162,8 @@ const PurchaseReturn = (props) => {
             formData.append('ReturnDate', values.ReturnDate);
             formData.append('ReturnReason', '');
             formData.append('BatchCode', values.BatchCode);
-            formData.append('VehicleNo', values.VehicleNo.value);
+            formData.append('Vehicle', values.VehicleNo.value);
             formData.append('Customer', commonPartyDropSelect.value);
-
             formData.append('Party', values.Customer.value);
             formData.append('Comment', values.Comment);
             formData.append('GrandTotal', Number(grandTotal).toFixed(2));
@@ -1146,6 +1174,20 @@ const PurchaseReturn = (props) => {
             formData.append('IsApproved', 0);
             formData.append('ReturnItems', JSON.stringify(processedItems)); // Convert to JSON string
             formData.append('PurchaseReturnReferences', JSON.stringify([])); // Convert to JSON string
+
+            if ((systemSetting?.AutoEwayBill === "1" && (Number(systemSetting?.AutoEwayBillminAmount) < (Number(grandTotal)))) && values.VehicleNo.value === "") {
+                
+                customAlert({
+                    Type: 11,
+                    Message: "",
+                    Title: "Applicable for Auto E-way Bill",
+                    TitleMessage: `E-Way Bill is mandatory for return above ₹${systemSetting?.AutoEwayBillminAmount}. Please select a Vehicle Number to proceed.`,
+                    ActionButton: "OK",
+                    Icon: "mdi mdi-alert-circle-outline",
+                    color: "info",
+                });
+                return
+            }
 
             dispatch(saveSalesReturnMaster({ formData }));
 

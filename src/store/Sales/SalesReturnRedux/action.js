@@ -17,7 +17,16 @@ import {
   RETURN_APPROVE_ACTION_SUCCESS,
   RETURN_APPROVE_ACTION,
   RETURN_UPLOAD_ACTION,
-  RETURN_UPLOAD_ACTION_SUCCESS
+  RETURN_UPLOAD_ACTION_SUCCESS,
+  UPLOADED_EWAYBILLACTION_RETURN,
+  CANCEL_EWAYBILL_RETURN,
+  CANCEL_EWAYBILL_RETURN_SUCCESS,
+  UPLOADED_EWAYBILLACTION_RETURN_SUCCESS,
+  RETURN_UPLOADED_EWAYBILLACTION_SUCCESS,
+  RETURN_CANCEL_EWAYBILL,
+  RETURN_CANCEL_EWAYBILL_SUCCESS,
+  RETURN_UPLOADED_EWAYBILL_ACTION,
+  RETURN_UPLOADED_EWAYBILL_ACTION_SUCCESS
 } from "./actionType";
 
 
@@ -121,6 +130,30 @@ export const post_Send_to_superStockiest_Id_Succcess = (resp) => ({
   type: POST_SENT_TO_SUPERSTOCKIEST_ID_SUCCESS,
   payload: resp,
 });
+
+// E-Way Bill Upload Return Actions
+
+export const Return_Uploaded_EwayBill_Action = (config = {}) => ({
+  type: RETURN_UPLOADED_EWAYBILL_ACTION,
+  config,
+});
+
+
+export const Return_Uploaded_EwayBill_Action__Succcess = (config = {}) => ({
+  type: RETURN_UPLOADED_EWAYBILL_ACTION_SUCCESS,
+  config,
+});
+
+export const Return_Cancel_EwayBill = (config = {}) => ({
+  type: RETURN_CANCEL_EWAYBILL,
+  config,
+})
+
+export const Return_Cancel_EwayBill_Success = (config = {}) => ({
+  type: RETURN_CANCEL_EWAYBILL_SUCCESS,
+  config,
+})
+
 
 export const SalesReturnApiErrorAction = () => ({
   type: SALES_RETURN_API_ERROR_ACTION,

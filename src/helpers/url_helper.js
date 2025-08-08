@@ -491,6 +491,9 @@ export const INVOICE_SEND_TO_SCM = '/InvoicetoSCM' // Uploaded_E-wayBill
 export const INVOICE_SEND_TO_SAP = '/InvoiceSAPExportDetails' // Uploaded_E-wayBill
 
 
+export const RETURN_UPLOADED_EWAYBILL_ACTION = '/PurchaseReturnUploaded_EwayBill'
+export const RETURN_CANCEL_EWAYBILL = '/PurchaseReturnUploaded_EwayBill'
+
 
 
 export const INVOICE_1_BULK_DELETE_API = '/InvoiceBulkDelete'// invoice_1 Bulk Delete Api
