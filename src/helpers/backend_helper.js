@@ -724,6 +724,11 @@ export const EInvoice_Cancel_Get_API = ({ RowId, UserID, Invoice_Identifier_ID }
 export const EwayBill_Uploade_Get_API = ({ RowId, UserID, Invoice_Identifier_ID }) => get(`${url.UPLOADED_E_WAY_BILL}/${RowId}/${UserID}/${Invoice_Identifier_ID}`)// Uploade_EwayBill
 export const EwayBill_Cancel_Get_API = ({ RowId, UserID, Invoice_Identifier_ID }) => get(`${url.CANCEL_E_WAY_BILL}/${RowId}/${UserID}/${Invoice_Identifier_ID}`)// Cancel_EwayBill
 
+export const Return_EwayBill_Uploade_Get_API = ({ RowId, UserID,  }) => get(`${url.RETURN_UPLOADED_EWAYBILL_ACTION}/${RowId}/${UserID}`)// Uploade_EwayBill
+export const  Return_EwayBill_Cancel_Get_API = ({ RowId, UserID,  }) => get(`${url.RETURN_CANCEL_EWAYBILL}/${RowId}/${UserID}`)// Cancel_EwayBill
+
+
+
 //IB Invoice 2 
 export const IB_Invoice_GoButton_API = ({ jsonBody }) => post(url.IB_INVOICE_ADD_PAGE_GO_BTN, jsonBody)// go button postapi
 export const IB_Invoice_Save_API = ({ jsonBody }) => post(url.IB_INVOICE_SAVE, jsonBody)// postapi

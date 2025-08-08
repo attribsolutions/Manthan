@@ -17,7 +17,12 @@ import {
     RETURN_APPROVE_ACTION,
     RETURN_APPROVE_ACTION_SUCCESS,
     RETURN_UPLOAD_ACTION,
-    RETURN_UPLOAD_ACTION_SUCCESS
+    RETURN_UPLOAD_ACTION_SUCCESS,
+   
+    RETURN_CANCEL_EWAYBILL,
+    RETURN_CANCEL_EWAYBILL_SUCCESS,
+    RETURN_UPLOADED_EWAYBILL_ACTION,
+    RETURN_UPLOADED_EWAYBILL_ACTION_SUCCESS
 } from "./actionType"
 
 const INIT_STATE = {
@@ -171,6 +176,35 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
                 sendToSSbtnLoading: false,
                 sendToSSbtnTableData: action.payload,
             }
+
+// ******************** E-WayBill actions*********
+            case RETURN_UPLOADED_EWAYBILL_ACTION:
+            return {
+                ...state,
+                listBtnLoading: action.config.btnId,
+            }
+
+        case RETURN_UPLOADED_EWAYBILL_ACTION_SUCCESS:
+            return {
+                ...state,
+                listBtnLoading: false,
+                Uploaded_EwayBill: action.payload,
+            }
+
+//******** */ E-Way Bill Cancel Action
+
+            case RETURN_CANCEL_EWAYBILL:
+            return {
+                ...state,
+                listBtnLoading: action.config.btnId,
+            }
+        case RETURN_CANCEL_EWAYBILL_SUCCESS:
+            return {
+                ...state,
+                listBtnLoading: false,
+                Cancel_EwayBill: action.payload,
+            }
+
 
         case SALES_RETURN_API_ERROR_ACTION:
             return {

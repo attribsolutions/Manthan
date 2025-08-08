@@ -4,7 +4,6 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { date_ymd_func, loginSelectedPartyID, loginUserDetails } from '../../../components/Common/CommonFunction';
 import { useDispatch, useSelector } from 'react-redux';
 import { globalTableSearchProps } from '../../../components/Common/SearchBox/MySearch';
-import { salesReturnListAPI, salesReturnListAPISuccess } from '../../../store/Sales/SalesReturnRedux/action';
 import SimpleBar from "simplebar-react"
 import { getOrderListPage, getOrderListPageSuccess, getpdfReportdata, makeGRN_Mode_1Action } from '../../../store/actions';
 import { mode, url } from '../../../routes';

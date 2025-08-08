@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { globalTableSearchProps } from '../../../components/Common/SearchBox/MySearch';
-import { IsSweetAndSnacksCompany, date_ymd_func, loginPartyID, loginUserDetails } from '../../../components/Common/CommonFunction';
+import { IsSweetAndSnacksCompany, date_ymd_func, loginUserDetails } from '../../../components/Common/CommonFunction';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { order_Type } from '../../../components/Common/C-Varialbes';
@@ -14,7 +14,7 @@ import SimpleBar from "simplebar-react"
 import { printBtnCss } from '../../../components/Common/ListActionsButtons';
 import * as report from '../../../Reports/ReportIndex'
 import { IB_Invoice_Singel_Get_for_Report_Api, Invoice_Singel_Get_for_Report_Api } from '../../../helpers/backend_helper';
-import { challanList_ForListPage, getpdfReportdata, invoiceListGoBtnfilter } from '../../../store/actions';
+import { challanList_ForListPage, getpdfReportdata, } from '../../../store/actions';
 import C_Report from '../../../components/Common/C_Report';
 
 
