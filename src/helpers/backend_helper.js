@@ -755,7 +755,10 @@ export const Inward_Delete_API = (id) => del(`${url.POST_API_FOR_INWARD}/${id}`)
 export const Make_Inward_Post_API = ({ makeInwardId }) => get(`${url.MAKE_INWARD_BUTTON_API}/${makeInwardId}`)// Inward post api
 
 //Report API
-export const MultipleInvoice_API = ({ editId }) => get(`${url.MULTIPLEINVOICE_API}/${editId}`)//dropdown api
+// export const MultipleInvoice_API = ({ editId }) => get(`${url.MULTIPLEINVOICE_API}/${editId}`)//dropdown api
+
+export const MultipleInvoice_API = ({ jsonBody }) => post(url.MULTIPLEINVOICE_API, jsonBody)// Inward post api
+
 export const LoadingSheet_API = ({ editId }) => get(`${url.LOADINGSHEET_PARTY_WISE_INVOICE}/${editId}`)//dropdown api
 
 

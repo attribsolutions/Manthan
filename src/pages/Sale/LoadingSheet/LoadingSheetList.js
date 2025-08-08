@@ -140,6 +140,14 @@ const LoadingSheetList = () => {
         if (config.btnmode === "MultiInvoice") {
             config["ReportType"] = report.invoice;
             config["forceA5"] = true;
+
+             config["jsonBody"] = JSON.stringify({
+                LoadingSheetID: config.editId,
+                FromDate: "",
+                ToDate: "",
+                Customer: "",
+                Party: 0,
+            });
             dispatch(getpdfReportdata(MultipleInvoice_API, config))
         } else {
             config["ReportType"] = report.VanLoadingPartyWiseInvoice
